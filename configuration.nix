@@ -81,13 +81,21 @@
     };
     jhakonen = {
       home.stateVersion = "23.05";
-      programs.bash = {
-        enable = true;
-        profileExtra = ''
-          if [ "$XDG_SESSION_TYPE" = "tty" ]; then
-            neofetch
-          fi
-        '';
+      programs = {
+        bash = {
+          enable = true;
+          profileExtra = ''
+            if [ "$XDG_SESSION_TYPE" = "tty" ]; then
+              neofetch
+            fi
+          '';
+        };
+        git = {
+          enable = true;
+          userName = "Janne Hakonen";
+          userEmail = "***REMOVED***";
+          aliases.l = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit";
+        };
       };
     };
   };
