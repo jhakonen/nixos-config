@@ -9,6 +9,7 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ./docker-nitter.nix
+      <home-manager/nixos>
     ];
 
   # Bootloader.
@@ -76,12 +77,24 @@
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [];
   };
+  home-manager.users.jhakonen = { pkgs, ... }: {
+    home.stateVersion = "23.05";
+    programs.bash = {
+      enable = true;
+      profileExtra = ''
+        if [ "$XDG_SESSION_TYPE" = "tty" ]; then
+          neofetch
+        fi
+      '';
+    };
+  };
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     git
     inetutils
+    neofetch
   ];
 
   # Estä `inetutils` pakettia korvaamasta `nettools`
