@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, home-manager, ... }:
+{ config, pkgs, agenix, home-manager, ... }:
 
 {
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -99,6 +99,8 @@
     git
     inetutils
     neofetch
+
+    agenix.packages."x86_64-linux".default
   ];
 
   # Estä `inetutils` pakettia korvaamasta `nettools`
@@ -144,6 +146,37 @@
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "23.05"; # Did you read the comment?
+
+
+  ######### Borgbackup #########
+  age.secrets = {
+    borgbackup-id-rsa.file = ./secrets/borgbackup-id-rsa.age;
+    borgbackup-password.file = ./secrets/borgbackup-password.age;
+  };
+  services.borgbackup.jobs.backup = {
+    paths = [
+      "/etc/nixos"
+      "/home/jhakonen"
+    ];
+    exclude = [
+      "**/.cache"
+      "**/.Trash*"
+    ];
+    encryption = {
+      mode = "repokey-blake2";
+      passCommand = "cat ${config.age.secrets.borgbackup-password.path}";
+    };
+    environment.BORG_RSH = "ssh -o 'StrictHostKeyChecking=no' -i ${config.age.secrets.borgbackup-id-rsa.path}";
+    repo = "borg-backup@nas:/volume2/backups/borg/nas-toolbox-nixos";
+    compression = "auto,zstd";
+    startAt = "daily";
+    prune.keep = {
+      daily = 3;
+      weekly = 4;
+      monthly = 12;
+      yearly = 2;
+    };
+  };
 
 
   ######### Nitter palvelu #########
