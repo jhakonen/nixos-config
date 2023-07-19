@@ -81,26 +81,48 @@
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [];
   };
-  home-manager.users.jhakonen = { pkgs, ... }: {
-    home.stateVersion = "23.05";
-    programs.bash = {
-      enable = true;
-      profileExtra = ''
-        if [ "$XDG_SESSION_TYPE" = "tty" ]; then
-          neofetch
-        fi
-      '';
+  home-manager.users = {
+    root = { pkgs, ... }: {
+      home.stateVersion = "23.05";
+      programs.ssh = {
+        enable = true;
+        matchBlocks."borg-backup@nas" = {
+          match = "host nas user borg-backup";
+          identityFile = config.age.secrets.borgbackup-id-rsa.path;
+          checkHostIP = false;
+        };
+      };
+    };
+    jhakonen = { pkgs, ... }: {
+      home.stateVersion = "23.05";
+      programs.bash = {
+        enable = true;
+        profileExtra = ''
+          if [ "$XDG_SESSION_TYPE" = "tty" ]; then
+            neofetch
+          fi
+        '';
+      };
     };
   };
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+    # Nixpkgs
     git
     inetutils
     neofetch
 
+    # Flaket
     agenix.packages."x86_64-linux".default
+
+    # Mahdollista fuse.borgfs mount tyypin käyttö
+    (pkgs.writeScriptBin "mount.fuse.borgfs" ''
+      #!/bin/sh
+      export BORG_PASSCOMMAND="${coreutils-full}/bin/cat ${config.age.secrets.borgbackup-password.path}"
+      exec ${pkgs.borgbackup}/bin/borgfs "$@"
+    '')
   ];
 
   # Estä `inetutils` pakettia korvaamasta `nettools`
@@ -153,7 +175,7 @@
     borgbackup-id-rsa.file = ./secrets/borgbackup-id-rsa.age;
     borgbackup-password.file = ./secrets/borgbackup-password.age;
   };
-  services.borgbackup.jobs.backup = {
+  services.borgbackup.jobs.nas = {
     paths = [
       "/etc/nixos"
       "/home/jhakonen"
@@ -166,7 +188,6 @@
       mode = "repokey-blake2";
       passCommand = "cat ${config.age.secrets.borgbackup-password.path}";
     };
-    environment.BORG_RSH = "ssh -o 'StrictHostKeyChecking=no' -i ${config.age.secrets.borgbackup-id-rsa.path}";
     repo = "borg-backup@nas:/volume2/backups/borg/nas-toolbox-nixos";
     compression = "auto,zstd";
     startAt = "daily";
@@ -175,6 +196,26 @@
       weekly = 4;
       monthly = 12;
       yearly = 2;
+    };
+  };
+  fileSystems = {
+    "/mnt/borg/kotiautomaatio" = {
+      device = "borg-backup@nas:/volume2/backups/borg/nas-kotiautomaatio";
+      fsType = "fuse.borgfs";
+      options = [ "x-systemd.automount" "noauto" "x-systemd.after=network-online.target"
+                  "x-systemd.mount-timeout=90" "x-systemd.idle-timeout=1min" "allow_other" ];
+    };
+    "/mnt/borg/toolbox" = {
+      device = "borg-backup@nas:/volume2/backups/borg/nas-toolbox-nixos";
+      fsType = "fuse.borgfs";
+      options = [ "x-systemd.automount" "noauto" "x-systemd.after=network-online.target"
+                  "x-systemd.mount-timeout=90" "x-systemd.idle-timeout=1min" "allow_other" ];
+    };
+    "/mnt/borg/vaultwarden" = {
+      device = "borg-backup@nas:/volume2/backups/borg/vaultwarden";
+      fsType = "fuse.borgfs";
+      options = [ "x-systemd.automount" "noauto" "x-systemd.after=network-online.target"
+                  "x-systemd.mount-timeout=90" "x-systemd.idle-timeout=1min" "allow_other" ];
     };
   };
 
