@@ -97,6 +97,13 @@
           userEmail = "***REMOVED***";
           aliases.l = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit";
         };
+        ssh = {
+          enable = true;
+          matchBlocks."github.com" = {
+            identityFile = config.age.secrets.github-id-rsa.path;
+            user = "git";
+          };
+        };
       };
     };
   };
@@ -123,6 +130,10 @@
   age.secrets = {
     borgbackup-id-rsa.file = ./secrets/borgbackup-id-rsa.age;
     borgbackup-password.file = ./secrets/borgbackup-password.age;
+    github-id-rsa = {
+      file = ./secrets/github-id-rsa.age;
+      owner = "jhakonen";
+    };
   };
 
   # Some programs need SUID wrappers, can be configured further or are
