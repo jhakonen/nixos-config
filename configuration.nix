@@ -11,6 +11,7 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ./modules/backup.nix
+      ./modules/grafana.nix
       ./modules/nitter.nix
       home-manager.nixosModules.default
     ];
@@ -161,7 +162,6 @@
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "23.05"; # Did you read the comment?
 
-  apps.nitter.enable = true;
   apps.backup = {
     enable = true;
     repo = {
@@ -185,4 +185,6 @@
       "/mnt/borg/vaultwarden".remote    = "borg-backup@nas:/volume2/backups/borg/vaultwarden";
     };
   };
+  apps.grafana.enable = true;
+  apps.nitter.enable = true;
 }

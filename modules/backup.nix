@@ -28,6 +28,14 @@ in {
     passwordFile = mkOption {
       type = types.str;
     };
+    preHooks = mkOption {
+      type = types.listOf types.str;
+      default = [];
+    };
+    postHooks = mkOption {
+      type = types.listOf types.str;
+      default = [];
+    };
     mounts = mkOption {
       default = {};
       type = types.attrsOf (types.submodule [({ name, ... }: {
@@ -78,6 +86,8 @@ in {
         monthly = 12;
         yearly = 2;
       };
+      preHook = mkIf (cfg.preHooks != []) (concatStringsSep "\n" cfg.preHooks);
+      postHook = mkIf (cfg.postHooks != []) (concatStringsSep "\n" cfg.postHooks);
     };
 
     fileSystems = listToAttrs(map (mount: {
