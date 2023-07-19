@@ -301,6 +301,7 @@ in
       image = "zedeus/nitter:latest";
       ports = [ "${toString cfg.server.port}:${toString cfg.server.port}" ];
       volumes = [ "${configFile}:/src/nitter.conf:ro" ];
+      extraOptions = [ "--pull=newer" ];
     };
 
     # Nitter ei osaa ottaa sigterm:ä vastaan, joten tapa se nopeasti
