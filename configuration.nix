@@ -8,7 +8,6 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ./docker-nitter.nix
       <home-manager/nixos>
     ];
 
@@ -16,6 +15,9 @@
   boot.loader.grub.enable = true;
   boot.loader.grub.device = "/dev/sda";
   boot.loader.grub.useOSProber = true;
+
+  # virtualisation.docker.enable = true;
+  # virtualisation.oci-containers.backend = "docker";
 
   networking.hostName = "nas-toolbox"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -27,7 +29,7 @@
   # Enable networking
   networking.networkmanager.enable = true;
   # Salli docker-konteista pääsy isäntäkoneelle
-  networking.firewall.trustedInterfaces = [ "docker0" ];
+  # networking.firewall.trustedInterfaces = [ "docker0" ];
 
   # Set your time zone.
   time.timeZone = "Europe/Helsinki";
@@ -141,31 +143,25 @@
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "23.05"; # Did you read the comment?
 
-  virtualisation.docker.enable = true;
-  virtualisation.oci-containers.backend = "docker";
 
-  # Nitter palvelu
-  services.redis.servers.nitter = {
-    bind = null;
-    enable = true;
-    port = 6379;
-    requirePass = "password";
-  };
-  # TODO: Kokeile kääntää pkgs.nitter lähdekoodista (overlay) jotta saa uusimman heti
-  services.docker-nitter = {
+  ######### Nitter palvelu #########
+  services.nitter = {
     enable = true;
     openFirewall = true;
-    cache = {
-      redisHost = "172.17.0.1"; # docker-isäntäkone
-      redisPort = config.services.redis.servers.nitter.port;
-      redisPassword = "password";
-    };
-    config = {
-      hmacKey = "4g2j3hg54j5v4jk3b534kj5h453kjh";
-    };
     server = {
       port = 11000;
       hostname = "nitter.jhakonen.com";
     };
   };
+  # 14.7.2023: Käännä Nitterin uusin master jossa on search fixi mukana
+  nixpkgs.overlays = [(final: prev: {
+    nitter = prev.nitter.overrideAttrs (old: {
+      src = prev.fetchFromGitHub {
+        owner = "zedeus";
+        repo = "nitter";
+        rev = "afbdbd293e30f614ee288731717868c6d618b55f";
+        hash = "sha256-sbhc/R/QlShsnM30BhlWc/NWPBr5MJwxfF57JeBQygQ=";
+      };
+    });
+  })];
 }
