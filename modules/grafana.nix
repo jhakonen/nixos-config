@@ -20,6 +20,15 @@ in {
         security.allow_embedding = true;
         server.http_addr = "0.0.0.0";
       };
+      provision.datasources.settings = {
+        apiVersion = 1;
+        datasources = [{
+          name = "InfluxDB";
+          type = "influxdb";
+          url = "http://nas-ubuntu-vm:8086";
+          database = "telegraf";
+        }];
+      };
     };
 
     networking.firewall.allowedTCPPorts = [ config.services.grafana.settings.server.http_port ];
