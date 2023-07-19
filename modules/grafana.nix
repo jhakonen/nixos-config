@@ -25,7 +25,8 @@ in {
         datasources = [{
           name = "InfluxDB";
           type = "influxdb";
-          url = "http://nas-ubuntu-vm:8086";
+          #url = "http://nas-ubuntu-vm:8086";
+          url = "http://localhost:8086";
           database = "telegraf";
         }];
       };

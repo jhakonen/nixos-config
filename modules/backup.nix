@@ -88,7 +88,14 @@ in {
       };
       preHook = mkIf (cfg.preHooks != []) (concatStringsSep "\n" cfg.preHooks);
       postHook = mkIf (cfg.postHooks != []) (concatStringsSep "\n" cfg.postHooks);
+      readWritePaths = [
+        "/var/backup"
+      ];
     };
+
+    system.activationScripts.makeVarBackupDir = lib.stringAfter [ "var" ] ''
+      mkdir -m 755 -p /var/backup
+    '';
 
     fileSystems = listToAttrs(map (mount: {
       name = mount.local;

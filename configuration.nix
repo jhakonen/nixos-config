@@ -12,6 +12,7 @@
       ./hardware-configuration.nix
       ./modules/backup.nix
       ./modules/grafana.nix
+      ./modules/influxdb.nix
       ./modules/nitter.nix
       home-manager.nixosModules.default
     ];
@@ -105,7 +106,7 @@
   environment.systemPackages = with pkgs; [
     # Nixpkgs
     git
-    inetutils
+    inetutils  # telnet
     neofetch
 
     # Flaket
@@ -194,5 +195,6 @@
     };
   };
   apps.grafana.enable = true;
+  apps.influxdb.enable = true;
   apps.nitter.enable = true;
 }
