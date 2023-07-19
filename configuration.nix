@@ -84,6 +84,12 @@
     inetutils
   ];
 
+  # Estä `inetutils` pakettia korvaamasta `nettools`
+  # paketin ohjelmia `ifconfig`, `hostname` ja `dnsdomainname`
+  nixpkgs.config.packageOverrides = pkgs: {
+    nettools = pkgs.hiPrio pkgs.nettools;
+  };
+
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
@@ -132,6 +138,7 @@
     port = 6379;
     requirePass = "password";
   };
+  # TODO: Kokeile kääntää pkgs.nitter lähdekoodista (overlay) jotta saa uusimman heti
   services.docker-nitter = {
     enable = true;
     openFirewall = true;
