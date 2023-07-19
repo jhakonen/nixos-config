@@ -303,6 +303,9 @@ in
       volumes = [ "${configFile}:/src/nitter.conf:ro" ];
     };
 
+    # Nitter ei osaa ottaa sigterm:ä vastaan, joten tapa se nopeasti
+    systemd.services."${config.virtualisation.oci-containers.backend}-nitter".serviceConfig.TimeoutStopSec = lib.mkForce 1;
+
     networking.firewall = mkIf cfg.openFirewall {
       allowedTCPPorts = [ cfg.server.port ];
     };
