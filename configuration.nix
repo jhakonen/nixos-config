@@ -10,35 +10,33 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      ./modules/borgbackup.nix
+      ./modules/nitter.nix
       home-manager.nixosModules.default
     ];
 
   # Bootloader.
-  boot.loader.grub.enable = true;
-  boot.loader.grub.device = "/dev/sda";
-  boot.loader.grub.useOSProber = true;
+  boot.loader.grub = {
+    enable = true;
+    device = "/dev/sda";
+    useOSProber = true;
+  };
 
-  # virtualisation.docker.enable = true;
-  # virtualisation.oci-containers.backend = "docker";
-
-  networking.hostName = "nas-toolbox"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+  networking.hostName = "nas-toolbox";
 
   # Enable networking
   networking.networkmanager.enable = true;
+
   # Salli docker-konteista pääsy isäntäkoneelle
   # networking.firewall.trustedInterfaces = [ "docker0" ];
+  # virtualisation.docker.enable = true;
+  # virtualisation.oci-containers.backend = "docker";
 
   # Set your time zone.
   time.timeZone = "Europe/Helsinki";
 
   # Select internationalisation properties.
   i18n.defaultLocale = "fi_FI.UTF-8";
-
   i18n.extraLocaleSettings = {
     LC_ADDRESS = "fi_FI.UTF-8";
     LC_IDENTIFICATION = "fi_FI.UTF-8";
@@ -49,12 +47,6 @@
     LC_PAPER = "fi_FI.UTF-8";
     LC_TELEPHONE = "fi_FI.UTF-8";
     LC_TIME = "fi_FI.UTF-8";
-  };
-
-  # Configure keymap in X11
-  services.xserver = {
-    layout = "fi";
-    xkbVariant = "nodeadkeys";
   };
 
   # Configure console keymap
@@ -82,18 +74,11 @@
     packages = with pkgs; [];
   };
   home-manager.users = {
-    root = { pkgs, ... }: {
+    root = {
       home.stateVersion = "23.05";
-      programs.ssh = {
-        enable = true;
-        matchBlocks."borg-backup@nas" = {
-          match = "host nas user borg-backup";
-          identityFile = config.age.secrets.borgbackup-id-rsa.path;
-          checkHostIP = false;
-        };
-      };
+      programs.ssh.enable = true;
     };
-    jhakonen = { pkgs, ... }: {
+    jhakonen = {
       home.stateVersion = "23.05";
       programs.bash = {
         enable = true;
@@ -116,13 +101,6 @@
 
     # Flaket
     agenix.packages."x86_64-linux".default
-
-    # Mahdollista fuse.borgfs mount tyypin käyttö
-    (pkgs.writeScriptBin "mount.fuse.borgfs" ''
-      #!/bin/sh
-      export BORG_PASSCOMMAND="${coreutils-full}/bin/cat ${config.age.secrets.borgbackup-password.path}"
-      exec ${pkgs.borgbackup}/bin/borgfs "$@"
-    '')
   ];
 
   # Estä `inetutils` pakettia korvaamasta `nettools`
@@ -140,20 +118,28 @@
   # };
 
   # List services that you want to enable:
+  services = {
+    # Enable the OpenSSH daemon.
+    openssh = {
+      enable = true;
+      settings = {
+        # Vaadi SSH sisäänkirjautuminen käyttäen vain yksityistä avainta
+        PasswordAuthentication = false;
+        KbdInteractiveAuthentication = false;
+      };
+    };
 
-  # Enable the OpenSSH daemon.
-  services.openssh = {
-    enable = true;
-    settings = {
-      # Vaadi SSH sisäänkirjautuminen käyttäen vain yksityistä avainta
-      PasswordAuthentication = false;
-      KbdInteractiveAuthentication = false;
+    # Ota häntäverkko käyttöön, vaatii lisäksi komennon suorittamisen:
+    #   sudo tailscale up
+    tailscale.enable = true;
+
+    # Configure keymap in X11
+    xserver = {
+      layout = "fi";
+      xkbVariant = "nodeadkeys";
     };
   };
 
-  # Ota häntäverkko käyttöön, vaatii lisäksi komennon suorittamisen:
-  #   sudo tailscale up
-  services.tailscale.enable = true;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
@@ -168,76 +154,4 @@
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "23.05"; # Did you read the comment?
-
-
-  ######### Borgbackup #########
-  age.secrets = {
-    borgbackup-id-rsa.file = ./secrets/borgbackup-id-rsa.age;
-    borgbackup-password.file = ./secrets/borgbackup-password.age;
-  };
-  services.borgbackup.jobs.nas = {
-    paths = [
-      "/etc/nixos"
-      "/home/jhakonen"
-    ];
-    exclude = [
-      "**/.cache"
-      "**/.Trash*"
-    ];
-    encryption = {
-      mode = "repokey-blake2";
-      passCommand = "cat ${config.age.secrets.borgbackup-password.path}";
-    };
-    repo = "borg-backup@nas:/volume2/backups/borg/nas-toolbox-nixos";
-    compression = "auto,zstd";
-    startAt = "daily";
-    prune.keep = {
-      daily = 3;
-      weekly = 4;
-      monthly = 12;
-      yearly = 2;
-    };
-  };
-  fileSystems = {
-    "/mnt/borg/kotiautomaatio" = {
-      device = "borg-backup@nas:/volume2/backups/borg/nas-kotiautomaatio";
-      fsType = "fuse.borgfs";
-      options = [ "x-systemd.automount" "noauto" "x-systemd.after=network-online.target"
-                  "x-systemd.mount-timeout=90" "x-systemd.idle-timeout=1min" "allow_other" ];
-    };
-    "/mnt/borg/toolbox" = {
-      device = "borg-backup@nas:/volume2/backups/borg/nas-toolbox-nixos";
-      fsType = "fuse.borgfs";
-      options = [ "x-systemd.automount" "noauto" "x-systemd.after=network-online.target"
-                  "x-systemd.mount-timeout=90" "x-systemd.idle-timeout=1min" "allow_other" ];
-    };
-    "/mnt/borg/vaultwarden" = {
-      device = "borg-backup@nas:/volume2/backups/borg/vaultwarden";
-      fsType = "fuse.borgfs";
-      options = [ "x-systemd.automount" "noauto" "x-systemd.after=network-online.target"
-                  "x-systemd.mount-timeout=90" "x-systemd.idle-timeout=1min" "allow_other" ];
-    };
-  };
-
-
-  ######### Nitter palvelu #########
-  services.nitter = {
-    enable = true;
-    openFirewall = true;
-    server = {
-      port = 11000;
-      hostname = "nitter.jhakonen.com";
-    };
-  };
-  # 14.7.2023: Käännä Nitterin uusin master jossa on search fixi mukana
-  nixpkgs.overlays = [(final: prev: {
-    nitter = prev.nitter.overrideAttrs (old: {
-      src = prev.fetchFromGitHub {
-        owner = "zedeus";
-        repo = "nitter";
-        rev = "afbdbd293e30f614ee288731717868c6d618b55f";
-        hash = "sha256-sbhc/R/QlShsnM30BhlWc/NWPBr5MJwxfF57JeBQygQ=";
-      };
-    });
-  })];
 }
