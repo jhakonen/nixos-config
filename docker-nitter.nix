@@ -1,5 +1,6 @@
 # Kopioitu osoitteesta https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/services/misc/nitter.nix
 # ja muokattu käyttämään docker-konttia systemd-palvelun sijaan
+# Tämä mahdollistaa Nitterin nopeamman päivityksen jos Elon Musk taas rikkoo Twitterin
 { config, lib, pkgs, ... }:
 
 with lib;
@@ -16,28 +17,16 @@ let
       } " = ";
     } (lib.recursiveUpdate {
       Server = cfg.server;
-      Cache = cfg.cache // { redisPassword = "password"; };
-      Config = cfg.config // { hmacKey = "4g2j3hg54j5v4jk3b534kj5h453kjh"; };
+      Cache = cfg.cache;
+      Config = cfg.config;
       Preferences = cfg.preferences;
     } cfg.settings)}
   '';
 in
 {
-  imports = [
-    # https://github.com/zedeus/nitter/pull/772
-    (mkRemovedOptionModule [ "services" "docker-nitter" "replaceInstagram" ] "Nitter no longer supports this option as Bibliogram has been discontinued.")
-  ];
-
   options = {
     services.docker-nitter = {
       enable = mkEnableOption (lib.mdDoc "Nitter");
-
-      #package = mkOption {
-      #  default = pkgs.nitter;
-      #  type = types.package;
-      #  defaultText = literalExpression "pkgs.nitter";
-      #  description = lib.mdDoc "The nitter derivation to use.";
-      #};
 
       server = {
         address = mkOption {
@@ -102,7 +91,7 @@ in
 
         redisHost = mkOption {
           type = types.str;
-          default = "172.17.0.1";
+          default = "";
           description = lib.mdDoc "Redis host.";
         };
 
@@ -110,6 +99,12 @@ in
           type = types.port;
           default = 6379;
           description = lib.mdDoc "Redis port.";
+        };
+
+        redisPassword = mkOption {
+          type = types.str;
+          default = "";
+          description = lib.mdDoc "Redis password.";
         };
 
         redisConnections = mkOption {
@@ -141,6 +136,12 @@ in
         enableRSS = mkEnableOption (lib.mdDoc "RSS feeds") // { default = true; };
 
         enableDebug = mkEnableOption (lib.mdDoc "request logs and debug endpoints");
+
+        hmacKey = mkOption {
+          type = types.str;
+          default = "";
+          description = lib.mdDoc "HMAC key.";
+        };
 
         proxy = mkOption {
           type = types.str;
@@ -287,12 +288,6 @@ in
         '';
       };
 
-      redisCreateLocally = mkOption {
-        type = types.bool;
-        default = true;
-        description = lib.mdDoc "Configure local Redis server for Nitter.";
-      };
-
       openFirewall = mkOption {
         type = types.bool;
         default = false;
@@ -302,70 +297,10 @@ in
   };
 
   config = mkIf cfg.enable {
-    #assertions = [
-    #  {
-    #    assertion = !cfg.redisCreateLocally || (cfg.cache.redisHost == "localhost" && cfg.cache.redisPort == 6379);
-    #    message = "When services.docker-nitter.redisCreateLocally is enabled you need to use localhost:6379 as a cache server.";
-    #  }
-    #];
-
     virtualisation.oci-containers.containers.nitter = {
       image = "zedeus/nitter:latest";
       ports = [ "${toString cfg.server.port}:${toString cfg.server.port}" ];
       volumes = [ "${configFile}:/src/nitter.conf:ro" ];
-    };
-
-    #systemd.services.docker-nitter = {
-    #    description = "Nitter (An alternative Twitter front-end)";
-    #    wantedBy = [ "multi-user.target" ];
-    #    wants = [ "network-online.target" ];
-    #    after = [ "network-online.target" ];
-    #    serviceConfig = {
-    #      DynamicUser = true;
-    #      StateDirectory = "nitter";
-    #      Environment = [ "NITTER_CONF_FILE=/var/lib/nitter/nitter.conf" ];
-    #      # Some parts of Nitter expect `public` folder in working directory,
-    #      # see https://github.com/zedeus/nitter/issues/414
-    #      WorkingDirectory = "${cfg.package}/share/nitter";
-    #      ExecStart = "${cfg.package}/bin/nitter";
-    #      ExecStartPre = "${preStart}";
-    #      AmbientCapabilities = lib.mkIf (cfg.server.port < 1024) [ "CAP_NET_BIND_SERVICE" ];
-    #      Restart = "on-failure";
-    #      RestartSec = "5s";
-    #      # Hardening
-    #      CapabilityBoundingSet = if (cfg.server.port < 1024) then [ "CAP_NET_BIND_SERVICE" ] else [ "" ];
-    #      DeviceAllow = [ "" ];
-    #      LockPersonality = true;
-    #      MemoryDenyWriteExecute = true;
-    #      PrivateDevices = true;
-    #      # A private user cannot have process capabilities on the host's user
-    #      # namespace and thus CAP_NET_BIND_SERVICE has no effect.
-    #      PrivateUsers = (cfg.server.port >= 1024);
-    #      ProcSubset = "pid";
-    #      ProtectClock = true;
-    #      ProtectControlGroups = true;
-    #      ProtectHome = true;
-    #      ProtectHostname = true;
-    #      ProtectKernelLogs = true;
-    #      ProtectKernelModules = true;
-    #      ProtectKernelTunables = true;
-    #      ProtectProc = "invisible";
-    #      RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
-    #      RestrictNamespaces = true;
-    #      RestrictRealtime = true;
-    #      RestrictSUIDSGID = true;
-    #      SystemCallArchitectures = "native";
-    #      SystemCallFilter = [ "@system-service" "~@privileged" "~@resources" ];
-    #      UMask = "0077";
-    #    };
-    #};
-
-    services.redis.servers.nitter = lib.mkIf (cfg.redisCreateLocally) {
-      bind = null;
-      enable = true;
-      openFirewall = true;
-      port = cfg.cache.redisPort;
-      requirePass = "password";
     };
 
     networking.firewall = mkIf cfg.openFirewall {
