@@ -30,5 +30,6 @@ in
 {
   "borgbackup-id-rsa.age".publicKeys = keys;
   "borgbackup-password.age".publicKeys = keys;
+  "environment-variables.age".publicKeys = keys;
   "github-id-rsa.age".publicKeys = keys;
 }

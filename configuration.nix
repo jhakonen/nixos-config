@@ -126,10 +126,15 @@
     nettools = pkgs.hiPrio pkgs.nettools;
   };
 
+  # Asenna root ca certifikaatti, tarvitaan kun otetaan
+  # yhteyttä *.jhakonen.com domaineihin SSL:n yli, esim. MQTT
+  security.pki.certificateFiles = [ ./data/root-ca.pem ];
+
   # Salaisuudet
   age.secrets = {
     borgbackup-id-rsa.file = ./secrets/borgbackup-id-rsa.age;
     borgbackup-password.file = ./secrets/borgbackup-password.age;
+    environment-variables.file = ./secrets/environment-variables.age;
     github-id-rsa = {
       file = ./secrets/github-id-rsa.age;
       owner = "jhakonen";
@@ -164,6 +169,39 @@
     xserver = {
       layout = "fi";
       xkbVariant = "nodeadkeys";
+    };
+
+    telegraf = {
+      enable = true;
+      environmentFiles = [
+        # Lataa MQTT_PASSWORD muuttuja kryptatusta env-tiedostosta
+        config.age.secrets.environment-variables.path
+      ];
+      extraConfig = {
+        # Kerää ruuvitagien mittausdataa MQTT:stä
+        inputs.mqtt_consumer = {
+          servers = [ "ssl://mqtt.jhakonen.com:8883" ];
+          topics = [
+            "bt-mqtt-gateway/ruuvitag/+/battery"
+            "bt-mqtt-gateway/ruuvitag/+/humidity"
+            "bt-mqtt-gateway/ruuvitag/+/pressure"
+            "bt-mqtt-gateway/ruuvitag/+/temperature"
+          ];
+          topic_tag = "topic";
+          client_id = "telegraf-nas-toolbox";
+          username = "koti";
+          password = "$MQTT_PASSWORD";
+          data_format = "value";
+          data_type = "float";
+          name_override = "ruuvitag";
+        };
+
+        # Tallenna kerätty data influxdb kantaan
+        outputs.influxdb = {
+          urls = [ "http://localhost:8086" ];
+          database = "telegraf";
+        };
+      };
     };
   };
 
