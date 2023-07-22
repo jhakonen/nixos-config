@@ -16,14 +16,14 @@ in {
         hostname = "nitter.jhakonen.com";
       };
     };
-    # 14.7.2023: Käännä Nitterin uusin master jossa on search fixi mukana
+    # 22.7.2023: Käännä Nitterin uusin master
     nixpkgs.overlays = [(final: prev: {
       nitter = prev.nitter.overrideAttrs (old: {
         src = prev.fetchFromGitHub {
           owner = "zedeus";
           repo = "nitter";
-          rev = "afbdbd293e30f614ee288731717868c6d618b55f";
-          hash = "sha256-sbhc/R/QlShsnM30BhlWc/NWPBr5MJwxfF57JeBQygQ=";
+          rev = "72d8f35cd1ec1205824711a41dab4b8d7a6b298a";
+          hash = "sha256-EijzAxZdYT7o9IaHZEGTwDfYPAe1W1DtSfUfRHI4AxM=";
         };
       });
     })];
