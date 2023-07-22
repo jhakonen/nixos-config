@@ -29,4 +29,6 @@
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   virtualisation.hypervGuest.enable = true;
+
+  powerManagement.cpuFreqGovernor = "performance";
 }
