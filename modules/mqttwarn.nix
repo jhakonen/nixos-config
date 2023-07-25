@@ -46,9 +46,9 @@ let
   settingsFormat = pkgs.formats.ini { };
   toPython = with builtins; input:
     if (isAttrs input) then
-      "{" + (concatStringsSep "," (lib.attrsets.mapAttrsToList (name: value: "'${name}'=${toPython value}") input)) + "}"
+      "{ " + (concatStringsSep "," (lib.attrsets.mapAttrsToList (name: value: "'${name}': ${toPython value}") input)) + " }"
     else if (isList input) then
-      "[" + (concatStringsSep "," (map (item: toPython item) input)) + "]"
+      "[ " + (concatStringsSep "," (map (item: toPython item) input)) + " ]"
     else if (isBool input) then
       if input then "True" else "False"
     else if (isFloat input || isInt input) then
@@ -61,13 +61,24 @@ let
       abort "Unsupported input: ${input}"
     ;
 
-  pythonizeTargets = with builtins; settings:
+  prepareSettingsForIni = with builtins; settings:
     let
-      pythonizeTargets = option: value: if option == "targets" then (toPython value) else value;
+      prepareOption = option: value:
+        if option == "targets" then
+          toPython value
+        else
+          value
+        ;
+      prepareSection = section: options:
+        if (match "config:.+" section) == [] then
+          mapAttrs prepareOption options
+        else
+          options
+        ;
     in
-    mapAttrs (section: options: (options: mapAttrs pythonizeTargets options) options) settings;
+    mapAttrs prepareSection settings;
 
-  configFile = settingsFormat.generate "mqttwarn.ini" (pythonizeTargets cfg.settings);
+  configFile = settingsFormat.generate "mqttwarn.ini" (prepareSettingsForIni cfg.settings);
 in {
   options.apps.mqttwarn = {
     enable = lib.mkEnableOption "Mqttwarn app";
