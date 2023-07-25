@@ -15,6 +15,7 @@
       ./modules/influxdb.nix
       ./modules/mqttwarn.nix
       ./modules/nitter.nix
+      ./modules/node-red.nix
       home-manager.nixosModules.default
     ];
 
@@ -302,4 +303,11 @@
     };
   };
   apps.nitter.enable = true;
+  apps.node-red = {
+    enable = true;
+    environmentFiles = [
+      # Lataa MQTT_PASSWORD muuttuja kryptatusta env-tiedostosta
+      config.age.secrets.environment-variables.path
+    ];
+  };
 }
