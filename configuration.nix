@@ -10,12 +10,7 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ./modules/backup.nix
-      ./modules/grafana.nix
-      ./modules/influxdb.nix
-      ./modules/mqttwarn.nix
-      ./modules/nitter.nix
-      ./modules/node-red.nix
+      ./modules
       home-manager.nixosModules.default
     ];
 
@@ -176,39 +171,6 @@
       layout = "fi";
       xkbVariant = "nodeadkeys";
     };
-
-    telegraf = {
-      enable = true;
-      environmentFiles = [
-        # Lataa MQTT_PASSWORD muuttuja kryptatusta env-tiedostosta
-        config.age.secrets.environment-variables.path
-      ];
-      extraConfig = {
-        # Kerää ruuvitagien mittausdataa MQTT:stä
-        inputs.mqtt_consumer = {
-          servers = [ "ssl://mqtt.jhakonen.com:8883" ];
-          topics = [
-            "bt-mqtt-gateway/ruuvitag/+/battery"
-            "bt-mqtt-gateway/ruuvitag/+/humidity"
-            "bt-mqtt-gateway/ruuvitag/+/pressure"
-            "bt-mqtt-gateway/ruuvitag/+/temperature"
-          ];
-          topic_tag = "topic";
-          client_id = "telegraf-nas-toolbox";
-          username = "koti";
-          password = "$MQTT_PASSWORD";
-          data_format = "value";
-          data_type = "float";
-          name_override = "ruuvitag";
-        };
-
-        # Tallenna kerätty data influxdb kantaan
-        outputs.influxdb = {
-          urls = [ "http://localhost:8086" ];
-          database = "telegraf";
-        };
-      };
-    };
   };
 
 
@@ -226,88 +188,44 @@
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "23.05"; # Did you read the comment?
 
-  apps.backup = {
-    enable = true;
-    repo = {
-      host = "nas";
-      user = "borg-backup";
-      path = "/volume2/backups/borg/nas-toolbox-nixos";
-    };
-    paths = [
-      "/etc/nixos"
-      "/home/jhakonen"
-    ];
-    excludes = [
-      "**/.cache"
-      "**/.Trash*"
-    ];
-    identityFile = config.age.secrets.borgbackup-id-rsa.path;
-    passwordFile = config.age.secrets.borgbackup-password.path;
-    mounts = {
-      "/mnt/borg/kotiautomaatio".remote = "borg-backup@nas:/volume2/backups/borg/nas-kotiautomaatio";
-      "/mnt/borg/toolbox".remote        = "borg-backup@nas:/volume2/backups/borg/nas-toolbox-nixos";
-      "/mnt/borg/vaultwarden".remote    = "borg-backup@nas:/volume2/backups/borg/vaultwarden";
-    };
-  };
-  apps.grafana.enable = true;
-  apps.influxdb.enable = true;
-  apps.mqttwarn = {
-    enable = true;
-    environmentFiles = [
-      # Lataa MQTT_PASSWORD muuttuja kryptatusta env-tiedostosta
-      config.age.secrets.environment-variables.path
-    ];
-    settings = {
-      defaults = {
-        hostname = "mqtt.jhakonen.com";
-        port = 8883;
-        username = "koti";
-        password = "$ENV:MQTT_PASSWORD";
-        clientid = "nas-toolbox-mqttwarn";
-        tls = true;
-        tls_version = "tlsv1_2";
-        tls_insecure = false;
-        launch = "telegram, smtp";
+  apps = {
+    backup = {
+      enable = true;
+      repo = {
+        host = "nas";
+        user = "borg-backup";
+        path = "/volume2/backups/borg/nas-toolbox-nixos";
       };
-      "config:telegram" = {
-        timeout = 60;
-        parse_mode = "Markdown";
-        token = "$ENV:TELEGRAM_TOKEN";
-        use_chat_id = true;
-        targets = {
-          #       chatId (in quotes)
-          j01 = [ "$ENV:TELEGRAM_CHAT_ID" ];
-        };
-      };
-      "config:smtp" = {
-        server = "***REMOVED***:587";
-        sender = "$ENV:SMTP_FROM";
-        username = "$ENV:SMTP_USERNAME";
-        password = "$ENV:SMTP_PASSWORD";
-        starttls = true;
-        htmlmsg = false;
-        targets = {
-          valvoja = [ "$ENV:SMTP_TO" ];
-        };
-      };
-      "topic-telegram" = {
-        topic = "mqttwarn/telegram";
-        targets = "telegram:j01";
-      };
-      "topic-smtp" = {
-        topic = "mqttwarn/smtp";
-        targets = "smtp:valvoja";
-        title = "{otsikko}";
-        format = "{viesti}";
+      paths = [
+        "/etc/nixos"
+        "/home/jhakonen"
+      ];
+      excludes = [
+        "**/.cache"
+        "**/.Trash*"
+      ];
+      identityFile = config.age.secrets.borgbackup-id-rsa.path;
+      passwordFile = config.age.secrets.borgbackup-password.path;
+      mounts = {
+        "/mnt/borg/kotiautomaatio".remote = "borg-backup@nas:/volume2/backups/borg/nas-kotiautomaatio";
+        "/mnt/borg/toolbox".remote        = "borg-backup@nas:/volume2/backups/borg/nas-toolbox-nixos";
+        "/mnt/borg/vaultwarden".remote    = "borg-backup@nas:/volume2/backups/borg/vaultwarden";
       };
     };
-  };
-  apps.nitter.enable = true;
-  apps.node-red = {
-    enable = true;
-    environmentFiles = [
-      # Lataa MQTT_PASSWORD muuttuja kryptatusta env-tiedostosta
-      config.age.secrets.environment-variables.path
-    ];
+    grafana.enable = true;
+    influxdb.enable = true;
+    mqttwarn = {
+      enable = true;
+      environmentFiles = [ config.age.secrets.environment-variables.path ];
+    };
+    nitter.enable = true;
+    node-red = {
+      enable = true;
+      environmentFiles = [ config.age.secrets.environment-variables.path ];
+    };
+    telegraf = {
+      enable = true;
+      environmentFiles = [ config.age.secrets.environment-variables.path ];
+    };
   };
 }
