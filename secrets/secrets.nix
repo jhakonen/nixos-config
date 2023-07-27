@@ -32,4 +32,6 @@ in
   "borgbackup-password.age".publicKeys = keys;
   "environment-variables.age".publicKeys = keys;
   "github-id-rsa.age".publicKeys = keys;
+  "mqtt-password.age".publicKeys = keys;
+  "wildcard-jhakonen-com.key.age".publicKeys = keys;
 }
