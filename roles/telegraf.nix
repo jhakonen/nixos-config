@@ -1,17 +1,16 @@
 { lib, pkgs, config, ... }:
-with lib;
 let
-  cfg = config.apps.telegraf;
+  cfg = config.roles.telegraf;
 in {
-  options.apps.telegraf = {
-    enable = lib.mkEnableOption "Telegraf app";
+  options.roles.telegraf = {
+    enable = lib.mkEnableOption "Telegraf rooli";
     environmentFiles = lib.mkOption {
       type = lib.types.listOf lib.types.path;
       default = [];
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     services.telegraf = {
       enable = true;
       environmentFiles = cfg.environmentFiles;

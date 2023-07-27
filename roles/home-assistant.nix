@@ -1,10 +1,10 @@
 { lib, pkgs, config, ... }:
 let
-  cfg = config.apps.home-assistant;
+  cfg = config.roles.home-assistant;
   listenPort = 8123;
 in {
-  options.apps.home-assistant = {
-    enable = lib.mkEnableOption "Home Assistant app";
+  options.roles.home-assistant = {
+    enable = lib.mkEnableOption "Home Assistant rooli";
   };
 
   config = lib.mkIf cfg.enable {
@@ -50,7 +50,7 @@ in {
       };
     };
     networking.firewall.allowedTCPPorts = [ listenPort ];
-    apps.backup = {
+    roles.backup = {
       paths = [ config.services.home-assistant.configDir ];
       preHooks = [ "systemctl stop home-assistant.service" ];
       postHooks = [ "systemctl start home-assistant.service" ];

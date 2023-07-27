@@ -1,13 +1,12 @@
 { lib, pkgs, config, ... }:
-with lib;
 let
-  cfg = config.apps.grafana;
+  cfg = config.roles.grafana;
 in {
-  options.apps.grafana = {
-    enable = mkEnableOption "Grafana app";
+  options.roles.grafana = {
+    enable = lib.mkEnableOption "Grafana app";
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     services.grafana = {
       enable = true;
       settings = {
@@ -33,8 +32,8 @@ in {
     };
 
     networking.firewall.allowedTCPPorts = [ config.services.grafana.settings.server.http_port ];
-    apps.backup.paths = [ config.services.grafana.dataDir ];
-    apps.backup.preHooks = [ "systemctl stop grafana.service" ];
-    apps.backup.postHooks = [ "systemctl start grafana.service" ];
+    roles.backup.paths = [ config.services.grafana.dataDir ];
+    roles.backup.preHooks = [ "systemctl stop grafana.service" ];
+    roles.backup.postHooks = [ "systemctl start grafana.service" ];
   };
 }

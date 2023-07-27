@@ -1,13 +1,12 @@
 { lib, pkgs, config, ... }:
-with lib;
 let
-  cfg = config.apps.nitter;
+  cfg = config.roles.nitter;
 in {
-  options.apps.nitter = {
-    enable = mkEnableOption "Nitter app";
+  options.roles.nitter = {
+    enable = lib.mkEnableOption "Nitter rooli";
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     services.nitter = {
       enable = true;
       openFirewall = true;

@@ -1,6 +1,6 @@
 { lib, pkgs, config, ... }:
 let
-  cfg = config.apps.mqttwarn;
+  cfg = config.services.mqttwarn;
   mqttwarn = pkgs.python3.pkgs.buildPythonApplication rec {
     pname = "mqttwarn";
     version = "0.34.1";
@@ -78,66 +78,19 @@ let
     in
     mapAttrs prepareSection settings;
 
-  configFile = settingsFormat.generate "mqttwarn.ini" (prepareSettingsForIni settings);
+  configFile = settingsFormat.generate "mqttwarn.ini" (prepareSettingsForIni cfg.settings);
 
-  settings = {
-    defaults = {
-      hostname = "mqtt.jhakonen.com";
-      port = 8883;
-      username = "koti";
-      password = "$ENV:MQTT_PASSWORD";
-      clientid = "nas-toolbox-mqttwarn";
-      tls = true;
-      tls_version = "tlsv1_2";
-      tls_insecure = false;
-      launch = "telegram, smtp";
-    };
-    "config:telegram" = {
-      timeout = 60;
-      parse_mode = "Markdown";
-      token = "$ENV:TELEGRAM_TOKEN";
-      use_chat_id = true;
-      targets.jhakonen = [ "$ENV:TELEGRAM_CHAT_ID" ];
-    };
-    "config:smtp" = {
-      server = "***REMOVED***:587";
-      sender = "$ENV:SMTP_FROM";
-      username = "$ENV:SMTP_USERNAME";
-      password = "$ENV:SMTP_PASSWORD";
-      starttls = true;
-      htmlmsg = false;
-      targets.jhakonen = [ "$ENV:SMTP_TO" ];
-    };
-    "topic-telegram" = {
-      topic = "mqttwarn/telegram";
-      targets = "telegram:jhakonen";
-    };
-    "topic-smtp" = {
-      topic = "mqttwarn/smtp";
-      targets = "smtp:jhakonen";
-      title = "{otsikko}";
-      format = "{viesti}";
-    };
-  };
 in {
-  options.apps.mqttwarn = {
-    enable = lib.mkEnableOption "Mqttwarn app";
+  options.services.mqttwarn = {
+    enable = lib.mkEnableOption "Mqttwarn service";
     environmentFiles = lib.mkOption {
       type = lib.types.listOf lib.types.path;
       default = [];
-      example = [ "/run/keys/mqttwarn.env" ];
     };
-    # settings = lib.mkOption {
-    #   type = lib.types.submodule {
-    #     freeformType = lib.types.attrs;
-    #   };
-    #   default = {};
-    #   description = ''
-    #     Configuration for Mqttwarn, see
-    #     <link xlink:href="https://mqttwarn.readthedocs.io/en/latest/configure/"/>
-    #     for supported values.
-    #   '';
-    # };
+    settings = lib.mkOption {
+      type = lib.types.attrs;
+      default = {};
+    };
   };
 
   config = lib.mkIf cfg.enable {

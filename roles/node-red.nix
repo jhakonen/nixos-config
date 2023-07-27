@@ -1,8 +1,8 @@
 { lib, pkgs, config, ... }:
 let
-  cfg = config.apps.node-red;
+  cfg = config.roles.node-red;
 in {
-  options.apps.node-red = {
+  options.roles.node-red = {
     enable = lib.mkEnableOption "Node-Red app";
     environmentFiles = lib.mkOption {
       type = lib.types.listOf lib.types.path;
@@ -23,8 +23,8 @@ in {
 
     systemd.services.node-red.serviceConfig.EnvironmentFile = cfg.environmentFiles;
 
-    apps.backup.preHooks = [ "systemctl stop node-red.service" ];
-    apps.backup.postHooks = [ "systemctl start node-red.service" ];
-    apps.backup.paths = [ config.services.node-red.userDir ];
+    roles.backup.preHooks = [ "systemctl stop node-red.service" ];
+    roles.backup.postHooks = [ "systemctl start node-red.service" ];
+    roles.backup.paths = [ config.services.node-red.userDir ];
   };
 }

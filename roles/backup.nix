@@ -1,10 +1,10 @@
 { lib, pkgs, config, home-manager, ... }:
 with lib;
 let
-  cfg = config.apps.backup;
+  cfg = config.roles.backup;
 in {
-  options.apps.backup = {
-    enable = mkEnableOption "Backup app";
+  options.roles.backup = {
+    enable = mkEnableOption "Backup rooli";
     repo = {
       host = mkOption {
         type = types.str;

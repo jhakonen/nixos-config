@@ -1,9 +1,9 @@
 { lib, pkgs, config, ... }:
 let
-  cfg = config.apps.mosquitto;
+  cfg = config.roles.mosquitto;
 in {
-  options.apps.mosquitto = {
-    enable = lib.mkEnableOption "Mosquitto app";
+  options.roles.mosquitto = {
+    enable = lib.mkEnableOption "Mosquitto rooli";
     user = lib.mkOption {
       type = lib.types.str;
       default = "koti";

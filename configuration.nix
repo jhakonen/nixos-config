@@ -10,7 +10,7 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ./modules
+      ./roles
       home-manager.nixosModules.default
     ];
 
@@ -225,7 +225,7 @@
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "23.05"; # Did you read the comment?
 
-  apps = {
+  roles = {
     backup = {
       enable = true;
       repo = {
