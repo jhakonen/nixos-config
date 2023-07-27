@@ -3,14 +3,12 @@ let
   cfg = config.roles.node-red;
 in {
   options.roles.node-red = {
-    enable = lib.mkEnableOption "Node-Red app";
-    environmentFiles = lib.mkOption {
-      type = lib.types.listOf lib.types.path;
-      default = [];
-    };
+    enable = lib.mkEnableOption "Node-Red rooli";
   };
 
   config = lib.mkIf cfg.enable {
+    age.secrets.environment-variables.file = ../secrets/environment-variables.age;
+
     services.node-red = {
       enable = true;
       openFirewall = true;
@@ -21,7 +19,7 @@ in {
       };
     };
 
-    systemd.services.node-red.serviceConfig.EnvironmentFile = cfg.environmentFiles;
+    systemd.services.node-red.serviceConfig.EnvironmentFile = [ config.age.secrets.environment-variables.path ];
 
     roles.backup.preHooks = [ "systemctl stop node-red.service" ];
     roles.backup.postHooks = [ "systemctl start node-red.service" ];

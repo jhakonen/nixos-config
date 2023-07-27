@@ -4,7 +4,7 @@ let
   backupDir = "/var/backup/influxdb";
 in {
   options.roles.influxdb = {
-    enable = lib.mkEnableOption "Influxdb app";
+    enable = lib.mkEnableOption "Influxdb rooli";
   };
 
   config = lib.mkIf cfg.enable {

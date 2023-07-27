@@ -6,16 +6,14 @@ in {
 
   options.roles.mqttwarn = {
     enable = lib.mkEnableOption "Mqttwarn rooli";
-    environmentFiles = lib.mkOption {
-      type = lib.types.listOf lib.types.path;
-      default = [];
-    };
   };
 
   config = lib.mkIf cfg.enable {
+    age.secrets.environment-variables.file = ../secrets/environment-variables.age;
+
     services.mqttwarn = {
       enable = true;
-      environmentFiles = cfg.environmentFiles;
+      environmentFiles = [ config.age.secrets.environment-variables.path ];
       settings = {
         defaults = {
           hostname = "mqtt.jhakonen.com";

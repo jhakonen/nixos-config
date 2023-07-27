@@ -4,16 +4,14 @@ let
 in {
   options.roles.telegraf = {
     enable = lib.mkEnableOption "Telegraf rooli";
-    environmentFiles = lib.mkOption {
-      type = lib.types.listOf lib.types.path;
-      default = [];
-    };
   };
 
   config = lib.mkIf cfg.enable {
+    age.secrets.environment-variables.file = ../secrets/environment-variables.age;
+
     services.telegraf = {
       enable = true;
-      environmentFiles = cfg.environmentFiles;
+      environmentFiles = [ config.age.secrets.environment-variables.path ];
       extraConfig = {
         # Kerää ruuvitagien mittausdataa MQTT:stä
         inputs.mqtt_consumer = {

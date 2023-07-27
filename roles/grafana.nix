@@ -3,7 +3,7 @@ let
   cfg = config.roles.grafana;
 in {
   options.roles.grafana = {
-    enable = lib.mkEnableOption "Grafana app";
+    enable = lib.mkEnableOption "Grafana rooli";
   };
 
   config = lib.mkIf cfg.enable {
