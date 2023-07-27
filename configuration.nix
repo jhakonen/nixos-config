@@ -213,6 +213,7 @@
       };
     };
     grafana.enable = true;
+    home-assistant.enable = true;
     influxdb.enable = true;
     mqttwarn = {
       enable = true;
