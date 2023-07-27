@@ -10,6 +10,7 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      ./modules
       ./roles
       home-manager.nixosModules.default
     ];
@@ -133,8 +134,6 @@
 
   # Salaisuudet
   age.secrets = {
-    borgbackup-id-rsa.file = ./secrets/borgbackup-id-rsa.age;
-    borgbackup-password.file = ./secrets/borgbackup-password.age;
     github-id-rsa = {
       file = ./secrets/github-id-rsa.age;
       owner = "jhakonen";
@@ -188,29 +187,7 @@
   system.stateVersion = "23.05"; # Did you read the comment?
 
   roles = {
-    backup = {
-      enable = true;
-      repo = {
-        host = "nas";
-        user = "borg-backup";
-        path = "/volume2/backups/borg/nas-toolbox-nixos";
-      };
-      paths = [
-        "/etc/nixos"
-        "/home/jhakonen"
-      ];
-      excludes = [
-        "**/.cache"
-        "**/.Trash*"
-      ];
-      identityFile = config.age.secrets.borgbackup-id-rsa.path;
-      passwordFile = config.age.secrets.borgbackup-password.path;
-      mounts = {
-        "/mnt/borg/kotiautomaatio".remote = "borg-backup@nas:/volume2/backups/borg/nas-kotiautomaatio";
-        "/mnt/borg/toolbox".remote        = "borg-backup@nas:/volume2/backups/borg/nas-toolbox-nixos";
-        "/mnt/borg/vaultwarden".remote    = "borg-backup@nas:/volume2/backups/borg/vaultwarden";
-      };
-    };
+    backup.enable = true;
     grafana.enable = true;
     home-assistant.enable = true;
     influxdb.enable = true;

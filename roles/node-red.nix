@@ -21,8 +21,8 @@ in {
 
     systemd.services.node-red.serviceConfig.EnvironmentFile = [ config.age.secrets.environment-variables.path ];
 
-    roles.backup.preHooks = [ "systemctl stop node-red.service" ];
-    roles.backup.postHooks = [ "systemctl start node-red.service" ];
-    roles.backup.paths = [ config.services.node-red.userDir ];
+    services.backup.preHooks = [ "systemctl stop node-red.service" ];
+    services.backup.postHooks = [ "systemctl start node-red.service" ];
+    services.backup.paths = [ config.services.node-red.userDir ];
   };
 }

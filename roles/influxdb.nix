@@ -13,14 +13,14 @@ in {
 
     services.influxdb.enable = true;
 
-    roles.backup.preHooks = [
+    services.backup.preHooks = [
       ''
       rm -rf ${backupDir}
       ${pkgs.influxdb}/bin/influxd backup -portable ${backupDir}
       systemctl stop influxdb.service
       ''
     ];
-    roles.backup.postHooks = [ "systemctl start influxdb.service" ];
-    roles.backup.paths = [ backupDir ];
+    services.backup.postHooks = [ "systemctl start influxdb.service" ];
+    services.backup.paths = [ backupDir ];
   };
 }

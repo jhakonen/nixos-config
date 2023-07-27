@@ -2,8 +2,6 @@
 let
   cfg = config.roles.mqttwarn;
 in {
-  imports = [ ../modules/mqttwarn.nix ];
-
   options.roles.mqttwarn = {
     enable = lib.mkEnableOption "Mqttwarn rooli";
   };

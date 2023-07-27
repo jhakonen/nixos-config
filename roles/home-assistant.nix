@@ -50,7 +50,7 @@ in {
       };
     };
     networking.firewall.allowedTCPPorts = [ listenPort ];
-    roles.backup = {
+    services.backup = {
       paths = [ config.services.home-assistant.configDir ];
       preHooks = [ "systemctl stop home-assistant.service" ];
       postHooks = [ "systemctl start home-assistant.service" ];

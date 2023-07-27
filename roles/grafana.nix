@@ -32,8 +32,8 @@ in {
     };
 
     networking.firewall.allowedTCPPorts = [ config.services.grafana.settings.server.http_port ];
-    roles.backup.paths = [ config.services.grafana.dataDir ];
-    roles.backup.preHooks = [ "systemctl stop grafana.service" ];
-    roles.backup.postHooks = [ "systemctl start grafana.service" ];
+    services.backup.paths = [ config.services.grafana.dataDir ];
+    services.backup.preHooks = [ "systemctl stop grafana.service" ];
+    services.backup.postHooks = [ "systemctl start grafana.service" ];
   };
 }
