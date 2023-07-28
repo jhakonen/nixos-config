@@ -24,8 +24,8 @@ in
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ./modules
-      ./roles
+      ../../modules
+      ../../roles/nixos
       home-manager.nixosModules.default
     ];
 
@@ -88,31 +88,16 @@ in
       home.stateVersion = "23.05";
       programs.ssh.enable = true;
     };
-    jhakonen = {
+    jhakonen = { ... }: {
+      imports = [
+        ../../roles/home-manager
+      ];
       home.stateVersion = "23.05";
-      programs = {
-        bash = {
-          enable = true;
-          profileExtra = ''
-            if [ "$XDG_SESSION_TYPE" = "tty" ]; then
-              neofetch
-            fi
-          '';
-        };
-        git = {
-          enable = true;
-          userName = "Janne Hakonen";
-          userEmail = "***REMOVED***";
-          aliases.l = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit";
-        };
-        ssh = {
-          enable = true;
-          matchBlocks."github.com" = {
-            identityFile = config.age.secrets.github-id-rsa.path;
-            user = "git";
-          };
-        };
+      roles.git = {
+        enable = true;
+        githubIdentityFile = config.age.secrets.github-id-rsa.path;
       };
+      roles.neofetch.enable = true;
     };
   };
 
@@ -122,7 +107,6 @@ in
     # Nixpkgs
     git
     inetutils  # telnet
-    neofetch
 
     # Flaket
     agenix.packages."x86_64-linux".default
@@ -136,12 +120,12 @@ in
 
   # Asenna root ca certifikaatti, tarvitaan kun otetaan
   # yhteyttä *.jhakonen.com domaineihin SSL:n yli, esim. MQTT
-  security.pki.certificateFiles = [ ./data/root-ca.pem ];
+  security.pki.certificateFiles = [ ../../data/root-ca.pem ];
 
   # Salaisuudet
   age.secrets = {
     github-id-rsa = {
-      file = ./secrets/github-id-rsa.age;
+      file = ../../secrets/github-id-rsa.age;
       owner = "jhakonen";
     };
   };

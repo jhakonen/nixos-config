@@ -7,7 +7,7 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    age.secrets.environment-variables.file = ../secrets/environment-variables.age;
+    age.secrets.environment-variables.file = ../../secrets/environment-variables.age;
 
     services.telegraf = {
       enable = true;

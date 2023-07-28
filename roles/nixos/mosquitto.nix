@@ -11,12 +11,12 @@ in {
     # Salaisuudet
     age.secrets = {
       mosquitto-password = {
-        file = ../secrets/mqtt-password.age;
+        file = ../../secrets/mqtt-password.age;
         owner = "mosquitto";
         group = "mosquitto";
       };
       mosquitto-key-file = {
-        file = ../secrets/wildcard-jhakonen-com.key.age;
+        file = ../../secrets/wildcard-jhakonen-com.key.age;
         owner = "mosquitto";
         group = "mosquitto";
       };

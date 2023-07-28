@@ -9,8 +9,8 @@ in {
   config = lib.mkIf cfg.enable {
     # Salaisuudet
     age.secrets = {
-      borgbackup-id-rsa.file = ../secrets/borgbackup-id-rsa.age;
-      borgbackup-password.file = ../secrets/borgbackup-password.age;
+      borgbackup-id-rsa.file = ../../secrets/borgbackup-id-rsa.age;
+      borgbackup-password.file = ../../secrets/borgbackup-password.age;
     };
 
     services.backup = {

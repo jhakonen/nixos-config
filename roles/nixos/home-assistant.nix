@@ -34,7 +34,7 @@ in {
             }
           ];
         };
-        frontend = {};
+        default_config = {};
       };
       extraComponents = [ "default_config" "github" "met" "mqtt" ];
     };
