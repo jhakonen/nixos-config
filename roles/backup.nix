@@ -1,4 +1,4 @@
-{ lib, pkgs, config, home-manager, ... }:
+{ lib, pkgs, config, ... }:
 let
   cfg = config.roles.backup;
 in {
