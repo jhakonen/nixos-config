@@ -85,26 +85,19 @@
     };
   };
 
-  programs.bash = {
-    enable = true;
-    bashrcExtra = ''
-      # Promptin tyyli
-      source /etc/bashrc
-    '';
-    # profileExtra = ''
-    #   if [ -e /home/jhakonen/.nix-profile/etc/profile.d/nix.sh ]; then . /home/jhakonen/.nix-profile/etc/profile.d/nix.sh; fi
-    # '';
-  };
-
   # Nicely reload system units when changing configs
   systemd.user.startServices = "sd-switch";
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
   home.stateVersion = "23.05";
 
+  # https://nixos.wiki/wiki/Home_Manager#Usage_on_non-NixOS_Linux
+  targets.genericLinux.enable = true;
+
   roles.git = {
     enable = true;
     githubIdentityFile = config.age.secrets.github-id-rsa.path;
   };
   roles.neofetch.enable = true;
+  roles.zsh.enable = true;
 }

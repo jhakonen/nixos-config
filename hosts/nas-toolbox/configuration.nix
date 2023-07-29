@@ -66,21 +66,26 @@ in
   # Configure console keymap
   console.keyMap = "fi";
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users = {
-    jhakonen = {
-      openssh.authorizedKeys.keys = [ id-rsa-public-key ];
-      isNormalUser = true;
-      description = "Janne Hakonen";
-      extraGroups = [
-        # "docker"
-        "networkmanager"
-        "wheel"
-      ];
-      packages = with pkgs; [];
-    };
-    root = {
-      openssh.authorizedKeys.keys = [ id-rsa-public-key ];
+  users = {
+    # Aseta käytettävä komentotulkki
+    # Huomaa: komentotulkki pitää olla environment.shells listassa
+    defaultUserShell = pkgs.zsh;
+
+    users = {
+      jhakonen = {
+        openssh.authorizedKeys.keys = [ id-rsa-public-key ];
+        isNormalUser = true;
+        description = "Janne Hakonen";
+        extraGroups = [
+          # "docker"
+          "networkmanager"
+          "wheel"
+        ];
+        packages = with pkgs; [];
+      };
+      root = {
+        openssh.authorizedKeys.keys = [ id-rsa-public-key ];
+      };
     };
   };
   home-manager.users = {
@@ -98,19 +103,25 @@ in
         githubIdentityFile = config.age.secrets.github-id-rsa.path;
       };
       roles.neofetch.enable = true;
+      roles.zsh.enable = true;
     };
   };
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  environment.systemPackages = with pkgs; [
-    # Nixpkgs
-    git
-    inetutils  # telnet
+  environment = {
+    # Lisää ZSH valittavien komentotulkkien listaan 
+    shells = [ pkgs.zsh ];
 
-    # Flaket
-    agenix.packages."x86_64-linux".default
-  ];
+    # List packages installed in system profile. To search, run:
+    # $ nix search wget
+    systemPackages = [
+      # Nixpkgs
+      pkgs.git
+      pkgs.inetutils  # telnet
+
+      # Flaket
+      agenix.packages."x86_64-linux".default
+    ];
+  };
 
   # Estä `inetutils` pakettia korvaamasta `nettools`
   # paketin ohjelmia `ifconfig`, `hostname` ja `dnsdomainname`
@@ -130,13 +141,8 @@ in
     };
   };
 
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
+  # Tämä vaaditaan kun zsh on lisätty environment.shells listalle
+  programs.zsh.enable = true;
 
   # List services that you want to enable:
   services = {
