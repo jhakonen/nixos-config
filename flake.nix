@@ -12,7 +12,7 @@
 
     nixosConfigurations.nas-toolbox = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
-      specialArgs = attrs;
+      specialArgs = { catalog = import ./catalog.nix {}; } // attrs;
       modules = [
         ./hosts/nas-toolbox/configuration.nix
         agenix.nixosModules.default
@@ -21,7 +21,7 @@
 
     homeConfigurations."jhakonen@dellxps13" = home-manager.lib.homeManagerConfiguration {
       pkgs = nixpkgs.legacyPackages.x86_64-linux;
-      extraSpecialArgs = attrs;
+      extraSpecialArgs = { catalog = import ./catalog.nix; } // attrs;
       modules = [
         ./hosts/dellxps13/home.nix
         agenix.homeManagerModules.age

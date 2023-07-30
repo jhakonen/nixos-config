@@ -184,6 +184,7 @@ in
 
   roles = {
     backup.enable = true;
+    dashy.enable = true;
     grafana.enable = true;
     home-assistant.enable = true;
     influxdb.enable = true;

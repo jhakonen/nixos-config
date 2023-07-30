@@ -1,6 +1,7 @@
 {
   imports = [
     ./backup.nix
+    ./dashy.nix
     ./grafana.nix
     ./home-assistant.nix
     ./influxdb.nix
