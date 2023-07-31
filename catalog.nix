@@ -78,7 +78,7 @@ in rec {
     };
     huginn = {
       host = nodes.nas;
-      port = 443;
+      port = 80;
       dns.public = "huginn.jhakonen.com";
       dashy = {
         section = "palvelut";
