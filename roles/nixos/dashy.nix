@@ -16,7 +16,36 @@ let
       name = "Palvelut";
       icon = "fas fa-cube";
     }
+    {
+      name = "Verkon hallinta";
+      icon = "fas fa-router";
+    }
   ];
+
+  capitalize = input: concatStringsSep " " (map (word: capitalizeWord word) (lib.strings.splitString " " input));
+  capitalizeWord = word: (lib.strings.toUpper (builtins.substring 0 1 word)) + builtins.substring 1 1000 word;
+
+  specialCharsToSpaces = input: lib.strings.stringAsChars (c: if (builtins.match "[-_]" c) == [] then " " else c) input;
+
+  getServiceName = service: capitalize (specialCharsToSpaces service.name);
+
+  getServiceScheme = service: if service.port == 443 then "https" else "http";
+
+  getServiceAddress = service:
+    if (service ? dns.public) then
+      service.dns.public
+    else if (service ? host.useIp && service.host.useIp) then
+      service.host.ip.private
+    else
+      service.host.hostName
+    ;
+
+  getServiceTarget = service:
+    if (service ? dashy.newTab && service.dashy.newTab) then
+      "newtab"
+    else
+      "workspace"
+    ;
 
   # Build the items (services) for each section
   sectionServices = let
@@ -26,11 +55,11 @@ let
 
     createSectionItems = services:
       map (service: {
-        title = service.serviceName;
+        title = getServiceName(service);
         description = service.dashy.description;
-        url = "http://${service.host.hostName}:${toString service.port}";
+        url = "${getServiceScheme(service)}://${getServiceAddress(service)}:${toString service.port}";
         icon = service.dashy.icon;
-        target = "workspace";
+        target = getServiceTarget(service);
       }) services;
 
     sectionItems = sectionName:
@@ -56,6 +85,7 @@ let
       preventWriteToDisk = true;
       preventLocalSave = true;
       disableConfiguration = false;
+      disableContextMenu = true;
       hideComponents = {
         hideSettings = true;
         hideFooter = true;
