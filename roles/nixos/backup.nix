@@ -1,4 +1,4 @@
-{ lib, pkgs, config, ... }:
+{ lib, pkgs, config, catalog, ... }:
 let
   cfg = config.roles.backup;
 in {
@@ -16,7 +16,7 @@ in {
     services.backup = {
       enable = true;
       repo = {
-        host = "nas";
+        host = catalog.nodes.nas.hostName;
         user = "borg-backup";
         path = "/volume2/backups/borg/nas-toolbox-nixos";
       };
@@ -31,9 +31,9 @@ in {
       identityFile = config.age.secrets.borgbackup-id-rsa.path;
       passwordFile = config.age.secrets.borgbackup-password.path;
       mounts = {
-        "/mnt/borg/kotiautomaatio".remote = "borg-backup@nas:/volume2/backups/borg/nas-kotiautomaatio";
-        "/mnt/borg/toolbox".remote        = "borg-backup@nas:/volume2/backups/borg/nas-toolbox-nixos";
-        "/mnt/borg/vaultwarden".remote    = "borg-backup@nas:/volume2/backups/borg/vaultwarden";
+        "/mnt/borg/kotiautomaatio".remote = "borg-backup@${catalog.nodes.nas.hostName}:/volume2/backups/borg/nas-kotiautomaatio";
+        "/mnt/borg/toolbox".remote        = "borg-backup@${catalog.nodes.nas.hostName}:/volume2/backups/borg/nas-toolbox-nixos";
+        "/mnt/borg/vaultwarden".remote    = "borg-backup@${catalog.nodes.nas.hostName}:/volume2/backups/borg/vaultwarden";
       };
     };
   };

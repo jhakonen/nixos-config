@@ -1,7 +1,7 @@
-{ lib, pkgs, config, ... }:
+{ lib, pkgs, config, catalog, ... }:
 let
   cfg = config.roles.home-assistant;
-  listenPort = 8123;
+  listenPort = catalog.services.home-assistant.port;
 in {
   options.roles.home-assistant = {
     enable = lib.mkEnableOption "Home Assistant rooli";

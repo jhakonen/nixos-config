@@ -1,4 +1,4 @@
-{ lib, pkgs, config, ... }:
+{ lib, pkgs, config, catalog, ... }:
 let
   cfg = config.roles.nitter;
 in {
@@ -11,7 +11,7 @@ in {
       enable = true;
       openFirewall = true;
       server = {
-        port = 11000;
+        port = catalog.services.nitter.port;
         hostname = "nitter.jhakonen.com";
       };
     };

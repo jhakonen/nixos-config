@@ -1,4 +1,4 @@
-{ lib, pkgs, config, ... }:
+{ lib, pkgs, config, catalog, ... }:
 let
   cfg = config.roles.node-red;
 in {
@@ -12,7 +12,7 @@ in {
     services.node-red = {
       enable = true;
       openFirewall = true;
-      port = 1880;
+      port = catalog.services.node-red.port;
       define = {
         credentialSecret = "false";
         # "logging.console.level" = "trace";

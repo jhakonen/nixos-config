@@ -1,4 +1,4 @@
-{ lib, pkgs, config, ... }:
+{ lib, pkgs, config, catalog, ... }:
 let
   cfg = config.roles.grafana;
 in {
@@ -18,14 +18,14 @@ in {
         };
         security.allow_embedding = true;
         server.http_addr = "0.0.0.0";
+        server.http_port = catalog.services.grafana.port;
       };
       provision.datasources.settings = {
         apiVersion = 1;
         datasources = [{
           name = "InfluxDB";
           type = "influxdb";
-          #url = "http://nas-ubuntu-vm:8086";
-          url = "http://localhost:8086";
+          url = "http://localhost:${toString catalog.services.influx-db.port}";
           database = "telegraf";
         }];
       };

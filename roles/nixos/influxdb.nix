@@ -1,4 +1,4 @@
-{ lib, pkgs, config, ... }:
+{ lib, pkgs, config, catalog, ... }:
 let
   cfg = config.roles.influxdb;
   backupDir = "/var/backup/influxdb";
@@ -11,7 +11,10 @@ in {
     # Työkalut influxdb varmuuskopiointiin ja palatukseen
     environment.systemPackages = [ pkgs.influxdb ];
 
-    services.influxdb.enable = true;
+    services.influxdb = {
+      enable = true;
+      extraConfig.http.bind-address = ":${toString catalog.services.influx-db.port}";
+    };
 
     services.backup.preHooks = [
       ''

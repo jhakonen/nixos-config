@@ -1,4 +1,4 @@
-{ lib, pkgs, config, ... }:
+{ lib, pkgs, config, catalog, ... }:
 let
   cfg = config.roles.mqttwarn;
 in {
@@ -15,7 +15,7 @@ in {
       settings = {
         defaults = {
           hostname = "mqtt.jhakonen.com";
-          port = 8883;
+          port = catalog.services.mosquitto.port;
           username = "koti";
           password = "$ENV:MQTT_PASSWORD";
           clientid = "nas-toolbox-mqttwarn";

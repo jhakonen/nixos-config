@@ -1,4 +1,4 @@
-{ lib, pkgs, config, ... }:
+{ lib, pkgs, config, catalog, ... }:
 let
   cfg = config.roles.mosquitto;
   user = "koti";
@@ -60,7 +60,7 @@ in {
           };
         }
         {
-          port = 8883;
+          port = catalog.services.mosquitto.port;
           settings = {
             certfile = "/etc/wildcard-jhakonen-com.cert";
             keyfile = config.age.secrets.mosquitto-key-file.path;
@@ -72,6 +72,6 @@ in {
         }
       ];
     };
-    networking.firewall.allowedTCPPorts = [ 1883 8883 ];
+    networking.firewall.allowedTCPPorts = [ 1883 catalog.services.mosquitto.port ];
   };
 }
