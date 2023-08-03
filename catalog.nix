@@ -33,25 +33,31 @@ in rec {
 
   services = addServiceNames {
     bitwarden = {
-      host = nodes.nas;
-      port = 443;
-      dns.public = "bitwarden.jhakonen.com";
+      host = nodes.nas-ubuntu-vm;
+      port = 10000;
       dashy = {
         section = "palvelut";
         description = "Salasanojen hallinta";
         icon = "hl-bitwarden";
         newTab = true;
       };
+      public = {
+        domain = "bitwarden.jhakonen.com";
+        port = 443;
+      };
     };
     cops = {
-      host = nodes.nas;
-      port = 443;
-      dns.public = "cops.jhakonen.com";
+      host = nodes.nas-nextcloud-vm;
+      port = 10000;
       dashy = {
         section = "palvelut";
         description = "Calibre OPDS palvelin";
         icon = "https://github.com/seblucas/cops/blob/master/images/icons/icon114.png?raw=true";
         newTab = true;
+      };
+      public = {
+        domain = "cops.jhakonen.com";
+        port = 443;
       };
     };
     dashy = {
@@ -77,14 +83,17 @@ in rec {
       };
     };
     huginn = {
-      host = nodes.nas;
-      port = 80;
-      dns.public = "huginn.jhakonen.com";
+      host = nodes.nas-ubuntu-vm;
+      port = 140000;
       dashy = {
         section = "palvelut";
         description = "Tehtävien automatisointi";
         icon = "hl-huginn";
         newTab = true;
+      };
+      public = {
+        domain = "huginn.jhakonen.com";
+        port = 80;
       };
     };
     influx-db = {
@@ -105,7 +114,9 @@ in rec {
     mosquitto = {
       host = nodes.nas-toolbox;
       port = 8883;
-      dns.public = "mqtt.jhakonen.com";
+      public = {
+        domain = "mqtt.jhakonen.com";
+      };
     };
     nas = {
       host = nodes.nas;
@@ -118,14 +129,17 @@ in rec {
       };
     };
     nextcloud = {
-      host = nodes.nas;
-      port = 443;
-      dns.public = "nextcloud.jhakonen.com";
+      host = nodes.nas-nextcloud-vm;
+      port = 80;
       dashy = {
         section = "palvelut";
         description = "Verkkolevy";
         icon = "hl-nextcloud";
         newTab = true;
+      };
+      public = {
+        domain = "nextcloud.jhakonen.com";
+        port = 443;
       };
     };
     nitter = {
@@ -135,6 +149,10 @@ in rec {
         section = "palvelut";
         description = "Twitterin käyttöliittymä";
         icon = "hl-nitter";
+      };
+      public = {
+        domain = "nitter.jhakonen.com";
+        port = 80;
       };
     };
     node-red = {
@@ -147,9 +165,8 @@ in rec {
       };
     };
     paperless = {
-      host = nodes.nas;
-      port = 443;
-      dns.public = "paperless.jhakonen.com";
+      host = nodes.nas-toolbox;
+      port = 12000;
       dashy = {
         section = "palvelut";
         description = "Asiakirjojen hallinta";

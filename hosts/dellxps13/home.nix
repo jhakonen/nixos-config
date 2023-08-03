@@ -61,6 +61,7 @@
   # programs.neovim.enable = true;
   home.packages = [
     pkgs.nixos-rebuild  # rebuildaus etäkoneelle
+    pkgs.nix-index  # Nixpkgs pakettien sisällön etsiminen
   ];
 
   # Enable home-manager and git

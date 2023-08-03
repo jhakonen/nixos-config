@@ -29,11 +29,18 @@ let
 
   getServiceName = service: capitalize (specialCharsToSpaces service.name);
 
-  getServiceScheme = service: if service.port == 443 then "https" else "http";
+  getServiceScheme = service: if (getServicePort service) == 443 then "https" else "http";
+
+  getServicePort = service:
+    if (service ? public.port) then
+      service.public.port
+    else
+      service.port
+    ;
 
   getServiceAddress = service:
-    if (service ? dns.public) then
-      service.dns.public
+    if (service ? public.domain) then
+      service.public.domain
     else if (service ? host.useIp && service.host.useIp) then
       service.host.ip.private
     else
@@ -57,9 +64,9 @@ let
       map (service: {
         title = getServiceName(service);
         description = service.dashy.description;
-        url = "${getServiceScheme(service)}://${getServiceAddress(service)}:${toString service.port}";
+        url = "${getServiceScheme service}://${getServiceAddress service}:${toString (getServicePort service)}";
         icon = service.dashy.icon;
-        target = getServiceTarget(service);
+        target = getServiceTarget service;
       }) services;
 
     sectionItems = sectionName:

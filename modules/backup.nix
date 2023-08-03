@@ -35,6 +35,10 @@ in {
       type = lib.types.listOf lib.types.str;
       default = [];
     };
+    readWritePaths = lib.mkOption {
+      type = lib.types.listOf lib.types.path;
+      default = [];
+    };
     mounts = lib.mkOption {
       default = {};
       type = lib.types.attrsOf (lib.types.submodule [({ name, ... }: {
@@ -87,7 +91,7 @@ in {
       };
       preHook = lib.mkIf (cfg.preHooks != []) (lib.concatStringsSep "\n" cfg.preHooks);
       postHook = lib.mkIf (cfg.postHooks != []) (lib.concatStringsSep "\n" cfg.postHooks);
-      readWritePaths = [
+      readWritePaths = cfg.readWritePaths ++ [
         "/var/backup"
       ];
     };

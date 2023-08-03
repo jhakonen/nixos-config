@@ -192,6 +192,7 @@ in
     mqttwarn.enable = true;
     nitter.enable = true;
     node-red.enable = true;
+    paperless.enable = true;
     telegraf.enable = true;
   };
 }

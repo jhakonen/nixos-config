@@ -9,6 +9,7 @@
     ./mqttwarn.nix
     ./nitter.nix
     ./node-red.nix
+    ./paperless.nix
     ./telegraf.nix
   ];
 }
