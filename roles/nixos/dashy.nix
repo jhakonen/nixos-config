@@ -22,31 +22,6 @@ let
     }
   ];
 
-  capitalize = input: concatStringsSep " " (map (word: capitalizeWord word) (lib.strings.splitString " " input));
-  capitalizeWord = word: (lib.strings.toUpper (builtins.substring 0 1 word)) + builtins.substring 1 1000 word;
-
-  specialCharsToSpaces = input: lib.strings.stringAsChars (c: if (builtins.match "[-_]" c) == [] then " " else c) input;
-
-  getServiceName = service: capitalize (specialCharsToSpaces service.name);
-
-  getServiceScheme = service: if (getServicePort service) == 443 then "https" else "http";
-
-  getServicePort = service:
-    if (service ? public.port) then
-      service.public.port
-    else
-      service.port
-    ;
-
-  getServiceAddress = service:
-    if (service ? public.domain) then
-      service.public.domain
-    else if (service ? host.useIp && service.host.useIp) then
-      service.host.ip.private
-    else
-      service.host.hostName
-    ;
-
   getServiceTarget = service:
     if (service ? dashy.newTab && service.dashy.newTab) then
       "newtab"
@@ -62,9 +37,9 @@ let
 
     createSectionItems = services:
       map (service: {
-        title = getServiceName(service);
+        title = catalog.getServiceName(service);
         description = service.dashy.description;
-        url = "${getServiceScheme service}://${getServiceAddress service}:${toString (getServicePort service)}";
+        url = "${catalog.getServiceScheme service}://${catalog.getServiceAddress service}:${toString (catalog.getServicePort service)}";
         icon = service.dashy.icon;
         target = getServiceTarget service;
       }) services;

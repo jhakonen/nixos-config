@@ -12,7 +12,7 @@
 
     nixosConfigurations.nas-toolbox = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
-      specialArgs = { catalog = import ./catalog.nix {}; } // attrs;
+      specialArgs = { catalog = import ./catalog.nix attrs; } // attrs;
       modules = [
         ./hosts/nas-toolbox/configuration.nix
         agenix.nixosModules.default

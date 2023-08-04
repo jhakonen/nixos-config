@@ -1,9 +1,51 @@
 # Perustuu ideaan blogista: https://jdheyburn.co.uk/blog/automating-service-configurations-with-nixos/
-{ ... }:
+{ nixpkgs, ... }:
+with nixpkgs;
 let
+  # Lisää node.hostName attribuutti jokaiseen nodeen
   addHostNames = nodes: builtins.mapAttrs (hostName: node: { hostName = hostName; } // node) nodes;
+
+  # Lisää service.name attribuutti jokaiseen palveluun
   addServiceNames = services: builtins.mapAttrs (serviceName: service: { name = serviceName; } // service) services;
+
+  # Muuttaa kunkin sanan ensimmäisen kirjaimen isoksi
+  capitalize = input: builtins.concatStringsSep " " (map (word: capitalizeWord word) (lib.strings.splitString " " input));
+
+  # Muuttaa merkkijonon esnsimmäisen kirjaimen isoksi
+  capitalizeWord = word: (lib.strings.toUpper (builtins.substring 0 1 word)) + builtins.substring 1 1000 word;
+
+  # Muuttaa merkkijonon erikoismerkit välilyönneiksi
+  specialCharsToSpaces = input: lib.strings.stringAsChars (c: if (builtins.match "[-_]" c) == [] then " " else c) input;
+
+  # Palauttaa palvelun nimen
+  getServiceName = service: capitalize (specialCharsToSpaces service.name);
+
+  # Palauttaa palvelun skeeman, eli http tai https, riippuen portista jota käytetään
+  getServiceScheme = service: if (getServicePort service) == 443 then "https" else "http";
+
+  # Palauttaa palvelun portin
+  getServicePort = service:
+    if (service ? public.port) then
+      service.public.port
+    else
+      service.port
+    ;
+
+  # Palauttaa palvelun osoitteen
+  getServiceAddress = service:
+    if (service ? public.domain) then
+      service.public.domain
+    else if (service ? host.useIp && service.host.useIp) then
+      service.host.ip.private
+    else
+      service.host.hostName
+    ;
 in rec {
+  inherit getServiceName;
+  inherit getServiceScheme;
+  inherit getServicePort;
+  inherit getServiceAddress;
+
   nodes = addHostNames {
     asus-router = {
       ip.private = "192.168.1.1";
@@ -172,6 +214,10 @@ in rec {
         description = "Asiakirjojen hallinta";
         icon = "hl-paperless";
         newTab = true;
+      };
+      public = {
+        domain = "paperless.jhakonen.com";
+        port = 443;
       };
     };
     reititin = {

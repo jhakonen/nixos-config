@@ -9,7 +9,7 @@ let
   userGroup = "users";  # Oletan että tämä on aina gid 100
 
   # Varmuuskopiokansio joka sisältää tietokannan ja dokumenttien exportin
-  exportDir = "/var/backup/paperless-export";
+  exportDir = "${config.services.paperless.dataDir}/exports";
 in {
   options.roles.paperless = {
     enable = lib.mkEnableOption "Paperless rooli";
@@ -33,8 +33,8 @@ in {
         PAPERLESS_FILENAME_FORMAT = "{document_type}/{created_year}-{created_month}-{created_day} {title}";
         PAPERLESS_OCR_LANGUAGE = "fin";
         PAPERLESS_OCR_LANGUAGES = "fin";
-        # TODO: Ota käyttöön
-        #PAPERLESS_URL = "https://paperless.jhakonen.com";
+        # Tämä tarvitaan jotta Paperless ei estä pääsyä CSRF tarkistuksen takia
+        PAPERLESS_URL = "${catalog.getServiceScheme catalog.services.paperless}://${catalog.getServiceAddress catalog.services.paperless}";
       };
       port = catalog.services.paperless.port;
       address = "0.0.0.0";  # Salli pääsy palveluun koneen ulkopuolelta (oletuksena 'localhost')
@@ -57,7 +57,6 @@ in {
       ];
       paths = [
         config.services.paperless.dataDir  # Paperlessin tietokanta ja dokumentit
-        exportDir  # Exportti
       ];
       postHooks = [
         # Nosta palvelut takaisin ylös varmuuskopioinnin jälkeen
@@ -71,6 +70,19 @@ in {
     # syöttää skannatut paperit
     fileSystems.${config.services.paperless.consumptionDir} = {
       device = "${catalog.nodes.nas.ip.private}:/volume1/scans";
+      fsType = "nfs";
+      options = [
+        "noauto"
+        "x-systemd.automount"
+        "x-systemd.after=network-online.target"
+        "x-systemd.mount-timeout=90"
+        "x-systemd.idle-timeout=1min"
+      ];
+    };
+
+    # Liitä Paperlessin exporttikansio NFS:n yli NAS:lta
+    fileSystems.${exportDir} = {
+      device = "${catalog.nodes.nas.ip.private}:/volume1/paperless";
       fsType = "nfs";
       options = [
         "noauto"
