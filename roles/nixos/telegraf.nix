@@ -1,41 +1,33 @@
-{ lib, pkgs, config, catalog, ... }:
-let
-  cfg = config.roles.telegraf;
-in {
-  options.roles.telegraf = {
-    enable = lib.mkEnableOption "Telegraf rooli";
-  };
+{ config, catalog, ... }:
+{
+  age.secrets.environment-variables.file = ../../secrets/environment-variables.age;
 
-  config = lib.mkIf cfg.enable {
-    age.secrets.environment-variables.file = ../../secrets/environment-variables.age;
+  services.telegraf = {
+    enable = true;
+    environmentFiles = [ config.age.secrets.environment-variables.path ];
+    extraConfig = {
+      # Kerää ruuvitagien mittausdataa MQTT:stä
+      inputs.mqtt_consumer = {
+        servers = [ "ssl://mqtt.jhakonen.com:${toString catalog.services.mosquitto.port}" ];
+        topics = [
+          "bt-mqtt-gateway/ruuvitag/+/battery"
+          "bt-mqtt-gateway/ruuvitag/+/humidity"
+          "bt-mqtt-gateway/ruuvitag/+/pressure"
+          "bt-mqtt-gateway/ruuvitag/+/temperature"
+        ];
+        topic_tag = "topic";
+        client_id = "telegraf-nas-toolbox";
+        username = "koti";
+        password = "$MQTT_PASSWORD";
+        data_format = "value";
+        data_type = "float";
+        name_override = "ruuvitag";
+      };
 
-    services.telegraf = {
-      enable = true;
-      environmentFiles = [ config.age.secrets.environment-variables.path ];
-      extraConfig = {
-        # Kerää ruuvitagien mittausdataa MQTT:stä
-        inputs.mqtt_consumer = {
-          servers = [ "ssl://mqtt.jhakonen.com:${toString catalog.services.mosquitto.port}" ];
-          topics = [
-            "bt-mqtt-gateway/ruuvitag/+/battery"
-            "bt-mqtt-gateway/ruuvitag/+/humidity"
-            "bt-mqtt-gateway/ruuvitag/+/pressure"
-            "bt-mqtt-gateway/ruuvitag/+/temperature"
-          ];
-          topic_tag = "topic";
-          client_id = "telegraf-nas-toolbox";
-          username = "koti";
-          password = "$MQTT_PASSWORD";
-          data_format = "value";
-          data_type = "float";
-          name_override = "ruuvitag";
-        };
-
-        # Tallenna kerätty data influxdb kantaan
-        outputs.influxdb = {
-          urls = [ "http://localhost:${toString catalog.services.influx-db.port}" ];
-          database = "telegraf";
-        };
+      # Tallenna kerätty data influxdb kantaan
+      outputs.influxdb = {
+        urls = [ "http://localhost:${toString catalog.services.influx-db.port}" ];
+        database = "telegraf";
       };
     };
   };

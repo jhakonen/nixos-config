@@ -25,7 +25,17 @@ in
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ../../modules
-      ../../roles/nixos
+      ../../roles/nixos/backup.nix
+      ../../roles/nixos/dashy.nix
+      ../../roles/nixos/grafana.nix
+      ../../roles/nixos/home-assistant.nix
+      ../../roles/nixos/influxdb.nix
+      ../../roles/nixos/mosquitto.nix
+      ../../roles/nixos/mqttwarn.nix
+      ../../roles/nixos/nitter.nix
+      ../../roles/nixos/node-red.nix
+      ../../roles/nixos/paperless.nix
+      ../../roles/nixos/telegraf.nix
       home-manager.nixosModules.default
     ];
 
@@ -95,15 +105,12 @@ in
     };
     jhakonen = { ... }: {
       imports = [
-        ../../roles/home-manager
+        ../../roles/home-manager/git.nix
+        ../../roles/home-manager/neofetch.nix
+        ../../roles/home-manager/zsh.nix
       ];
       home.stateVersion = "23.05";
-      roles.git = {
-        enable = true;
-        githubIdentityFile = config.age.secrets.github-id-rsa.path;
-      };
-      roles.neofetch.enable = true;
-      roles.zsh.enable = true;
+      roles.git.githubIdentityFile = config.age.secrets.github-id-rsa.path;
     };
   };
 
@@ -181,18 +188,4 @@ in
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "23.05"; # Did you read the comment?
-
-  roles = {
-    backup.enable = true;
-    dashy.enable = true;
-    grafana.enable = true;
-    home-assistant.enable = true;
-    influxdb.enable = true;
-    mosquitto.enable = true;
-    mqttwarn.enable = true;
-    nitter.enable = true;
-    node-red.enable = true;
-    paperless.enable = true;
-    telegraf.enable = true;
-  };
 }

@@ -2,18 +2,10 @@
 # Use this to configure your home environment (it replaces ~/.config/nixpkgs/home.nix)
 
 { inputs, outputs, lib, config, pkgs, agenix, ... }: {
-  # You can import other home-manager modules here
   imports = [
-    # If you want to use modules your own flake exports (from modules/home-manager):
-    # outputs.homeManagerModules.example
-
-    # Or modules exported from other flakes (such as nix-colors):
-    # inputs.nix-colors.homeManagerModules.default
-
-    # You can also split up your configuration and import pieces of it here:
-    # ./nvim.nix
-
-    ../../roles/home-manager
+    ../../roles/home-manager/git.nix
+    ../../roles/home-manager/neofetch.nix
+    ../../roles/home-manager/zsh.nix
   ];
 
   age = {
@@ -95,10 +87,5 @@
   # https://nixos.wiki/wiki/Home_Manager#Usage_on_non-NixOS_Linux
   targets.genericLinux.enable = true;
 
-  roles.git = {
-    enable = true;
-    githubIdentityFile = config.age.secrets.github-id-rsa.path;
-  };
-  roles.neofetch.enable = true;
-  roles.zsh.enable = true;
+  roles.git.githubIdentityFile = config.age.secrets.github-id-rsa.path;
 }
