@@ -29,6 +29,7 @@ in
       ../../roles/nixos/dashy.nix
       ../../roles/nixos/grafana.nix
       ../../roles/nixos/home-assistant.nix
+      ../../roles/nixos/huginn.nix
       ../../roles/nixos/influxdb.nix
       ../../roles/nixos/mosquitto.nix
       ../../roles/nixos/mqttwarn.nix

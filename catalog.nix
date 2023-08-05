@@ -125,8 +125,8 @@ in rec {
       };
     };
     huginn = {
-      host = nodes.nas-ubuntu-vm;
-      port = 140000;
+      host = nodes.nas-toolbox;
+      port = 14000;
       dashy = {
         section = "palvelut";
         description = "Tehtävien automatisointi";
