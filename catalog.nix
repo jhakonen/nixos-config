@@ -75,7 +75,7 @@ in rec {
 
   services = addServiceNames {
     bitwarden = {
-      host = nodes.nas-ubuntu-vm;
+      host = nodes.nas-toolbox;
       port = 10000;
       dashy = {
         section = "palvelut";

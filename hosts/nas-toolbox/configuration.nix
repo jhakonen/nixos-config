@@ -37,6 +37,7 @@ in
       ../../roles/nixos/node-red.nix
       ../../roles/nixos/paperless.nix
       ../../roles/nixos/telegraf.nix
+      ../../roles/nixos/vaultwarden.nix
       home-manager.nixosModules.default
     ];
 
@@ -123,6 +124,8 @@ in
     # $ nix search wget
     systemPackages = [
       # Nixpkgs
+      pkgs.btop
+      pkgs.sqlite-interactive # sqlite3 vaultwardenin tietokannan tutkimiseen
       pkgs.git
       pkgs.inetutils  # telnet
 

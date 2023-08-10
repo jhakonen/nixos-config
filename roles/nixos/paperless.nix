@@ -28,6 +28,8 @@ in {
       PAPERLESS_OCR_LANGUAGES = "fin";
       # Tämä tarvitaan jotta Paperless ei estä pääsyä CSRF tarkistuksen takia
       PAPERLESS_URL = "${catalog.getServiceScheme catalog.services.paperless}://${catalog.getServiceAddress catalog.services.paperless}";
+      # Sähköpostin skannaus-workeri meni jumiin ja söi 70% cputa, otetaan pois käytöstä
+      PAPERLESS_EMAIL_TASK_CRON = "disable";
     };
     port = catalog.services.paperless.port;
     address = "0.0.0.0";  # Salli pääsy palveluun koneen ulkopuolelta (oletuksena 'localhost')

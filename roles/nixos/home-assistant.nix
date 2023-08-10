@@ -35,8 +35,12 @@ in {
   services.nginx = {
     enable = true;
     recommendedProxySettings = true;
-    defaultHTTPListenPort = listenPort;
-    virtualHosts."kota.jhakonen.com" = {
+    virtualHosts.homeAssistant = {
+      serverName = "kota.jhakonen.com";
+      listen = [{
+        addr = "0.0.0.0";
+        port = listenPort;
+      }];
       locations."/" = {
         proxyPass = "http://127.0.0.1:${toString config.services.home-assistant.config.http.server_port}/";
         proxyWebsockets = true;
