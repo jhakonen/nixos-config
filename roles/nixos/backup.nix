@@ -24,9 +24,7 @@
     identityFile = config.age.secrets.borgbackup-id-rsa.path;
     passwordFile = config.age.secrets.borgbackup-password.path;
     mounts = {
-      "/mnt/borg/kotiautomaatio".remote = "borg-backup@${catalog.nodes.nas.hostName}:/volume2/backups/borg/nas-kotiautomaatio";
-      "/mnt/borg/toolbox".remote        = "borg-backup@${catalog.nodes.nas.hostName}:/volume2/backups/borg/nas-toolbox-nixos";
-      "/mnt/borg/vaultwarden".remote    = "borg-backup@${catalog.nodes.nas.hostName}:/volume2/backups/borg/vaultwarden";
+      "/mnt/borg/toolbox".remote = "borg-backup@${catalog.nodes.nas.hostName}:/volume2/backups/borg/nas-toolbox-nixos";
     };
   };
 }
