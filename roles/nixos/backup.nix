@@ -14,7 +14,6 @@
       path = "/volume2/backups/borg/nas-toolbox-nixos";
     };
     paths = [
-      "/etc/nixos"
       "/home/jhakonen"
     ];
     excludes = [
