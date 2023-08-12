@@ -5,7 +5,7 @@
     openFirewall = true;
     server = {
       port = catalog.services.nitter.port;
-      hostname = "nitter.jhakonen.com";
+      hostname = catalog.services.nitter.public.domain;
     };
   };
   # 22.7.2023: Käännä Nitterin uusin master

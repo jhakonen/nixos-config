@@ -7,7 +7,7 @@
     environmentFiles = [ config.age.secrets.environment-variables.path ];
     settings = {
       defaults = {
-        hostname = "mqtt.jhakonen.com";
+        hostname = catalog.services.mosquitto.public.domain;
         port = catalog.services.mosquitto.port;
         username = "koti";
         password = "$ENV:MQTT_PASSWORD";

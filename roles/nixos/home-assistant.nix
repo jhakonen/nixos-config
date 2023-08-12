@@ -12,8 +12,8 @@ in {
         trusted_proxies = [ "127.0.0.1" ];
       };
       homeassistant = {
-        external_url = "http://kota.jhakonen.com:${toString listenPort}";
-        internal_url = "http://nas-toolbox:${toString listenPort}";
+        external_url = "http://${catalog.services.home-assistant.public.domain}:${toString listenPort}";
+        internal_url = "http://${catalog.services.home-assistant.host.hostName}:${toString listenPort}";
         auth_providers = [
           {
             type = "trusted_networks";
@@ -36,7 +36,7 @@ in {
     enable = true;
     recommendedProxySettings = true;
     virtualHosts.homeAssistant = {
-      serverName = "kota.jhakonen.com";
+      serverName = catalog.services.home-assistant.public.domain;
       listen = [{
         addr = "0.0.0.0";
         port = listenPort;

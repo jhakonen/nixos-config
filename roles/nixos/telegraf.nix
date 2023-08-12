@@ -8,7 +8,7 @@
     extraConfig = {
       # Kerää ruuvitagien mittausdataa MQTT:stä
       inputs.mqtt_consumer = {
-        servers = [ "ssl://mqtt.jhakonen.com:${toString catalog.services.mosquitto.port}" ];
+        servers = [ "ssl://${catalog.services.mosquitto.public.domain}:${toString catalog.services.mosquitto.port}" ];
         topics = [
           "bt-mqtt-gateway/ruuvitag/+/battery"
           "bt-mqtt-gateway/ruuvitag/+/humidity"

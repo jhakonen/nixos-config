@@ -3,10 +3,10 @@
 with nixpkgs;
 let
   # Lisää node.hostName attribuutti jokaiseen nodeen
-  addHostNames = nodes: builtins.mapAttrs (hostName: node: { hostName = hostName; } // node) nodes;
+  addHostNames = nodes: builtins.mapAttrs (hostName: node: { inherit hostName; } // node) nodes;
 
   # Lisää service.name attribuutti jokaiseen palveluun
-  addServiceNames = services: builtins.mapAttrs (serviceName: service: { name = serviceName; } // service) services;
+  addServiceNames = services: builtins.mapAttrs (name: service: { inherit name; } // service) services;
 
   # Muuttaa kunkin sanan ensimmäisen kirjaimen isoksi
   capitalize = input: builtins.concatStringsSep " " (map (word: capitalizeWord word) (lib.strings.splitString " " input));
@@ -123,6 +123,7 @@ in rec {
         description = "Kotiautomaation hallinta";
         icon = "hl-home-assistant";
       };
+      public.domain = "kota.jhakonen.com";
     };
     huginn = {
       host = nodes.nas-toolbox;
