@@ -19,7 +19,16 @@ let
       + "QZdUqOqF3C79F3f/MCrYk3/CvtbDtQ== jhakonen";
 in
 {
+  # Ota flaket käyttöön
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  # Poista duplikaatteja storesta, säästäen tilaa
+  nix.settings.auto-optimise-store = true;
+  nix.gc = {
+    # Poista automaattisesti vanhoja nix paketteja ja sukupolvia
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 7d";
+  };
 
   imports =
     [ # Include the results of the hardware scan.
