@@ -72,9 +72,6 @@
           "~/.ssh/id_rsa_borgbackup"
         ];
       };
-      "nas-ubuntu-vm" = {
-        user = "jhakonen";
-      };
     };
   };
 

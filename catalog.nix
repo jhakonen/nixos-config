@@ -65,9 +65,6 @@ in rec {
     nas-toolbox = {
       ip.private = "192.168.1.171";
     };
-    nas-ubuntu-vm = {
-      ip.private = "192.168.1.70";
-    };
     nas-nextcloud-vm = {
       ip.private = "192.168.1.49";
     };
