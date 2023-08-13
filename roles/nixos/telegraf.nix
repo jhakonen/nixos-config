@@ -1,10 +1,10 @@
 { config, catalog, ... }:
 {
-  age.secrets.environment-variables.file = ../../secrets/environment-variables.age;
+  age.secrets.telegraf-environment.file = ../../secrets/telegraf-environment.age;
 
   services.telegraf = {
     enable = true;
-    environmentFiles = [ config.age.secrets.environment-variables.path ];
+    environmentFiles = [ config.age.secrets.telegraf-environment.path ];
     extraConfig = {
       # Kerää ruuvitagien mittausdataa MQTT:stä
       inputs.mqtt_consumer = {

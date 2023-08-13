@@ -1,10 +1,10 @@
 { config, catalog, ... }:
 {
-  age.secrets.environment-variables.file = ../../secrets/environment-variables.age;
+  age.secrets.mqttwarn-environment.file = ../../secrets/mqttwarn-environment.age;
 
   services.mqttwarn = {
     enable = true;
-    environmentFiles = [ config.age.secrets.environment-variables.path ];
+    environmentFiles = [ config.age.secrets.mqttwarn-environment.path ];
     settings = {
       defaults = {
         hostname = catalog.services.mosquitto.public.domain;

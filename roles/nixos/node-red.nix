@@ -1,6 +1,6 @@
 { config, catalog, ... }:
 {
-  age.secrets.environment-variables.file = ../../secrets/environment-variables.age;
+  age.secrets.node-red-environment.file = ../../secrets/node-red-environment.age;
 
   services.node-red = {
     enable = true;
@@ -12,7 +12,9 @@
     };
   };
 
-  systemd.services.node-red.serviceConfig.EnvironmentFile = [ config.age.secrets.environment-variables.path ];
+  systemd.services.node-red.serviceConfig.EnvironmentFile = [
+    config.age.secrets.node-red-environment.path
+  ];
 
   services.backup.preHooks = [ "systemctl stop node-red.service" ];
   services.backup.postHooks = [ "systemctl start node-red.service" ];

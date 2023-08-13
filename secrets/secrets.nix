@@ -30,9 +30,11 @@ in
 {
   "borgbackup-id-rsa.age".publicKeys = keys;
   "borgbackup-password.age".publicKeys = keys;
-  "environment-variables.age".publicKeys = keys;
   "github-id-rsa.age".publicKeys = keys;
   "mqtt-password.age".publicKeys = keys;
+  "mqttwarn-environment.age".publicKeys = keys;
+  "node-red-environment.age".publicKeys = keys;
+  "telegraf-environment.age".publicKeys = keys;
   "vaultwarden-environment.age".publicKeys = keys;
   "wildcard-jhakonen-com.key.age".publicKeys = keys;
 }

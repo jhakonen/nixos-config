@@ -52,6 +52,7 @@
   # Add stuff for your user as you see fit:
   # programs.neovim.enable = true;
   home.packages = [
+    agenix.packages."x86_64-linux".default  # agenix komento
     pkgs.nixos-rebuild  # rebuildaus etäkoneelle
     pkgs.nix-index  # Nixpkgs pakettien sisällön etsiminen
   ];
