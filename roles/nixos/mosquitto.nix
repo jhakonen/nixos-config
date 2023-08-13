@@ -47,13 +47,6 @@ in {
     enable = true;
     listeners = [
       {
-        port = 1883;
-        users."${user}" = {
-          acl = [ "#" ];
-          passwordFile = config.age.secrets.mosquitto-password.path;
-        };
-      }
-      {
         port = catalog.services.mosquitto.port;
         settings = {
           certfile = "/etc/wildcard-jhakonen-com.cert";
@@ -66,5 +59,5 @@ in {
       }
     ];
   };
-  networking.firewall.allowedTCPPorts = [ 1883 catalog.services.mosquitto.port ];
+  networking.firewall.allowedTCPPorts = [ catalog.services.mosquitto.port ];
 }
