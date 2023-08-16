@@ -31,4 +31,7 @@
       };
     };
   };
+
+  # Lisää rooli lokiriveihin jotka Promtail lukee
+  systemd.services.telegraf.serviceConfig.LogExtraFields = "ROLE=telegraf";
 }

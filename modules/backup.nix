@@ -109,5 +109,8 @@ in {
                     "x-systemd.mount-timeout=90" "x-systemd.idle-timeout=1min" "allow_other" ];
       };
     }) (lib.attrValues cfg.mounts));
+
+    # Lisää rooli lokiriveihin jotka Promtail lukee
+    systemd.services.borgbackup-job-nas.serviceConfig.LogExtraFields = "ROLE=backup";
   };
 }

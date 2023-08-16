@@ -19,4 +19,7 @@ in {
   ];
   services.backup.postHooks = [ "systemctl start influxdb.service" ];
   services.backup.paths = [ backupDir ];
+
+  # Lisää rooli lokiriveihin jotka Promtail lukee
+  systemd.services.influxdb.serviceConfig.LogExtraFields = "ROLE=influxdb";
 }

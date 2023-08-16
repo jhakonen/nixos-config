@@ -105,6 +105,9 @@ in {
         ExecStart = "${mqttwarn}/bin/mqttwarn";
         Restart = "on-failure";
         RestartSec = "5s";
+
+        # Lisää rooli lokiriveihin jotka Promtail lukee
+        LogExtraFields = "ROLE=mqttwarn";
       };
     };
     environment.systemPackages = [ mqttwarn ];

@@ -87,4 +87,12 @@ in {
       "x-systemd.idle-timeout=1min"
     ];
   };
+
+  # Lisää rooli lokiriveihin jotka Promtail lukee
+  systemd.services.paperless-scheduler.serviceConfig.LogExtraFields = "ROLE=paperless";
+  systemd.services.paperless-task-queue.serviceConfig.LogExtraFields = "ROLE=paperless";
+  systemd.services.paperless-copy-password.serviceConfig.LogExtraFields = "ROLE=paperless";
+  systemd.services.paperless-download-nltk-data.serviceConfig.LogExtraFields = "ROLE=paperless";
+  systemd.services.paperless-consumer.serviceConfig.LogExtraFields = "ROLE=paperless";
+  systemd.services.paperless-web.serviceConfig.LogExtraFields = "ROLE=paperless";
 }

@@ -28,4 +28,7 @@
   services.backup.paths = [ config.services.grafana.dataDir ];
   services.backup.preHooks = [ "systemctl stop grafana.service" ];
   services.backup.postHooks = [ "systemctl start grafana.service" ];
+
+  # Lisää rooli lokiriveihin jotka Promtail lukee
+  systemd.services.grafana.serviceConfig.LogExtraFields = "ROLE=grafana";
 }

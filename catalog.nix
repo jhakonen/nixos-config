@@ -108,7 +108,7 @@ in rec {
       port = 3000;
       dashy = {
         section = "palvelut";
-        description = "Kotiautomaation valvonta";
+        description = "Järjestelmän valvonta";
         icon = "hl-grafana";
       };
     };
@@ -139,6 +139,10 @@ in rec {
     influx-db = {
       host = nodes.nas-toolbox;
       port = 8086;
+    };
+    loki = {
+      host = nodes.nas-toolbox;
+      port = 15000;
     };
     modeemi = {
       name = "5G Modeemi";

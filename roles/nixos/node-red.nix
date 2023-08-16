@@ -19,4 +19,7 @@
   services.backup.preHooks = [ "systemctl stop node-red.service" ];
   services.backup.postHooks = [ "systemctl start node-red.service" ];
   services.backup.paths = [ config.services.node-red.userDir ];
+
+  # Lisää rooli lokiriveihin jotka Promtail lukee
+  systemd.services.node-red.serviceConfig.LogExtraFields = "ROLE=node-red";
 }

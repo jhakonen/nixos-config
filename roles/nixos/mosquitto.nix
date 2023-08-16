@@ -60,4 +60,7 @@ in {
     ];
   };
   networking.firewall.allowedTCPPorts = [ catalog.services.mosquitto.port ];
+
+  # Lisää rooli lokiriveihin jotka Promtail lukee
+  systemd.services.mosquitto.serviceConfig.LogExtraFields = "ROLE=mosquitto";
 }

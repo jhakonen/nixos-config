@@ -53,4 +53,7 @@ in {
     preHooks = [ "systemctl stop home-assistant.service" ];
     postHooks = [ "systemctl start home-assistant.service" ];
   };
+
+  # Lisää rooli lokiriveihin jotka Promtail lukee
+  systemd.services.home-assistant.serviceConfig.LogExtraFields = "ROLE=home-assistant";
 }

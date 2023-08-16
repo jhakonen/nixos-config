@@ -40,11 +40,13 @@ in
       ../../roles/nixos/home-assistant.nix
       ../../roles/nixos/huginn.nix
       ../../roles/nixos/influxdb.nix
+      ../../roles/nixos/loki.nix
       ../../roles/nixos/mosquitto.nix
       ../../roles/nixos/mqttwarn.nix
       ../../roles/nixos/nitter.nix
       ../../roles/nixos/node-red.nix
       ../../roles/nixos/paperless.nix
+      ../../roles/nixos/promtail.nix
       ../../roles/nixos/telegraf.nix
       ../../roles/nixos/vaultwarden.nix
       home-manager.nixosModules.default

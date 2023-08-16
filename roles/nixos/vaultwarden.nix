@@ -64,4 +64,8 @@ in
 
   # Varmuuskopiointi
   services.backup.paths = [ backupDir ];
+
+  # Lisää rooli lokiriveihin jotka Promtail lukee
+  systemd.services.vaultwarden.serviceConfig.LogExtraFields = "ROLE=vaultwarden";
+  systemd.services.backup-vaultwarden.serviceConfig.LogExtraFields = "ROLE=vaultwarden";
 }

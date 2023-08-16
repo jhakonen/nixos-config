@@ -19,4 +19,7 @@
   #     };
   #   });
   # })];
+
+  # Lisää rooli lokiriveihin jotka Promtail lukee
+  systemd.services.nitter.serviceConfig.LogExtraFields = "ROLE=nitter";
 }

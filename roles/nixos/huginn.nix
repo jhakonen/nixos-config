@@ -16,11 +16,16 @@ in {
     };
   };
 
-  # Luo datakansio
-  systemd.services."${config.virtualisation.oci-containers.backend}-huginn".preStart = ''
-    mkdir -p ${dataDir}
-    chmod 777 ${dataDir}
-  '';
+  systemd.services."${config.virtualisation.oci-containers.backend}-huginn" = {
+    # Luo datakansio
+    preStart = ''
+      mkdir -p ${dataDir}
+      chmod 777 ${dataDir}
+    '';
+
+    # Lisää rooli lokiriveihin jotka Promtail lukee
+    serviceConfig.LogExtraFields = "ROLE=huginn";
+  };
 
   # Puhkaise reikä palomuuriin
   networking.firewall.allowedTCPPorts = [ catalog.services.huginn.port ];
