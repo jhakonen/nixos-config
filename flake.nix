@@ -19,6 +19,15 @@
       ];
     };
 
+    nixosConfigurations.kota-portti = nixpkgs.lib.nixosSystem {
+      system = "aarch64-linux";
+      specialArgs = { catalog = import ./catalog.nix attrs; } // attrs;
+      modules = [
+        ./hosts/kota-portti/configuration.nix
+        agenix.nixosModules.default
+      ];
+    };
+
     homeConfigurations."jhakonen@dellxps13" = home-manager.lib.homeManagerConfiguration {
       pkgs = nixpkgs.legacyPackages.x86_64-linux;
       extraSpecialArgs = { catalog = import ./catalog.nix; } // attrs;

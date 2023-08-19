@@ -1,4 +1,4 @@
-.PHONY: hm-switch update nas-toolbox nas-toolbox-debug
+.PHONY: hm-switch update nas-toolbox nas-toolbox-debug kota-portti
 .DEFAULT_GOAL := help
 
 # Lokaalin koneen targetit
@@ -15,6 +15,9 @@ nas-toolbox: ## Rakenna nas-toolboxin järjestelmä
 
 nas-toolbox-debug: ## Rakenna nas-toolboxin järjestelmä, enemmän virhetulostusta
 	nixos-rebuild switch --flake '.#nas-toolbox' --target-host root@nas-toolbox --show-trace --verbose
+
+kota-portti: ## Rakenna kota-porttin järjestelmä
+	nixos-rebuild switch --flake '.#kota-portti' --target-host root@kota-portti --build-host root@kota-portti --fast
 
 # Muut targetit
 help:
