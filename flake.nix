@@ -21,7 +21,12 @@
 
     nixosConfigurations.kota-portti = nixpkgs.lib.nixosSystem {
       system = "aarch64-linux";
-      specialArgs = { catalog = import ./catalog.nix attrs; } // attrs;
+      specialArgs = {
+        catalog = import ./catalog.nix attrs;
+        my-packages = import ./packages {
+          pkgs = nixpkgs.legacyPackages.aarch64-linux;
+        };
+      } // attrs;
       modules = [
         ./hosts/kota-portti/configuration.nix
         agenix.nixosModules.default
