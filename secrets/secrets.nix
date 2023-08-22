@@ -13,6 +13,19 @@ let
     + "Cq0tb5pheaYWRd1iGOY0x2dI6TC2nl6ZVBB6ABzHoRLhG+FDnTWvPTodY1C7rTzUVyWOn"
     + "QZdUqOqF3C79F3f/MCrYk3/CvtbDtQ== jhakonen";
   # /etc/ssh/ssh_host_rsa_key.pub
+  kota-portti =
+    "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQD3zbvY+UeRbzSGnti3y9I0CFb5LB9ckPv"
+    + "vq45Il7UrNE7omEnehv4LBhVarCcU6iY6wpzxXXb/1gCOM27Hf1Da7TpohEyeb05Q8N52"
+    + "GwCPUOvUqmE1x9lxiwLSWMONili8Sk5/ZB8F9VZ5uIzkIdnZ0OhgWba7pYRWXkGmXcGuT"
+    + "48iaCxXD7VoUHpbL4CmMQVWwgFBjhhZyDFJoCQaBjseAZmbXe+QuLf0lyfqi4yxub8m6T"
+    + "hG2NN6XKBp0Rqw7vy2Gfab8dIt3nwuEivRahuGf/G2bW2FpEkVFtzSUx2xchR5QX55u4K"
+    + "kCmJCGaYSxlEI8robiAGIQYYsTAgLgQKvZXow2xngIA/dtuhG/4n4A5QhJuvDuMuLxWsg"
+    + "gXHNmCRrBhHDXQkBvXZp1PE4b/dwwuL/61J+Y2LxBy3i3rQXf/UyeJh2xLvf4KvWzB7HF"
+    + "/WQqfWmnQOr0dR/+Qz1lz3kxEwAO9Sdt5O9mXHE/ig+aaPEfIXGxB+zidonjNHGSaRCOF"
+    + "MrGiDiuj1N/FQshT2/t84ITkU3Ji6uZbh1G1iPlPtd62QQVLNM/3apC71+6+JRJNEkeJa"
+    + "M65P3ZC16x4OtQ67tl4aIk6nUsynxge4QyaFMK7Que1mDpskBdmIbkvrRVGey5PbjPgnm"
+    + "+FJ1QHTSnbWPESrPDIyboTEAzAc7tQ== root@nixos";
+  # /etc/ssh/ssh_host_rsa_key.pub
   nas-toolbox =
     "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDk2VrBOGh0UgaztWOSZVqoNEdzQeObWba"
     + "D/7czbc11zxrr0AhyrpcYC8rA4LPijE//hymsR/ofM06xBN/cducebTbkaMda7JykVSwD"
@@ -25,16 +38,16 @@ let
     + "4u6xD2QnrZCIgKDW9JbbMNJZWDGerDltdh6SpjQjIizuzla+hloY+vp2cw2iMN9o6jXbG"
     + "H2ogrsIKXHyEaOJ9jjdTmngvbrXNalcIpBK3oGj6pvPR+y3ayEZ6fMWXlZ9aLkRM3oIdq"
     + "XUb80pgeh/stpeOv2canemQHzUHZ6Q== root@nas-toolbox";
-  keys = [ jhakonen nas-toolbox ];
 in
 {
-  "borgbackup-id-rsa.age".publicKeys = keys;
-  "borgbackup-password.age".publicKeys = keys;
-  "github-id-rsa.age".publicKeys = keys;
-  "mqtt-password.age".publicKeys = keys;
-  "mqttwarn-environment.age".publicKeys = keys;
-  "node-red-environment.age".publicKeys = keys;
-  "telegraf-environment.age".publicKeys = keys;
-  "vaultwarden-environment.age".publicKeys = keys;
-  "wildcard-jhakonen-com.key.age".publicKeys = keys;
+  "borgbackup-id-rsa.age".publicKeys = [ jhakonen nas-toolbox ];
+  "borgbackup-password.age".publicKeys = [ jhakonen nas-toolbox ];
+  "github-id-rsa.age".publicKeys = [ jhakonen nas-toolbox ];
+  "mqtt-password.age".publicKeys = [ jhakonen nas-toolbox ];
+  "mqttwarn-environment.age".publicKeys = [ jhakonen nas-toolbox ];
+  "node-red-environment.age".publicKeys = [ jhakonen nas-toolbox ];
+  "telegraf-environment.age".publicKeys = [ jhakonen nas-toolbox ];
+  "vaultwarden-environment.age".publicKeys = [ jhakonen nas-toolbox ];
+  "wildcard-jhakonen-com.key.age".publicKeys = [ jhakonen nas-toolbox ];
+  "zigbee2mqtt-environment.age".publicKeys = [ jhakonen kota-portti ];
 }

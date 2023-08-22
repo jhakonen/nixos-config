@@ -26,6 +26,7 @@ in
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ../../roles/nixos/gpio-shutdown.nix
+      ../../roles/nixos/zigbee2mqtt.nix
     ];
 
   # Use the extlinux boot loader. (NixOS wants to enable GRUB by default)
@@ -105,6 +106,10 @@ in
   #   vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
   #   wget
   # ];
+
+  # Asenna root ca certifikaatti, tarvitaan kun otetaan
+  # yhteyttä *.jhakonen.com domaineihin SSL:n yli, esim. MQTT
+  security.pki.certificateFiles = [ ../../data/root-ca.pem ];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
