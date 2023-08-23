@@ -1,4 +1,4 @@
-{ config, ... }:
+{ catalog, config, ... }:
 {
   services.zigbee2mqtt = {
     enable = true;
@@ -41,7 +41,7 @@
         };
       };
       groups = {};
-      frontend = true;
+      frontend.port = catalog.services.zigbee2mqtt.port;
     };
   };
 
@@ -51,7 +51,9 @@
     config.age.secrets.zigbee2mqtt-environment.path
   ];
 
+  # Avaa palomuuriin hallintapaneelille reikä
+  networking.firewall.allowedTCPPorts = [ catalog.services.zigbee2mqtt.port ];
+
   # TODO: Lisää varmuuskopiointi
-  # TODO: Lisää hallintapaneeli Dashyyn
   # TODO: Lisää promtail lokitus
 }

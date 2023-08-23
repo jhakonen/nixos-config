@@ -56,7 +56,7 @@ in rec {
       useIp = true;
     };
     dellxps13 = {};
-    kota = {
+    kota-portti = {
       ip.private = "192.168.1.132";
     };
     nas = {
@@ -233,7 +233,7 @@ in rec {
       };
     };
     zigbee2mqtt = {
-      host = nodes.kota;
+      host = nodes.kota-portti;
       port = 8880;
       dashy = {
         section = "palvelut";
