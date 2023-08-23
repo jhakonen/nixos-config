@@ -51,9 +51,11 @@
     config.age.secrets.zigbee2mqtt-environment.path
   ];
 
+  # Lisää rooli lokiriveihin jotka Promtail lukee
+  systemd.services.zigbee2mqtt.serviceConfig.LogExtraFields = "ROLE=zigbee2mqtt";
+
   # Avaa palomuuriin hallintapaneelille reikä
   networking.firewall.allowedTCPPorts = [ catalog.services.zigbee2mqtt.port ];
 
   # TODO: Lisää varmuuskopiointi
-  # TODO: Lisää promtail lokitus
 }

@@ -12,7 +12,7 @@
       positions.filename = "/tmp/positions.yaml";
       clients = [{
         # Loki-kannan osoite johon lokirivit lähetetään
-        url = "http://127.0.0.1:${toString catalog.services.loki.port}/loki/api/v1/push";
+        url = "http://${catalog.getServiceAddress(catalog.services.loki)}:${toString catalog.services.loki.port}/loki/api/v1/push";
       }];
       scrape_configs = [{
         # Konffan nimi, pakollinen, en tiedä miksi tarvitaan
