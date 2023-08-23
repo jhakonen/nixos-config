@@ -61,7 +61,9 @@ in {
     home-manager.users.root.programs.ssh.matchBlocks."${cfg.repo.user}@${cfg.repo.host}" = {
       match = "host ${cfg.repo.host} user ${cfg.repo.user}";
       identityFile = cfg.identityFile;
-      checkHostIP = false;
+      # Ilman tarkistuksen poistoa tulee virhe "Host key verification failed" jos kone ei ole
+      # .ssh/known_hosts tiedostossa. Tämä on luultavasti ok sisäverkossa.
+      extraOptions.StrictHostKeyChecking = "no";
     };
 
     environment.systemPackages = lib.mkIf (cfg.mounts != {}) [

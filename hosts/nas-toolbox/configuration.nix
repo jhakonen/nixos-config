@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, agenix, home-manager, ... }:
+{ catalog, config, pkgs, agenix, home-manager, ... }:
 let
   # Julkinen avain SSH:lla sisäänkirjautumista varten
   id-rsa-public-key =
@@ -34,7 +34,6 @@ in
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ../../modules
-      ../../roles/nixos/backup.nix
       ../../roles/nixos/dashy.nix
       ../../roles/nixos/grafana.nix
       ../../roles/nixos/home-assistant.nix
@@ -161,6 +160,8 @@ in
       file = ../../secrets/github-id-rsa.age;
       owner = "jhakonen";
     };
+    borgbackup-id-rsa.file = ../../secrets/borgbackup-id-rsa.age;
+    borgbackup-password.file = ../../secrets/borgbackup-password.age;
   };
 
   # Tämä vaaditaan kun zsh on lisätty environment.shells listalle
@@ -168,6 +169,27 @@ in
 
   # List services that you want to enable:
   services = {
+    backup = {
+      enable = true;
+      repo = {
+        host = catalog.nodes.nas.hostName;
+        user = "borg-backup";
+        path = "/volume2/backups/borg/nas-toolbox-nixos";
+      };
+      paths = [
+        "/home/jhakonen"
+      ];
+      excludes = [
+        "**/.cache"
+        "**/.Trash*"
+      ];
+      identityFile = config.age.secrets.borgbackup-id-rsa.path;
+      passwordFile = config.age.secrets.borgbackup-password.path;
+      mounts = {
+        "/mnt/borg/toolbox".remote = "borg-backup@${catalog.nodes.nas.hostName}:/volume2/backups/borg/nas-toolbox-nixos";
+      };
+    };
+
     # Enable the OpenSSH daemon.
     openssh = {
       enable = true;

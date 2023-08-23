@@ -17,27 +17,31 @@
       devices = {
         "0x14b457fffe7e06cc" = {
           friendly_name = "tradfri-lamppu-1";
-          retain = true;
+          description = "Olohuoneen kattovalaisimen lamppu";
         };
         "0x14b457fffe7e05ed" = {
           friendly_name = "tradfri-lamppu-2";
-          retain = true;
-        };
-        "0xf0d1b8000015dde5" = {
-          friendly_name = "pistoke-2";
-          description = "Osramin Ledvance pistoke";
-        };
-        "0x14b457fffe779423" = {
-          friendly_name = "tradfri-ohjain-1";
+          description = "Olohuoneen kattovalaisimen lamppu";
         };
         "0xccccccfffe3c78b1" = {
           friendly_name = "tradfri-lamppu-3";
+          description = "Olohuoneen kattovalaisimen lamppu";
         };
         "0x086bd7fffe5a78ee" = {
           friendly_name = "pistoke-1";
+          description = "Ei ohjaa mitään, toimii zigbee verkon extenderinä";
+        };
+        "0xf0d1b8000015dde5" = {
+          friendly_name = "pistoke-2";
+          description = "Tietokonepöydän sähköpistorasia";
+        };
+        "0x14b457fffe779423" = {
+          friendly_name = "tradfri-ohjain-1";
+          description = "Rikki, pois käytöstä";
         };
         "0x00158d00027a6155" = {
           friendly_name = "nappi1";
+          description = "Tietokonepöydän sähköjen ohjauspainike";
         };
       };
       groups = {};
@@ -57,5 +61,7 @@
   # Avaa palomuuriin hallintapaneelille reikä
   networking.firewall.allowedTCPPorts = [ catalog.services.zigbee2mqtt.port ];
 
-  # TODO: Lisää varmuuskopiointi
+  # Varmuuskopiointi
+  services.backup.paths = [ config.services.zigbee2mqtt.dataDir ];
+  services.backup.excludes = [ "${config.services.zigbee2mqtt.dataDir}/log" ];
 }

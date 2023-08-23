@@ -43,7 +43,8 @@ in {
   services.backup = {
     preHooks = [
       # Exporttaa varmuuskopio
-      "mkdir -p -m 777 ${exportDir}"
+      "ls ${exportDir}" # Herätä NFS mountti niin että se näyttää kirjoitettavalta, muuten document_exporter herjaa siittä
+      "chown ${username}:${userGroup} ${exportDir}"
       "${pkgs.util-linux}/bin/runuser -u ${username} -- ${config.services.paperless.dataDir}/paperless-manage document_exporter --delete --use-filename-format --use-folder-prefix ${exportDir}"
 
       # Vedä alas paperlessin palvelut jotta tietokannan tiedostot voidaan
