@@ -60,6 +60,7 @@ in {
     ];
     # document_exporter tarvitsee kirjoitusoikeudet data-hakemistoon
     readWritePaths = [ config.services.paperless.dataDir ];
+    excludes = [ "${config.services.paperless.dataDir}/consume" ];
   };
 
   # Liitä dokumenttien syötekansio NFS:n yli NAS:lta. Tähän kansioon skanneri
@@ -72,7 +73,6 @@ in {
       "x-systemd.automount"
       "x-systemd.after=network-online.target"
       "x-systemd.mount-timeout=90"
-      "x-systemd.idle-timeout=1min"
     ];
   };
 
@@ -85,7 +85,6 @@ in {
       "x-systemd.automount"
       "x-systemd.after=network-online.target"
       "x-systemd.mount-timeout=90"
-      "x-systemd.idle-timeout=1min"
     ];
   };
 
