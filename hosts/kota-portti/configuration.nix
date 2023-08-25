@@ -37,6 +37,11 @@ in
   # Enables the generation of /boot/extlinux/extlinux.conf
   boot.loader.generic-extlinux-compatible.enable = true;
 
+  boot.blacklistedKernelModules = [
+    "btbcm" "hci_uart"  # Poista sisäinen bluetooth sovitin pois käytöstä
+                        # Lähde: https://plone.lucidsolutions.co.nz/hardware/raspberry-pi/3/disable-unwanted-raspbian-services
+  ];
+
   networking.hostName = "kota-portti"; # Define your hostname.
   # Pick only one of the below networking options.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -86,6 +91,10 @@ in
   # sound.enable = true;
   # hardware.pulseaudio.enable = true;
 
+  # Tarvitaan jotta bluetooth toimii, myös kun käytetään asusin usb bluetooth
+  # mokkulaa, asentaa myös hcitool ohjelman
+  hardware.bluetooth.enable = true;
+
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
@@ -112,10 +121,9 @@ in
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
-  # environment.systemPackages = with pkgs; [
-  #   vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-  #   wget
-  # ];
+  environment.systemPackages = with pkgs; [
+    usbutils  # lsusb
+  ];
 
   # Asenna root ca certifikaatti, tarvitaan kun otetaan
   # yhteyttä *.jhakonen.com domaineihin SSL:n yli, esim. MQTT
@@ -192,4 +200,9 @@ in
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "23.11"; # Did you read the comment?
 
+  # Mounttaa config.txt saataville
+  # fileSystems."/mnt/firmware" = {
+  #   device = "/dev/disk/by-label/FIRMWARE";
+  #   fsType = "vfat";
+  # };
 }
