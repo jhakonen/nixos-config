@@ -42,6 +42,7 @@ in
 {
   "borgbackup-id-rsa.age".publicKeys = [ jhakonen kota-portti nas-toolbox ];
   "borgbackup-password.age".publicKeys = [ jhakonen kota-portti nas-toolbox ];
+  "bt-mqtt-gateway-environment.age".publicKeys = [ jhakonen kota-portti ];
   "github-id-rsa.age".publicKeys = [ jhakonen nas-toolbox ];
   "mqtt-password.age".publicKeys = [ jhakonen nas-toolbox ];
   "mqttwarn-environment.age".publicKeys = [ jhakonen nas-toolbox ];

@@ -26,6 +26,7 @@ in
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ../../modules
+      ../../roles/nixos/bt-mqtt-gateway.nix
       ../../roles/nixos/gpio-shutdown.nix
       ../../roles/nixos/promtail.nix
       ../../roles/nixos/zigbee2mqtt.nix
