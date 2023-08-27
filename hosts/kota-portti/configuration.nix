@@ -30,6 +30,7 @@ in
       ../../roles/nixos/gpio-shutdown.nix
       ../../roles/nixos/promtail.nix
       ../../roles/nixos/zigbee2mqtt.nix
+      ../../roles/nixos/zsh.nix
       home-manager.nixosModules.default
     ];
 
@@ -104,10 +105,6 @@ in
     openssh.authorizedKeys.keys = [ id-rsa-public-key ];
     isNormalUser = true;
     extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
-  #   packages = with pkgs; [
-  #     firefox
-  #     tree
-  #   ];
   };
   users.users.root = {
     openssh.authorizedKeys.keys = [ id-rsa-public-key ];
@@ -115,8 +112,17 @@ in
 
   home-manager.users = {
     root = {
+      imports = [
+        ../../roles/home-manager/zsh.nix
+      ];
       home.stateVersion = "23.05";
       programs.ssh.enable = true; # Varmuuskopiointi feilaa ilman tätä
+    };
+    jhakonen = {
+      imports = [
+        ../../roles/home-manager/zsh.nix
+      ];
+      home.stateVersion = "23.05";
     };
   };
 

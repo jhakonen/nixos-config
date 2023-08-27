@@ -48,6 +48,7 @@ in
       ../../roles/nixos/promtail.nix
       ../../roles/nixos/telegraf.nix
       ../../roles/nixos/vaultwarden.nix
+      ../../roles/nixos/zsh.nix
       home-manager.nixosModules.default
     ];
 
@@ -88,37 +89,32 @@ in
   # Configure console keymap
   console.keyMap = "fi";
 
-  users = {
-    # Aseta käytettävä komentotulkki
-    # Huomaa: komentotulkki pitää olla environment.shells listassa
-    defaultUserShell = pkgs.zsh;
-
-    users = {
-      jhakonen = {
-        openssh.authorizedKeys.keys = [ id-rsa-public-key ];
-        isNormalUser = true;
-        description = "Janne Hakonen";
-        extraGroups = [
-          # "docker"
-          "networkmanager"
-          "wheel"
-        ];
-        packages = with pkgs; [];
-      };
-      root = {
-        openssh.authorizedKeys.keys = [ id-rsa-public-key ];
-      };
+  users.users = {
+    jhakonen = {
+      openssh.authorizedKeys.keys = [ id-rsa-public-key ];
+      isNormalUser = true;
+      description = "Janne Hakonen";
+      extraGroups = [
+        # "docker"
+        "networkmanager"
+        "wheel"
+      ];
+    };
+    root = {
+      openssh.authorizedKeys.keys = [ id-rsa-public-key ];
     };
   };
   home-manager.users = {
     root = {
+      imports = [
+        ../../roles/home-manager/zsh.nix
+      ];
       home.stateVersion = "23.05";
       programs.ssh.enable = true;
     };
     jhakonen = { ... }: {
       imports = [
         ../../roles/home-manager/git.nix
-        ../../roles/home-manager/neofetch.nix
         ../../roles/home-manager/zsh.nix
       ];
       home.stateVersion = "23.05";
@@ -127,9 +123,6 @@ in
   };
 
   environment = {
-    # Lisää ZSH valittavien komentotulkkien listaan 
-    shells = [ pkgs.zsh ];
-
     # List packages installed in system profile. To search, run:
     # $ nix search wget
     systemPackages = [
@@ -163,9 +156,6 @@ in
     borgbackup-id-rsa.file = ../../secrets/borgbackup-id-rsa.age;
     borgbackup-password.file = ../../secrets/borgbackup-password.age;
   };
-
-  # Tämä vaaditaan kun zsh on lisätty environment.shells listalle
-  programs.zsh.enable = true;
 
   # List services that you want to enable:
   services = {
