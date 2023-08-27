@@ -4,11 +4,14 @@ python3.pkgs.buildPythonApplication rec {
   pname = "bt-mqtt-gateway";
   version = "1.0.0";
   src = fetchFromGitHub {
-    owner = "zewelor";
+    # Sisältää korjauksen:
+    #   https://github.com/jhakonen/bt-mqtt-gateway/commit/7dc088ff59c7b8e2242d30065a0d2d1a5726e85e
+    owner = "jhakonen";
     repo = "bt-mqtt-gateway";
-    rev = "1fc40ced1eee460ec1becff87440bac1bebd3fe4";
-    sha256 = "sha256-DUF/7uq6B6xhReYaeMtKV+vc5n6NyZsyI4n2wiEyIQA=";
+    rev = "7dc088ff59c7b8e2242d30065a0d2d1a5726e85e";
+    sha256 = "sha256-V3cMs2YP4jS5noVzyFdiEr7wTAMLCla6iBv7k/Iqj+A=";
   };
+  # src = /home/jhakonen/code/bt-mqtt-gateway;
 
   propagatedBuildInputs = with python3.pkgs; [
     # Perusriippuvuudet

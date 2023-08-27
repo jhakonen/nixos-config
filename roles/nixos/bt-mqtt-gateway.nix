@@ -30,7 +30,6 @@ let
           };
           topic_prefix = "ruuvitag";
         };
-        update_interval = 1;
       };
     };
   };
