@@ -29,6 +29,7 @@ let
             makuuhuone = "E2:7D:43:DE:99:0C";
           };
           topic_prefix = "ruuvitag";
+          no_data_timeout = 600;
         };
       };
     };
@@ -47,17 +48,22 @@ in
   systemd.services.bt-mqtt-gateway = {
     description = "bt-mqtt-gateway palvelu";
     wantedBy = [ "multi-user.target" ];
-    path = [ pkgs.bluez ]; # Lisää hci* työkalut polulle ruuvitag pluginia varten
+    path = [
+      pkgs.bluez  # Lisää hci* työkalut polulle
+      pkgs.envsubst
+    ];
     preStart = ''
       umask 077
       mkdir -p ${dataDir}
-      ${pkgs.envsubst}/bin/envsubst -i "${configFile}" -o "${dataDir}/bt-mqtt-gateway.yaml"
+      envsubst -i "${configFile}" -o "${dataDir}/bt-mqtt-gateway.yaml"
+      hciconfig hci0 down
+      hciconfig hci0 up
       '';
     serviceConfig = {
       Environment = "CONFIG_FILE=${dataDir}/bt-mqtt-gateway.yaml";
       EnvironmentFile = [ config.age.secrets.bt-mqtt-gateway-environment.path ];
       ExecStart = "${my-packages.bt-mqtt-gateway}/bin/bt-mqtt-gateway";
-      Restart = "on-failure";
+      Restart = "always";
       RestartSec = "5s";
       LogExtraFields = "ROLE=bt-mqtt-gateway";
     };

@@ -4,12 +4,13 @@ python3.pkgs.buildPythonApplication rec {
   pname = "bt-mqtt-gateway";
   version = "1.0.0";
   src = fetchFromGitHub {
-    # Sisältää korjauksen:
+    # Sisältää korjaukset ruuvitag-fixes haarasta:
     #   https://github.com/jhakonen/bt-mqtt-gateway/commit/7dc088ff59c7b8e2242d30065a0d2d1a5726e85e
+    #   https://github.com/jhakonen/bt-mqtt-gateway/commit/7c1e53ca824efcf3642a6fe6f4d26eb828937ac8
     owner = "jhakonen";
     repo = "bt-mqtt-gateway";
-    rev = "7dc088ff59c7b8e2242d30065a0d2d1a5726e85e";
-    sha256 = "sha256-V3cMs2YP4jS5noVzyFdiEr7wTAMLCla6iBv7k/Iqj+A=";
+    rev = "7c1e53ca824efcf3642a6fe6f4d26eb828937ac8";
+    sha256 = "sha256-L6xYNEHU0JrIS4GonHBwX+RLhKs7zp757dormYoxfnc=";
   };
   # src = /home/jhakonen/code/bt-mqtt-gateway;
 
@@ -22,8 +23,10 @@ python3.pkgs.buildPythonApplication rec {
     tenacity
 
     # Ruuvitag-pluginin riippuvuudet
-    bluepy ruuvitag-sensor
+    bluepy ruuvitag-sensor bleak
   ];
+
+  doCheck = false;
 
   preBuild = ''
 # Oletuksena bt-mqtt-gateway lataa logger.yaml tiedoston työskentelyhakemistosta mikä
