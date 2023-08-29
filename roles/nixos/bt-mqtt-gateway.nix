@@ -27,6 +27,7 @@ let
           devices = {
             sauna = "FB:F4:05:4A:70:70";
             makuuhuone = "E2:7D:43:DE:99:0C";
+            ulkona = "D4:43:1D:F2:66:45";
           };
           topic_prefix = "ruuvitag";
           no_data_timeout = 600;
