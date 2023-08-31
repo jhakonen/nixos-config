@@ -111,6 +111,10 @@ in rec {
         description = "Järjestelmän valvonta";
         icon = "hl-grafana";
       };
+      public = {
+        domain = "grafana.jhakonen.com";
+        port = 80;
+      };
     };
     home-assistant = {
       host = nodes.nas-toolbox;
@@ -120,7 +124,10 @@ in rec {
         description = "Kotiautomaation hallinta";
         icon = "hl-home-assistant";
       };
-      public.domain = "kota.jhakonen.com";
+      public = {
+        domain = "home-assistant.jhakonen.com";
+        port = 80;
+      };
     };
     huginn = {
       host = nodes.nas-toolbox;
@@ -207,6 +214,10 @@ in rec {
         description = "Kotiautomaation ohjelmointi";
         icon = "hl-node-red";
       };
+      public = {
+        domain = "node-red.jhakonen.com";
+        port = 80;
+      };
     };
     paperless = {
       host = nodes.nas-toolbox;
@@ -239,6 +250,10 @@ in rec {
         section = "palvelut";
         description = "Zigbee modeemin hallintapaneeli";
         icon = "hl-zigbee2mqtt";
+      };
+      public = {
+        domain = "zigbee2mqtt.jhakonen.com";
+        port = 80;
       };
     };
   };
