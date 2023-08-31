@@ -7,12 +7,12 @@ in {
     config = {
       automation = "!include automations.yaml";
       http = {
-        server_port = listenPort + 1;
+        server_port = listenPort;
         use_x_forwarded_for = true;
-        trusted_proxies = [ "127.0.0.1" ];
+        trusted_proxies = [ catalog.nodes.nas.ip.private ];
       };
       homeassistant = {
-        external_url = "http://${catalog.services.home-assistant.public.domain}:${toString listenPort}";
+        external_url = "http://${catalog.services.home-assistant.public.domain}";
         internal_url = "http://${catalog.services.home-assistant.host.hostName}:${toString listenPort}";
         auth_providers = [
           {
@@ -31,21 +31,6 @@ in {
       default_config = {};
     };
     extraComponents = [ "default_config" "github" "met" "mqtt" ];
-  };
-  services.nginx = {
-    enable = true;
-    recommendedProxySettings = true;
-    virtualHosts.homeAssistant = {
-      serverName = catalog.services.home-assistant.public.domain;
-      listen = [{
-        addr = "0.0.0.0";
-        port = listenPort;
-      }];
-      locations."/" = {
-        proxyPass = "http://127.0.0.1:${toString config.services.home-assistant.config.http.server_port}/";
-        proxyWebsockets = true;
-      };
-    };
   };
   networking.firewall.allowedTCPPorts = [ listenPort ];
   services.backup = {
