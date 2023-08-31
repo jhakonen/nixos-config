@@ -190,10 +190,6 @@ in
       };
     };
 
-    # Ota häntäverkko käyttöön, vaatii lisäksi komennon suorittamisen:
-    #   sudo tailscale up
-    tailscale.enable = true;
-
     # Configure keymap in X11
     xserver = {
       layout = "fi";

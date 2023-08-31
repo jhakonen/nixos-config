@@ -129,6 +129,7 @@ in
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+    btop
     usbutils  # lsusb
   ];
 
@@ -182,10 +183,6 @@ in
         KbdInteractiveAuthentication = false;
       };
     };
-
-    # Ota häntäverkko käyttöön, vaatii lisäksi komennon suorittamisen:
-    #   sudo tailscale up
-    tailscale.enable = true;
   };
 
   # Open ports in the firewall.
