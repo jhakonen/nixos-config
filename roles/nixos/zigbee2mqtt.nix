@@ -35,13 +35,13 @@
           friendly_name = "pistoke-2";
           description = "Tietokonepöydän sähköpistorasia";
         };
-        "0x14b457fffe779423" = {
-          friendly_name = "tradfri-ohjain-1";
-          description = "Rikki, pois käytöstä";
-        };
         "0x00158d00027a6155" = {
-          friendly_name = "nappi1";
+          friendly_name = "painike-1";
           description = "Tietokonepöydän sähköjen ohjauspainike";
+        };
+        "0x001788010d7daa37" = {
+          friendly_name = "painike-2";
+          description = "Olohuoneen valaisimen ohjain";
         };
       };
       groups = {};
