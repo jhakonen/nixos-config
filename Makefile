@@ -19,6 +19,9 @@ nas-toolbox-debug: ## Rakenna nas-toolboxin järjestelmä, enemmän virhetulostu
 kota-portti: ## Rakenna kota-porttin järjestelmä
 	nixos-rebuild switch --flake '.#kota-portti' --target-host root@kota-portti --build-host root@kota-portti --fast
 
+mervi: ## Rakenna mervin järjestelmä
+	nixos-rebuild switch --flake '.#mervi' --target-host root@mervi
+
 # Muut targetit
 help:
 	@sed -ne '/@sed/!s/^## //p' $(MAKEFILE_LIST)

@@ -19,6 +19,15 @@
       ];
     };
 
+    nixosConfigurations.mervi = nixpkgs.lib.nixosSystem {
+      system = "x86_64-linux";
+      specialArgs = { catalog = import ./catalog.nix attrs; } // attrs;
+      modules = [
+        ./hosts/mervi/configuration.nix
+        agenix.nixosModules.default
+      ];
+    };
+
     nixosConfigurations.kota-portti = nixpkgs.lib.nixosSystem {
       system = "aarch64-linux";
       specialArgs = {
