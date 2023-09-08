@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ config, home-manager, pkgs, ... }:
 let
   # Julkinen avain SSH:lla sisäänkirjautumista varten
   id-rsa-public-key =
@@ -22,6 +22,8 @@ in
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      ../../roles/nixos/zsh.nix
+      home-manager.nixosModules.default
     ];
 
   # Bootloader.
@@ -110,6 +112,20 @@ in
     };
     root = {
       openssh.authorizedKeys.keys = [ id-rsa-public-key ];
+    };
+  };
+  home-manager.users = {
+    root = {
+      imports = [
+        ../../roles/home-manager/zsh.nix
+      ];
+      home.stateVersion = "23.05";
+    };
+    jhakonen = { ... }: {
+      imports = [
+        ../../roles/home-manager/zsh.nix
+      ];
+      home.stateVersion = "23.05";
     };
   };
 
