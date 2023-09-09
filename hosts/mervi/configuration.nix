@@ -123,6 +123,7 @@ in
     };
     jhakonen = { ... }: {
       imports = [
+        ../../roles/home-manager/kodi.nix
         ../../roles/home-manager/zsh.nix
       ];
       home.stateVersion = "23.05";
