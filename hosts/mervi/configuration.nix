@@ -22,6 +22,7 @@ in
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      ../../roles/nixos/sunshine.nix
       ../../roles/nixos/zsh.nix
       home-manager.nixosModules.default
     ];

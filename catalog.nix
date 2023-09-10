@@ -21,7 +21,7 @@ let
   getServiceName = service: capitalize (specialCharsToSpaces service.name);
 
   # Palauttaa palvelun skeeman, eli http tai https, riippuen portista jota käytetään
-  getServiceScheme = service: if (getServicePort service) == 443 then "https" else "http";
+  getServiceScheme = service: if ((service ? https) && service.https) || (getServicePort service) == 443 then "https" else "http";
 
   # Palauttaa palvelun portin
   getServicePort = service:
@@ -59,6 +59,7 @@ in rec {
     kota-portti = {
       ip.private = "192.168.1.132";
     };
+    mervi = {};
     nas = {
       ip.private = "192.168.1.101";
     };
@@ -240,6 +241,18 @@ in rec {
         section = "verkon hallinta";
         description = "Reititimen hallintapaneeli";
         icon = "hl-asus-router";
+        newTab = true;
+      };
+    };
+    sunshine-webui = {
+      host = nodes.mervi;
+      port = 47990;
+      https = true;
+      dashy = {
+        section = "palvelut";
+        description = "Sunshine pelipalvelimen hallintapaneeli";
+        icon = "https://raw.githubusercontent.com/LizardByte/Sunshine/68ba1db24ab66df63fd525d15f95b95bc958beac"
+             + "/src_assets/common/assets/web/images/favicon.ico";
         newTab = true;
       };
     };
