@@ -32,7 +32,7 @@
       system = "aarch64-linux";
       specialArgs = {
         catalog = import ./catalog.nix attrs;
-        my-packages = import ./packages {
+        my-packages = import ./packages/nix {
           pkgs = nixpkgs.legacyPackages.aarch64-linux;
         };
       } // attrs;

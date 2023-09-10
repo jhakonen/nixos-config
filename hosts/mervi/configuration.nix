@@ -121,7 +121,7 @@ in
       ];
       home.stateVersion = "23.05";
     };
-    jhakonen = { ... }: {
+    jhakonen = {
       imports = [
         ../../roles/home-manager/kodi.nix
         ../../roles/home-manager/zsh.nix

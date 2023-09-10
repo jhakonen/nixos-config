@@ -2,10 +2,10 @@
 {
   programs.kodi = {
     enable = true;
-    package = (pkgs.kodi.withPackages (exts: with exts; [
-      netflix
-      youtube
-      (callPackage ../../packages/kodi-addons/plugin.video.twitch { })
+    package = (pkgs.kodi.withPackages (exts: [
+      exts.netflix
+      exts.youtube
+      (exts.callPackage ../../packages/kodi-addons/plugin.video.twitch { })
     ]));
     settings = {};
     sources = {
