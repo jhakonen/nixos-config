@@ -63,5 +63,15 @@
           "$HOME/.kodi/userdata/addon_data/plugin.video.twitch/settings.xml"
       '';
     })
+    (pkgs.writeShellApplication {
+      name = "kodi-twitch-set-private-oauth-token";
+      runtimeInputs = [ pkgs.xmlstarlet ];
+      text = ''
+        echo "See: https://github.com/anxdpanic/plugin.video.twitch/wiki/Private-API-Credentials---OAuth-Token#2-enabling-additional-features"
+        read -rp "Twitch private credentials OAuth token: " token
+        xmlstarlet edit --inplace --update "/settings/setting[@id='private_oauth_token']" --value "$token" \
+          "$HOME/.kodi/userdata/addon_data/plugin.video.twitch/settings.xml"
+      '';
+    })
   ];
 }
