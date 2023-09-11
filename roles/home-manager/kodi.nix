@@ -28,49 +28,47 @@
   };
   home.packages = [
     (pkgs.writeShellApplication {
-      name = "kodi-youtube-set-api-id";
+      name = "kodi-set-addon-setting";
       runtimeInputs = [ pkgs.xmlstarlet ];
       text = ''
+        xmlstarlet edit --inplace --update "/settings/setting[@id='$2']" --value "$3" \
+          "$HOME/.kodi/userdata/addon_data/$1/settings.xml"
+      '';
+    })
+    (pkgs.writeShellApplication {
+      name = "kodi-youtube-set-api-id";
+      text = ''
         read -rp "Youtube API Id: " api_id
-        xmlstarlet edit --inplace --update "/settings/setting[@id='youtube.api.id']" --value "$api_id" \
-          "$HOME/.kodi/userdata/addon_data/plugin.video.youtube/settings.xml"
+        kodi-set-addon-setting plugin.video.youtube youtube.api.id "$api_id"
       '';
     })
     (pkgs.writeShellApplication {
       name = "kodi-youtube-set-api-secret";
-      runtimeInputs = [ pkgs.xmlstarlet ];
       text = ''
         read -rp "Youtube API Secret: " api_secret
-        xmlstarlet edit --inplace --update "/settings/setting[@id='youtube.api.secret']" --value "$api_secret" \
-          "$HOME/.kodi/userdata/addon_data/plugin.video.youtube/settings.xml"
+        kodi-set-addon-setting plugin.video.youtube youtube.api.secret "$api_secret"
       '';
     })
     (pkgs.writeShellApplication {
       name = "kodi-youtube-set-api-key";
-      runtimeInputs = [ pkgs.xmlstarlet ];
       text = ''
         read -rp "Youtube API key: " api_key
-        xmlstarlet edit --inplace --update "/settings/setting[@id='youtube.api.key']" --value "$api_key" \
-          "$HOME/.kodi/userdata/addon_data/plugin.video.youtube/settings.xml"
+        kodi-set-addon-setting plugin.video.youtube youtube.api.key "$api_key"
       '';
     })
     (pkgs.writeShellApplication {
       name = "kodi-twitch-set-oauth-token";
-      runtimeInputs = [ pkgs.xmlstarlet ];
       text = ''
         read -rp "Twitch OAuth token: " token
-        xmlstarlet edit --inplace --update "/settings/setting[@id='oauth_token_helix']" --value "$token" \
-          "$HOME/.kodi/userdata/addon_data/plugin.video.twitch/settings.xml"
+        kodi-set-addon-setting plugin.video.twitch oauth_token_helix "$token"
       '';
     })
     (pkgs.writeShellApplication {
       name = "kodi-twitch-set-private-oauth-token";
-      runtimeInputs = [ pkgs.xmlstarlet ];
       text = ''
         echo "See: https://github.com/anxdpanic/plugin.video.twitch/wiki/Private-API-Credentials---OAuth-Token#2-enabling-additional-features"
         read -rp "Twitch private credentials OAuth token: " token
-        xmlstarlet edit --inplace --update "/settings/setting[@id='private_oauth_token']" --value "$token" \
-          "$HOME/.kodi/userdata/addon_data/plugin.video.twitch/settings.xml"
+        kodi-set-addon-setting plugin.video.twitch private_oauth_token "$token"
       '';
     })
   ];
