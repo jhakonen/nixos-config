@@ -107,11 +107,7 @@ in
       isNormalUser = true;
       description = "Janne Hakonen";
       extraGroups = [ "networkmanager" "wheel" ];
-      packages = with pkgs; [
-        firefox
-        kate
-      #  thunderbird
-      ];
+      packages = with pkgs; [];
     };
     root = {
       openssh.authorizedKeys.keys = [ id-rsa-public-key ];
@@ -142,7 +138,13 @@ in
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
-  environment.systemPackages = with pkgs; [];
+  environment.systemPackages = with pkgs; [
+    firefox
+    flirc
+    kate
+    kodi  # lisää Kodin puuttuvan ikonin
+    spotify
+  ];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
