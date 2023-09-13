@@ -90,7 +90,7 @@ in rec {
       host = nodes.nas-nextcloud-vm;
       port = 10000;
       dashy = {
-        section = "palvelut";
+        section = "viihde";
         description = "Calibre OPDS palvelin";
         icon = "https://github.com/seblucas/cops/blob/master/images/icons/icon114.png?raw=true";
         newTab = true;
@@ -147,6 +147,16 @@ in rec {
     influx-db = {
       host = nodes.nas-toolbox;
       port = 8086;
+    };
+    kodi = {
+      host = nodes.mervi;
+      port = 8080;
+      dashy = {
+        section = "viihde";
+        description = "Kodin hallintapaneeli";
+        icon = "hl-kodi";
+        newTab = true;
+      };
     };
     loki = {
       host = nodes.nas-toolbox;
@@ -249,10 +259,22 @@ in rec {
       port = 47990;
       https = true;
       dashy = {
-        section = "palvelut";
+        section = "viihde";
+        title = "Sunshine";
         description = "Sunshine pelipalvelimen hallintapaneeli";
         icon = "https://raw.githubusercontent.com/LizardByte/Sunshine/68ba1db24ab66df63fd525d15f95b95bc958beac"
              + "/src_assets/common/assets/web/images/favicon.ico";
+        newTab = true;
+      };
+    };
+    tvheadend-webui = {
+      host = nodes.mervi;
+      port = 9981;
+      dashy = {
+        section = "viihde";
+        title = "Tvheadend";
+        description = "Tvheadend palvelimen hallintapaneeli";
+        icon = "hl-tvheadend";
         newTab = true;
       };
     };

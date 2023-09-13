@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, home-manager, pkgs, ... }:
+{ catalog, config, home-manager, pkgs, ... }:
 let
   # Julkinen avain SSH:lla sisäänkirjautumista varten
   id-rsa-public-key =
@@ -23,6 +23,7 @@ in
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ../../roles/nixos/sunshine.nix
+      ../../roles/nixos/tvheadend.nix
       ../../roles/nixos/zsh.nix
       home-manager.nixosModules.default
     ];
@@ -166,6 +167,10 @@ in
       KbdInteractiveAuthentication = false;
     };
   };
+
+  networking.firewall.allowedTCPPorts = [
+    catalog.services.kodi.port  # Kodi hallintapaneeli + Kore Android appi
+  ];
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];

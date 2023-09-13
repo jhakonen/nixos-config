@@ -4,6 +4,7 @@
     enable = true;
     package = (pkgs.kodi.withPackages (exts: [
       exts.netflix
+      exts.pvr-hts  # TVheadend
       exts.youtube
       (exts.callPackage ../../packages/kodi-addons/plugin.video.twitch { })
     ]));

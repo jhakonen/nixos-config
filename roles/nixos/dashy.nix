@@ -11,6 +11,10 @@ let
       name = "Verkon hallinta";
       icon = "fas fa-router";
     }
+    {
+      name = "Viihde";
+      icon = "fas fa-video";
+    }
   ];
 
   getSectionItems = sectionName: services:
@@ -23,7 +27,7 @@ let
     service ? dashy.section && service.dashy.section == (lib.toLower sectionName);
 
   buildSectionItem = service: {
-    title = catalog.getServiceName(service);
+    title = if service ? dashy.title then service.dashy.title else catalog.getServiceName(service);
     description = service.dashy.description;
     url = "${catalog.getServiceScheme service}://${catalog.getServiceAddress service}:${toString (catalog.getServicePort service)}";
     icon = service.dashy.icon;
