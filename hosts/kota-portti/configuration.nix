@@ -27,6 +27,7 @@ in
       ./hardware-configuration.nix
       ../../modules
       ../../roles/nixos/bt-mqtt-gateway.nix
+      ../../roles/nixos/common-programs.nix
       ../../roles/nixos/gpio-shutdown.nix
       ../../roles/nixos/promtail.nix
       ../../roles/nixos/zigbee2mqtt.nix
@@ -128,10 +129,7 @@ in
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
-  environment.systemPackages = with pkgs; [
-    btop
-    usbutils  # lsusb
-  ];
+  environment.systemPackages = with pkgs; [];
 
   # Asenna root ca certifikaatti, tarvitaan kun otetaan
   # yhteyttä *.jhakonen.com domaineihin SSL:n yli, esim. MQTT

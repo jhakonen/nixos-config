@@ -34,6 +34,7 @@ in
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ../../modules
+      ../../roles/nixos/common-programs.nix
       ../../roles/nixos/dashy.nix
       ../../roles/nixos/grafana.nix
       ../../roles/nixos/home-assistant.nix
@@ -126,21 +127,8 @@ in
     # List packages installed in system profile. To search, run:
     # $ nix search wget
     systemPackages = [
-      # Nixpkgs
-      pkgs.btop
       pkgs.sqlite-interactive # sqlite3 vaultwardenin tietokannan tutkimiseen
-      pkgs.git
-      pkgs.inetutils  # telnet
-
-      # Flaket
-      agenix.packages."x86_64-linux".default
     ];
-  };
-
-  # Estä `inetutils` pakettia korvaamasta `nettools`
-  # paketin ohjelmia `ifconfig`, `hostname` ja `dnsdomainname`
-  nixpkgs.config.packageOverrides = pkgs: {
-    nettools = pkgs.hiPrio pkgs.nettools;
   };
 
   # Asenna root ca certifikaatti, tarvitaan kun otetaan

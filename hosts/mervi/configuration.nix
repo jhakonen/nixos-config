@@ -22,6 +22,7 @@ in
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      ../../roles/nixos/common-programs.nix
       ../../roles/nixos/sunshine.nix
       ../../roles/nixos/tvheadend.nix
       ../../roles/nixos/zsh.nix
@@ -141,10 +142,7 @@ in
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
-  environment.systemPackages = with pkgs; [
-  #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-  #  wget
-  ];
+  environment.systemPackages = with pkgs; [];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
