@@ -23,6 +23,7 @@ in
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ../../roles/nixos/common-programs.nix
+      ../../roles/nixos/gamepads.nix
       ../../roles/nixos/sunshine.nix
       ../../roles/nixos/tvheadend.nix
       ../../roles/nixos/zsh.nix
