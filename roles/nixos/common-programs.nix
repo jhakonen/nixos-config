@@ -12,8 +12,8 @@
     btop
     git
     inetutils  # telnet
-    nix-index
-    usbutils  # lsusb
+    usbutils   # lsusb
+    binutils   # strings
   ];
 
   # Estä `inetutils` pakettia korvaamasta `nettools`
@@ -21,4 +21,7 @@
   nixpkgs.config.packageOverrides = pkgs: {
     nettools = pkgs.hiPrio pkgs.nettools;
   };
+
+  programs.nix-index.enable = true;
+  programs.command-not-found.enable = false;
 }
