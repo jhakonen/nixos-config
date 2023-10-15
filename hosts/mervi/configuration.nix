@@ -43,6 +43,8 @@ in
 
   # Enable networking
   networking.networkmanager.enable = true;
+  # Ota Wake-on-Lan (WoL) käyttöön
+  networking.interfaces."enp3s0".wakeOnLan.enable = true;
 
   # Set your time zone.
   time.timeZone = "Europe/Helsinki";
@@ -145,6 +147,7 @@ in
     kate
     kodi  # lisää Kodin puuttuvan ikonin
     spotify
+    ngrep  # verkkopakettien greppaus, hyödyllinen WoLin testaukseen
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -156,6 +159,10 @@ in
   # };
 
   programs.steam.enable = true;
+  programs.zsh.shellAliases = {
+    # Kokeile ottaako kone vastaan WoL paketteja
+    wol-listen = "sudo ngrep '\\xff{6}(.{6})\\1{15}' -x port 40000";
+  };
 
   # List services that you want to enable:
 
@@ -175,7 +182,11 @@ in
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
+
+  networking.firewall.allowedUDPPorts = [
+    40000  # WoL portti, ei pakollinen mutta tarpeellinen WoLin testaukseen ngrepillä
+  ];
+
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 
