@@ -1,9 +1,10 @@
 # This is your home-manager configuration file
 # Use this to configure your home environment (it replaces ~/.config/nixpkgs/home.nix)
 
-{ inputs, outputs, lib, config, pkgs, agenix, ... }: {
+{ catalog, inputs, outputs, lib, config, pkgs, agenix, ... }: {
   imports = [
     ../../roles/home-manager/git.nix
+    ../../roles/home-manager/kde-fix-desktop-files.nix
     ../../roles/home-manager/neofetch.nix
     ../../roles/home-manager/zsh.nix
   ];
@@ -72,6 +73,19 @@
           "~/.ssh/id_rsa"
           "~/.ssh/id_rsa_borgbackup"
         ];
+      };
+    };
+  };
+
+  accounts.email.accounts = catalog.emailAccounts;
+  programs.thunderbird = {
+    enable = true;
+    package = pkgs.unstable.thunderbird;  # Thunderbird 115 paremmalla käyttöliittymällä
+    profiles."${config.home.username}" = {
+      isDefault = true;
+      settings = {
+        # Järjestä mailit oletuksena kaikissa kansioissa laskevasti (uusin ensimmäisenä)
+        "mailnews.default_sort_order" = 2;
       };
     };
   };

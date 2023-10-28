@@ -292,4 +292,30 @@ in rec {
       };
     };
   };
+  emailAccounts = {
+    "Henkilökohtainen (***REMOVED***)" = {
+      primary = true;
+      realName = "Janne Hakonen";
+      address = "***REMOVED***";
+      userName = "***REMOVED***";
+      imap = {
+        host = "***REMOVED***";
+        port = 143;
+        tls.useStartTls = true;
+      };
+      smtp = {
+        host = "***REMOVED***";
+        port = 587;
+        tls.useStartTls = true;
+      };
+      thunderbird.enable = true;
+    };
+    "Roskaposti (***REMOVED***)" = {
+      realName = "Janne Hakonen";
+      address = "***REMOVED***";
+      userName = "***REMOVED***";
+      flavor = "***REMOVED***";
+      thunderbird.enable = true;
+    };
+  };
 }
