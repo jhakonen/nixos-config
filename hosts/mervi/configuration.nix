@@ -159,6 +159,7 @@ in
   #   enableSSHSupport = true;
   # };
 
+  programs.kdeconnect.enable = true;
   programs.steam.enable = true;
   programs.zsh.shellAliases = {
     # Kokeile ottaako kone vastaan WoL paketteja
