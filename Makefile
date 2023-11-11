@@ -8,6 +8,15 @@ hm-switch: ## Rakenna dellxps13 läppärin kotikäyttäjä
 update: ## Päivitä paketit uudempiin
 	nix flake update
 
+rebuild-boot-all:
+	nixos-rebuild build --flake '.#nas-toolbox' --target-host root@nas-toolbox
+	nixos-rebuild build --flake '.#kota-portti' --target-host root@kota-portti --build-host root@kota-portti --fast
+	nixos-rebuild build --flake '.#mervi' --target-host root@mervi
+
+reboot-all:
+	ssh root@nas-toolbox reboot
+	ssh root@kota-portti reboot
+	ssh root@mervi reboot
 
 # Etäkoneiden targetit
 nas-toolbox: ## Rakenna nas-toolboxin järjestelmä
