@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ catalog, config, home-manager, pkgs, ... }:
+{ catalog, config, home-manager-unstable, outputs, pkgs, ... }:
 let
   # Julkinen avain SSH:lla sisäänkirjautumista varten
   id-rsa-public-key =
@@ -27,7 +27,7 @@ in
       ../../roles/nixos/sunshine.nix
       ../../roles/nixos/tvheadend.nix
       ../../roles/nixos/zsh.nix
-      home-manager.nixosModules.default
+      home-manager-unstable.nixosModules.default
     ];
 
   # Bootloader.
