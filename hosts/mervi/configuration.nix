@@ -144,6 +144,7 @@ in
   environment.systemPackages = with pkgs; [
     firefox
     flirc
+    itch  # itch.io
     kate
     kodi  # lisää Kodin puuttuvan ikonin
     spotify
@@ -198,4 +199,7 @@ in
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "23.05"; # Did you read the comment?
 
+  nixpkgs.config.permittedInsecurePackages = [
+    "electron-11.5.0"  # itch paketti vaatii tämän
+  ];
 }
