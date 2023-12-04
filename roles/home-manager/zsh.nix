@@ -44,6 +44,7 @@
     shellAliases = {
       ls = "ls --color=auto";
       ll = "ls -l";
+      scp = "scp -O";  # Synology NAS ei tue scp:n uudempaa sftp protokollaa
     };
     plugins = [
       # Lähde: https://discourse.nixos.org/t/using-an-external-oh-my-zsh-theme-with-zsh-in-nix/6142/4

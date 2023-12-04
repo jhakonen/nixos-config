@@ -102,7 +102,10 @@ in rec {
     };
     dashy = {
       host = nodes.nas-toolbox;
-      port = 80;
+      port = 13000;
+      public = {
+        domain = "dashy.jhakonen.com";
+      };
     };
     grafana = {
       host = nodes.nas-toolbox;
@@ -191,8 +194,8 @@ in rec {
       };
     };
     nextcloud = {
-      host = nodes.nas-nextcloud-vm;
-      port = 80;
+      host = nodes.nas-toolbox;
+      port = 16000;
       dashy = {
         section = "palvelut";
         description = "Verkkolevy";

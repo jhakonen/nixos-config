@@ -43,6 +43,7 @@ in
       ../../roles/nixos/loki.nix
       ../../roles/nixos/mosquitto.nix
       ../../roles/nixos/mqttwarn.nix
+      ../../roles/nixos/nextcloud.nix
       ../../roles/nixos/nitter.nix
       ../../roles/nixos/node-red.nix
       ../../roles/nixos/paperless.nix
@@ -187,7 +188,8 @@ in
 
 
   # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
+  networking.firewall.allowedTCPPorts = [ 80 ];  # nginx
+
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;

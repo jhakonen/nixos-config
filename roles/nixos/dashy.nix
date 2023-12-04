@@ -69,4 +69,8 @@ in {
       sections = map (section: section // { items = getSectionItems section.name catalog.services; }) sections;
     };
   };
+
+  services.nginx.virtualHosts."${catalog.services.dashy.public.domain}" = {
+    locations."/".proxyPass = "http://127.0.0.1:${toString catalog.services.dashy.port}";
+  };
 }
