@@ -44,7 +44,7 @@ in
   services = {
     nextcloud = {
       enable = true;
-      package = pkgs.nextcloud25;
+      package = pkgs.nextcloud26;
       hostName = catalog.services.nextcloud.public.domain;
       config = {
         adminuser = "valvoja";
@@ -52,6 +52,11 @@ in
         dbhost = "localhost:/run/mysqld/mysqld.sock";
         dbtype = "mysql";
         overwriteProtocol = "https";
+      };
+      phpOptions = {
+        # Asetusten yleiskuvaus valittaa että strings puskuri on täynnä, tämä
+        # nostaa rajaa ylemmäs
+        "opcache.interned_strings_buffer" = "16";
       };
     };
 
