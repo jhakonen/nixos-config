@@ -67,10 +67,9 @@ in
         ssl = true;
       }];
 
+      # Käytä Let's Encrypt serifikaattia
       addSSL = true;
-      # TODO: Korvaa Let's Encrypt sertifikaatilla
-      sslCertificate = "/etc/wildcard-jhakonen-com.cert";
-      sslCertificateKey = config.age.secrets.nextcloud-ssl-key-file.path;
+      useACMEHost = "jhakonen.com";
     };
 
     mysql = {
@@ -90,14 +89,6 @@ in
       postHooks = [ "${backupCleanup}/bin/nextcloud-backup-post" ];
       paths = [ config.services.nextcloud.datadir ];
       readWritePaths = [ config.services.nextcloud.datadir ];
-    };
-  };
-
-  age.secrets = {
-    nextcloud-ssl-key-file = {
-      file = ../../secrets/wildcard-jhakonen-com.key.age;
-      owner = "nginx";
-      group = "nginx";
     };
   };
 

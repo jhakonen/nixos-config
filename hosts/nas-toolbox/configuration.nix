@@ -102,6 +102,10 @@ in
         "wheel"
       ];
     };
+
+    # Anna nginxille pääsy let's encrypt serifikaattiin
+    nginx.extraGroups = [ "acme" ];
+
     root = {
       openssh.authorizedKeys.keys = [ id-rsa-public-key ];
     };
@@ -132,12 +136,26 @@ in
     ];
   };
 
-  # Asenna root ca certifikaatti, tarvitaan kun otetaan
-  # yhteyttä *.jhakonen.com domaineihin SSL:n yli, esim. MQTT
-  security.pki.certificateFiles = [ ../../data/root-ca.pem ];
+  security = {
+    # Asenna Let's Encryptin sertifikaatti *.jhakonen.com domaineihin
+    acme = {
+      acceptTerms = true;
+      defaults = {
+        email = "***REMOVED***";
+        dnsProvider = "joker";
+        credentialsFile = config.age.secrets.acme-joker-credentials.path;
+      };
+      certs."jhakonen.com".extraDomainNames = [ "*.jhakonen.com" ];
+    };
+
+    # Asenna itse allekirjoitettu root ca certifikaatti, tarvitaan kun otetaan
+    # yhteyttä joihinkin *.jhakonen.com domaineihin SSL:n yli, esim. MQTT
+    pki.certificateFiles = [ ../../data/root-ca.pem ];
+  };
 
   # Salaisuudet
   age.secrets = {
+    acme-joker-credentials.file = ../../secrets/acme-joker-credentials.age;
     github-id-rsa = {
       file = ../../secrets/github-id-rsa.age;
       owner = "jhakonen";

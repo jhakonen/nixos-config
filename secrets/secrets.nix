@@ -40,6 +40,7 @@ let
     + "XUb80pgeh/stpeOv2canemQHzUHZ6Q== root@nas-toolbox";
 in
 {
+  "acme-joker-credentials.age".publicKeys = [ jhakonen nas-toolbox ];
   "borgbackup-id-rsa.age".publicKeys = [ jhakonen kota-portti nas-toolbox ];
   "borgbackup-password.age".publicKeys = [ jhakonen kota-portti nas-toolbox ];
   "bt-mqtt-gateway-environment.age".publicKeys = [ jhakonen kota-portti ];
