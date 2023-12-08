@@ -34,6 +34,7 @@ in
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ../../modules
+      ../../roles/nixos/calibre.nix
       ../../roles/nixos/common-programs.nix
       ../../roles/nixos/dashy.nix
       ../../roles/nixos/grafana.nix
@@ -206,7 +207,7 @@ in
 
 
   # Open ports in the firewall.
-  networking.firewall.allowedTCPPorts = [ 80 ];  # nginx
+  networking.firewall.allowedTCPPorts = [ 80 443 ];  # nginx
 
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.

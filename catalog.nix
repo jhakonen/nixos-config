@@ -86,17 +86,17 @@ in rec {
         port = 443;
       };
     };
-    cops = {
-      host = nodes.nas-nextcloud-vm;
-      port = 10000;
+    calibre-web = {
+      host = nodes.nas-toolbox;
+      port = 17000;
       dashy = {
         section = "viihde";
-        description = "Calibre OPDS palvelin";
-        icon = "https://github.com/seblucas/cops/blob/master/images/icons/icon114.png?raw=true";
+        description = "E-kirjojen selaus";
+        icon = "hl-calibre";
         newTab = true;
       };
       public = {
-        domain = "cops.jhakonen.com";
+        domain = "calibre-web.jhakonen.com";
         port = 443;
       };
     };

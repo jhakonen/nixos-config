@@ -53,6 +53,27 @@ in
         dbtype = "mysql";
         overwriteProtocol = "https";
       };
+      # Käytä Redisiä parammin toimivaan tiedostojen lukintaan:
+      #   https://help.nextcloud.com/t/file-is-locked-how-to-unlock/1883
+      configureRedis = true;
+      # SMB External Storage: Asenna smbclient kirjasto
+      phpExtraExtensions = all: [ all.smbclient ];
+      phpPackage = lib.mkForce (pkgs.php.override {
+        packageOverrides = final: prev: {
+          extensions = prev.extensions // {
+            # SMB External Storage: https://github.com/NixOS/nixpkgs/issues/224769
+            smbclient = prev.extensions.smbclient.overrideAttrs(attrs: {
+              src = pkgs.fetchFromGitHub {
+                owner = "remicollet";
+                repo = "libsmbclient-php";
+                rev = "b066b6bcd75c8741776d312337f3d69e8484482c";
+                sha256 = "sha256-BOY51zYgU2rvMSxbm+N6CwZ6SefY0YktF14zh5uTNU4=";
+              };
+            });
+          };
+        };
+      });
+
       phpOptions = {
         # Asetusten yleiskuvaus valittaa että strings puskuri on täynnä, tämä
         # nostaa rajaa ylemmäs
@@ -67,7 +88,7 @@ in
         ssl = true;
       }];
 
-      # Käytä Let's Encrypt serifikaattia
+      # Käytä Let's Encrypt sertifikaattia
       addSSL = true;
       useACMEHost = "jhakonen.com";
     };
@@ -106,7 +127,7 @@ in
     groups.nextcloud.gid = 65538;
   };
 
-  # Liitä Netcloudin datakansio NFS:n yli NAS:lta
+  # Liitä Nextcloudin datakansio NFS:n yli NAS:lta
   fileSystems.${config.services.nextcloud.datadir} = {
     device = "${catalog.nodes.nas.ip.private}:/volume1/nextcloud";
     fsType = "nfs";

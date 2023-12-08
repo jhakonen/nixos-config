@@ -54,6 +54,7 @@
   # programs.neovim.enable = true;
   home.packages = [
     agenix.packages."x86_64-linux".default  # agenix komento
+    pkgs.calibre
     pkgs.nixos-rebuild  # rebuildaus etäkoneelle
     pkgs.nix-index  # Nixpkgs pakettien sisällön etsiminen
   ];
