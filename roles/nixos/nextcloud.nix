@@ -1,5 +1,6 @@
 { catalog, config, lib, pkgs, ... }:
 let
+  nextcloudPackage = pkgs.nextcloud26;
   backupDbPath = "${config.services.nextcloud.datadir}/nextcloud-mariadb.backup";
   adminPassFile = pkgs.writeText "nextcloud-initialadminpass" "initial-pass";
   backupPrepare = pkgs.writeShellApplication {
@@ -44,7 +45,12 @@ in
   services = {
     nextcloud = {
       enable = true;
-      package = pkgs.nextcloud26;
+      package = nextcloudPackage.overrideAttrs (o: {
+        patches = (o.patches or [ ]) ++ [
+          # Salli upotus Dashyn iframeen
+          ../../data/nextcloud-iframe.patch
+        ];
+      });
       hostName = catalog.services.nextcloud.public.domain;
       config = {
         adminuser = "valvoja";

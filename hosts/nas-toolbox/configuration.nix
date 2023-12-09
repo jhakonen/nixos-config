@@ -202,6 +202,14 @@ in
       layout = "fi";
       xkbVariant = "nodeadkeys";
     };
+
+    nginx.virtualHosts."default" = {
+      default = true;
+      # Vastaa määrittelemättömään domainiin tai porttiin 403 virheellä
+      locations."/".extraConfig = ''
+        deny all;
+      '';
+    };
   };
 
 

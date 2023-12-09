@@ -36,8 +36,25 @@ in
       # Enable cross-site filter (XSS) and tell browser to block detected attacks
       add_header X-XSS-Protection "1; mode=block";
 
-      # Disallow the site to be rendered within a frame (clickjacking protection)
-      add_header X-Frame-Options DENY;
+      # Muokkaa Vaultwardenin Content-Security-Policy otsikkoa jotta sen voi
+      # upottaa Dashyn iframeen
+      set $CSP "default-src 'self';";
+      set $CSP "''${CSP} base-uri 'self';";
+      set $CSP "''${CSP} form-action 'self';";
+      set $CSP "''${CSP} object-src 'self' blob:;";
+      set $CSP "''${CSP} script-src 'self' 'wasm-unsafe-eval';";
+      set $CSP "''${CSP} style-src 'self' 'unsafe-inline';";
+      set $CSP "''${CSP} child-src 'self' https://*.duosecurity.com https://*.duofederal.com;";
+      set $CSP "''${CSP} frame-src 'self' https://*.duosecurity.com https://*.duofederal.com;";
+      set $CSP "''${CSP} frame-ancestors 'self'";
+      set $CSP "''${CSP}   chrome-extension://nngceckbapebfimnlniiiahkandclblb";
+      set $CSP "''${CSP}   chrome-extension://jbkfoedolllekgbhcbcoahefnbanhhlh moz-extension://*";
+      set $CSP "''${CSP}   moz-extension://*";
+      set $CSP "''${CSP}   https://${catalog.services.dashy.public.domain} ;";
+      set $CSP "''${CSP} img-src 'self' data: https://haveibeenpwned.com https://www.gravatar.com ;";
+      set $CSP "''${CSP} connect-src 'self' https://api.pwnedpasswords.com https://api.2fa.directory https://app.simplelogin.io/api/ https://app.anonaddy.com/api/ https://api.fastmail.com/;";
+      proxy_hide_header Content-Security-Policy;
+      add_header Content-Security-Policy "''${CSP}" always;
     '';
     # Proxy the Root directory to Rocket
     locations."/" = {

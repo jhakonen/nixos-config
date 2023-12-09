@@ -79,7 +79,6 @@ in rec {
         section = "palvelut";
         description = "Salasanojen hallinta";
         icon = "hl-bitwarden";
-        newTab = true;
       };
       public = {
         domain = "bitwarden.jhakonen.com";
@@ -93,7 +92,6 @@ in rec {
         section = "viihde";
         description = "E-kirjojen selaus";
         icon = "hl-calibre";
-        newTab = true;
       };
       public = {
         domain = "calibre-web.jhakonen.com";
@@ -114,7 +112,6 @@ in rec {
         section = "palvelut";
         description = "Järjestelmän valvonta";
         icon = "hl-grafana";
-        newTab = true;
       };
       public = {
         domain = "grafana.jhakonen.com";
@@ -128,7 +125,6 @@ in rec {
         section = "palvelut";
         description = "Kotiautomaation hallinta";
         icon = "hl-home-assistant";
-        newTab = true;
       };
       public = {
         domain = "home-assistant.jhakonen.com";
@@ -142,7 +138,6 @@ in rec {
         section = "palvelut";
         description = "Tehtävien automatisointi";
         icon = "hl-huginn";
-        newTab = true;
       };
       public = {
         domain = "huginn.jhakonen.com";
@@ -202,7 +197,6 @@ in rec {
         section = "palvelut";
         description = "Verkkolevy";
         icon = "hl-nextcloud";
-        newTab = true;
       };
       public = {
         domain = "nextcloud.jhakonen.com";
@@ -216,7 +210,6 @@ in rec {
         section = "palvelut";
         description = "Kotiautomaation ohjelmointi";
         icon = "hl-node-red";
-        newTab = true;
       };
       public = {
         domain = "node-red.jhakonen.com";
@@ -230,7 +223,6 @@ in rec {
         section = "palvelut";
         description = "Asiakirjojen hallinta";
         icon = "hl-paperless";
-        newTab = true;
       };
       public = {
         domain = "paperless.jhakonen.com";
@@ -278,6 +270,7 @@ in rec {
         section = "palvelut";
         description = "Zigbee modeemin hallintapaneeli";
         icon = "hl-zigbee2mqtt";
+        newTab = true;
       };
       public = {
         domain = "zigbee2mqtt.jhakonen.com";

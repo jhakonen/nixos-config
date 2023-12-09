@@ -70,7 +70,16 @@ in {
     };
   };
 
-  services.nginx.virtualHosts."${catalog.services.dashy.public.domain}" = {
-    locations."/".proxyPass = "http://127.0.0.1:${toString catalog.services.dashy.port}";
+  services.nginx = {
+    enable = true;
+    virtualHosts.${catalog.services.dashy.public.domain} = {
+      locations."/" = {
+        proxyPass = "http://127.0.0.1:${toString catalog.services.dashy.port}";
+        recommendedProxySettings = true;
+      };
+      # Käytä Let's Encrypt sertifikaattia
+      forceSSL = true;
+      useACMEHost = "jhakonen.com";
+    };
   };
 }

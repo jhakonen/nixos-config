@@ -1,0 +1,12 @@
+diff --git a/lib/public/AppFramework/Http/ContentSecurityPolicy.php b/lib/public/AppFramework/Http/ContentSecurityPolicy.php
+index 7f93f7004d9..7af28588a1d 100644
+--- a/lib/public/AppFramework/Http/ContentSecurityPolicy.php
++++ b/lib/public/AppFramework/Http/ContentSecurityPolicy.php
+@@ -93,6 +93,7 @@ class ContentSecurityPolicy extends EmptyContentSecurityPolicy {
+ 	/** @var array Domains which can embed this Nextcloud instance */
+ 	protected $allowedFrameAncestors = [
+ 		'\'self\'',
++		'https://dashy.jhakonen.com',
+ 	];
+ 
+ 	/** @var array Domains from which web-workers can be loaded */
