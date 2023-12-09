@@ -114,10 +114,11 @@ in rec {
         section = "palvelut";
         description = "Järjestelmän valvonta";
         icon = "hl-grafana";
+        newTab = true;
       };
       public = {
         domain = "grafana.jhakonen.com";
-        port = 80;
+        port = 443;
       };
     };
     home-assistant = {
@@ -127,10 +128,11 @@ in rec {
         section = "palvelut";
         description = "Kotiautomaation hallinta";
         icon = "hl-home-assistant";
+        newTab = true;
       };
       public = {
         domain = "home-assistant.jhakonen.com";
-        port = 80;
+        port = 443;
       };
     };
     huginn = {
@@ -144,7 +146,7 @@ in rec {
       };
       public = {
         domain = "huginn.jhakonen.com";
-        port = 80;
+        port = 443;
       };
     };
     influx-db = {
@@ -214,10 +216,11 @@ in rec {
         section = "palvelut";
         description = "Kotiautomaation ohjelmointi";
         icon = "hl-node-red";
+        newTab = true;
       };
       public = {
         domain = "node-red.jhakonen.com";
-        port = 80;
+        port = 443;
       };
     };
     paperless = {

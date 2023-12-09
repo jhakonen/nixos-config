@@ -16,6 +16,19 @@ in {
     };
   };
 
+  services.nginx = {
+    enable = true;
+    virtualHosts.${catalog.services.huginn.public.domain} = {
+      locations."/" = {
+        proxyPass = "http://127.0.0.1:${toString catalog.services.huginn.port}";
+        recommendedProxySettings = true;
+      };
+      # Käytä Let's Encrypt sertifikaattia
+      addSSL = true;
+      useACMEHost = "jhakonen.com";
+    };
+  };
+
   systemd.services."${config.virtualisation.oci-containers.backend}-huginn" = {
     # Luo datakansio
     preStart = ''
@@ -28,7 +41,7 @@ in {
   };
 
   # Puhkaise reikä palomuuriin
-  networking.firewall.allowedTCPPorts = [ catalog.services.huginn.port ];
+  networking.firewall.allowedTCPPorts = [ catalog.services.huginn.public.port ];
 
   # Varmuuskopiointi
   services.backup = {

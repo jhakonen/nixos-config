@@ -12,6 +12,22 @@
     };
   };
 
+  services.nginx = {
+    enable = true;
+    virtualHosts.${catalog.services.node-red.public.domain} = {
+      locations."/" = {
+        proxyPass = "http://127.0.0.1:${toString catalog.services.node-red.port}";
+        recommendedProxySettings = true;
+      };
+      # Käytä Let's Encrypt sertifikaattia
+      addSSL = true;
+      useACMEHost = "jhakonen.com";
+    };
+  };
+
+  # Puhkaise reikä palomuuriin
+  networking.firewall.allowedTCPPorts = [ catalog.services.node-red.public.port ];
+
   systemd.services.node-red.serviceConfig.EnvironmentFile = [
     config.age.secrets.node-red-environment.path
   ];

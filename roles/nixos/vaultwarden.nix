@@ -28,12 +28,10 @@ in
   '';
 
   services.nginx.enable = true;
-  services.nginx.virtualHosts.vaultwarden = {
-    serverName = catalog.services.bitwarden.public.domain;
-    listen = [{
-      addr = "0.0.0.0";
-      port = catalog.services.bitwarden.port;
-    }];
+  services.nginx.virtualHosts.${catalog.services.bitwarden.public.domain} = {
+    # Käytä Let's Encrypt sertifikaattia
+    addSSL = true;
+    useACMEHost = "jhakonen.com";
     extraConfig = ''
       # Enable cross-site filter (XSS) and tell browser to block detected attacks
       add_header X-XSS-Protection "1; mode=block";
@@ -60,7 +58,7 @@ in
   };
 
   # Avaa palomuuriin palvelulle reikä
-  networking.firewall.allowedTCPPorts = [ catalog.services.bitwarden.port ];
+  networking.firewall.allowedTCPPorts = [ catalog.services.bitwarden.public.port ];
 
   # Varmuuskopiointi
   services.backup.paths = [ backupDir ];

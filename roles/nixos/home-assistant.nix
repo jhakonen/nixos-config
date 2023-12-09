@@ -1,19 +1,18 @@
 { config, catalog, ... }:
-let
-  listenPort = catalog.services.home-assistant.port;
-in {
+{
   services.home-assistant = {
     enable = true;
     config = {
       automation = "!include automations.yaml";
       http = {
-        server_port = listenPort;
+        server_port = catalog.services.home-assistant.port;
         use_x_forwarded_for = true;
-        trusted_proxies = [ catalog.nodes.nas.ip.private ];
+        trusted_proxies = [
+          "127.0.0.1"  # Luota nginx palveluun
+        ];
       };
       homeassistant = {
-        external_url = "http://${catalog.services.home-assistant.public.domain}";
-        internal_url = "http://${catalog.services.home-assistant.host.hostName}:${toString listenPort}";
+        external_url = "https://${catalog.services.home-assistant.public.domain}";
         auth_providers = [
           {
             type = "trusted_networks";
@@ -32,7 +31,24 @@ in {
     };
     extraComponents = [ "default_config" "github" "met" "mqtt" ];
   };
-  networking.firewall.allowedTCPPorts = [ listenPort ];
+
+  services.nginx = {
+    enable = true;
+    virtualHosts.${catalog.services.home-assistant.public.domain} = {
+      locations."/" = {
+        proxyPass = "http://127.0.0.1:${toString catalog.services.home-assistant.port}";
+        proxyWebsockets = true;
+        recommendedProxySettings = true;
+      };
+      # Käytä Let's Encrypt sertifikaattia
+      addSSL = true;
+      useACMEHost = "jhakonen.com";
+    };
+  };
+
+  # Puhkaise reikä palomuuriin
+  networking.firewall.allowedTCPPorts = [ catalog.services.home-assistant.public.port ];
+
   services.backup = {
     paths = [ config.services.home-assistant.configDir ];
     preHooks = [ "systemctl stop home-assistant.service" ];

@@ -24,7 +24,22 @@
     };
   };
 
-  networking.firewall.allowedTCPPorts = [ config.services.grafana.settings.server.http_port ];
+  services.nginx = {
+    enable = true;
+    virtualHosts.${catalog.services.grafana.public.domain} = {
+      locations."/" = {
+        proxyPass = "http://127.0.0.1:${toString catalog.services.grafana.port}";
+        recommendedProxySettings = true;
+      };
+      # Käytä Let's Encrypt sertifikaattia
+      addSSL = true;
+      useACMEHost = "jhakonen.com";
+    };
+  };
+
+  # Puhkaise reikä palomuuriin
+  networking.firewall.allowedTCPPorts = [ catalog.services.grafana.public.port ];
+
   services.backup.paths = [ config.services.grafana.dataDir ];
   services.backup.preHooks = [ "systemctl stop grafana.service" ];
   services.backup.postHooks = [ "systemctl start grafana.service" ];
