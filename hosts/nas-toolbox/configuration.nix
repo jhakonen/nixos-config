@@ -45,7 +45,6 @@ in
       ../../roles/nixos/mosquitto.nix
       ../../roles/nixos/mqttwarn.nix
       ../../roles/nixos/nextcloud.nix
-      ../../roles/nixos/nitter.nix
       ../../roles/nixos/node-red.nix
       ../../roles/nixos/paperless.nix
       ../../roles/nixos/promtail.nix

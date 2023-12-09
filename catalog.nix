@@ -207,19 +207,6 @@ in rec {
         port = 443;
       };
     };
-    nitter = {
-      host = nodes.nas-toolbox;
-      port = 11000;
-      dashy = {
-        section = "palvelut";
-        description = "Twitterin käyttöliittymä";
-        icon = "hl-nitter";
-      };
-      public = {
-        domain = "nitter.jhakonen.com";
-        port = 80;
-      };
-    };
     node-red = {
       host = nodes.nas-toolbox;
       port = 1880;
