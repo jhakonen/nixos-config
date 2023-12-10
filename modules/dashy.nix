@@ -1,6 +1,7 @@
 { lib, pkgs, config, ... }:
 let
-  version = "2.1.1";
+  # lissy93/dashy:latest @ 7.12.2023
+  version = "sha256:097cfe11cf89c9d1b69b2cfbe985c7ba1f8d2ba9906895be37a34de20379d407";
 
   cfg = config.services.dashy;
   configFile = format.generate "dashy.yaml" cfg.settings;
@@ -20,7 +21,7 @@ in {
 
   config = lib.mkIf cfg.enable {
     virtualisation.oci-containers.containers.dashy = {
-      image = "lissy93/dashy:${version}";
+      image = "lissy93/dashy@${version}";
       volumes = [ "${configFile}:/app/public/conf.yml" ];
       ports = [ "${toString cfg.port}:80" ];
     };
