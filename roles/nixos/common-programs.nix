@@ -5,7 +5,7 @@
   services.locate = {
     enable = true;
     localuser = null;
-    locate = pkgs.plocate;
+    package = pkgs.plocate;
   };
 
   environment.systemPackages = with pkgs; [

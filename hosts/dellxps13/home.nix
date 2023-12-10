@@ -81,7 +81,7 @@
   accounts.email.accounts = catalog.emailAccounts;
   programs.thunderbird = {
     enable = true;
-    package = pkgs.unstable.thunderbird;  # Thunderbird 115 paremmalla käyttöliittymällä
+    package = pkgs.thunderbird;  # Thunderbird 115 paremmalla käyttöliittymällä
     profiles."${config.home.username}" = {
       isDefault = true;
       settings = {
