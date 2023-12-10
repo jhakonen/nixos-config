@@ -1,6 +1,6 @@
 { catalog, config, lib, pkgs, ... }:
 let
-  nextcloudPackage = pkgs.nextcloud26;
+  nextcloudPackage = pkgs.nextcloud27;
   backupDbPath = "${config.services.nextcloud.datadir}/nextcloud-mariadb.backup";
   adminPassFile = pkgs.writeText "nextcloud-initialadminpass" "initial-pass";
   backupPrepare = pkgs.writeShellApplication {
