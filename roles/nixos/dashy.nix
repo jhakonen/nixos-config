@@ -61,8 +61,10 @@ in {
         disableConfiguration = false;
         disableContextMenu = true;
         hideComponents = {
-          hideSettings = true;
           hideFooter = true;
+          hideHeading = true;
+          hideNav = true;
+          hideSettings = true;
         };
         workspaceLandingUrl = "home-assistant";
       };
