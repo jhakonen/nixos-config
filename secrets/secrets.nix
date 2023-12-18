@@ -25,6 +25,18 @@ let
     + "MrGiDiuj1N/FQshT2/t84ITkU3Ji6uZbh1G1iPlPtd62QQVLNM/3apC71+6+JRJNEkeJa"
     + "M65P3ZC16x4OtQ67tl4aIk6nUsynxge4QyaFMK7Que1mDpskBdmIbkvrRVGey5PbjPgnm"
     + "+FJ1QHTSnbWPESrPDIyboTEAzAc7tQ== root@nixos";
+  mervi =
+    "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC3uO0vRYsRkzSafCqYQ3m9nPTiiNW/z/T"
+    + "qAuUy19vhI/6t3fxZ9lTdkBUrtTsXEYqk72xOaMTcnbyE87Y7AXFt25VG2mHybJq88OI5"
+    + "6Nh82XRSM7Ls+YG4k1xs/FPWbOXlrfzDaVAiFdyd2qsMaZpc3dhe6DwrKfgkzcFGRNXkF"
+    + "dAyS2I2AULinAFQAIyGg1p2BWX4K8z/zaLZrXA7BjkxULV8YVPWZrkPRgL2pp1uddk8NL"
+    + "UUf883Mtx/y2S5wCPjVchCBqSyEsiJFg8JUhTIcl3LpQcfK8KY2j/YFjcKDVWGz1+ajps"
+    + "C3omCpaXya+BHwFbugtbsdf+x49Pd4axslg+MAUa6jf/aXNQRueCcQZ7KdIbTmnM7sVpQ"
+    + "MIHcZniz9U5/IyWbl5LCcAVL64B14WrO3YeC/ZC2TNmKEF/hybNAVEwpN65QtnES5SIW8"
+    + "oKJvGo1SvMFaCljpn/jdv2mWvZlCMuBGAJ0l+R4O+A8OkMdI2ni8Cee/G1Zr3rk6hZVSF"
+    + "F1tjXKPyIvwRaqPky8tiE507FF5FHh75ourWNTmC5GArU0AGYVXhqZa9Z71IxBcPtHTqc"
+    + "RgyuiBdfnbNyJ83/6TJ27OZV33ZP8NkbT8avh9nCdelsPghndEux3sf1mINqGOFltdtuD"
+    + "0UPFY3z6hq1tzpwkE3PSjEFX4/lzOw== root@mervi";
   # /etc/ssh/ssh_host_rsa_key.pub
   nas-toolbox =
     "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDk2VrBOGh0UgaztWOSZVqoNEdzQeObWba"
@@ -45,11 +57,10 @@ in
   "borgbackup-password.age".publicKeys = [ jhakonen kota-portti nas-toolbox ];
   "bt-mqtt-gateway-environment.age".publicKeys = [ jhakonen kota-portti ];
   "github-id-rsa.age".publicKeys = [ jhakonen nas-toolbox ];
-  "mqtt-password.age".publicKeys = [ jhakonen nas-toolbox ];
+  "mqtt-password.age".publicKeys = [ jhakonen nas-toolbox kota-portti mervi ];
   "mqttwarn-environment.age".publicKeys = [ jhakonen nas-toolbox ];
   "node-red-environment.age".publicKeys = [ jhakonen nas-toolbox ];
   "telegraf-environment.age".publicKeys = [ jhakonen nas-toolbox ];
   "vaultwarden-environment.age".publicKeys = [ jhakonen nas-toolbox ];
-  "wildcard-jhakonen-com.key.age".publicKeys = [ jhakonen nas-toolbox ];
   "zigbee2mqtt-environment.age".publicKeys = [ jhakonen kota-portti ];
 }

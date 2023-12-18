@@ -121,8 +121,10 @@ in
     };
     jhakonen = {
       imports = [
+        ../../roles/home-manager/mqtt-client.nix
         ../../roles/home-manager/zsh.nix
       ];
+      roles.mqtt-client.passwordFile = config.age.secrets.jhakonen-mosquitto-password.path;
       home.stateVersion = "23.05";
     };
   };
@@ -147,6 +149,10 @@ in
   age.secrets = {
     borgbackup-id-rsa.file = ../../secrets/borgbackup-id-rsa.age;
     borgbackup-password.file = ../../secrets/borgbackup-password.age;
+    jhakonen-mosquitto-password = {
+      file = ../../secrets/mqtt-password.age;
+      owner = "jhakonen";
+    };
   };
 
   # List services that you want to enable:

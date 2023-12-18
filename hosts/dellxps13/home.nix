@@ -5,6 +5,7 @@
   imports = [
     ../../roles/home-manager/git.nix
     ../../roles/home-manager/kde-fix-desktop-files.nix
+    ../../roles/home-manager/mqtt-client.nix
     ../../roles/home-manager/neofetch.nix
     ../../roles/home-manager/zsh.nix
   ];
@@ -14,6 +15,9 @@
       github-id-rsa = {
         file = ../../secrets/github-id-rsa.age;
         path = "/home/jhakonen/.ssh/github-id-rsa";
+      };
+      jhakonen-mosquitto-password = {
+        file = ../../secrets/mqtt-password.age;
       };
     };
   };
@@ -101,4 +105,5 @@
   targets.genericLinux.enable = true;
 
   roles.git.githubIdentityFile = config.age.secrets.github-id-rsa.path;
+  roles.mqtt-client.passwordFile = config.age.secrets.jhakonen-mosquitto-password.path;
 }

@@ -19,6 +19,9 @@ let
       + "QZdUqOqF3C79F3f/MCrYk3/CvtbDtQ== jhakonen";
 in
 {
+  # Ota flaket käyttöön
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
@@ -126,9 +129,11 @@ in
     jhakonen = {
       imports = [
         ../../roles/home-manager/kodi.nix
+        ../../roles/home-manager/mqtt-client.nix
         ../../roles/home-manager/zsh.nix
       ];
       home.stateVersion = "23.05";
+      roles.mqtt-client.passwordFile = config.age.secrets.jhakonen-mosquitto-password.path;
     };
   };
 
@@ -158,6 +163,14 @@ in
   #   enable = true;
   #   enableSSHSupport = true;
   # };
+
+  # Salaisuudet
+  age.secrets = {
+    jhakonen-mosquitto-password = {
+      file = ../../secrets/mqtt-password.age;
+      owner = "jhakonen";
+    };
+  };
 
   programs.kdeconnect.enable = true;
   programs.steam.enable = true;

@@ -121,10 +121,12 @@ in
     jhakonen = { ... }: {
       imports = [
         ../../roles/home-manager/git.nix
+        ../../roles/home-manager/mqtt-client.nix
         ../../roles/home-manager/zsh.nix
       ];
       home.stateVersion = "23.05";
       roles.git.githubIdentityFile = config.age.secrets.github-id-rsa.path;
+      roles.mqtt-client.passwordFile = config.age.secrets.jhakonen-mosquitto-password.path;
     };
   };
 
@@ -162,6 +164,10 @@ in
     };
     borgbackup-id-rsa.file = ../../secrets/borgbackup-id-rsa.age;
     borgbackup-password.file = ../../secrets/borgbackup-password.age;
+    jhakonen-mosquitto-password = {
+      file = ../../secrets/mqtt-password.age;
+      owner = "jhakonen";
+    };
   };
 
   # List services that you want to enable:
