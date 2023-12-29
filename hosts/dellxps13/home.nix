@@ -8,19 +8,8 @@
     ../../roles/home-manager/mqtt-client.nix
     ../../roles/home-manager/neofetch.nix
     ../../roles/home-manager/zsh.nix
+    agenix.homeManagerModules.age
   ];
-
-  age = {
-    secrets = {
-      github-id-rsa = {
-        file = ../../secrets/github-id-rsa.age;
-        path = "/home/jhakonen/.ssh/github-id-rsa";
-      };
-      jhakonen-mosquitto-password = {
-        file = ../../secrets/mqtt-password.age;
-      };
-    };
-  };
 
   nixpkgs = {
     # You can add overlays here
@@ -79,6 +68,16 @@
           "~/.ssh/id_rsa_borgbackup"
         ];
       };
+    };
+  };
+
+  age.secrets = {
+    github-id-rsa = {
+      file = ../../secrets/github-id-rsa.age;
+      path = "/home/jhakonen/.ssh/github-id-rsa";
+    };
+    jhakonen-mosquitto-password = {
+      file = ../../secrets/mqtt-password.age;
     };
   };
 

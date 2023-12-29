@@ -16,6 +16,9 @@ rebuild-boot-all: ## Tee 'nixos-rebuild boot' kaikille etäkoneille
 reboot-all: nas-toolbox-reboot kota-portti-reboot mervi-reboot ## Uudelleenkäynnistä kaikki etäkoneet
 
 # Etäkoneiden targetit
+dellxps13:
+	nixos-rebuild switch --flake '.#dellxps13'
+
 nas-toolbox: ## Rakenna nas-toolboxin järjestelmä
 	nixos-rebuild switch --flake '.#nas-toolbox' --target-host root@nas-toolbox
 nas-toolbox-debug: ## Rakenna nas-toolboxin järjestelmä, enemmän virhetulostusta
