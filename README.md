@@ -2,5 +2,6 @@
 
 ```bash
 make update
-make hm-switch rebuild-boot-all reboot-all
+make rebuild-boot-all reboot-all-remote
+reboot
 ```

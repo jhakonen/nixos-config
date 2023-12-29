@@ -1,23 +1,24 @@
-.PHONY: hm-switch update nas-toolbox nas-toolbox-debug kota-portti
+.PHONY: update rebuild-boot-all reboot-all-remote help \
+	    dellxps13 \
+	    kota-portti kota-portti-debug kota-portti-reboot \
+	    mervi mervi-debug mervi-reboot \
+	    nas-toolbox nas-toolbox-debug nas-toolbox-reboot
 .DEFAULT_GOAL := help
-
-# Lokaalin koneen targetit
-hm-switch: ## Rakenna dellxps13 läppärin kotikäyttäjä
-	home-manager switch --flake '.#jhakonen@dellxps13'
 
 update: ## Päivitä paketit uudempiin
 	nix flake update
 
 rebuild-boot-all: ## Tee 'nixos-rebuild boot' kaikille etäkoneille
+	sudo nixos-rebuild boot --flake '.#dellxps13'
 	nixos-rebuild boot --flake '.#nas-toolbox' --target-host root@nas-toolbox
 	nixos-rebuild boot --flake '.#kota-portti' --target-host root@kota-portti --build-host root@kota-portti --fast
 	nixos-rebuild boot --flake '.#mervi' --target-host root@mervi
 
-reboot-all: nas-toolbox-reboot kota-portti-reboot mervi-reboot ## Uudelleenkäynnistä kaikki etäkoneet
+reboot-all-remote: nas-toolbox-reboot kota-portti-reboot mervi-reboot ## Uudelleenkäynnistä kaikki etäkoneet
 
 # Etäkoneiden targetit
 dellxps13:
-	nixos-rebuild switch --flake '.#dellxps13'
+	sudo nixos-rebuild switch --flake '.#dellxps13'
 
 nas-toolbox: ## Rakenna nas-toolboxin järjestelmä
 	nixos-rebuild switch --flake '.#nas-toolbox' --target-host root@nas-toolbox
