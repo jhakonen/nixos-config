@@ -53,8 +53,8 @@ let
 in
 {
   "acme-joker-credentials.age".publicKeys = [ jhakonen nas-toolbox ];
-  "borgbackup-id-rsa.age".publicKeys = [ jhakonen kota-portti nas-toolbox ];
-  "borgbackup-password.age".publicKeys = [ jhakonen kota-portti nas-toolbox ];
+  "borgbackup-id-rsa.age".publicKeys = [ jhakonen kota-portti mervi nas-toolbox ];
+  "borgbackup-password.age".publicKeys = [ jhakonen kota-portti mervi nas-toolbox ];
   "bt-mqtt-gateway-environment.age".publicKeys = [ jhakonen kota-portti ];
   "github-id-rsa.age".publicKeys = [ jhakonen nas-toolbox ];
   "mqtt-password.age".publicKeys = [ jhakonen nas-toolbox kota-portti mervi ];
