@@ -116,6 +116,7 @@
     libsForQt5.kaccounts-integration  # Lisää KDE asetuksiin Verkkotilit osion
     libsForQt5.kaccounts-providers  # Lisää Verkkotilit osioon mahdollisuudeksi asentaa NextCloud tilin
     libsForQt5.kmahjongg
+    libsForQt5.qt5.qtwebsockets  # Tarvitaan Home Assistant plasmoidia varten
     libsForQt5.signond  # Tarvitaan Nextcloud tilin lisäämiseen
     meld
     moonlight-qt
