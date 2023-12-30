@@ -66,6 +66,13 @@ in {
       extraOptions.StrictHostKeyChecking = "no";
     };
 
+    environment.variables = {
+      # Määrittele SSH komento `borg` ohjelmalle komentorivikäyttöä varten
+      BORG_RSH = "ssh -o PasswordAuthentication=no -i ${cfg.identityFile}";
+      # Määrittele salasana `borg` ohjelmalle komentorivikäyttöä varten
+      BORG_PASSCOMMAND = "${pkgs.coreutils-full}/bin/cat ${cfg.passwordFile}";
+    };
+
     environment.systemPackages = lib.mkIf (cfg.mounts != {}) [
       # Mahdollista fuse.borgfs mount tyypin käyttö
       (pkgs.writeScriptBin "mount.fuse.borgfs" ''
