@@ -27,7 +27,7 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "nixos"; # Define your hostname.
+  networking.hostName = "dellxps13"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -134,6 +134,7 @@
     kate
     libsForQt5.kaccounts-integration  # Lisää KDE asetuksiin Verkkotilit osion
     libsForQt5.kaccounts-providers  # Lisää Verkkotilit osioon mahdollisuudeksi asentaa NextCloud tilin
+    libsForQt5.kdeconnect-kde
     libsForQt5.kmahjongg
     libsForQt5.qt5.qtwebsockets  # Tarvitaan Home Assistant plasmoidia varten
     libsForQt5.signond  # Tarvitaan Nextcloud tilin lisäämiseen
@@ -163,6 +164,14 @@
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
+
+  networking.firewall.allowedTCPPortRanges = [
+    { from = 1714; to = 1764; }  # KDE Connect
+  ];
+  networking.firewall.allowedUDPPortRanges = [
+    { from = 1714; to = 1764; }  # KDE Connect
+  ];
+
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 
