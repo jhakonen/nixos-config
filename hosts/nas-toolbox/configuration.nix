@@ -34,6 +34,7 @@ in
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ../../modules
+      ../../roles/nixos/backup.nix
       ../../roles/nixos/calibre.nix
       ../../roles/nixos/common-programs.nix
       ../../roles/nixos/dashy.nix
@@ -116,7 +117,6 @@ in
         ../../roles/home-manager/zsh.nix
       ];
       home.stateVersion = "23.05";
-      programs.ssh.enable = true;
     };
     jhakonen = { ... }: {
       imports = [
@@ -162,8 +162,6 @@ in
       file = ../../secrets/github-id-rsa.age;
       owner = "jhakonen";
     };
-    borgbackup-id-rsa.file = ../../secrets/borgbackup-id-rsa.age;
-    borgbackup-password.file = ../../secrets/borgbackup-password.age;
     jhakonen-mosquitto-password = {
       file = ../../secrets/mqtt-password.age;
       owner = "jhakonen";
@@ -173,21 +171,7 @@ in
   # List services that you want to enable:
   services = {
     backup = {
-      enable = true;
-      repo = {
-        host = catalog.nodes.nas.hostName;
-        user = "borg-backup";
-        path = "/volume2/backups/borg/nas-toolbox-nixos";
-      };
-      paths = [
-        "/home/jhakonen"
-      ];
-      excludes = [
-        "**/.cache"
-        "**/.Trash*"
-      ];
-      identityFile = config.age.secrets.borgbackup-id-rsa.path;
-      passwordFile = config.age.secrets.borgbackup-password.path;
+      repo.path = "/volume2/backups/borg/nas-toolbox-nixos";
       mounts = {
         "/mnt/borg/toolbox".remote = "borg-backup@${catalog.nodes.nas.hostName}:/volume2/backups/borg/nas-toolbox-nixos";
       };

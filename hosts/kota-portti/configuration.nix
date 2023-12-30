@@ -34,6 +34,7 @@ in
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ../../modules
+      ../../roles/nixos/backup.nix
       ../../roles/nixos/bt-mqtt-gateway.nix
       ../../roles/nixos/common-programs.nix
       ../../roles/nixos/gpio-shutdown.nix
@@ -125,7 +126,6 @@ in
         ../../roles/home-manager/zsh.nix
       ];
       home.stateVersion = "23.05";
-      programs.ssh.enable = true; # Varmuuskopiointi feilaa ilman tätä
     };
     jhakonen = {
       imports = [
@@ -154,33 +154,15 @@ in
   # };
 
   # Salaisuudet
-  age.secrets = {
-    borgbackup-id-rsa.file = ../../secrets/borgbackup-id-rsa.age;
-    borgbackup-password.file = ../../secrets/borgbackup-password.age;
-    jhakonen-mosquitto-password = {
-      file = ../../secrets/mqtt-password.age;
-      owner = "jhakonen";
-    };
+  age.secrets.jhakonen-mosquitto-password = {
+    file = ../../secrets/mqtt-password.age;
+    owner = "jhakonen";
   };
 
   # List services that you want to enable:
   services = {
     backup = {
-      enable = true;
-      repo = {
-        host = catalog.nodes.nas.hostName;
-        user = "borg-backup";
-        path = "/volume2/backups/borg/kota-portti-nixos";
-      };
-      paths = [
-        "/home/jhakonen"
-      ];
-      excludes = [
-        "**/.cache"
-        "**/.Trash*"
-      ];
-      identityFile = config.age.secrets.borgbackup-id-rsa.path;
-      passwordFile = config.age.secrets.borgbackup-password.path;
+      repo.path = "/volume2/backups/borg/kota-portti-nixos";
       mounts = {
         "/mnt/borg/kota-portti".remote = "borg-backup@${catalog.nodes.nas.hostName}:/volume2/backups/borg/kota-portti-nixos";
       };

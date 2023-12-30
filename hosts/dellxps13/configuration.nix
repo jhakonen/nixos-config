@@ -18,7 +18,7 @@
 
   imports = [
     ./hardware-configuration.nix
-    ../../modules/backup.nix
+    ../../roles/nixos/backup.nix
     ../../roles/nixos/common-programs.nix
     ../../roles/nixos/zsh.nix
   ];
@@ -55,11 +55,6 @@
     LC_TIME = "fi_FI.UTF-8";
   };
 
-  # Salaisuudet
-  age.secrets = {
-    borgbackup-id-rsa.file = ../../secrets/borgbackup-id-rsa.age;
-    borgbackup-password.file = ../../secrets/borgbackup-password.age;
-  };
   # Määrittele avain jolla voidaan purkaa salaus (normaalisti voisi käyttää
   # openssh palvelun host avainta, mutta se vaatisi openssh palvelun käyttöönoton)
   age.identityPaths = [ "/home/jhakonen/.ssh/id_rsa" ];
@@ -102,23 +97,11 @@
 
   # Varmuuskopiointi
   services.backup = {
-    enable = true;
-    repo = {
-      host = catalog.nodes.nas.hostName;
-      user = "borg-backup";
-      path = "/volume2/backups/borg/dellxps13-nixos";
-    };
-    paths = [
-      "/home/jhakonen"
-    ];
+    repo.path = "/volume2/backups/borg/dellxps13-nixos";
     excludes = [
-      "**/.cache"
-      "**/.Trash*"
       "**/backup"
       "**/Nextcloud"
     ];
-    identityFile = config.age.secrets.borgbackup-id-rsa.path;
-    passwordFile = config.age.secrets.borgbackup-password.path;
     mounts = {
       "/mnt/borg/dellxps13".remote = "borg-backup@${catalog.nodes.nas.hostName}:/volume2/backups/borg/dellxps13-nixos";
     };
@@ -134,11 +117,7 @@
     extraGroups = [ "networkmanager" "wheel" ];
   };
 
-  home-manager.users.root = {
-    # Tarvitaan varmuuskopiointia varten
-    home.stateVersion = "23.11";
-    programs.ssh.enable = true;
-  };
+  home-manager.users.root.home.stateVersion = "23.11";
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
