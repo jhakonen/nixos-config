@@ -22,11 +22,21 @@
       };
     };
 
-    nixosConfigurations.dellxps13 = nixpkgs.lib.nixosSystem {
+    nixosConfigurations.dellxps13 = nixpkgs.lib.nixosSystem rec {
       system = "x86_64-linux";
       specialArgs = { inherit catalog; } // inputs;
       modules = [
         ./hosts/dellxps13/configuration.nix
+        ({ ... }: {
+          nixpkgs.overlays = [
+            (final: prev: {
+              unstable = import nixpkgs-unstable {
+                inherit system;
+                config.allowUnfree = true;
+              };
+            })
+          ];
+        })
         agenix.nixosModules.default
         home-manager.nixosModules.home-manager
         {
