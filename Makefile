@@ -17,27 +17,29 @@ rebuild-boot-all: ## Tee 'nixos-rebuild boot' kaikille etäkoneille
 reboot-all-remote: nas-toolbox-reboot kota-portti-reboot mervi-reboot ## Uudelleenkäynnistä kaikki etäkoneet
 
 # Etäkoneiden targetit
-dellxps13:
+dellxps13: ## Rakenna dellxps13 järjestelmä
 	sudo nixos-rebuild switch --flake '.#dellxps13'
+dellxps13-debug: ## Rakenna dellxps13 järjestelmä, enemmän virhetulostusta
+	nixos-rebuild switch --flake '.#dellxps13' --show-trace --verbose --option eval-cache false
 
 nas-toolbox: ## Rakenna nas-toolboxin järjestelmä
 	nixos-rebuild switch --flake '.#nas-toolbox' --target-host root@nas-toolbox
 nas-toolbox-debug: ## Rakenna nas-toolboxin järjestelmä, enemmän virhetulostusta
-	nixos-rebuild switch --flake '.#nas-toolbox' --target-host root@nas-toolbox --show-trace --verbose
+	nixos-rebuild switch --flake '.#nas-toolbox' --target-host root@nas-toolbox --show-trace --verbose --option eval-cache false
 nas-toolbox-reboot: ## Uudelleenkäynnistä nas-toolbox kone
 	ssh root@nas-toolbox reboot
 
 kota-portti: ## Rakenna kota-porttin järjestelmä
 	nixos-rebuild switch --flake '.#kota-portti' --target-host root@kota-portti --build-host root@kota-portti --fast
 kota-portti-debug: ## Rakenna kota-porttin järjestelmä, enemmän virhetulostusta
-	nixos-rebuild switch --flake '.#kota-portti' --target-host root@kota-portti --show-trace --verbose
+	nixos-rebuild switch --flake '.#kota-portti' --target-host root@kota-portti --show-trace --verbose --option eval-cache false
 kota-portti-reboot: ## Uudelleenkäynnistä kota-portti kone
 	ssh root@kota-portti reboot
 
 mervi: ## Rakenna mervin järjestelmä
 	nixos-rebuild switch --flake '.#mervi' --target-host root@mervi
 mervi-debug: ## Rakenna mervin järjestelmä, enemmän virhetulostusta
-	nixos-rebuild switch --flake '.#mervi' --target-host root@mervi --show-trace --verbose
+	nixos-rebuild switch --flake '.#mervi' --target-host root@mervi --show-trace --verbose --option eval-cache false
 mervi-reboot: ## Uudelleenkäynnistä mervi kone
 	ssh root@mervi reboot
 
