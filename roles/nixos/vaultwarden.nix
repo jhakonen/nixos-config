@@ -1,5 +1,7 @@
-{ config, catalog, lib, ... }:
+{ config, lib, ... }:
 let
+  catalog = config.dep-inject.catalog;
+
   dataDir = "/var/lib/bitwarden_rs"; # Tämä on kovakoodattu `services.vaultwarden`iin
   backupDir = "${dataDir}-backup";
 in

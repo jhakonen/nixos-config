@@ -1,4 +1,7 @@
-{ catalog, config, ... }:
+{ config, ... }:
+let
+  catalog = config.dep-inject.catalog;
+in
 {
   # Grafanan Loki tietokanta joka vastaanottaa ja tallentaa lokirivejä
   services.loki = {

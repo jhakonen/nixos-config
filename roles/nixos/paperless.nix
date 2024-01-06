@@ -1,5 +1,7 @@
-{ pkgs, config, catalog, ... }:
+{ pkgs, config, ... }:
 let
+  catalog = config.dep-inject.catalog;
+
   # Näiden tulee vastata vastaavaa käyttäjää NAS:lla sillä tällä käyttäjällä
   # on luku/kirjoitus oikeus skannerin syötekansioon
   username = "skanneri";

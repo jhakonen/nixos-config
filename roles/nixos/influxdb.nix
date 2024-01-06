@@ -1,5 +1,6 @@
-{ pkgs, catalog, ... }:
+{ config, pkgs, ... }:
 let
+  catalog = config.dep-inject.catalog;
   backupDir = "/var/backup/influxdb";
 in {
   # Työkalut influxdb varmuuskopiointiin ja palatukseen

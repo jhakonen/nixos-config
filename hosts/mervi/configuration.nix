@@ -2,8 +2,10 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ catalog, config, home-manager-unstable, outputs, pkgs, ... }:
+{ config, pkgs, ... }:
 let
+  catalog = config.dep-inject.catalog;
+
   # Julkinen avain SSH:lla sisäänkirjautumista varten
   id-rsa-public-key =
       "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDMqorF45N0aG+QqJbRt7kRcmXXbsgvXw7"
@@ -39,7 +41,6 @@ in
       ../../roles/nixos/sunshine.nix
       ../../roles/nixos/tvheadend.nix
       ../../roles/nixos/zsh.nix
-      home-manager-unstable.nixosModules.default
     ];
 
   # Bootloader.

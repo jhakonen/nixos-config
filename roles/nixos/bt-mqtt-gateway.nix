@@ -1,5 +1,8 @@
-{ catalog, config, my-packages, pkgs, ... }:
+{ config, pkgs, ... }:
 let
+  catalog = config.dep-inject.catalog;
+  my-packages = config.dep-inject.my-packages;
+
   gatewayConfig = {
     mqtt = {
       host = catalog.services.mosquitto.public.domain;

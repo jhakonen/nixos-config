@@ -12,48 +12,45 @@
     agenix.inputs.home-manager.follows = "home-manager";
   };
 
-  outputs = { self, nixos-hardware, nixpkgs, nixpkgs-unstable, agenix, home-manager, ... }@inputs: let
+  outputs = { self, nixos-hardware, nixpkgs, nixpkgs-unstable, agenix, home-manager, home-manager-unstable, ... }@inputs:
+  let
     inherit (self) outputs;
-    catalog = import ./catalog.nix inputs;
+    depInject = { lib, pkgs, ... }: {
+      options.dep-inject = lib.mkOption {
+        type = with lib.types; attrsOf unspecified;
+        default = {};
+      };
+      config.dep-inject = {
+        # Injektoi riippuvuudet `specialArgs` muuttujan sijaan, lähde:
+        #   https://jade.fyi/blog/flakes-arent-real/#injecting-dependencies
+        inherit agenix;
+        catalog = pkgs.callPackage ./catalog.nix inputs;
+        my-packages = pkgs.callPackage ./packages/nix {};
+      };
+    };
   in {
     overlays = {
       unstable-packages = final: prev: {
-        unstable = import inputs.nixpkgs-unstable { system = final.system; };
+        unstable = import inputs.nixpkgs-unstable {
+          config.allowUnfree = true;
+          system = final.system;
+        };
       };
     };
 
     nixosConfigurations.dellxps13 = nixpkgs.lib.nixosSystem rec {
       system = "x86_64-linux";
-      specialArgs = { inherit catalog; } // inputs;
       modules = [
+        depInject
         ./hosts/dellxps13/configuration.nix
-        ({ ... }: {
+        {
           nixpkgs.overlays = [
-            (final: prev: {
-              unstable = import nixpkgs-unstable {
-                inherit system;
-                config.allowUnfree = true;
-              };
-            })
+            outputs.overlays.unstable-packages
           ];
-        })
+          home-manager.users.jhakonen = import ./hosts/dellxps13/home.nix;
+        }
         agenix.nixosModules.default
         home-manager.nixosModules.home-manager
-        {
-          home-manager = {
-            extraSpecialArgs = {
-              inherit outputs;
-              inherit catalog;
-              inherit agenix;
-            };
-            users.jhakonen = import ./hosts/dellxps13/home.nix;
-          };
-          # home-manager.useGlobalPkgs = true;
-          # home-manager.useUserPackages = true;
-
-          # Optionally, use home-manager.extraSpecialArgs to pass
-          # arguments to home.nix
-        }
         nixos-hardware.nixosModules.common-cpu-intel
         nixos-hardware.nixosModules.common-pc-laptop
         nixos-hardware.nixosModules.common-pc-ssd
@@ -62,36 +59,31 @@
 
     nixosConfigurations.nas-toolbox = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
-      specialArgs = { inherit catalog; } // inputs;
       modules = [
+        depInject
         ./hosts/nas-toolbox/configuration.nix
         agenix.nixosModules.default
+        home-manager.nixosModules.default
       ];
     };
 
     nixosConfigurations.mervi = nixpkgs-unstable.lib.nixosSystem {
       system = "x86_64-linux";
-      specialArgs = {
-        inherit catalog;
-        inherit outputs;
-      } // inputs;
       modules = [
+        depInject
         ./hosts/mervi/configuration.nix
         agenix.nixosModules.default
+        home-manager-unstable.nixosModules.default
       ];
     };
 
     nixosConfigurations.kota-portti = nixpkgs.lib.nixosSystem {
       system = "aarch64-linux";
-      specialArgs = {
-        inherit catalog;
-        my-packages = import ./packages/nix {
-          pkgs = nixpkgs.legacyPackages.aarch64-linux;
-        };
-      } // inputs;
       modules = [
+        depInject
         ./hosts/kota-portti/configuration.nix
         agenix.nixosModules.default
+        home-manager.nixosModules.default
       ];
     };
   };

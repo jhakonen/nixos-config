@@ -1,5 +1,7 @@
-{ catalog, config, lib, ... }:
+{ config, lib, ... }:
 let
+  catalog = config.dep-inject.catalog;
+
   LOCAL_LIBRARY_PATH = "/mnt/calibre";
   REMOTE_LIBRARY_PATH = "/volume1/calibre";
   # Nämä ID arvot tulee olla samat kuin Synologyssä

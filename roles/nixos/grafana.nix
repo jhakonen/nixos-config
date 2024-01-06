@@ -1,4 +1,7 @@
-{ config, catalog, ... }:
+{ config, ... }:
+let
+  catalog = config.dep-inject.catalog;
+in
 {
   services.grafana = {
     enable = true;

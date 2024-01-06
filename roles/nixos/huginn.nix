@@ -1,5 +1,7 @@
-{ catalog, config, ... }:
+{ config, ... }:
 let
+  catalog = config.dep-inject.catalog;
+
   dataDir = "/var/lib/huginn/data";
   version = "2d5fcafc507da3e8c115c3479e9116a0758c5375";  # 23.7.2023
 in {

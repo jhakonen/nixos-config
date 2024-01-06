@@ -1,4 +1,7 @@
-{ catalog, ... }:
+{ config, ... }:
+let
+  catalog = config.dep-inject.catalog;
+in
 {
   services.tvheadend = {
     enable = true;

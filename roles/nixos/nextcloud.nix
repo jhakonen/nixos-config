@@ -1,5 +1,7 @@
-{ catalog, config, lib, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 let
+  catalog = config.dep-inject.catalog;
+
   nextcloudPackage = pkgs.nextcloud27;
   backupDbPath = "${config.services.nextcloud.datadir}/nextcloud-mariadb.backup";
   adminPassFile = pkgs.writeText "nextcloud-initialadminpass" "initial-pass";

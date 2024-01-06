@@ -1,5 +1,6 @@
-{ config, catalog, ... }:
+{ config, ... }:
 let
+  catalog = config.dep-inject.catalog;
   user = "koti";
   certDir = config.security.acme.certs."jhakonen.com".directory;
 in {

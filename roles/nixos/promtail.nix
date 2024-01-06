@@ -1,4 +1,7 @@
-{ catalog, config, ... }:
+{ config, ... }:
+let
+  catalog = config.dep-inject.catalog;
+in
 {
   # Tämä palvelu kerää järjestelmästä lokirivejä jotka se lähettää Grafanan Loki
   # kantaan. Grafanassa voi sitten selata ja hakea palveluiden lokeja.

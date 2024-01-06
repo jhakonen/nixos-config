@@ -1,7 +1,12 @@
 # This is your home-manager configuration file
 # Use this to configure your home environment (it replaces ~/.config/nixpkgs/home.nix)
 
-{ catalog, inputs, outputs, lib, config, pkgs, agenix, ... }: {
+{ inputs, osConfig, lib, config, pkgs, ... }:
+let
+  agenix = osConfig.dep-inject.agenix;
+  catalog = osConfig.dep-inject.catalog;
+in
+{
   imports = [
     ../../roles/home-manager/git.nix
     ../../roles/home-manager/kde-fix-desktop-files.nix
@@ -17,7 +22,7 @@
       # Add overlays your own flake exports (from overlays and pkgs dir):
       # outputs.overlays.additions
       # outputs.overlays.modifications
-      outputs.overlays.unstable-packages
+      # outputs.overlays.unstable-packages
 
       # You can also add overlays exported from other flakes:
       # neovim-nightly-overlay.overlays.default

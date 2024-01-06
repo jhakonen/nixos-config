@@ -1,4 +1,4 @@
-{ catalog, config, pkgs, ... }:
+{ config, pkgs, ... }:
 {
   imports = [ ../../modules/backup.nix ];
 
@@ -30,7 +30,7 @@
   services.backup = {
     enable = true;
     repo = {
-      host = catalog.nodes.nas.hostName;
+      host = config.dep-inject.catalog.nodes.nas.hostName;
       user = "borg-backup";
     };
     paths = [

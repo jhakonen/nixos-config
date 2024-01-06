@@ -1,4 +1,7 @@
-{ config, catalog, ... }:
+{ config, ... }:
+let
+  catalog = config.dep-inject.catalog;
+in
 {
   age.secrets.node-red-environment.file = ../../secrets/node-red-environment.age;
 

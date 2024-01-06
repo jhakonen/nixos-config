@@ -1,4 +1,4 @@
-{ catalog, pkgs, ... }:
+{ pkgs, ... }:
 {
   # Asenna locate ja updatedb komennot, updatedb ajetaan myös kerran päivässä
   # keskiyöllä

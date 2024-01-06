@@ -1,4 +1,7 @@
-{ pkgs, my-packages, ... }:
+{ config, pkgs, ... }:
+let
+  my-packages = config.dep-inject.my-packages;
+in
 {
   systemd.services.gpio-shutdown = {
     description = "gpio-shutdown palvelu";

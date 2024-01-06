@@ -1,4 +1,7 @@
-{ catalog, config, ... }:
+{ config, ... }:
+let
+  catalog = config.dep-inject.catalog;
+in
 {
   services.zigbee2mqtt = {
     enable = true;

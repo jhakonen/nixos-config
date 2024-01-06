@@ -1,4 +1,7 @@
-{ config, catalog, ... }:
+{ config, ... }:
+let
+  catalog = config.dep-inject.catalog;
+in
 {
   age.secrets.telegraf-environment.file = ../../secrets/telegraf-environment.age;
 
