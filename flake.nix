@@ -94,18 +94,5 @@
         agenix.nixosModules.default
       ];
     };
-
-    homeConfigurations."jhakonen@dellxps13" = home-manager.lib.homeManagerConfiguration {
-      pkgs = nixpkgs.legacyPackages.x86_64-linux;
-      extraSpecialArgs = {
-        inherit catalog;
-        inherit outputs;
-      } // inputs;
-      modules = [
-        ./hosts/dellxps13/home.nix
-        agenix.homeManagerModules.age
-      ];
-    };
-
   };
 }
