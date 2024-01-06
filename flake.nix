@@ -38,30 +38,29 @@
       };
     };
 
-    nixosConfigurations.dellxps13 = nixpkgs.lib.nixosSystem rec {
+    nixosConfigurations.dellxps13 = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
-        depInject
         ./hosts/dellxps13/configuration.nix
-        {
-          nixpkgs.overlays = [
-            outputs.overlays.unstable-packages
-          ];
-          home-manager.users.jhakonen = import ./hosts/dellxps13/home.nix;
-        }
+        depInject
         agenix.nixosModules.default
         home-manager.nixosModules.home-manager
         nixos-hardware.nixosModules.common-cpu-intel
         nixos-hardware.nixosModules.common-pc-laptop
         nixos-hardware.nixosModules.common-pc-ssd
+        {
+          nixpkgs.overlays = [
+            outputs.overlays.unstable-packages
+          ];
+        }
       ];
     };
 
     nixosConfigurations.nas-toolbox = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
-        depInject
         ./hosts/nas-toolbox/configuration.nix
+        depInject
         agenix.nixosModules.default
         home-manager.nixosModules.default
       ];
@@ -70,8 +69,8 @@
     nixosConfigurations.mervi = nixpkgs-unstable.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
-        depInject
         ./hosts/mervi/configuration.nix
+        depInject
         agenix.nixosModules.default
         home-manager-unstable.nixosModules.default
       ];
@@ -80,8 +79,8 @@
     nixosConfigurations.kota-portti = nixpkgs.lib.nixosSystem {
       system = "aarch64-linux";
       modules = [
-        depInject
         ./hosts/kota-portti/configuration.nix
+        depInject
         agenix.nixosModules.default
         home-manager.nixosModules.default
       ];

@@ -18,6 +18,16 @@ in
     options = "--delete-older-than 60d";
   };
 
+  nixpkgs = {
+    config = {
+      allowUnfree = true;
+      permittedInsecurePackages = [
+        "electron-25.9.0"
+        "openssl-1.1.1w"
+      ];
+    };
+  };
+
   imports = [
     ./hardware-configuration.nix
     ../../roles/nixos/backup.nix
@@ -119,10 +129,8 @@ in
     extraGroups = [ "networkmanager" "wheel" ];
   };
 
+  home-manager.users.jhakonen = import ./home.nix;
   home-manager.users.root.home.stateVersion = "23.11";
-
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -184,11 +192,6 @@ in
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "23.11"; # Did you read the comment?
-
-  nixpkgs.config.permittedInsecurePackages = [
-    "electron-25.9.0"
-    "openssl-1.1.1w"
-  ];
 
   # Lisää swappiä jotta nix-index komennolle riittää muistia
   swapDevices = [{
