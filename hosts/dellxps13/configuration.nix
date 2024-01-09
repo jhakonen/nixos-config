@@ -119,6 +119,9 @@ in
     };
   };
 
+  # Thunderbolt tuki
+  services.hardware.bolt.enable = true;
+
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
@@ -152,6 +155,7 @@ in
     moonlight-qt
     nextcloud-client
     obsidian
+    plasma5Packages.plasma-thunderbolt  # Asetusvälilehti thunderboltille (lisäksi services.hardware.bolt)
     spotify
     sublime4
   ];
