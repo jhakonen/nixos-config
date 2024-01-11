@@ -15,6 +15,7 @@ in
         ];
       };
       homeassistant = {
+        country = "FI";
         external_url = "https://${catalog.services.home-assistant.public.domain}";
         auth_providers = [
           {
