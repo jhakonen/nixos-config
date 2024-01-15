@@ -7,6 +7,7 @@
       exts.pvr-hts  # TVheadend
       exts.youtube
       (exts.callPackage ../../packages/kodi-addons/plugin.video.twitch { })
+      (exts.callPackage ../../packages/kodi-addons/plugin.video.yleareena.jade.nix {})
     ]));
     settings = {};
     sources = {
