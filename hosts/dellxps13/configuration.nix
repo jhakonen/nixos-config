@@ -151,6 +151,8 @@ in
     libsForQt5.kmahjongg
     libsForQt5.kolourpaint
     libsForQt5.qt5.qtwebsockets  # Tarvitaan Home Assistant plasmoidia varten
+    libsForQt5.kcalc
+    # libsForQt5.sddm-kcm  # Lisää KDE asetuksiin Kirjautumisruutu (SSDM) osion
     libsForQt5.signond  # Tarvitaan Nextcloud tilin lisäämiseen
     meld
     moonlight-qt
