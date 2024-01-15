@@ -17,6 +17,7 @@ in
         reject_unauthorized = true;
       };
       advanced.report = true;
+      ota.disable_automatic_update_check = true;
       devices = {
         "0x14b457fffe7e06cc" = {
           friendly_name = "tradfri-lamppu-1";
@@ -29,6 +30,22 @@ in
         "0xccccccfffe3c78b1" = {
           friendly_name = "tradfri-lamppu-3";
           description = "Olohuoneen kattovalaisimen lamppu";
+        };
+        "0x001788010d9f259a" = {
+          friendly_name = "hue-lamppu-1";
+          description = "Käytävän kattovalaisimen lamppu";
+        };
+        "0x001788010d9f2604" = {
+          friendly_name = "hue-lamppu-2";
+          description = "Käytävän kattovalaisimen lamppu";
+        };
+        "0x001788010d9f21f4" = {
+          friendly_name = "hue-lamppu-3";
+          description = "Käytävän kattovalaisimen lamppu";
+        };
+        "0x001788010d9f2624" = {
+          friendly_name = "hue-lamppu-4";
+          description = "Käytävän kattovalaisimen lamppu";
         };
         "0x086bd7fffe5a78ee" = {
           friendly_name = "pistoke-1";
