@@ -11,6 +11,9 @@ in {
     extraConfig.http.bind-address = ":${toString catalog.services.influx-db.port}";
   };
 
+  # Influxdb:n käynnistys saattaa kestää, anna lisää aikaa
+  systemd.services.influxdb.serviceConfig.TimeoutStartSec = "5min";
+
   services.backup.preHooks = [
     ''
     rm -rf ${backupDir}
