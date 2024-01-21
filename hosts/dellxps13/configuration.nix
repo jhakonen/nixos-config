@@ -141,6 +141,7 @@ in
     pkgs.unstable.beeper
     bitwarden
     brave
+    easyeffects
     firefox
     gnumake
     itch  # itch.io
@@ -172,6 +173,8 @@ in
   # };
 
   programs.steam.enable = true;
+
+  programs.dconf.enable = true;  # Easyeffects tarvitsee tämän
 
   # List services that you want to enable:
 
