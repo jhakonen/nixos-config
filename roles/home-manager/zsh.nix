@@ -42,8 +42,8 @@
       fi
     '';
     shellAliases = {
-      ls = "ls --color=auto";
-      ll = "ls -l";
+      ls = "eza";
+      ll = "eza -l";
       scp = "scp -O";  # Synology NAS ei tue scp:n uudempaa sftp protokollaa
     };
     plugins = [

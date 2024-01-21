@@ -14,6 +14,8 @@
     inetutils  # telnet
     usbutils   # lsusb
     binutils   # strings
+    tailspin   # https://github.com/bensadeh/tailspin
+    eza        # https://github.com/eza-community/eza
   ];
 
   # Estä `inetutils` pakettia korvaamasta `nettools`
