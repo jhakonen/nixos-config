@@ -3,6 +3,7 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+    nur.url = "github:nix-community/NUR";
     home-manager.url = "github:nix-community/home-manager/release-23.11";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     home-manager-unstable.url = "github:nix-community/home-manager";
@@ -12,7 +13,15 @@
     agenix.inputs.home-manager.follows = "home-manager";
   };
 
-  outputs = { self, nixos-hardware, nixpkgs, nixpkgs-unstable, agenix, home-manager, home-manager-unstable, ... }@inputs:
+  outputs = { self
+            , agenix
+            , home-manager
+            , home-manager-unstable
+            , nixos-hardware
+            , nixpkgs
+            , nixpkgs-unstable
+            , nur
+            , ... }@inputs:
   let
     inherit (self) outputs;
     depInject = { lib, pkgs, ... }: {
@@ -48,6 +57,7 @@
         nixos-hardware.nixosModules.common-cpu-intel
         nixos-hardware.nixosModules.common-pc-laptop
         nixos-hardware.nixosModules.common-pc-ssd
+        nur.nixosModules.nur
         {
           nixpkgs.overlays = [
             outputs.overlays.unstable-packages
@@ -73,6 +83,7 @@
         depInject
         agenix.nixosModules.default
         home-manager-unstable.nixosModules.default
+        nur.nixosModules.nur
       ];
     };
 

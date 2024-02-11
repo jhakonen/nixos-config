@@ -8,6 +8,7 @@ let
 in
 {
   imports = [
+    ../../roles/home-manager/firefox.nix
     ../../roles/home-manager/git.nix
     ../../roles/home-manager/kde-fix-desktop-files.nix
     ../../roles/home-manager/mqtt-client.nix
@@ -87,4 +88,9 @@ in
 
   roles.git.githubIdentityFile = config.age.secrets.github-id-rsa.path;
   roles.mqtt-client.passwordFile = config.age.secrets.jhakonen-mosquitto-password.path;
+
+  my.programs.firefox = {
+    enable = true;
+    nur = osConfig.nur;
+  };
 }

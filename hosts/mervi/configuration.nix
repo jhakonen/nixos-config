@@ -146,12 +146,17 @@ in
     };
     jhakonen = {
       imports = [
+        ../../roles/home-manager/firefox.nix
         ../../roles/home-manager/kodi.nix
         ../../roles/home-manager/mqtt-client.nix
         ../../roles/home-manager/zsh.nix
       ];
       home.stateVersion = "23.05";
       roles.mqtt-client.passwordFile = config.age.secrets.jhakonen-mosquitto-password.path;
+      my.programs.firefox = {
+        enable = true;
+        nur = config.nur;
+      };
     };
   };
 
@@ -165,7 +170,6 @@ in
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    firefox
     flirc
     itch  # itch.io
     kate
