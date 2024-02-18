@@ -294,7 +294,13 @@ in rec {
         port = 587;
         tls.useStartTls = true;
       };
-      thunderbird.enable = true;
+      thunderbird = {
+        enable = true;
+        settings = id: {
+          # Käytä ikin smtp palvelimella ikin käyttäjänimeä `userName`-kentän sijaan
+          "mail.smtpserver.smtp_${id}.username" = "***REMOVED***";
+        };
+      };
     };
     "Roskaposti (***REMOVED***)" = {
       realName = "Janne Hakonen";
