@@ -138,11 +138,10 @@ in
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    pkgs.unstable.beeper
+    beeper
     bitwarden
     brave
     easyeffects
-    firefox
     gnumake
     itch  # itch.io
     kate
