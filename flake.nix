@@ -8,6 +8,7 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     home-manager-unstable.url = "github:nix-community/home-manager";
     home-manager-unstable.inputs.nixpkgs.follows = "nixpkgs-unstable";
+    lollypops.url = "github:pinpox/lollypops";
     agenix.url = "github:ryantm/agenix";
     agenix.inputs.nixpkgs.follows = "nixpkgs";
     agenix.inputs.home-manager.follows = "home-manager";
@@ -17,6 +18,7 @@
             , agenix
             , home-manager
             , home-manager-unstable
+            , lollypops
             , nixos-hardware
             , nixpkgs
             , nixpkgs-unstable
@@ -37,6 +39,29 @@
         my-packages = pkgs.callPackage ./packages/nix {};
       };
     };
+    lollypops-reboot-task = { config, ... }: {
+      lollypops.extraTasks.reboot = {
+        desc = "Reboot machine";
+        cmds = [
+          "echo Rebooting machine"
+          "ssh ${config.lollypops.deployment.ssh.user}@${config.lollypops.deployment.ssh.host} reboot"
+        ];
+      };
+    };
+    lollypops-rebuild-debug-task = { config, ... }: {
+      lollypops.extraTasks.rebuild-debug = {
+        desc = "Rebuild with debug output";
+        cmds = [
+          "echo Rebuilding with debug information"
+          ''
+          ssh ${config.lollypops.deployment.ssh.user}@${config.lollypops.deployment.ssh.host} \
+            nixos-rebuild switch \
+              --flake '${config.lollypops.deployment.config-dir}#${config.lollypops.deployment.ssh.host}' \
+              --show-trace --verbose --option eval-cache false
+          ''
+        ];
+      };
+    };
   in {
     overlays = {
       unstable-packages = final: prev: {
@@ -54,6 +79,8 @@
         depInject
         agenix.nixosModules.default
         home-manager.nixosModules.home-manager
+        lollypops.nixosModules.lollypops
+        lollypops-rebuild-debug-task
         nixos-hardware.nixosModules.common-cpu-intel
         nixos-hardware.nixosModules.common-pc-laptop
         nixos-hardware.nixosModules.common-pc-ssd
@@ -62,6 +89,7 @@
           nixpkgs.overlays = [
             outputs.overlays.unstable-packages
           ];
+          lollypops.deployment.ssh.host = "localhost";
         }
       ];
     };
@@ -73,6 +101,9 @@
         depInject
         agenix.nixosModules.default
         home-manager.nixosModules.default
+        lollypops.nixosModules.lollypops
+        lollypops-reboot-task
+        lollypops-rebuild-debug-task
       ];
     };
 
@@ -83,7 +114,10 @@
         depInject
         agenix.nixosModules.default
         home-manager-unstable.nixosModules.default
+        lollypops.nixosModules.lollypops
         nur.nixosModules.nur
+        lollypops-reboot-task
+        lollypops-rebuild-debug-task
       ];
     };
 
@@ -94,7 +128,12 @@
         depInject
         agenix.nixosModules.default
         home-manager.nixosModules.default
+        lollypops.nixosModules.lollypops
+        lollypops-reboot-task
+        lollypops-rebuild-debug-task
       ];
     };
+
+    apps."x86_64-linux".default = lollypops.apps."x86_64-linux".default { configFlake = self; };
   };
 }
