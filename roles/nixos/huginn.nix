@@ -28,10 +28,6 @@ in {
       # Käytä Let's Encrypt sertifikaattia
       addSSL = true;
       useACMEHost = "jhakonen.com";
-      extraConfig = ''
-        # Salli upotus Dashyn iframeen
-        add_header Content-Security-Policy "frame-ancestors 'self' https://${catalog.services.dashy.public.domain} ;";
-      '';
     };
   };
 

@@ -12,7 +12,6 @@ in
         org_role = "Viewer";
         hide_version = true;
       };
-      security.allow_embedding = true;
       server.http_addr = "0.0.0.0";
       server.http_port = catalog.services.grafana.port;
     };

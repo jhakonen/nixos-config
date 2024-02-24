@@ -33,15 +33,8 @@ let
     description = service.dashy.description;
     url = "${catalog.getServiceScheme service}://${catalog.getServiceAddress service}:${toString (catalog.getServicePort service)}";
     icon = service.dashy.icon;
-    target = getServiceTarget service;
+    target = "newtab";
   };
-
-  getServiceTarget = service:
-    if (service ? dashy.newTab && service.dashy.newTab) then
-      "newtab"
-    else
-      "workspace"
-    ;
 in {
   services.dashy = {
     enable = true;

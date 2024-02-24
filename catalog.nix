@@ -155,7 +155,6 @@ in rec {
         section = "viihde";
         description = "Kodin hallintapaneeli";
         icon = "hl-kodi";
-        newTab = true;
       };
     };
     loki = {
@@ -170,7 +169,6 @@ in rec {
         section = "verkon hallinta";
         description = "Modeemin hallintapaneeli";
         icon = "mdi-router-network";
-        newTab = true;
       };
     };
     mosquitto = {
@@ -187,7 +185,6 @@ in rec {
         section = "palvelut";
         description = "Synology NAS hallintapaneeli";
         icon = "http://nas:5000/webman/favicon.ico";
-        newTab = true;
       };
     };
     nextcloud = {
@@ -236,7 +233,6 @@ in rec {
         section = "verkon hallinta";
         description = "Reititimen hallintapaneeli";
         icon = "hl-asus-router";
-        newTab = true;
       };
     };
     sunshine-webui = {
@@ -249,7 +245,6 @@ in rec {
         description = "Sunshine pelipalvelimen hallintapaneeli";
         icon = "https://raw.githubusercontent.com/LizardByte/Sunshine/68ba1db24ab66df63fd525d15f95b95bc958beac"
              + "/src_assets/common/assets/web/images/favicon.ico";
-        newTab = true;
       };
     };
     tvheadend-webui = {
@@ -260,7 +255,6 @@ in rec {
         title = "Tvheadend";
         description = "Tvheadend palvelimen hallintapaneeli";
         icon = "hl-tvheadend";
-        newTab = true;
       };
     };
     zigbee2mqtt = {
@@ -270,7 +264,6 @@ in rec {
         section = "palvelut";
         description = "Zigbee modeemin hallintapaneeli";
         icon = "hl-zigbee2mqtt";
-        newTab = true;
       };
       public = {
         domain = "zigbee2mqtt.jhakonen.com";

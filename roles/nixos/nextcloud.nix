@@ -47,12 +47,7 @@ in
   services = {
     nextcloud = {
       enable = true;
-      package = nextcloudPackage.overrideAttrs (o: {
-        patches = (o.patches or [ ]) ++ [
-          # Salli upotus Dashyn iframeen
-          ../../data/nextcloud-iframe.patch
-        ];
-      });
+      package = nextcloudPackage;
       hostName = catalog.services.nextcloud.public.domain;
       config = {
         adminuser = "valvoja";
