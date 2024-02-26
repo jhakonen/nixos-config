@@ -45,6 +45,7 @@ in
   imports = [
     ./hardware-configuration.nix
     ../../roles/nixos/backup.nix
+    ../../roles/nixos/beeper.nix
     ../../roles/nixos/common-programs.nix
     ../../roles/nixos/zsh.nix
   ];
@@ -170,7 +171,6 @@ in
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    beeper
     bitwarden
     brave
     easyeffects
