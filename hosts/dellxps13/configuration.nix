@@ -102,7 +102,12 @@ in
   # Configure console keymap
   console.keyMap = "fi";
 
-  # Enable CUPS to print documents.
+  # Konfiguroi verkkotulostimen tuki
+  services.avahi = {
+    enable = true;
+    nssmdns = true;
+    openFirewall = true;
+  };
   services.printing.enable = true;
 
   # Enable sound with pipewire.
