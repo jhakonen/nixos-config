@@ -11,14 +11,15 @@ in {
     programs.firefox = {
       enable = true;
       profiles.hakonen = {
-        extensions = [
-          cfg.nur.repos.rycee.firefox-addons.bitwarden
-          cfg.nur.repos.rycee.firefox-addons.floccus
-          cfg.nur.repos.rycee.firefox-addons.multi-account-containers
+        extensions = with cfg; [
+          nur.repos.rycee.firefox-addons.bitwarden
+          nur.repos.rycee.firefox-addons.floccus
+          nur.repos.rycee.firefox-addons.multi-account-containers
+          nur.repos.rycee.firefox-addons.ublacklist
         ];
         search = {
           force = true;
-          default = "Stract";
+          default = "StartPage";
           engines = {
             "Stract" = {
               urls = [{
@@ -83,6 +84,7 @@ in {
           "browser.backspace_action" = 0;  # Use backspace as back button
           "browser.ctrlTab.sortByRecentlyUsed" = true;  # Ctrl+Tab cycles tabs on previously used basis
           "browser.startup.page" = 3;  # Open previously open windows and tabs on startup
+          "browser.tabs.closeWindowWithLastTab" = false; # Älä sulje selainta kun viimeinen välilehti suljetaan
           "privacy.donottrackheader.enabled" = true;
           "privacy.globalprivacycontrol.enabled" = true;
           "privacy.globalprivacycontrol.was_ever_enabled" = true;
