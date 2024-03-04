@@ -69,6 +69,9 @@ in rec {
     nas-nextcloud-vm = {
       ip.private = "192.168.1.49";
     };
+    hl-l2445dw = {
+      ip.private = "192.168.1.76";
+    };
   };
 
   services = addServiceNames {
@@ -245,6 +248,16 @@ in rec {
         description = "Sunshine pelipalvelimen hallintapaneeli";
         icon = "https://raw.githubusercontent.com/LizardByte/Sunshine/68ba1db24ab66df63fd525d15f95b95bc958beac"
              + "/src_assets/common/assets/web/images/favicon.ico";
+      };
+    };
+    tulostin-hl-l2445dw = {
+      host = nodes.hl-l2445dw;
+      port = 80;
+      dashy = {
+        section = "verkon hallinta";
+        title = "Brother HL-L2445DW";
+        description = "Tulostimen hallintapaneeli";
+        icon = "hl-printer";
       };
     };
     tvheadend-webui = {
