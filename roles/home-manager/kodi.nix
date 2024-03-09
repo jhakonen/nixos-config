@@ -3,10 +3,11 @@
   programs.kodi = {
     enable = true;
     package = (pkgs.kodi.withPackages (exts: [
-      exts.netflix
+      exts.inputstream-adaptive
+      #exts.netflix
       exts.pvr-hts  # TVheadend
       exts.youtube
-      (exts.callPackage ../../packages/kodi-addons/plugin.video.twitch { })
+      #(exts.callPackage ../../packages/kodi-addons/plugin.video.twitch { })
       (exts.callPackage ../../packages/kodi-addons/plugin.video.yleareena.jade.nix {})
     ]));
     settings = {};
@@ -58,20 +59,20 @@
         kodi-set-addon-setting plugin.video.youtube youtube.api.key "$api_key"
       '';
     })
-    (pkgs.writeShellApplication {
-      name = "kodi-twitch-set-oauth-token";
-      text = ''
-        read -rp "Twitch OAuth token: " token
-        kodi-set-addon-setting plugin.video.twitch oauth_token_helix "$token"
-      '';
-    })
-    (pkgs.writeShellApplication {
-      name = "kodi-twitch-set-private-oauth-token";
-      text = ''
-        echo "See: https://github.com/anxdpanic/plugin.video.twitch/wiki/Private-API-Credentials---OAuth-Token#2-enabling-additional-features"
-        read -rp "Twitch private credentials OAuth token: " token
-        kodi-set-addon-setting plugin.video.twitch private_oauth_token "$token"
-      '';
-    })
+    # (pkgs.writeShellApplication {
+    #   name = "kodi-twitch-set-oauth-token";
+    #   text = ''
+    #     read -rp "Twitch OAuth token: " token
+    #     kodi-set-addon-setting plugin.video.twitch oauth_token_helix "$token"
+    #   '';
+    # })
+    # (pkgs.writeShellApplication {
+    #   name = "kodi-twitch-set-private-oauth-token";
+    #   text = ''
+    #     echo "See: https://github.com/anxdpanic/plugin.video.twitch/wiki/Private-API-Credentials---OAuth-Token#2-enabling-additional-features"
+    #     read -rp "Twitch private credentials OAuth token: " token
+    #     kodi-set-addon-setting plugin.video.twitch private_oauth_token "$token"
+    #   '';
+    # })
   ];
 }
