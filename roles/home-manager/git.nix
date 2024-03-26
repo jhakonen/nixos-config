@@ -18,9 +18,15 @@ in {
     };
     ssh = {
       enable = true;
-      matchBlocks."github.com" = {
-        identityFile = cfg.githubIdentityFile;
-        user = "git";
+      matchBlocks = {
+        "framagit.org" = {
+          identityFile = "~/.ssh/framagit-ssh-key";
+          user = "git";
+        };
+        "github.com" = {
+          identityFile = cfg.githubIdentityFile;
+          user = "git";
+        };
       };
     };
   };
