@@ -25,6 +25,14 @@ in
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   # Poista duplikaatteja storesta, säästäen tilaa
   nix.settings.auto-optimise-store = true;
+  nix.settings.substituters = [
+    # devenv.sh tarvitsee tämän
+    "https://devenv.cachix.org"
+    "https://cache.nixos.org/"
+  ];
+  nix.settings.trusted-public-keys = [
+    "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw="
+  ];
   nix.gc = {
     # Poista automaattisesti vanhoja nix paketteja ja sukupolvia
     automatic = true;
@@ -178,6 +186,7 @@ in
   environment.systemPackages = with pkgs; [
     bitwarden
     brave
+    cachix
     easyeffects
     gnumake
     itch  # itch.io
@@ -219,6 +228,11 @@ in
   programs.steam.enable = true;
 
   programs.dconf.enable = true;  # Easyeffects tarvitsee tämän
+
+  programs.direnv = {
+    enable = true;
+    silent = true;
+  };
 
   # List services that you want to enable:
 
