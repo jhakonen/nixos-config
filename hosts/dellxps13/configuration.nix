@@ -187,6 +187,7 @@ in
     bitwarden
     brave
     cachix
+    google-chrome  # Chromecastin tukea varten
     easyeffects
     gnumake
     itch  # itch.io
