@@ -164,8 +164,25 @@ in
   # Thunderbolt tuki
   services.hardware.bolt.enable = true;
 
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
+  services.syncthing = {
+    enable = true;
+    user = "jhakonen";
+    dataDir = "/home/jhakonen";
+    overrideDevices = true;
+    overrideFolders = true;
+    openDefaultPorts = true;
+    settings = {
+      devices = {
+        "FP3" = { id = "OO76IIS-6JQYTM6-DYLOSGM-XBQ5EDC-H74PV2X-2GXYR37-AU33GR2-DE4UEQT"; };
+      };
+      folders = {
+        "Keepass" = {
+          path = "/home/jhakonen/Keepass";
+          devices = [ "FP3" ];
+        };
+      };
+    };
+  };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.jhakonen = {
@@ -195,6 +212,7 @@ in
     gnumake
     itch  # itch.io
     kate
+    keepassxc
     libsForQt5.kaccounts-integration  # Lisää KDE asetuksiin Verkkotilit osion
     libsForQt5.kaccounts-providers  # Lisää Verkkotilit osioon mahdollisuudeksi asentaa NextCloud tilin
     libsForQt5.kdeconnect-kde
