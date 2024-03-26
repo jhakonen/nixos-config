@@ -47,6 +47,18 @@ in
           friendly_name = "hue-lamppu-4";
           description = "Käytävän kattovalaisimen lamppu";
         };
+        "0x001788010cfb6125" = {
+          friendly_name = "hue-lamppu-5";
+          description = "Tietokonepöydän lattiavalaisimen lamppu rgb 470lm";
+        };
+        "0x001788010cfe1265" = {
+          friendly_name = "hue-lamppu-6";
+          description = "Tietokonepöydän lattiavalaisimen lamppu rgb 470lm";
+        };
+        "0x001788010b9a83ea" = {
+          friendly_name = "hue-lamppu-7";
+          description = "Tietokonepöydän lattiavalaisimen lamppu rgb 800lm";
+        };
         "0x086bd7fffe5a78ee" = {
           friendly_name = "pistoke-1";
           description = "Ei ohjaa mitään, toimii zigbee verkon extenderinä";
