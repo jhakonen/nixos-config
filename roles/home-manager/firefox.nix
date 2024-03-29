@@ -12,8 +12,8 @@ in {
       enable = true;
       profiles.hakonen = {
         extensions = with cfg; [
-          nur.repos.rycee.firefox-addons.bitwarden
           nur.repos.rycee.firefox-addons.floccus
+          nur.repos.rycee.firefox-addons.keepassxc-browser
           nur.repos.rycee.firefox-addons.multi-account-containers
           nur.repos.rycee.firefox-addons.ublacklist
         ];
