@@ -173,12 +173,12 @@ in
     openDefaultPorts = true;
     settings = {
       devices = {
-        "FP3" = { id = "OO76IIS-6JQYTM6-DYLOSGM-XBQ5EDC-H74PV2X-2GXYR37-AU33GR2-DE4UEQT"; };
+        "NAS".id = "M5AL6GA-OEENQ5G-JN36HDW-M2KBKGB-TCEZIVL-EQXRGZX-BJRJZ4C-MX36TAL";
       };
       folders = {
         "Keepass" = {
           path = "/home/jhakonen/Keepass";
-          devices = [ "FP3" ];
+          devices = [ "NAS" ];
         };
       };
     };
