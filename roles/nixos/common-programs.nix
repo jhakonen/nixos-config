@@ -12,6 +12,7 @@
     btop
     git
     inetutils  # telnet
+    inotify-info
     jq
     usbutils   # lsusb
     binutils   # strings
