@@ -69,8 +69,13 @@ in rec {
     nas-nextcloud-vm = {
       ip.private = "192.168.1.49";
     };
-    hl-l2445dw = {
+    hl-l2445dw = { # tulostin
       ip.private = "192.168.1.76";
+      useIp = true;
+    };
+    ads-1700w = { # skanneri
+      ip.private = "192.168.1.218";
+      useIp = true;
     };
   };
 
@@ -236,6 +241,16 @@ in rec {
         section = "verkon hallinta";
         description = "Reititimen hallintapaneeli";
         icon = "hl-asus-router";
+      };
+    };
+    skanneri-ads-1700w = {
+      host = nodes.ads-1700w;
+      port = 80;
+      dashy = {
+        section = "verkon hallinta";
+        title = "Brother ADS-1700W";
+        description = "Skannerin hallintapaneeli";
+        icon = "mdi-barcode-scan";
       };
     };
     sunshine-webui = {

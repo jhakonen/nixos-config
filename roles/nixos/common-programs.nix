@@ -12,6 +12,7 @@
     btop
     git
     inetutils  # telnet
+    jq
     usbutils   # lsusb
     binutils   # strings
     tailspin   # https://github.com/bensadeh/tailspin
