@@ -171,14 +171,16 @@ in
     overrideDevices = true;
     overrideFolders = true;
     openDefaultPorts = true;
+    guiAddress = "0.0.0.0:${toString catalog.services.syncthing-dellxps13.port}";
     settings = {
       devices = {
-        "NAS".id = "M5AL6GA-OEENQ5G-JN36HDW-M2KBKGB-TCEZIVL-EQXRGZX-BJRJZ4C-MX36TAL";
+        "nas".id = catalog.services.syncthing-nas.syncthing.id;
+        "mervi".id = catalog.services.syncthing-mervi.syncthing.id;
       };
       folders = {
         "Keepass" = {
           path = "/home/jhakonen/Keepass";
-          devices = [ "NAS" ];
+          devices = [ "mervi" "nas" ];
         };
       };
     };

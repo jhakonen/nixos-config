@@ -124,6 +124,28 @@ in
     };
   };
 
+  services.syncthing = {
+    enable = true;
+    user = "jhakonen";
+    dataDir = "/home/jhakonen";
+    overrideDevices = true;
+    overrideFolders = true;
+    openDefaultPorts = true;
+    guiAddress = "0.0.0.0:${toString catalog.services.syncthing-mervi.port}";
+    settings = {
+      devices = {
+        "NAS".id = catalog.services.syncthing-nas.syncthing.id;
+        "dellxps13".id = catalog.services.syncthing-dellxps13.syncthing.id;
+      };
+      folders = {
+        "Keepass" = {
+          path = "/home/jhakonen/Keepass";
+          devices = [ "dellxps13" "NAS" ];
+        };
+      };
+    };
+  };
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users = {
     jhakonen = {
@@ -171,8 +193,10 @@ in
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     flirc
-    itch  # itch.io
+    # TODO: Enable itch once is done: https://github.com/NixOS/nixpkgs/issues/298410
+    # itch  # itch.io
     kate
+    keepassxc
     kodi  # lisää Kodin puuttuvan ikonin
     spotify
     ngrep  # verkkopakettien greppaus, hyödyllinen WoLin testaukseen
@@ -215,6 +239,7 @@ in
 
   networking.firewall.allowedTCPPorts = [
     catalog.services.kodi.port  # Kodi hallintapaneeli + Kore Android appi
+    catalog.services.syncthing-mervi.port
   ];
 
   # Open ports in the firewall.

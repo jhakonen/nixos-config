@@ -265,6 +265,36 @@ in rec {
              + "/src_assets/common/assets/web/images/favicon.ico";
       };
     };
+    syncthing-dellxps13 = {
+      host = nodes.dellxps13;
+      port = 8384;
+      dashy = {
+        section = "palvelut";
+        description = "Syncthing - Dell XPS 13";
+        icon = "hl-syncthing";
+      };
+      syncthing.id = "WKELG45-M6XHPMK-LDYP7FI-AIWMZKK-P6ORZHW-KS3KTNL-GPYKNGX-ZBYIGQX";
+    };
+    syncthing-mervi = {
+      host = nodes.mervi;
+      port = 8384;
+      dashy = {
+        section = "palvelut";
+        description = "Syncthing - Mervi";
+        icon = "hl-syncthing";
+      };
+      syncthing.id = "7BTJFDZ-XDJS5OX-FSBRLIB-PB7ACKK-3VEYRHA-LP5NKYN-KWLZ3QS-X2V36AR";
+    };
+    syncthing-nas = {
+      host = nodes.nas;
+      port = 8384;
+      dashy = {
+        section = "palvelut";
+        description = "Syncthing - NAS";
+        icon = "hl-syncthing";
+      };
+      syncthing.id = "M5AL6GA-OEENQ5G-JN36HDW-M2KBKGB-TCEZIVL-EQXRGZX-BJRJZ4C-MX36TAL";
+    };
     tulostin-hl-l2445dw = {
       host = nodes.hl-l2445dw;
       port = 80;
