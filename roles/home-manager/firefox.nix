@@ -13,23 +13,24 @@ in {
       profiles.hakonen = {
         extensions = with cfg; [
           nur.repos.rycee.firefox-addons.floccus
+          nur.repos.rycee.firefox-addons.kagi-search
           nur.repos.rycee.firefox-addons.keepassxc-browser
           nur.repos.rycee.firefox-addons.multi-account-containers
           nur.repos.rycee.firefox-addons.ublacklist
         ];
         search = {
           force = true;
-          default = "StartPage";
+          default = "Kagi";
           engines = {
-            "Stract" = {
+            "Kagi" = {
               urls = [{
-                template = "https://stract.com/search";
+                template = "https://kagi.com/search";
                 params = [
                   { name = "q"; value = "{searchTerms}"; }
                 ];
+                definedAliases = [ "@k" ];
+                iconUpdateURL = "https://kagi.com/favicon.ico";
               }];
-              definedAliases = [ "@s" ];
-              iconUpdateURL = "https://stract.com/favicon.ico";
             };
             "StartPage" = {
               urls = [{
@@ -45,13 +46,21 @@ in {
               urls = [{
                 template = "https://search.nixos.org/packages";
                 params = [
-                  { name = "type"; value = "packages"; }
                   { name = "query"; value = "{searchTerms}"; }
                 ];
               }];
-
               icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
               definedAliases = [ "@np" ];
+            };
+            "Nix Options" = {
+              urls = [{
+                template = "https://search.nixos.org/options";
+                params = [
+                  { name = "query"; value = "{searchTerms}"; }
+                ];
+              }];
+              icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
+              definedAliases = [ "@no" ];
             };
             "NixOS Wiki" = {
               urls = [{ template = "https://nixos.wiki/index.php?search={searchTerms}"; }];
@@ -59,21 +68,11 @@ in {
               updateInterval = 24 * 60 * 60 * 1000; # every day
               definedAliases = [ "@nw" ];
             };
-            "Marginalia" = {
-              urls = [{
-                template = "https://search.marginalia.nu/search";
-                params = [
-                  { name = "query"; value = "{searchTerms}"; }
-                ];
-              }];
-              definedAliases = [ "@m" ];
-              iconUpdateURL = "https://search.marginalia.nu/favicon.ico";
-            };
             "Bing".metaData.hidden = true;
             "Amazon.nl".metaData.hidden = true;
             "Google".metaData.hidden = true;
           };
-          order = [ "StartPage" "Nix Packages" ];
+          order = [ "Kagi" "StartPage" "Nix Packages" "Nix Options" "NixOS Wiki" ];
         };
         settings = {
           # How to figure out which setting to change:
