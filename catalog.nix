@@ -273,7 +273,6 @@ in rec {
         description = "Syncthing - Dell XPS 13";
         icon = "hl-syncthing";
       };
-      syncthing.id = "WKELG45-M6XHPMK-LDYP7FI-AIWMZKK-P6ORZHW-KS3KTNL-GPYKNGX-ZBYIGQX";
     };
     syncthing-mervi = {
       host = nodes.mervi;
@@ -283,7 +282,6 @@ in rec {
         description = "Syncthing - Mervi";
         icon = "hl-syncthing";
       };
-      syncthing.id = "7BTJFDZ-XDJS5OX-FSBRLIB-PB7ACKK-3VEYRHA-LP5NKYN-KWLZ3QS-X2V36AR";
     };
     syncthing-nas = {
       host = nodes.nas;
@@ -293,7 +291,6 @@ in rec {
         description = "Syncthing - NAS";
         icon = "hl-syncthing";
       };
-      syncthing.id = "M5AL6GA-OEENQ5G-JN36HDW-M2KBKGB-TCEZIVL-EQXRGZX-BJRJZ4C-MX36TAL";
     };
     tulostin-hl-l2445dw = {
       host = nodes.hl-l2445dw;
@@ -360,5 +357,11 @@ in rec {
       flavor = "***REMOVED***";
       thunderbird.enable = true;
     };
+  };
+
+  syncthing-devices = {
+    "dellxps13".id = "WKELG45-M6XHPMK-LDYP7FI-AIWMZKK-P6ORZHW-KS3KTNL-GPYKNGX-ZBYIGQX";
+    "mervi".id = "7BTJFDZ-XDJS5OX-FSBRLIB-PB7ACKK-3VEYRHA-LP5NKYN-KWLZ3QS-X2V36AR";
+    "nas".id = "M5AL6GA-OEENQ5G-JN36HDW-M2KBKGB-TCEZIVL-EQXRGZX-BJRJZ4C-MX36TAL";
   };
 }

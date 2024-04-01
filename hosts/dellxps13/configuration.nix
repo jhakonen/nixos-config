@@ -52,6 +52,7 @@ in
 
   imports = [
     ./hardware-configuration.nix
+    ../../modules
     ../../roles/nixos/backup.nix
     ../../roles/nixos/beeper.nix
     ../../roles/nixos/common-programs.nix
@@ -164,23 +165,19 @@ in
   # Thunderbolt tuki
   services.hardware.bolt.enable = true;
 
-  services.syncthing = {
+  my.services.syncthing = {
     enable = true;
-    user = "jhakonen";
-    dataDir = "/home/jhakonen";
-    overrideDevices = true;
-    overrideFolders = true;
-    openDefaultPorts = true;
-    guiAddress = "0.0.0.0:${toString catalog.services.syncthing-dellxps13.port}";
+    gui-port = catalog.services.syncthing-dellxps13.port;
     settings = {
-      devices = {
-        "nas".id = catalog.services.syncthing-nas.syncthing.id;
-        "mervi".id = catalog.services.syncthing-mervi.syncthing.id;
-      };
+      devices = catalog.syncthing-devices;
       folders = {
         "Keepass" = {
           path = "/home/jhakonen/Keepass";
           devices = [ "mervi" "nas" ];
+        };
+        "Muistiinpanot" = {
+          path = "/home/jhakonen/Muistiinpanot";
+          devices = [ "nas" ];
         };
       };
     };

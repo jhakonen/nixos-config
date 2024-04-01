@@ -35,6 +35,7 @@ in
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      ../../modules
       ../../roles/nixos/backup.nix
       ../../roles/nixos/common-programs.nix
       ../../roles/nixos/gamepads.nix
@@ -124,23 +125,15 @@ in
     };
   };
 
-  services.syncthing = {
+  my.services.syncthing = {
     enable = true;
-    user = "jhakonen";
-    dataDir = "/home/jhakonen";
-    overrideDevices = true;
-    overrideFolders = true;
-    openDefaultPorts = true;
-    guiAddress = "0.0.0.0:${toString catalog.services.syncthing-mervi.port}";
+    gui-port = catalog.services.syncthing-mervi.port;
     settings = {
-      devices = {
-        "NAS".id = catalog.services.syncthing-nas.syncthing.id;
-        "dellxps13".id = catalog.services.syncthing-dellxps13.syncthing.id;
-      };
+      devices = catalog.syncthing-devices;
       folders = {
         "Keepass" = {
           path = "/home/jhakonen/Keepass";
-          devices = [ "dellxps13" "NAS" ];
+          devices = [ "dellxps13" "nas" ];
         };
       };
     };
@@ -239,7 +232,6 @@ in
 
   networking.firewall.allowedTCPPorts = [
     catalog.services.kodi.port  # Kodi hallintapaneeli + Kore Android appi
-    catalog.services.syncthing-mervi.port
   ];
 
   # Open ports in the firewall.
