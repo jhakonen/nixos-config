@@ -23,14 +23,6 @@ in
 {
   # Ota flaket käyttöön
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
-  # Poista duplikaatteja storesta, säästäen tilaa
-  nix.settings.auto-optimise-store = true;
-  nix.gc = {
-    # Poista automaattisesti vanhoja nix paketteja ja sukupolvia
-    automatic = true;
-    dates = "weekly";
-    options = "--delete-older-than 60d";
-  };
 
   imports =
     [ # Include the results of the hardware scan.
@@ -48,6 +40,7 @@ in
       ../../roles/nixos/mosquitto.nix
       ../../roles/nixos/mqttwarn.nix
       ../../roles/nixos/nextcloud.nix
+      ../../roles/nixos/nix-cleanup.nix
       ../../roles/nixos/node-red.nix
       ../../roles/nixos/paperless.nix
       ../../roles/nixos/promtail.nix

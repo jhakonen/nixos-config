@@ -49,3 +49,30 @@ which grafana
 > /nix/store/bgxpkjnfx9dp3yyjvkcrmcpmga0qiy1w-grafana-10.2.6/bin/grafana
 nix-copy-closure --to root@nas-toolbox /nix/store/bgxpkjnfx9dp3yyjvkcrmcpmga0qiy1w-grafana-10.2.6
 ```
+
+# Sukupolvien listaus
+
+```bash
+nixos-rebuild list-generations
+```
+
+# Vanhojen sukupolvien poistaminen
+
+Poista vanhat sukupolvet profiilista (säästäen 20 viimeisintä):
+```bash
+sudo nix-env -p /nix/var/nix/profiles/system --delete-generations +20
+```
+
+Päivitä bootin lista sukupolvista:
+```bash
+sudo /run/current-system/bin/switch-to-configuration boot
+```
+
+# Tilan tekeminen nix storeen:
+
+```bash
+sudo nix-collect-garbage --delete-older-than 30d
+```
+Huomaa, että kannattaa ensin poistaa vanhoja sukupolvia, jotta garbage collector pystyy poistaan myös niiden viittaamat tiedostot storesta.
+
+Minulla on myös automaattinen puhdistus otettu käyttöön kaikilla NixOS koneilla joten tätä ei tarvitse välttämättä tehdä.

@@ -23,8 +23,6 @@ in
 {
   # Ota flaket käyttöön
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
-  # Poista duplikaatteja storesta, säästäen tilaa
-  nix.settings.auto-optimise-store = true;
   nix.settings.substituters = [
     # devenv.sh tarvitsee tämän
     "https://devenv.cachix.org"
@@ -33,12 +31,6 @@ in
   nix.settings.trusted-public-keys = [
     "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw="
   ];
-  nix.gc = {
-    # Poista automaattisesti vanhoja nix paketteja ja sukupolvia
-    automatic = true;
-    dates = "weekly";
-    options = "--delete-older-than 60d";
-  };
 
   nixpkgs = {
     config = {
@@ -56,6 +48,7 @@ in
     ../../roles/nixos/backup.nix
     ../../roles/nixos/beeper.nix
     ../../roles/nixos/common-programs.nix
+    ../../roles/nixos/nix-cleanup.nix
     ../../roles/nixos/zsh.nix
   ];
 
