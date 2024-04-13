@@ -6,9 +6,11 @@
       exts.inputstream-adaptive
       #exts.netflix
       exts.pvr-hts  # TVheadend
+      exts.sendtokodi
       exts.youtube
       #(exts.callPackage ../../packages/kodi-addons/plugin.video.twitch { })
       (exts.callPackage ../../packages/kodi-addons/plugin.video.yleareena.jade.nix {})
+      (exts.callPackage ../../packages/kodi-addons/skin.estuary.nexus.pkscout.mod.nix {})
     ]));
     settings = {};
     sources = {
