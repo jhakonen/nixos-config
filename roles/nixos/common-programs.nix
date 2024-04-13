@@ -16,6 +16,7 @@
     jq
     usbutils   # lsusb
     binutils   # strings
+    python3
     tailspin   # https://github.com/bensadeh/tailspin
     eza        # https://github.com/eza-community/eza
   ];
