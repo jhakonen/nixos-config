@@ -180,7 +180,7 @@ in
   users.users.jhakonen = {
     isNormalUser = true;
     description = "Janne Hakonen";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "adbusers" "networkmanager" "wheel" ];
     openssh.authorizedKeys.keys = [ id-rsa-public-key ];
   };
   users.users.root = {
@@ -238,6 +238,8 @@ in
   #   enable = true;
   #   enableSSHSupport = true;
   # };
+
+  programs.adb.enable = true;
 
   programs.steam.enable = true;
 
