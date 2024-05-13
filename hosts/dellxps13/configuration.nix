@@ -207,6 +207,7 @@ in
     itch  # itch.io
     kate
     keepassxc
+    libreoffice
     libsForQt5.kaccounts-integration  # Lisää KDE asetuksiin Verkkotilit osion
     libsForQt5.kaccounts-providers  # Lisää Verkkotilit osioon mahdollisuudeksi asentaa NextCloud tilin
     libsForQt5.kdeconnect-kde
@@ -218,6 +219,7 @@ in
     libsForQt5.signond  # Tarvitaan Nextcloud tilin lisäämiseen
     meld
     moonlight-qt
+    mqttx
     nextcloud-client
     obsidian
     plasma5Packages.plasma-thunderbolt  # Asetusvälilehti thunderboltille (lisäksi services.hardware.bolt)
