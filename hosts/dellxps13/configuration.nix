@@ -166,6 +166,10 @@ in
     settings = {
       devices = catalog.syncthing-devices;
       folders = {
+        "Calibre" = {
+          path = "/home/jhakonen/Calibre";
+          devices = [ "nas" ];
+        };
         "Keepass" = {
           path = "/home/jhakonen/Keepass";
           devices = [ "mervi" "nas" ];
@@ -217,6 +221,7 @@ in
     libsForQt5.kcalc
     # libsForQt5.sddm-kcm  # Lisää KDE asetuksiin Kirjautumisruutu (SSDM) osion
     libsForQt5.signond  # Tarvitaan Nextcloud tilin lisäämiseen
+    mcomix
     meld
     moonlight-qt
     mqttx
