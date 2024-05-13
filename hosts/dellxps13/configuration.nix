@@ -158,6 +158,8 @@ in
   # Thunderbolt tuki
   services.hardware.bolt.enable = true;
 
+  services.tailscale.enable = true;
+
   my.services.syncthing = {
     enable = true;
     gui-port = catalog.services.syncthing-dellxps13.port;
@@ -221,6 +223,7 @@ in
     plasma5Packages.plasma-thunderbolt  # Asetusvälilehti thunderboltille (lisäksi services.hardware.bolt)
     spotify
     sublime4
+    trayscale
     (pkgs.writeShellApplication {
       name = "deploy";
       runtimeInputs = [ ];
