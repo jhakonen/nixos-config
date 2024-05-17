@@ -42,9 +42,13 @@ in
   # Puhkaise reikä palomuuriin
   networking.firewall.allowedTCPPorts = [ catalog.services.grafana.public.port ];
 
-  services.backup.paths = [ config.services.grafana.dataDir ];
-  services.backup.preHooks = [ "systemctl stop grafana.service" ];
-  services.backup.postHooks = [ "systemctl start grafana.service" ];
+  # Varmuuskopiointi
+  my.services.rsync.jobs.grafana = {
+    destination = "nas";
+    paths = [ config.services.grafana.dataDir ];
+    preHooks = [ "systemctl stop grafana.service" ];
+    postHooks = [ "systemctl start grafana.service" ];
+  };
 
   # Lisää rooli lokiriveihin jotka Promtail lukee
   systemd.services.grafana.serviceConfig.LogExtraFields = "ROLE=grafana";

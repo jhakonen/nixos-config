@@ -28,7 +28,6 @@ in
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ../../modules
-      ../../roles/nixos/backup.nix
       ../../roles/nixos/bt-mqtt-gateway.nix
       ../../roles/nixos/common-programs.nix
       ../../roles/nixos/gpio-shutdown.nix
@@ -104,6 +103,18 @@ in
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
+  # # Varmuuskopiointi
+  my.services.rsync = {
+    enable = true;
+    schedule = "*-*-* 0:00:00";
+    destinations.nas = {
+      username = "rsync-backup";
+      passwordFile = config.age.secrets.rsyncbackup-password.path;
+      host = catalog.nodes.nas.hostName;
+      path = "::backups/${config.networking.hostName}";
+    };
+  };
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.jhakonen = {
     openssh.authorizedKeys.keys = [ id-rsa-public-key ];
@@ -148,20 +159,16 @@ in
   # };
 
   # Salaisuudet
-  age.secrets.jhakonen-mosquitto-password = {
-    file = ../../secrets/mqtt-password.age;
-    owner = "jhakonen";
+  age.secrets = {
+    jhakonen-mosquitto-password = {
+      file = ../../secrets/mqtt-password.age;
+      owner = "jhakonen";
+    };
+    rsyncbackup-password.file = ../../secrets/rsyncbackup-password.age;
   };
 
   # List services that you want to enable:
   services = {
-    backup = {
-      repo.path = "/volume2/backups/borg/kota-portti-nixos";
-      mounts = {
-        "/mnt/borg/kota-portti".remote = "borg-backup@${catalog.nodes.nas.hostName}:/volume2/backups/borg/kota-portti-nixos";
-      };
-    };
-
     # Enable the OpenSSH daemon.
     openssh = {
       enable = true;

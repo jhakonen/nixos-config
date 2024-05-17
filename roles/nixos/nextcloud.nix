@@ -107,13 +107,6 @@ in
         };
       }];
     };
-
-    backup = {
-      preHooks = [ "${backupPrepare}/bin/nextcloud-backup-pre" ];
-      postHooks = [ "${backupCleanup}/bin/nextcloud-backup-post" ];
-      paths = [ config.services.nextcloud.datadir ];
-      readWritePaths = [ config.services.nextcloud.datadir ];
-    };
   };
 
   environment.systemPackages = [
@@ -140,5 +133,14 @@ in
       "x-systemd.after=network-online.target"
       "x-systemd.mount-timeout=90"
     ];
+  };
+
+  # Varmuuskopiointi
+  my.services.rsync.jobs.nextcloud = {
+    destination = "nas";
+    preHooks = [ "${backupPrepare}/bin/nextcloud-backup-pre" ];
+    postHooks = [ "${backupCleanup}/bin/nextcloud-backup-post" ];
+    paths = [ config.services.nextcloud.datadir ];
+    readWritePaths = [ config.services.nextcloud.datadir ];
   };
 }

@@ -35,9 +35,13 @@ in
     config.age.secrets.node-red-environment.path
   ];
 
-  services.backup.preHooks = [ "systemctl stop node-red.service" ];
-  services.backup.postHooks = [ "systemctl start node-red.service" ];
-  services.backup.paths = [ config.services.node-red.userDir ];
+  # Varmuuskopiointi
+  my.services.rsync.jobs.node-red = {
+    destination = "nas";
+    preHooks = [ "systemctl stop node-red.service" ];
+    postHooks = [ "systemctl start node-red.service" ];
+    paths = [ config.services.node-red.userDir ];
+  };
 
   # Lisää rooli lokiriveihin jotka Promtail lukee
   systemd.services.node-red.serviceConfig.LogExtraFields = "ROLE=node-red";

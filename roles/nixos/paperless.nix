@@ -55,7 +55,8 @@ in {
   networking.firewall.allowedTCPPorts = [ catalog.services.paperless.public.port ];
 
   # Varmuuskopiointi
-  services.backup = {
+  my.services.rsync.jobs.paperless = {
+    destination = "nas";
     preHooks = [
       # Exporttaa varmuuskopio
       "ls ${exportDir}" # Herätä NFS mountti niin että se näyttää kirjoitettavalta, muuten document_exporter herjaa siittä

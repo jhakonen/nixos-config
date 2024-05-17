@@ -94,6 +94,9 @@ in
   networking.firewall.allowedTCPPorts = [ catalog.services.zigbee2mqtt.port ];
 
   # Varmuuskopiointi
-  services.backup.paths = [ config.services.zigbee2mqtt.dataDir ];
-  services.backup.excludes = [ "${config.services.zigbee2mqtt.dataDir}/log" ];
+  my.services.rsync.jobs.zigbee2mqtt = {
+    destination = "nas";
+    paths = [ config.services.zigbee2mqtt.dataDir ];
+    excludes = [ "${config.services.zigbee2mqtt.dataDir}/log" ];
+  };
 }

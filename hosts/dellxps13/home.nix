@@ -44,7 +44,6 @@ in
         user = "valvoja";
         identityFile = [
           "~/.ssh/id_rsa"
-          "~/.ssh/id_rsa_borgbackup"
         ];
       };
     };

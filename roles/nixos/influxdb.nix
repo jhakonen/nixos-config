@@ -14,15 +14,20 @@ in {
   # Influxdb:n käynnistys saattaa kestää, anna lisää aikaa
   systemd.services.influxdb.serviceConfig.TimeoutStartSec = "5min";
 
-  services.backup.preHooks = [
-    ''
-    rm -rf ${backupDir}
-    ${pkgs.influxdb}/bin/influxd backup -portable ${backupDir}
-    systemctl stop influxdb.service
-    ''
-  ];
-  services.backup.postHooks = [ "systemctl start influxdb.service" ];
-  services.backup.paths = [ backupDir ];
+
+  # Varmuuskopiointi
+  my.services.rsync.jobs.influxdb = {
+    destination = "nas";
+    paths = [ backupDir ];
+    preHooks = [
+      ''
+      rm -rf ${backupDir}
+      ${pkgs.influxdb}/bin/influxd backup -portable ${backupDir}
+      systemctl stop influxdb.service
+      ''
+    ];
+    postHooks = [ "systemctl start influxdb.service" ];
+  };
 
   # Lisää rooli lokiriveihin jotka Promtail lukee
   systemd.services.influxdb.serviceConfig.LogExtraFields = "ROLE=influxdb";

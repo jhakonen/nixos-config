@@ -53,7 +53,9 @@ in
   # Puhkaise reikä palomuuriin
   networking.firewall.allowedTCPPorts = [ catalog.services.home-assistant.public.port ];
 
-  services.backup = {
+  # Varmuuskopiointi
+  my.services.rsync.jobs.home-assistant = {
+    destination = "nas";
     paths = [ config.services.home-assistant.configDir ];
     preHooks = [ "systemctl stop home-assistant.service" ];
     postHooks = [ "systemctl start home-assistant.service" ];

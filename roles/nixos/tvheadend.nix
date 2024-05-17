@@ -11,7 +11,11 @@ in
     catalog.services.tvheadend-webui.port
   ];
 
-  services.backup.paths = [ "/var/lib/tvheadend/.hts" ];
+  # Varmuuskopiointi
+  my.services.rsync.jobs.tvheadend = {
+    destination = "nas";
+    paths = [ "/var/lib/tvheadend/.hts" ];
+  };
 
   systemd.services.tvheadend.serviceConfig.LogExtraFields = "ROLE=tvheadend";
 }

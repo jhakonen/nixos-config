@@ -45,7 +45,6 @@ in
   imports = [
     ./hardware-configuration.nix
     ../../modules
-    ../../roles/nixos/backup.nix
     ../../roles/nixos/beeper.nix
     ../../roles/nixos/common-programs.nix
     ../../roles/nixos/nix-cleanup.nix
@@ -129,15 +128,31 @@ in
     #media-session.enable = true;
   };
 
+  # Salaisuudet
+  age.secrets = {
+    rsyncbackup-password.file = ../../secrets/rsyncbackup-password.age;
+  };
+
   # Varmuuskopiointi
-  services.backup = {
-    repo.path = "/volume2/backups/borg/dellxps13-nixos";
-    excludes = [
-      "**/backup"
-      "**/Nextcloud"
-    ];
-    mounts = {
-      "/mnt/borg/dellxps13".remote = "borg-backup@${catalog.nodes.nas.hostName}:/volume2/backups/borg/dellxps13-nixos";
+  my.services.rsync = {
+    enable = true;
+    schedule = "*-*-* 0:00:00";
+    destinations.nas = {
+      username = "rsync-backup";
+      passwordFile = config.age.secrets.rsyncbackup-password.path;
+      host = catalog.nodes.nas.hostName;
+      path = "::backups/${config.networking.hostName}";
+    };
+    jobs.jhakonen = {
+      destination = "nas";
+      paths = [ "/home/jhakonen" ];
+      excludes = [
+        "**/.cache"
+        "**/.Trash*"
+        "**/Calibre"
+        "**/Keepass"
+        "**/Nextcloud"
+      ];
     };
   };
 

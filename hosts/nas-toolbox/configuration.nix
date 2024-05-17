@@ -28,7 +28,6 @@ in
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ../../modules
-      ../../roles/nixos/backup.nix
       ../../roles/nixos/calibre.nix
       ../../roles/nixos/common-programs.nix
       ../../roles/nixos/dashy.nix
@@ -160,17 +159,11 @@ in
       file = ../../secrets/mqtt-password.age;
       owner = "jhakonen";
     };
+    rsyncbackup-password.file = ../../secrets/rsyncbackup-password.age;
   };
 
   # List services that you want to enable:
   services = {
-    backup = {
-      repo.path = "/volume2/backups/borg/nas-toolbox-nixos";
-      mounts = {
-        "/mnt/borg/toolbox".remote = "borg-backup@${catalog.nodes.nas.hostName}:/volume2/backups/borg/nas-toolbox-nixos";
-      };
-    };
-
     # Enable the OpenSSH daemon.
     openssh = {
       enable = true;
@@ -196,6 +189,16 @@ in
     };
   };
 
+  my.services.rsync = {
+    enable = true;
+    schedule = "*-*-* 0:00:00";
+    destinations.nas = {
+      username = "rsync-backup";
+      passwordFile = config.age.secrets.rsyncbackup-password.path;
+      host = catalog.nodes.nas.hostName;
+      path = "::backups/${config.networking.hostName}";
+    };
+  };
 
   # Open ports in the firewall.
   networking.firewall.allowedTCPPorts = [ 80 443 ];  # nginx

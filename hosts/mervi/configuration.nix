@@ -28,7 +28,6 @@ in
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ../../modules
-      ../../roles/nixos/backup.nix
       ../../roles/nixos/common-programs.nix
       ../../roles/nixos/gamepads.nix
       ../../roles/nixos/nix-cleanup.nix
@@ -111,10 +110,14 @@ in
   # services.xserver.libinput.enable = true;
 
   # Varmuuskopiointi
-  services.backup = {
-    repo.path = "/volume2/backups/borg/mervi-nixos";
-    mounts = {
-      "/mnt/borg/mervi".remote = "borg-backup@${catalog.nodes.nas.hostName}:/volume2/backups/borg/mervi-nixos";
+  my.services.rsync = {
+    enable = true;
+    schedule = "*-*-* 0:00:00";
+    destinations.nas = {
+      username = "rsync-backup";
+      passwordFile = config.age.secrets.rsyncbackup-password.path;
+      host = catalog.nodes.nas.hostName;
+      path = "::backups/${config.networking.hostName}";
     };
   };
 
@@ -202,6 +205,7 @@ in
       file = ../../secrets/mqtt-password.age;
       owner = "jhakonen";
     };
+    rsyncbackup-password.file = ../../secrets/rsyncbackup-password.age;
   };
 
   programs.kdeconnect.enable = true;

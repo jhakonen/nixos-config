@@ -1,8 +1,8 @@
 {
   imports = [
-    ./backup.nix
     ./dashy.nix
     ./mqttwarn.nix
+    ./rsync.nix
     ./syncthing.nix
   ];
 }

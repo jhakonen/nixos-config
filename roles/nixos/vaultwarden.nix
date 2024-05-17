@@ -60,7 +60,10 @@ in
   networking.firewall.allowedTCPPorts = [ catalog.services.bitwarden.public.port ];
 
   # Varmuuskopiointi
-  services.backup.paths = [ backupDir ];
+  my.services.rsync.jobs.vaultwarden = {
+    destination = "nas";
+    paths = [ backupDir ];
+  };
 
   # Lisää rooli lokiriveihin jotka Promtail lukee
   systemd.services.vaultwarden.serviceConfig.LogExtraFields = "ROLE=vaultwarden";

@@ -46,9 +46,10 @@ in {
   networking.firewall.allowedTCPPorts = [ catalog.services.huginn.public.port ];
 
   # Varmuuskopiointi
-  services.backup = {
-    preHooks = [ "systemctl stop ${config.virtualisation.oci-containers.backend}-huginn.service" ];
+  my.services.rsync.jobs.huginn = {
+    destination = "nas";
     paths = [ dataDir ];
+    preHooks = [ "systemctl stop ${config.virtualisation.oci-containers.backend}-huginn.service" ];
     postHooks = [ "systemctl start ${config.virtualisation.oci-containers.backend}-huginn.service" ];
   };
 }
