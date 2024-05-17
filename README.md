@@ -19,7 +19,7 @@ deploy dellxps13
 Debuggaus:
 
 ```bash
-deploy <kone>-debug
+deploy <kone>:rebuild-debug
 ```
 
 # Järjestelmien päivitys

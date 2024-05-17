@@ -51,13 +51,14 @@
     lollypops-rebuild-debug-task = { config, ... }: {
       lollypops.extraTasks.rebuild-debug = {
         desc = "Rebuild with debug output";
+        deps = [ "deploy-flake" "deploy-secrets" ];
         cmds = [
           "echo Rebuilding with debug information"
           ''
           ssh ${config.lollypops.deployment.ssh.user}@${config.lollypops.deployment.ssh.host} \
-            nixos-rebuild switch \
-              --flake '${config.lollypops.deployment.config-dir}#${config.lollypops.deployment.ssh.host}' \
-              --show-trace --verbose --option eval-cache false
+            'nixos-rebuild switch \
+              --flake "$(readlink -f ${config.lollypops.deployment.config-dir}/flake)#${config.lollypops.deployment.ssh.host}" \
+              --show-trace --verbose --option eval-cache false'
           ''
         ];
       };
