@@ -12,7 +12,7 @@ let
         destcfg = cfg.destinations."${jobcfg.destination}";
         destination = "${destcfg.username}@${destcfg.host}${destcfg.path}/${jobname}/";
         sources = lib.strings.concatStringsSep " " jobcfg.paths;
-        excludes = lib.strings.concatStringsSep " " (builtins.map (ex: "--exclude ${ex}") jobcfg.excludes);
+        excludes = lib.strings.concatStringsSep " " (builtins.map (ex: "--exclude='${ex}'") jobcfg.excludes);
         precmd = lib.strings.concatStringsSep "\n" (jobcfg.preHooks or []);
         postcmd = lib.strings.concatStringsSep "\n" (jobcfg.postHooks or []);
       in

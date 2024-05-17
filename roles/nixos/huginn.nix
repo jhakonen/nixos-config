@@ -48,7 +48,7 @@ in {
   # Varmuuskopiointi
   my.services.rsync.jobs.huginn = {
     destination = "nas";
-    paths = [ dataDir ];
+    paths = [ "${dataDir}/" ];
     preHooks = [ "systemctl stop ${config.virtualisation.oci-containers.backend}-huginn.service" ];
     postHooks = [ "systemctl start ${config.virtualisation.oci-containers.backend}-huginn.service" ];
   };

@@ -62,7 +62,7 @@ in
   # Varmuuskopiointi
   my.services.rsync.jobs.vaultwarden = {
     destination = "nas";
-    paths = [ backupDir ];
+    paths = [ "${backupDir}/" ];
   };
 
   # Lisää rooli lokiriveihin jotka Promtail lukee

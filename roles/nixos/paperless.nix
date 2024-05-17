@@ -68,7 +68,7 @@ in {
       "systemctl stop paperless-consumer.service paperless-scheduler.service paperless-task-queue.service paperless-web.service"
     ];
     paths = [
-      config.services.paperless.dataDir  # Paperlessin tietokanta ja dokumentit
+      "${config.services.paperless.dataDir}/"  # Paperlessin tietokanta ja dokumentit
     ];
     postHooks = [
       # Nosta palvelut takaisin ylös varmuuskopioinnin jälkeen

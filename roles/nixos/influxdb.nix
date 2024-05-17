@@ -18,7 +18,7 @@ in {
   # Varmuuskopiointi
   my.services.rsync.jobs.influxdb = {
     destination = "nas";
-    paths = [ backupDir ];
+    paths = [ "${backupDir}/" ];
     preHooks = [
       ''
       rm -rf ${backupDir}

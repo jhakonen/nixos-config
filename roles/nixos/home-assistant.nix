@@ -56,7 +56,7 @@ in
   # Varmuuskopiointi
   my.services.rsync.jobs.home-assistant = {
     destination = "nas";
-    paths = [ config.services.home-assistant.configDir ];
+    paths = [ "${config.services.home-assistant.configDir}/" ];
     preHooks = [ "systemctl stop home-assistant.service" ];
     postHooks = [ "systemctl start home-assistant.service" ];
   };

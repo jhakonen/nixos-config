@@ -40,7 +40,7 @@ in
     destination = "nas";
     preHooks = [ "systemctl stop node-red.service" ];
     postHooks = [ "systemctl start node-red.service" ];
-    paths = [ config.services.node-red.userDir ];
+    paths = [ "${config.services.node-red.userDir}/" ];
   };
 
   # Lisää rooli lokiriveihin jotka Promtail lukee

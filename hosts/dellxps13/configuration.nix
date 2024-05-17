@@ -145,13 +145,16 @@ in
     };
     jobs.jhakonen = {
       destination = "nas";
-      paths = [ "/home/jhakonen" ];
+      paths = [ "/home/jhakonen/" ];
       excludes = [
-        "**/.cache"
-        "**/.Trash*"
-        "**/Calibre"
-        "**/Keepass"
-        "**/Nextcloud"
+        "/.cache"
+        "/.Trash*"
+        "/.local/share/Steam"
+        "/.local/share/Trash"
+        "/.local/share/baloo"
+        "/Calibre"
+        "/Keepass"
+        "/Nextcloud"
       ];
     };
   };

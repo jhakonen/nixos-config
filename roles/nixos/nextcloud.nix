@@ -140,7 +140,30 @@ in
     destination = "nas";
     preHooks = [ "${backupPrepare}/bin/nextcloud-backup-pre" ];
     postHooks = [ "${backupCleanup}/bin/nextcloud-backup-post" ];
-    paths = [ config.services.nextcloud.datadir ];
+    paths = [ "${config.services.nextcloud.datadir}/" ];
+    readWritePaths = [ config.services.nextcloud.datadir ];
+  };
+  my.services.rsync.jobs.nextcloud-tarkeat = {
+    destination = "nas";
+    preHooks = [ "${backupPrepare}/bin/nextcloud-backup-pre" ];
+    postHooks = [ "${backupCleanup}/bin/nextcloud-backup-post" ];
+    paths = [ "${config.services.nextcloud.datadir}/" ];
+    excludes = [
+      "/data/phakonen/**"
+      "/data/valvoja/**"
+      "/data/jhakonen/files/Data/Eve V/**"
+      "/data/jhakonen/files/Data/Ohjelmapaketit/**"
+      "/data/jhakonen/files/Data/Sarjakuvat/**"
+      "/data/jhakonen/files/Data/Pelit/**"
+      "/data/jhakonen/files/Data/Kirjallisuus/**"
+      "/data/jhakonen/files/Data/Ohjelmapaketit/**"
+      "/data/jhakonen/files/Tyo/**"
+      "/data/jhakonen/files/=Inbox=/**"
+      "/data/jhakonen/files/Henkilokohtainen/Virtuaalikoneet/**"
+      "/data/jhakonen/files/Henkilokohtainen/Projektit/Anarchy Online/**"
+      "/data/jhakonen/files/Henkilokohtainen/Projektit/World_of_Tanks/**"
+      "/data/**/files_trashbin/**"
+    ];
     readWritePaths = [ config.services.nextcloud.datadir ];
   };
 }
