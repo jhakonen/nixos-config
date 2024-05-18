@@ -8,6 +8,14 @@ in {
       type = lib.types.int;
       default = 0;
     };
+    user = lib.mkOption {
+      type = lib.types.str;
+      default = "jhakonen";
+    };
+    data-dir = lib.mkOption {
+      type = lib.types.str;
+      default = "/home/jhakonen";
+    };
     settings = lib.mkOption {
       type = lib.types.attrs;
       default = {};
@@ -16,8 +24,8 @@ in {
 
   config.services.syncthing = {
     enable = cfg.enable;
-    user = "jhakonen";
-    dataDir = "/home/jhakonen";
+    user = cfg.user;
+    dataDir = cfg.data-dir;
     overrideDevices = true;
     overrideFolders = true;
     openDefaultPorts = true;

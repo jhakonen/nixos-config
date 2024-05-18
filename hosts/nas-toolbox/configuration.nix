@@ -200,6 +200,16 @@ in
     };
   };
 
+  my.services.syncthing = {
+    enable = true;
+    gui-port = catalog.services.syncthing-nas-toolbox.port;
+    user = "root";
+    data-dir = "/root";
+    settings = {
+      devices = catalog.syncthing-devices;
+    };
+  };
+
   # Open ports in the firewall.
   networking.firewall.allowedTCPPorts = [ 80 443 ];  # nginx
 

@@ -292,6 +292,15 @@ in rec {
         icon = "hl-syncthing";
       };
     };
+    syncthing-nas-toolbox = {
+      host = nodes.nas-toolbox;
+      port = 8384;
+      dashy = {
+        section = "palvelut";
+        description = "Syncthing - nas-toolbox";
+        icon = "hl-syncthing";
+      };
+    };
     tulostin-hl-l2445dw = {
       host = nodes.hl-l2445dw;
       port = 80;
