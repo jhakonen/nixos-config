@@ -44,7 +44,10 @@ in
 
   # Varmuuskopiointi
   my.services.rsync.jobs.grafana = {
-    destination = "nas";
+    destinations = [
+      "nas-normal"
+      "nas-minimal"
+    ];
     paths = [ "${config.services.grafana.dataDir}/" ];
     preHooks = [ "systemctl stop grafana.service" ];
     postHooks = [ "systemctl start grafana.service" ];

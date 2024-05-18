@@ -37,7 +37,10 @@ in
 
   # Varmuuskopiointi
   my.services.rsync.jobs.node-red = {
-    destination = "nas";
+    destinations = [
+      "nas-normal"
+      "nas-minimal"
+    ];
     preHooks = [ "systemctl stop node-red.service" ];
     postHooks = [ "systemctl start node-red.service" ];
     paths = [ "${config.services.node-red.userDir}/" ];

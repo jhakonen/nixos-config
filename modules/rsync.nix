@@ -6,15 +6,40 @@ let
   backup-jobs = lib.attrsets.mapAttrsToList (name: jobcfg: rec {
     jobname = name;
     appname = "rsync-backup-${name}.sh";
+    binpath = "${app}/bin/${appname}";
     app = pkgs.writeShellApplication {
       name = appname;
       text = let
-        destcfg = cfg.destinations."${jobcfg.destination}";
-        destination = "${destcfg.username}@${destcfg.host}${destcfg.path}/${jobname}/";
-        sources = lib.strings.concatStringsSep " " jobcfg.paths;
-        excludes = lib.strings.concatStringsSep " " (builtins.map (ex: "--exclude='${ex}'") jobcfg.excludes);
-        precmd = lib.strings.concatStringsSep "\n" (jobcfg.preHooks or []);
-        postcmd = lib.strings.concatStringsSep "\n" (jobcfg.postHooks or []);
+        pre-cmd = lib.strings.concatStringsSep "\n" (jobcfg.preHooks or []);
+        post-cmd = lib.strings.concatStringsSep "\n" (jobcfg.postHooks or []);
+        merged-destinations = builtins.map (destination-entry:
+          if builtins.isString destination-entry then
+            {
+              username = cfg.destinations."${destination-entry}".username;
+              host = cfg.destinations."${destination-entry}".host;
+              path = cfg.destinations."${destination-entry}".path;
+              password-file = cfg.destinations."${destination-entry}".passwordFile;
+              excludes = jobcfg.excludes;
+              sources = jobcfg.paths;
+            }
+          else
+            {
+              username = cfg.destinations."${destination-entry.destination}".username;
+              host = cfg.destinations."${destination-entry.destination}".host;
+              path = cfg.destinations."${destination-entry.destination}".path;
+              password-file = cfg.destinations."${destination-entry.destination}".passwordFile;
+              excludes = jobcfg.excludes ++ destination-entry.excludes;
+              sources = jobcfg.paths ++ destination-entry.paths;
+            }
+        ) jobcfg.destinations;
+        rsync-cmds = builtins.map (entry: lib.strings.concatStringsSep " " [
+          "${pkgs.rsync}/bin/rsync -av --no-owner --no-group --delete --delete-excluded"
+          "--password-file=${entry.password-file}"
+          (lib.strings.concatStringsSep " " (builtins.map (ex: "--exclude='${ex}'") entry.excludes))
+          (lib.strings.concatStringsSep " " entry.sources)
+          "${entry.username}@${entry.host}${entry.path}/${jobname}/"
+        ]) merged-destinations;
+
       in
         ''
           set -e
@@ -24,7 +49,7 @@ let
 
           function cleanup() {
             ${if jobcfg.postHooks != [] then ''echo "''${GREEN}Running backup posthooks...''${RESET}"'' else ""}
-            ${postcmd}
+            ${post-cmd}
             echo "''${GREEN}Finished''${RESET}"
           }
 
@@ -32,22 +57,37 @@ let
             trap - ERR EXIT SIGINT
             echo "''${RED}Backup interrupted, cleaning up...''${RESET}" >&2
             cleanup
-            exit
+            exit 1
           }
 
           trap onerror ERR SIGINT
           trap cleanup EXIT
 
           ${if jobcfg.preHooks != [] then ''echo "''${GREEN}Running backup prehooks...''${RESET}"'' else ""}
-          ${precmd}
+          ${pre-cmd}
 
           echo "''${GREEN}Copy files to remote...''${RESET}"
-          ${pkgs.rsync}/bin/rsync -av --no-owner --no-group --delete --delete-excluded \
-            --password-file=${destcfg.passwordFile} ${excludes} ${sources} ${destination}
+          ${lib.strings.concatStringsSep "\n\n" rsync-cmds}
         '';
     };
-    binpath = "${app}/bin/${appname}";
   }) cfg.jobs;
+  backup-all-app = pkgs.writeShellApplication {
+      name = "rsync-backup-all.sh";
+      text =
+        let
+          commands = builtins.map (job: lib.strings.concatStringsSep "\n" [
+            ''echo "''${GREEN}Running backup for ${job.jobname}''${RESET}"''
+            job.binpath
+          ]) backup-jobs;
+        in
+          ''
+            set -e
+            GREEN=$(${pkgs.ncurses}/bin/tput setaf 2)
+            RESET=$(${pkgs.ncurses}/bin/tput sgr0)
+
+            ${lib.strings.concatStringsSep "\n\n" commands}
+          '';
+    };
 in {
   options.my.services.rsync = {
     enable = lib.mkEnableOption "rsync palvelu";
@@ -77,8 +117,25 @@ in {
       default = {};
       type = lib.types.attrsOf (lib.types.submodule {
         options = {
-          destination = lib.mkOption {
-            type = lib.types.str;
+          destinations = lib.mkOption {
+            type = lib.types.listOf (lib.types.oneOf [
+              lib.types.str  # destination as str
+              (lib.types.submodule {
+                options = {
+                  destination = lib.mkOption {
+                    type = lib.types.str;
+                  };
+                  excludes = lib.mkOption {
+                    type = lib.types.listOf lib.types.str;
+                    default = [];
+                  };
+                  paths = lib.mkOption {
+                    type = lib.types.listOf lib.types.str;
+                    default = [];
+                  };
+                };
+              })
+            ]);
           };
           paths = lib.mkOption {
             type = lib.types.listOf lib.types.str;
@@ -104,7 +161,8 @@ in {
     };
   };
 
-  config.environment.systemPackages = lib.mkIf cfg.enable (builtins.map (job: job.app) backup-jobs);
+  config.environment.systemPackages = lib.mkIf cfg.enable
+    ((builtins.map (job: job.app) backup-jobs) ++ [backup-all-app]);
 
   config.systemd = lib.mkIf cfg.enable {
     services = builtins.listToAttrs (builtins.map (job: {

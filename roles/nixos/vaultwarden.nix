@@ -61,7 +61,10 @@ in
 
   # Varmuuskopiointi
   my.services.rsync.jobs.vaultwarden = {
-    destination = "nas";
+    destinations = [
+      "nas-normal"
+      "nas-minimal"
+    ];
     paths = [ "${backupDir}/" ];
   };
 

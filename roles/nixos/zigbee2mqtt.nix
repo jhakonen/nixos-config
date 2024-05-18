@@ -95,7 +95,10 @@ in
 
   # Varmuuskopiointi
   my.services.rsync.jobs.zigbee2mqtt = {
-    destination = "nas";
+    destinations = [
+      "nas-normal"
+      "nas-minimal"
+    ];
     paths = [ "${config.services.zigbee2mqtt.dataDir}/" ];
     excludes = [ "${config.services.zigbee2mqtt.dataDir}/log" ];
   };

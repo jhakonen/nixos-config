@@ -192,11 +192,19 @@ in
   my.services.rsync = {
     enable = true;
     schedule = "*-*-* 0:00:00";
-    destinations.nas = {
-      username = "rsync-backup";
-      passwordFile = config.age.secrets.rsyncbackup-password.path;
-      host = catalog.nodes.nas.hostName;
-      path = "::backups/${config.networking.hostName}";
+    destinations = {
+      nas-minimal = {
+        username = "rsync-backup";
+        passwordFile = config.age.secrets.rsyncbackup-password.path;
+        host = catalog.nodes.nas.hostName;
+        path = "::backups/minimal/${config.networking.hostName}";
+      };
+      nas-normal = {
+        username = "rsync-backup";
+        passwordFile = config.age.secrets.rsyncbackup-password.path;
+        host = catalog.nodes.nas.hostName;
+        path = "::backups/normal/${config.networking.hostName}";
+      };
     };
   };
 

@@ -56,7 +56,10 @@ in {
 
   # Varmuuskopiointi
   my.services.rsync.jobs.paperless = {
-    destination = "nas";
+    destinations = [
+      "nas-normal"
+      "nas-minimal"
+    ];
     preHooks = [
       # Exporttaa varmuuskopio
       "ls ${exportDir}" # Herätä NFS mountti niin että se näyttää kirjoitettavalta, muuten document_exporter herjaa siittä

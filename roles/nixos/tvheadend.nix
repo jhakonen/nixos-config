@@ -13,7 +13,10 @@ in
 
   # Varmuuskopiointi
   my.services.rsync.jobs.tvheadend = {
-    destination = "nas";
+    destinations = [
+      "nas-normal"
+      "nas-minimal"
+    ];
     paths = [ "/var/lib/tvheadend/.hts" ];
   };
 
