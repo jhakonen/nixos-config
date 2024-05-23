@@ -241,6 +241,13 @@ in
     google-chrome  # Chromecastin tukea varten
     easyeffects
     gnumake
+    (hakuneko.overrideAttrs(attrs: {  # Manga downloader
+      postFixup = ''
+        makeWrapper ${steam-run}/bin/steam-run $out/bin/hakuneko \
+          --add-flags $out/lib/hakuneko-desktop/hakuneko \
+          "''${gappsWrapperArgs[@]}"
+      '';
+    }))
     itch  # itch.io
     kate
     keepassxc
