@@ -235,12 +235,11 @@ in
     };
   };
 
+  # Open ports in the firewall.
   networking.firewall.allowedTCPPorts = [
     catalog.services.kodi.port  # Kodi hallintapaneeli + Kore Android appi
+    46899  # FCast
   ];
-
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
 
   networking.firewall.allowedUDPPorts = [
     40000  # WoL portti, ei pakollinen mutta tarpeellinen WoLin testaukseen ngrepillä

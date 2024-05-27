@@ -8,6 +8,7 @@
       exts.pvr-hts  # TVheadend
       exts.sendtokodi
       exts.youtube
+      (exts.callPackage ../../packages/kodi-addons/c4valli.fcast.receiver.nix {})
       #(exts.callPackage ../../packages/kodi-addons/plugin.video.twitch { })
       (exts.callPackage ../../packages/kodi-addons/plugin.video.yleareena.jade.nix {})
       (exts.callPackage ../../packages/kodi-addons/skin.estuary.pkscout.mod.nix {})
