@@ -10,7 +10,7 @@
       exts.youtube
       #(exts.callPackage ../../packages/kodi-addons/plugin.video.twitch { })
       (exts.callPackage ../../packages/kodi-addons/plugin.video.yleareena.jade.nix {})
-      (exts.callPackage ../../packages/kodi-addons/skin.estuary.nexus.pkscout.mod.nix {})
+      (exts.callPackage ../../packages/kodi-addons/skin.estuary.pkscout.mod.nix {})
     ]));
     settings = {};
     sources = {
