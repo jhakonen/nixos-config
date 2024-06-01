@@ -87,12 +87,10 @@ in
   # openssh palvelun host avainta, mutta se vaatisi openssh palvelun käyttöönoton)
   age.identityPaths = [ "/home/jhakonen/.ssh/id_rsa" ];
 
-  # Enable the X11 windowing system.
-  services.xserver.enable = true;
-
   # Enable the KDE Plasma Desktop Environment.
   services.displayManager.sddm.enable = true;
-  services.xserver.desktopManager.plasma5.enable = true;
+  services.displayManager.sddm.wayland.enable = true;
+  services.desktopManager.plasma6.enable = true;
 
   # Configure keymap in X11
   services.xserver.xkb = {
@@ -252,22 +250,21 @@ in
     kate
     keepassxc
     libreoffice
-    libsForQt5.kaccounts-integration  # Lisää KDE asetuksiin Verkkotilit osion
-    libsForQt5.kaccounts-providers  # Lisää Verkkotilit osioon mahdollisuudeksi asentaa NextCloud tilin
-    libsForQt5.kdeconnect-kde
-    libsForQt5.kmahjongg
-    libsForQt5.kolourpaint
-    libsForQt5.qt5.qtwebsockets  # Tarvitaan Home Assistant plasmoidia varten
-    libsForQt5.kcalc
-    # libsForQt5.sddm-kcm  # Lisää KDE asetuksiin Kirjautumisruutu (SSDM) osion
-    libsForQt5.signond  # Tarvitaan Nextcloud tilin lisäämiseen
+    kdePackages.kaccounts-integration  # Lisää KDE asetuksiin Verkkotilit osion
+    kdePackages.kaccounts-providers  # Lisää Verkkotilit osioon mahdollisuudeksi asentaa NextCloud tilin
+    kdePackages.kdeconnect-kde
+    kdePackages.kmahjongg
+    kdePackages.kolourpaint
+    kdePackages.plasma-thunderbolt  # Asetusvälilehti thunderboltille (lisäksi services.hardware.bolt)
+    kdePackages.qtwebsockets  # Tarvitaan Home Assistant plasmoidia varten
+    kdePackages.kcalc
+    kdePackages.signond  # Tarvitaan Nextcloud tilin lisäämiseen
     mcomix
     meld
     moonlight-qt
     mqttx
     nextcloud-client
     obsidian
-    plasma5Packages.plasma-thunderbolt  # Asetusvälilehti thunderboltille (lisäksi services.hardware.bolt)
     spotify
     sublime4
     syncthingtray-minimal

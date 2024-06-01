@@ -52,6 +52,13 @@ nix-copy-closure --to root@nas-toolbox /nix/store/bgxpkjnfx9dp3yyjvkcrmcpmga0qiy
 
 # Järjestelmän päivitys uudempaan Nixos julkaisuun
 
+Päivitä nix-kanava ja indeksi:
+```bash
+sudo nix-channel --add https://nixos.org/channels/nixos-24.05 nixos
+sudo nix-channel --update
+nix-index
+```
+
 Muokkaa `flake.nix` tiedostossa `inputs` osiossa vanhan version esim. `23.11` merkkijono arvoon `24.05`.
 
 Päivitä lukkotiedosto:
