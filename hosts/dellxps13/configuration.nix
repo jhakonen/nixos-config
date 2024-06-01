@@ -270,6 +270,7 @@ in
     plasma5Packages.plasma-thunderbolt  # Asetusvälilehti thunderboltille (lisäksi services.hardware.bolt)
     spotify
     sublime4
+    syncthingtray-minimal
     trayscale
     (pkgs.writeShellApplication {
       name = "deploy";

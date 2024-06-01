@@ -216,6 +216,10 @@ in
     rsyncbackup-password.file = ../../secrets/rsyncbackup-password.age;
   };
 
+  programs.fcast-receiver = {
+    enable = true;
+    openFirewall = true;
+  };
   programs.kdeconnect.enable = true;
   programs.steam.enable = true;
   programs.zsh.shellAliases = {
