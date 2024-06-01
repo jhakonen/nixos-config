@@ -238,6 +238,7 @@ in
     cachix
     google-chrome  # Chromecastin tukea varten
     easyeffects
+    unstable.errands
     gnumake
     (hakuneko.overrideAttrs(attrs: {  # Manga downloader
       postFixup = ''

@@ -10,7 +10,6 @@ in
   imports = [
     ../../roles/home-manager/firefox.nix
     ../../roles/home-manager/git.nix
-    ../../roles/home-manager/kde-fix-desktop-files.nix
     ../../roles/home-manager/mqtt-client.nix
     ../../roles/home-manager/neofetch.nix
     ../../roles/home-manager/zsh.nix
