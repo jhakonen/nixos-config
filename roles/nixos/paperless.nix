@@ -21,7 +21,7 @@ in {
 
   services.paperless = {
     enable = true;
-    extraConfig = {
+    settings = {
       # Inotify ei toimi FTP jaon kanssa, pollaa sen sijaan
       # TODO: Toimiiko NFS:n yli?
       PAPERLESS_CONSUMER_POLLING = 60;  # sekunnin välein

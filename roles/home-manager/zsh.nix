@@ -2,7 +2,7 @@
 {
   programs.zsh = {
     enable = true;
-    enableAutosuggestions = true;
+    autosuggestion.enable = true;
     initExtra = ''
       # Kopioitu osoitteesta https://wiki.archlinux.org/title/Zsh#Key_bindings
       typeset -g -A key

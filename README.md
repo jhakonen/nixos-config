@@ -50,6 +50,33 @@ which grafana
 nix-copy-closure --to root@nas-toolbox /nix/store/bgxpkjnfx9dp3yyjvkcrmcpmga0qiy1w-grafana-10.2.6
 ```
 
+# Järjestelmän päivitys uudempaan Nixos julkaisuun
+
+Muokkaa `flake.nix` tiedostossa `inputs` osiossa vanhan version esim. `23.11` merkkijono arvoon `24.05`.
+
+Päivitä lukkotiedosto:
+
+```bash
+nix flake update
+```
+
+Estä läppärin meneminen valmiustilaan jotta verkkoyhteys ei katkea kesken kaiken.
+
+Testaa että päivitys onnistuu:
+
+```bash
+REBUILD_ACTION=test deploy <kone>
+```
+
+Lopuksi tee boot entry ja käynnistä kone uudelleen:
+
+```bash
+REBUILD_ACTION=boot deploy <kone>
+deploy <kone>:reboot
+```
+
+Toista kullekkin koneelle.
+
 # Sukupolvien listaus
 
 ```bash

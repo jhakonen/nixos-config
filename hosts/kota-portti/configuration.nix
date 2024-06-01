@@ -32,7 +32,7 @@ in
       ../../roles/nixos/common-programs.nix
       ../../roles/nixos/gpio-shutdown.nix
       ../../roles/nixos/nix-cleanup.nix
-      ../../roles/nixos/promtail.nix
+      # ../../roles/nixos/promtail.nix - Loki on poissa käytöstä
       ../../roles/nixos/zigbee2mqtt.nix
       ../../roles/nixos/zsh.nix
     ];

@@ -91,13 +91,13 @@ in
   services.xserver.enable = true;
 
   # Enable the KDE Plasma Desktop Environment.
-  services.xserver.displayManager.sddm.enable = true;
+  services.displayManager.sddm.enable = true;
   services.xserver.desktopManager.plasma5.enable = true;
 
   # Configure keymap in X11
-  services.xserver = {
+  services.xserver.xkb = {
     layout = "fi";
-    xkbVariant = "nodeadkeys";
+    variant = "nodeadkeys";
   };
 
   # Configure console keymap
@@ -106,7 +106,7 @@ in
   # Konfiguroi verkkotulostimen tuki
   services.avahi = {
     enable = true;
-    nssmdns = true;
+    nssmdns4 = true;
     openFirewall = true;
   };
   services.printing.enable = true;
@@ -248,7 +248,7 @@ in
           "''${gappsWrapperArgs[@]}"
       '';
     }))
-    itch  # itch.io
+    # itch  # itch.io - Riippuu rikkinäisestä butler kirjastosta
     kate
     keepassxc
     libreoffice

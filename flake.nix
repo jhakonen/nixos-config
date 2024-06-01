@@ -1,10 +1,10 @@
 {
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     nur.url = "github:nix-community/NUR";
-    home-manager.url = "github:nix-community/home-manager/release-23.11";
+    home-manager.url = "github:nix-community/home-manager/release-24.05";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     home-manager-unstable.url = "github:nix-community/home-manager";
     home-manager-unstable.inputs.nixpkgs.follows = "nixpkgs-unstable";
@@ -108,13 +108,13 @@
       ];
     };
 
-    nixosConfigurations.mervi = nixpkgs-unstable.lib.nixosSystem {
+    nixosConfigurations.mervi = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
         ./hosts/mervi/configuration.nix
         depInject
         agenix.nixosModules.default
-        home-manager-unstable.nixosModules.default
+        home-manager.nixosModules.default
         lollypops.nixosModules.lollypops
         nur.nixosModules.nur
         lollypops-reboot-task

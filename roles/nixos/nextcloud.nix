@@ -54,7 +54,6 @@ in
         adminpassFile = "${adminPassFile}";
         dbhost = "localhost:/run/mysqld/mysqld.sock";
         dbtype = "mysql";
-        overwriteProtocol = "https";
       };
       # Käytä Redisiä parammin toimivaan tiedostojen lukintaan:
       #   https://help.nextcloud.com/t/file-is-locked-how-to-unlock/1883
@@ -82,6 +81,8 @@ in
         # nostaa rajaa ylemmäs
         "opcache.interned_strings_buffer" = "16";
       };
+
+      settings.overwriteprotocol = "https";
     };
 
     nginx.virtualHosts.${config.services.nextcloud.hostName} = {

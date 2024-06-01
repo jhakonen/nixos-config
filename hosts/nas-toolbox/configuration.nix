@@ -35,14 +35,14 @@ in
       ../../roles/nixos/home-assistant.nix
       ../../roles/nixos/huginn.nix
       ../../roles/nixos/influxdb.nix
-      ../../roles/nixos/loki.nix
+      # ../../roles/nixos/loki.nix - Tässä on jotain konfiguraatio-ongelmia, en tajua
       ../../roles/nixos/mosquitto.nix
       ../../roles/nixos/mqttwarn.nix
       ../../roles/nixos/nextcloud.nix
       ../../roles/nixos/nix-cleanup.nix
       ../../roles/nixos/node-red.nix
       ../../roles/nixos/paperless.nix
-      ../../roles/nixos/promtail.nix
+      # ../../roles/nixos/promtail.nix - Loki on poissa käytöstä
       ../../roles/nixos/telegraf.nix
       ../../roles/nixos/vaultwarden.nix
       ../../roles/nixos/zsh.nix
@@ -175,9 +175,9 @@ in
     };
 
     # Configure keymap in X11
-    xserver = {
+    xserver.xkb = {
       layout = "fi";
-      xkbVariant = "nodeadkeys";
+      variant = "nodeadkeys";
     };
 
     nginx.virtualHosts."default" = {
