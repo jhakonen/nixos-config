@@ -2,7 +2,7 @@
 let
   catalog = config.dep-inject.catalog;
 
-  nextcloudPackage = pkgs.nextcloud28;
+  nextcloudPackage = pkgs.nextcloud29;
   backupDbPath = "${config.services.nextcloud.datadir}/nextcloud-mariadb.backup";
   adminPassFile = pkgs.writeText "nextcloud-initialadminpass" "initial-pass";
   backupPrepare = pkgs.writeShellApplication {
