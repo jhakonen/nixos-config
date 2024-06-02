@@ -43,9 +43,11 @@ let
       in
         ''
           set -e
-          RED=$(${pkgs.ncurses}/bin/tput setaf 1)
-          GREEN=$(${pkgs.ncurses}/bin/tput setaf 2)
-          RESET=$(${pkgs.ncurses}/bin/tput sgr0)
+
+          if [ -t 1 ]; then IS_TTY=1; else IS_TTY=0; fi
+          RED=$(if [ "$IS_TTY" = 1 ]; then ${pkgs.ncurses}/bin/tput setaf 1; fi)
+          GREEN=$(if [ "$IS_TTY" = 1 ]; then ${pkgs.ncurses}/bin/tput setaf 2; fi)
+          RESET=$(if [ "$IS_TTY" = 1 ]; then ${pkgs.ncurses}/bin/tput sgr0; fi)
 
           function cleanup() {
             ${if jobcfg.postHooks != [] then ''echo "''${GREEN}Running backup posthooks...''${RESET}"'' else ""}
@@ -82,8 +84,10 @@ let
         in
           ''
             set -e
-            GREEN=$(${pkgs.ncurses}/bin/tput setaf 2)
-            RESET=$(${pkgs.ncurses}/bin/tput sgr0)
+
+            if [ -t 1 ]; then IS_TTY=1; else IS_TTY=0; fi
+            GREEN=$(if [ "$IS_TTY" = 1 ]; then ${pkgs.ncurses}/bin/tput setaf 2; fi)
+            RESET=$(if [ "$IS_TTY" = 1 ]; then ${pkgs.ncurses}/bin/tput sgr0; fi)
 
             ${lib.strings.concatStringsSep "\n\n" commands}
           '';
