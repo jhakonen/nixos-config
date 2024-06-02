@@ -31,13 +31,14 @@ in
       ../../roles/nixos/calibre.nix
       ../../roles/nixos/common-programs.nix
       ../../roles/nixos/dashy.nix
+      ../../roles/nixos/freshrss.nix
       ../../roles/nixos/grafana.nix
       ../../roles/nixos/home-assistant.nix
       ../../roles/nixos/huginn.nix
       ../../roles/nixos/influxdb.nix
       # ../../roles/nixos/loki.nix - Tässä on jotain konfiguraatio-ongelmia, en tajua
       ../../roles/nixos/mosquitto.nix
-      ../../roles/nixos/mqttwarn.nix
+      # ../../roles/nixos/mqttwarn.nix - ModuleNotFoundError: No module named 'pkg_resources'
       ../../roles/nixos/nextcloud.nix
       ../../roles/nixos/nix-cleanup.nix
       ../../roles/nixos/node-red.nix

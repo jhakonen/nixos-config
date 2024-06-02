@@ -113,6 +113,18 @@ in rec {
         domain = "dashy.jhakonen.com";
       };
     };
+    freshrss = {
+      host = nodes.nas-toolbox;
+      dashy = {
+        section = "palvelut";
+        description = "RSS lukija";
+        icon = "hl-freshrss";
+      };
+      public = {
+        domain = "freshrss.jhakonen.com";
+        port = 443;
+      };
+    };
     grafana = {
       host = nodes.nas-toolbox;
       port = 3000;

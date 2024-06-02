@@ -62,4 +62,5 @@ in
   "telegraf-environment.age".publicKeys = [ jhakonen nas-toolbox ];
   "vaultwarden-environment.age".publicKeys = [ jhakonen nas-toolbox ];
   "zigbee2mqtt-environment.age".publicKeys = [ jhakonen kota-portti ];
+  "freshrss-admin-password.age".publicKeys = [ jhakonen nas-toolbox ];
 }
