@@ -2,7 +2,7 @@
 let
   catalog = config.dep-inject.catalog;
 
-  nextcloudPackage = pkgs.nextcloud27;
+  nextcloudPackage = pkgs.nextcloud28;
   backupDbPath = "${config.services.nextcloud.datadir}/nextcloud-mariadb.backup";
   adminPassFile = pkgs.writeText "nextcloud-initialadminpass" "initial-pass";
   backupPrepare = pkgs.writeShellApplication {
@@ -82,7 +82,12 @@ in
         "opcache.interned_strings_buffer" = "16";
       };
 
-      settings.overwriteprotocol = "https";
+      # Nämä asetukset tulee config.php tiedostoon
+      settings = {
+        default_phone_region = "FI";
+        maintenance_window_start = 23; # Klo 23 - 03 UTC aikaa
+        overwriteprotocol = "https";
+      };
     };
 
     nginx.virtualHosts.${config.services.nextcloud.hostName} = {
