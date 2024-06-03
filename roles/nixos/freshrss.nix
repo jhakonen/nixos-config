@@ -16,6 +16,12 @@ in
     passwordFile = config.age.secrets.freshrss-admin-password.path;
   };
 
+  # https://github.com/NixOS/nixpkgs/issues/316624
+  systemd.services.freshrss-config = {
+    restartIfChanged = true;
+    serviceConfig.RemainAfterExit = true;
+  };
+
   services.nginx = {
     enable = true;
     virtualHosts.${catalog.services.freshrss.public.domain} = {
