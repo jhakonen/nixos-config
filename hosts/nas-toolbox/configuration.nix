@@ -38,7 +38,7 @@ in
       ../../roles/nixos/influxdb.nix
       # ../../roles/nixos/loki.nix - Tässä on jotain konfiguraatio-ongelmia, en tajua
       ../../roles/nixos/mosquitto.nix
-      # ../../roles/nixos/mqttwarn.nix - ModuleNotFoundError: No module named 'pkg_resources'
+      ../../roles/nixos/mqttwarn.nix
       ../../roles/nixos/nextcloud.nix
       ../../roles/nixos/nix-cleanup.nix
       ../../roles/nixos/node-red.nix

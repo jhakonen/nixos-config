@@ -29,6 +29,7 @@ let
       jinja2
       paho-mqtt
       requests
+      setuptools
       six
       versioningit
     ];
