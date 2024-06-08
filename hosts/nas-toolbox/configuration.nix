@@ -141,7 +141,10 @@ in
         dnsProvider = "joker";
         credentialsFile = config.age.secrets.acme-joker-credentials.path;
       };
-      certs."jhakonen.com".extraDomainNames = [ "*.jhakonen.com" ];
+      certs."jhakonen.com".extraDomainNames = [
+        "*.jhakonen.com"
+        "*.nas-toolbox.lan.jhakonen.com"
+      ];
     };
 
     # Asenna itse allekirjoitettu root ca certifikaatti, tarvitaan kun otetaan
@@ -188,6 +191,11 @@ in
         deny all;
       '';
     };
+  };
+
+  my.services.monitoring = {
+    enable = true;
+    virtualHost = catalog.services.monit-nas-toolbox.public.domain;
   };
 
   my.services.rsync = {

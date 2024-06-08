@@ -170,4 +170,17 @@ in
       }
     ];
   };
+
+  my.services.monitoring = {
+    services = [
+      { name = config.systemd.services.phpfpm-nextcloud.name; expected = "running"; }
+      { name = config.systemd.services.redis-nextcloud.name; expected = "running"; }
+      { name = config.systemd.services.nextcloud-cron.name; expected = "succeeded"; }
+      { name = config.systemd.services.nextcloud-setup.name; expected = "succeeded"; }
+      { name = config.systemd.services.nextcloud-update-db.name; expected = "succeeded"; }
+    ];
+    network = [
+      { address = "https://nextcloud.jhakonen.com/login"; response.body = "Login – Nextcloud"; response.code = 200; }
+    ];
+  };
 }

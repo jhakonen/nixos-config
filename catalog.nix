@@ -181,6 +181,18 @@ in rec {
       host = nodes.nas-toolbox;
       port = 15000;
     };
+    monit-nas-toolbox = {
+      host = nodes.nas-toolbox;
+      dashy = {
+        section = "palvelut";
+        description = "Monit - nas-toolbox";
+        icon = "hl-monit";
+      };
+      public = {
+        domain = "monit.nas-toolbox.lan.jhakonen.com";
+        port = 443;
+      };
+    };
     modeemi = {
       name = "5G Modeemi";
       host = nodes.modeemi;
