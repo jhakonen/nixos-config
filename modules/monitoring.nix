@@ -56,6 +56,10 @@ in {
           name = lib.mkOption {
             type = lib.types.str;
           };
+          description = lib.mkOption {
+            type = lib.types.str;
+            default = "";
+          };
           expected = lib.mkOption {
             type = lib.types.str;
             apply = x:
@@ -109,8 +113,8 @@ in {
             allow localhost
       '']
       ++
-      (map (serviceCfg: ''
-        check program ${serviceCfg.name} with path "${checkSystemdService} ${serviceCfg.name} ${serviceCfg.expected}"
+      (builtins.map (serviceCfg: ''
+        check program "${if serviceCfg.description == "" then serviceCfg.name else serviceCfg.description}" with path "${checkSystemdService} ${serviceCfg.name} ${serviceCfg.expected}"
           if status != 0 then alert
       '') cfg.services)
       ++

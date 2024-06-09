@@ -3,6 +3,9 @@
 # TODO: Lähetä sähköposti jos varmuuskopiointi epäonnistuu
 let
   cfg = config.my.services.rsync;
+  state-dir = "/var/libs/rsync-backup-times";
+  max-backup-age = 24 * 3; # 3 vuorokautta
+
   backup-jobs = lib.attrsets.mapAttrsToList (name: jobcfg: rec {
     jobname = name;
     appname = "rsync-backup-${name}.sh";
@@ -70,6 +73,9 @@ let
 
           echo "''${GREEN}Copy files to remote...''${RESET}"
           ${lib.strings.concatStringsSep "\n\n" rsync-cmds}
+
+          ${pkgs.coreutils}/bin/mkdir -p "${state-dir}"
+          ${pkgs.coreutils}/bin/date +%s > "${state-dir}/${name}"
         '';
     };
   }) cfg.jobs;
@@ -91,7 +97,38 @@ let
 
             ${lib.strings.concatStringsSep "\n\n" commands}
           '';
-    };
+  };
+  check-backup-times = pkgs.writeShellApplication {
+      name = "rsync-check-backup-times.sh";
+      text =
+        let
+          checks = builtins.map (job: ''
+            LAST_TIME_S=$(${pkgs.coreutils}/bin/cat "${state-dir}/${job.jobname}")
+            TIME_SINCE_S=$(( NOW_S - LAST_TIME_S ))
+            TIME_SINCE_H=$(( TIME_SINCE_S / 3600 ))
+            if (( TIME_SINCE_H < ${toString max-backup-age} )); then
+              echo "''${GREEN}OK - Backup for ${job.jobname} was executed ''${TIME_SINCE_H} hours ago ''${RESET}"
+            else
+              echo "''${RED}FAILED - Backup for ${job.jobname} was executed ''${TIME_SINCE_H} hours ago ''${RESET}"
+              RESULT=1
+            fi
+          '') backup-jobs;
+        in
+          ''
+            set +e errexit
+
+            if [ -t 1 ]; then IS_TTY=1; else IS_TTY=0; fi
+            RED=$(if [ "$IS_TTY" = 1 ]; then ${pkgs.ncurses}/bin/tput setaf 1; fi)
+            GREEN=$(if [ "$IS_TTY" = 1 ]; then ${pkgs.ncurses}/bin/tput setaf 2; fi)
+            RESET=$(if [ "$IS_TTY" = 1 ]; then ${pkgs.ncurses}/bin/tput sgr0; fi)
+            NOW_S=$(date +%s)
+            RESULT=0
+
+            ${lib.strings.concatStringsSep "\n\n" checks}
+
+            exit ''${RESULT}
+          '';
+  };
 in {
   options.my.services.rsync = {
     enable = lib.mkEnableOption "rsync palvelu";
@@ -166,7 +203,10 @@ in {
   };
 
   config.environment.systemPackages = lib.mkIf cfg.enable
-    ((builtins.map (job: job.app) backup-jobs) ++ [backup-all-app]);
+    ((builtins.map (job: job.app) backup-jobs) ++ [
+      backup-all-app
+      check-backup-times
+    ]);
 
   config.systemd = lib.mkIf cfg.enable {
     services = builtins.listToAttrs (builtins.map (job: {
@@ -181,5 +221,19 @@ in {
         };
       };
     }) backup-jobs);
+  };
+
+  config.my.services.monitoring = lib.mkIf cfg.enable {
+    services = builtins.map (job: {
+      name = "rsync-backup-${job.jobname}.service";
+      description = "Backups - Job: ${job.jobname}";
+      expected = "succeeded";
+    }) backup-jobs;
+    configs = [
+      ''
+        check program "Backups - Check backups are fresh" with path "${check-backup-times}/bin/rsync-check-backup-times.sh"
+          if status != 0 then alert
+      ''
+    ];
   };
 }
