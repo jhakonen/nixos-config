@@ -36,67 +36,11 @@ let
     fi
   '';
 
-  parseHttpsCheck = config: let
-    parts = builtins.match "([a-z]+)://([a-z.]+)(/.+)?" config.address;
-  in {
-    name = builtins.elemAt parts 1;
-    address = builtins.elemAt parts 1;
-    port = 443;
-    protocol = builtins.elemAt parts 0;
-    request = builtins.elemAt parts 2;
-    status = config.response.code;
-    content = config.response.body;
-  };
 in {
   options.my.services.monitoring = {
     enable = lib.mkEnableOption "valvonta palvelu";
-    services = lib.mkOption {
-      type = lib.types.listOf (lib.types.submodule {
-        options = {
-          name = lib.mkOption {
-            type = lib.types.str;
-          };
-          description = lib.mkOption {
-            type = lib.types.str;
-            default = "";
-          };
-          expected = lib.mkOption {
-            type = lib.types.str;
-            apply = x:
-              if
-                lib.lists.any (i: i == x) ["running" "succeeded"]
-              then x
-              else abort "expected ${x} must be one of [running, succeeded]";
-          };
-        };
-      });
-      default = [];
-    };
-    network = lib.mkOption {
-      type = lib.types.listOf (lib.types.submodule {
-        options = {
-          address = lib.mkOption {
-            type = lib.types.str;
-          };
-          response = lib.mkOption {
-            type = lib.types.submodule {
-              options = {
-                body = lib.mkOption {
-                  type = lib.types.str;
-                };
-                code = lib.mkOption {
-                  type = lib.types.int;
-                };
-              };
-            };
-          };
-        };
-      });
-      default = [];
-    };
-    configs = lib.mkOption {
-      type = lib.types.listOf lib.types.str;
-      default = [];
+    checks = lib.mkOption {
+      type = lib.types.listOf lib.types.attrs;
     };
     virtualHost = lib.mkOption {
       type = lib.types.str;
@@ -113,26 +57,30 @@ in {
             allow localhost
       '']
       ++
-      (builtins.map (serviceCfg: ''
-        check program "${if serviceCfg.description == "" then serviceCfg.name else serviceCfg.description}" with path "${checkSystemdService} ${serviceCfg.name} ${serviceCfg.expected}"
-          if status != 0 then alert
-      '') cfg.services)
-      ++
-      (builtins.map (config: let
-        vars = parseHttpsCheck config;
-      in ''
-        check host ${vars.name} with address ${vars.address}
-          if failed
-            port ${toString vars.port}
-            certificate valid > 30 days
-            protocol ${vars.protocol}
-              request "${vars.request}"
-              status ${toString vars.status}
-              content = "${vars.content}"
-          then alert
-      '') cfg.network)
-      ++
-      cfg.configs
+      (builtins.map (check: 
+        if check.type == "systemd service" then
+          ''
+            check program "${if check ? description then check.description else check.name}" with path "${checkSystemdService} ${check.name} ${check.expected}"
+              if status != 0 then alert
+          ''
+        else if check.type == "program" then
+          ''
+            check program "${check.description}" with path "${check.path}"
+              if status != 0 then alert
+          ''
+        else if check.type == "http check" then
+          ''
+            check host "${check.description}" with address ${check.domain}
+              if failed
+                port ${if check.secure then "443" else "80"}
+                ${if check.secure then "certificate valid > 30 days" else ""}
+                protocol ${if check.secure then "https" else "http"}
+                  ${if check ? path then "request ${check.path}" else ""}
+                  ${if check ? response.code then "status ${toString check.response.code}" else ""}
+              then alert
+          ''
+        else abort "Unknown check type for monioring: ${check.type}"
+      ) cfg.checks)
     );
   };
 

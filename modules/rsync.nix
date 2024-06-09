@@ -224,16 +224,19 @@ in {
   };
 
   config.my.services.monitoring = lib.mkIf cfg.enable {
-    services = builtins.map (job: {
-      name = "rsync-backup-${job.jobname}.service";
-      description = "Backups - Job: ${job.jobname}";
-      expected = "succeeded";
-    }) backup-jobs;
-    configs = [
-      ''
-        check program "Backups - Check backups are fresh" with path "${check-backup-times}/bin/rsync-check-backup-times.sh"
-          if status != 0 then alert
-      ''
+    checks = (builtins.map (job:
+      {
+        type = "systemd service";
+        description = "Backups - Job: ${job.jobname}";
+        name = "rsync-backup-${job.jobname}.service";
+        expected = "succeeded";
+      }
+    ) backup-jobs) ++ [
+      {
+        type = "program";
+        description = "Backups - Check backups are fresh";
+        path = "${check-backup-times}/bin/rsync-check-backup-times.sh";
+      }
     ];
   };
 }
