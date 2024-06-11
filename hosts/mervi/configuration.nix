@@ -190,7 +190,6 @@ in
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    flirc
     # TODO: Enable itch once is done: https://github.com/NixOS/nixpkgs/issues/298410
     # itch  # itch.io
     kate
