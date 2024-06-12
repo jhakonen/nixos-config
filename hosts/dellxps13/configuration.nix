@@ -280,6 +280,17 @@ in
     })
   ];
 
+  # Esimerkki miten ohjelman paketin voi overridata käyttäen overlaytä
+  # nixpkgs.overlays = [
+  #   (final: prev: {
+  #     ohjelma = prev.ohjelma.overrideAttrs (o: {
+  #       patches = (o.patches or [ ]) ++ [
+  #         ./polku/patch/tiedostoon.diff
+  #       ];
+  #     });
+  #   })
+  # ];
+
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
