@@ -163,6 +163,7 @@ in
       file = ../../secrets/mqtt-password.age;
       owner = "jhakonen";
     };
+    mosquitto-password.file = ../../secrets/mqtt-password.age;
     rsyncbackup-password.file = ../../secrets/rsyncbackup-password.age;
   };
 
@@ -196,6 +197,11 @@ in
   my.services.monitoring = {
     enable = true;
     virtualHost = catalog.services.monit-nas-toolbox.public.domain;
+    mqttAlert = {
+      address = catalog.services.mosquitto.public.domain;
+      port = catalog.services.mosquitto.port;
+      passwordFile = config.age.secrets.mosquitto-password.path;
+    };
   };
 
   my.services.rsync = {

@@ -171,46 +171,44 @@ in
     ];
   };
 
-  my.services.monitoring = {
-    checks = [
-      {
-        type = "systemd service";
-        description = "Nextcloud - phpfpm";
-        name = config.systemd.services.phpfpm-nextcloud.name;
-        expected = "running";
-      }
-      {
-        type = "systemd service";
-        description = "Nextcloud - redis";
-        name = config.systemd.services.redis-nextcloud.name;
-        expected = "running";
-      }
-      {
-        type = "systemd service";
-        description = "Nextcloud - cron";
-        name = config.systemd.services.nextcloud-cron.name;
-        expected = "succeeded";
-      }
-      {
-        type = "systemd service";
-        description = "Nextcloud - setup";
-        name = config.systemd.services.nextcloud-setup.name;
-        expected = "succeeded";
-      }
-      {
-        type = "systemd service";
-        description = "Nextcloud - update db";
-        name = config.systemd.services.nextcloud-update-db.name;
-        expected = "succeeded";
-      }
-      {
-        type = "http check";
-        description = "Nextcloud - web interface";
-        secure = true;
-        domain = "nextcloud.jhakonen.com";
-        path = "/login";
-        response.code = 200;
-      }
-    ];
-  };
+  my.services.monitoring.checks = [
+    {
+      type = "systemd service";
+      description = "Nextcloud - phpfpm";
+      name = config.systemd.services.phpfpm-nextcloud.name;
+      expected = "running";
+    }
+    {
+      type = "systemd service";
+      description = "Nextcloud - redis";
+      name = config.systemd.services.redis-nextcloud.name;
+      expected = "running";
+    }
+    {
+      type = "systemd service";
+      description = "Nextcloud - cron";
+      name = config.systemd.services.nextcloud-cron.name;
+      expected = "succeeded";
+    }
+    {
+      type = "systemd service";
+      description = "Nextcloud - setup";
+      name = config.systemd.services.nextcloud-setup.name;
+      expected = "succeeded";
+    }
+    {
+      type = "systemd service";
+      description = "Nextcloud - update db";
+      name = config.systemd.services.nextcloud-update-db.name;
+      expected = "succeeded";
+    }
+    {
+      type = "http check";
+      description = "Nextcloud - web interface";
+      secure = true;
+      domain = config.services.nextcloud.hostName;
+      path = "/login";
+      response.code = 200;
+    }
+  ];
 }

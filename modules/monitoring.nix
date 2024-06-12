@@ -36,6 +36,16 @@ let
     fi
   '';
 
+  mqttAlertCmd = pkgs.writeShellScript "mqtt-alert" ''
+    echo "$@" | ${pkgs.mosquitto}/bin/mosquitto_pub \
+      -h ${cfg.mqttAlert.address} \
+      -p ${toString cfg.mqttAlert.port} \
+      -u koti \
+      -P $(${pkgs.coreutils}/bin/cat ${cfg.mqttAlert.passwordFile}) \
+      -l \
+      -t 'mqttwarn/telegram'
+  '';
+
 in {
   options.my.services.monitoring = {
     enable = lib.mkEnableOption "valvonta palvelu";
@@ -44,6 +54,22 @@ in {
     };
     virtualHost = lib.mkOption {
       type = lib.types.str;
+    };
+    mqttAlert = lib.mkOption {
+      type = (lib.types.submodule {
+        options = {
+          enable = lib.mkEnableOption "enable mqtt alerts";
+          address = lib.mkOption {
+            type = lib.types.str;
+          };
+          port = lib.mkOption {
+            type = lib.types.int;
+          };
+          passwordFile = lib.mkOption {
+            type = lib.types.str;
+          };
+        };
+      });
     };
   };
 
@@ -61,12 +87,14 @@ in {
         if check.type == "systemd service" then
           ''
             check program "${if check ? description then check.description else check.name}" with path "${checkSystemdService} ${check.name} ${check.expected}"
-              if status != 0 then alert
+              if status != 0 then
+                exec "${mqttAlertCmd} System service '${if check ? description then check.description else check.name}' has failed"
           ''
         else if check.type == "program" then
           ''
             check program "${check.description}" with path "${check.path}"
-              if status != 0 then alert
+              if status != 0 then
+                exec "${mqttAlertCmd} Check '${check.description}' has failed"
           ''
         else if check.type == "http check" then
           ''
@@ -77,7 +105,8 @@ in {
                 protocol ${if check.secure then "https" else "http"}
                   ${if check ? path then "request ${check.path}" else ""}
                   ${if check ? response.code then "status ${toString check.response.code}" else ""}
-              then alert
+              then
+                exec "${mqttAlertCmd} HTTP check '${check.description}' has failed"
           ''
         else abort "Unknown check type for monioring: ${check.type}"
       ) cfg.checks)
