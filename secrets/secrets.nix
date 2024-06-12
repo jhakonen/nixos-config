@@ -52,7 +52,7 @@ let
     + "XUb80pgeh/stpeOv2canemQHzUHZ6Q== root@nas-toolbox";
 in
 {
-  "acme-joker-credentials.age".publicKeys = [ jhakonen nas-toolbox ];
+  "acme-joker-credentials.age".publicKeys = [ jhakonen nas-toolbox kota-portti mervi ];
   "bt-mqtt-gateway-environment.age".publicKeys = [ jhakonen kota-portti ];
   "github-id-rsa.age".publicKeys = [ jhakonen nas-toolbox ];
   "mqtt-password.age".publicKeys = [ jhakonen nas-toolbox kota-portti mervi ];

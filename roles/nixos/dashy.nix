@@ -10,6 +10,14 @@ let
       icon = "fas fa-cube";
     }
     {
+      name = "Syncthing";
+      icon = "";
+    }
+    {
+      name = "Valvonta";
+      icon = "fab fa-watchman-monitoring";
+    }
+    {
       name = "Verkon hallinta";
       icon = "fas fa-router";
     }

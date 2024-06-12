@@ -129,7 +129,7 @@ in rec {
       host = nodes.nas-toolbox;
       port = 3000;
       dashy = {
-        section = "palvelut";
+        section = "valvonta";
         description = "Järjestelmän valvonta";
         icon = "hl-grafana";
       };
@@ -181,10 +181,34 @@ in rec {
       host = nodes.nas-toolbox;
       port = 15000;
     };
+    monit-kota-portti = {
+      host = nodes.nas-toolbox;
+      dashy = {
+        section = "valvonta";
+        description = "Monit - kota-portti";
+        icon = "hl-monit";
+      };
+      public = {
+        domain = "monit.kota-portti.lan.jhakonen.com";
+        port = 443;
+      };
+    };
+    monit-mervi = {
+      host = nodes.mervi;
+      dashy = {
+        section = "valvonta";
+        description = "Monit - mervi";
+        icon = "hl-monit";
+      };
+      public = {
+        domain = "monit.mervi.lan.jhakonen.com";
+        port = 443;
+      };
+    };
     monit-nas-toolbox = {
       host = nodes.nas-toolbox;
       dashy = {
-        section = "palvelut";
+        section = "valvonta";
         description = "Monit - nas-toolbox";
         icon = "hl-monit";
       };
@@ -293,7 +317,7 @@ in rec {
       host = nodes.dellxps13;
       port = 8384;
       dashy = {
-        section = "palvelut";
+        section = "syncthing";
         description = "Syncthing - Dell XPS 13";
         icon = "hl-syncthing";
       };
@@ -302,7 +326,7 @@ in rec {
       host = nodes.mervi;
       port = 8384;
       dashy = {
-        section = "palvelut";
+        section = "syncthing";
         description = "Syncthing - Mervi";
         icon = "hl-syncthing";
       };
@@ -311,7 +335,7 @@ in rec {
       host = nodes.nas;
       port = 8384;
       dashy = {
-        section = "palvelut";
+        section = "syncthing";
         description = "Syncthing - NAS";
         icon = "hl-syncthing";
       };
@@ -320,7 +344,7 @@ in rec {
       host = nodes.nas-toolbox;
       port = 8384;
       dashy = {
-        section = "palvelut";
+        section = "syncthing";
         description = "Syncthing - nas-toolbox";
         icon = "hl-syncthing";
       };

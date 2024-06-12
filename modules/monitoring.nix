@@ -52,6 +52,9 @@ in {
     checks = lib.mkOption {
       type = lib.types.listOf lib.types.attrs;
     };
+    acmeHost = lib.mkOption {
+      type = lib.types.str;
+    };
     virtualHost = lib.mkOption {
       type = lib.types.str;
     };
@@ -88,13 +91,13 @@ in {
           ''
             check program "${if check ? description then check.description else check.name}" with path "${checkSystemdService} ${check.name} ${check.expected}"
               if status != 0 then
-                exec "${mqttAlertCmd} System service '${if check ? description then check.description else check.name}' has failed"
+                exec "${mqttAlertCmd} ${config.networking.hostName} - System service '${if check ? description then check.description else check.name}' has failed"
           ''
         else if check.type == "program" then
           ''
             check program "${check.description}" with path "${check.path}"
               if status != 0 then
-                exec "${mqttAlertCmd} Check '${check.description}' has failed"
+                exec "${mqttAlertCmd} ${config.networking.hostName} - Check '${check.description}' has failed"
           ''
         else if check.type == "http check" then
           ''
@@ -106,7 +109,7 @@ in {
                   ${if check ? path then "request ${check.path}" else ""}
                   ${if check ? response.code then "status ${toString check.response.code}" else ""}
               then
-                exec "${mqttAlertCmd} HTTP check '${check.description}' has failed"
+                exec "${mqttAlertCmd} ${config.networking.hostName} - HTTP check '${check.description}' has failed"
           ''
         else abort "Unknown check type for monioring: ${check.type}"
       ) cfg.checks)
@@ -122,7 +125,7 @@ in {
       };
       # Käytä Let's Encrypt sertifikaattia
       addSSL = true;
-      useACMEHost = "jhakonen.com";
+      useACMEHost = cfg.acmeHost;
     };
   };
 }

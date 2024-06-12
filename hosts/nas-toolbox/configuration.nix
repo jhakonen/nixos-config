@@ -196,6 +196,7 @@ in
 
   my.services.monitoring = {
     enable = true;
+    acmeHost = "jhakonen.com";
     virtualHost = catalog.services.monit-nas-toolbox.public.domain;
     mqttAlert = {
       address = catalog.services.mosquitto.public.domain;

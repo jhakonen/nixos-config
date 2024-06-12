@@ -103,6 +103,17 @@ in
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
+  my.services.monitoring = {
+    enable = true;
+    acmeHost = "mervi.lan.jhakonen.com";
+    virtualHost = catalog.services.monit-kota-portti.public.domain;
+    mqttAlert = {
+      address = catalog.services.mosquitto.public.domain;
+      port = catalog.services.mosquitto.port;
+      passwordFile = config.age.secrets.mosquitto-password.path;
+    };
+  };
+
   # # Varmuuskopiointi
   my.services.rsync = {
     enable = true;
@@ -124,13 +135,19 @@ in
   };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.jhakonen = {
-    openssh.authorizedKeys.keys = [ id-rsa-public-key ];
-    isNormalUser = true;
-    extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
-  };
-  users.users.root = {
-    openssh.authorizedKeys.keys = [ id-rsa-public-key ];
+  users.users = {
+    jhakonen = {
+      openssh.authorizedKeys.keys = [ id-rsa-public-key ];
+      isNormalUser = true;
+      extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
+    };
+
+    # Anna nginxille pääsy let's encrypt serifikaattiin
+    nginx.extraGroups = [ "acme" ];
+
+    root = {
+      openssh.authorizedKeys.keys = [ id-rsa-public-key ];
+    };
   };
 
   home-manager.users = {
@@ -166,12 +183,25 @@ in
   #   enableSSHSupport = true;
   # };
 
+  # Ota Let's Encryptin sertifikaatti käyttöön
+  security.acme = {
+    acceptTerms = true;
+    defaults = {
+      email = "***REMOVED***";
+      dnsProvider = "joker";
+      credentialsFile = config.age.secrets.acme-joker-credentials.path;
+    };
+    certs."mervi.lan.jhakonen.com".extraDomainNames = [ "*.mervi.lan.jhakonen.com" ];
+  };
+
   # Salaisuudet
   age.secrets = {
+    acme-joker-credentials.file = ../../secrets/acme-joker-credentials.age;
     jhakonen-mosquitto-password = {
       file = ../../secrets/mqtt-password.age;
       owner = "jhakonen";
     };
+    mosquitto-password.file = ../../secrets/mqtt-password.age;
     rsyncbackup-password.file = ../../secrets/rsyncbackup-password.age;
   };
 
@@ -189,7 +219,7 @@ in
   };
 
   # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
+  networking.firewall.allowedTCPPorts = [ 80 443 ];  # nginx
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
