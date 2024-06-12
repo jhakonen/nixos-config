@@ -5,6 +5,7 @@
 { config, pkgs, ... }:
 let
   catalog = config.dep-inject.catalog;
+  my-packages = config.dep-inject.my-packages;
 
   # Julkinen avain SSH:lla sisäänkirjautumista varten
   id-rsa-public-key =
@@ -197,6 +198,7 @@ in
     kodi  # lisää Kodin puuttuvan ikonin
     spotify
     ngrep  # verkkopakettien greppaus, hyödyllinen WoLin testaukseen
+    my-packages.kde-hide-cursor-effect
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
