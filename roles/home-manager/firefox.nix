@@ -24,55 +24,51 @@ in {
           engines = {
             "Kagi" = {
               urls = [{
-                template = "https://kagi.com/search";
-                params = [
-                  { name = "q"; value = "{searchTerms}"; }
-                ];
-                definedAliases = [ "@k" ];
-                iconUpdateURL = "https://kagi.com/favicon.ico";
+                template = "https://kagi.com/search?q={searchTerms}";
               }];
+              iconUpdateURL = "https://kagi.com/favicon.ico";
+              definedAliases = [ "@k" ];
             };
             "StartPage" = {
               urls = [{
-                template = "https://www.startpage.com/sp/search";
-                params = [
-                  { name = "query"; value = "{searchTerms}"; }
-                ];
+                template = "https://www.startpage.com/sp/search?query={searchTerms}";
               }];
-              definedAliases = [ "@sp" ];
               iconUpdateURL = "https://www.startpage.com/favicon.ico";
+              definedAliases = [ "@sp" ];
+            };
+            "Noogle" = {
+              urls = [{
+                template = "https://noogle.dev?term={searchTerms}";
+              }];
+              icon = "file://${../../data/noogle.png}";
+              definedAliases = [ "@nog" ];
             };
             "Nix Packages" = {
               urls = [{
-                template = "https://search.nixos.org/packages";
-                params = [
-                  { name = "query"; value = "{searchTerms}"; }
-                ];
+                template = "https://search.nixos.org/packages?query={searchTerms}";
               }];
-              icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
+              icon = "file://${../../data/nix-packages.png}";
               definedAliases = [ "@np" ];
             };
             "Nix Options" = {
               urls = [{
-                template = "https://search.nixos.org/options";
-                params = [
-                  { name = "query"; value = "{searchTerms}"; }
-                ];
+                template = "https://search.nixos.org/options?query={searchTerms}";
               }];
-              icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
+              icon = "file://${../../data/nix-options.png}";
               definedAliases = [ "@no" ];
             };
             "NixOS Wiki" = {
-              urls = [{ template = "https://nixos.wiki/index.php?search={searchTerms}"; }];
-              iconUpdateURL = "https://nixos.wiki/favicon.png";
-              updateInterval = 24 * 60 * 60 * 1000; # every day
+              urls = [{
+                template = "https://wiki.nixos.org/w/index.php?search={searchTerms}";
+              }];
+              icon = "file://${../../data/nix-wiki.png}";
               definedAliases = [ "@nw" ];
             };
             "Bing".metaData.hidden = true;
             "Amazon.nl".metaData.hidden = true;
             "Google".metaData.hidden = true;
           };
-          order = [ "Kagi" "StartPage" "Nix Packages" "Nix Options" "NixOS Wiki" ];
+          order = [ "Kagi" "Noogle" "Nix Packages" "Nix Options" "NixOS Wiki" "StartPage" ];
         };
         settings = {
           # How to figure out which setting to change:
