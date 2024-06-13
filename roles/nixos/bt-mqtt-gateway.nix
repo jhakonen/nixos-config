@@ -62,6 +62,8 @@ in
       umask 077
       mkdir -p ${dataDir}
       envsubst -i "${configFile}" -o "${dataDir}/bt-mqtt-gateway.yaml"
+
+      # "Korjaa" virhe: Bluetooth interface has gone down
       DEV_NAME=$(hcitool dev | grep -o 'hci[0-9]' | head -n1)
       hciconfig $DEV_NAME down
       hciconfig $DEV_NAME up
@@ -70,9 +72,15 @@ in
       Environment = "CONFIG_FILE=${dataDir}/bt-mqtt-gateway.yaml";
       EnvironmentFile = [ config.age.secrets.bt-mqtt-gateway-environment.path ];
       ExecStart = "${my-packages.bt-mqtt-gateway}/bin/bt-mqtt-gateway";
-      #Restart = "always";
-      #RestartSec = "5s";
+      Restart = "always";
+      RestartSec = "30";
       LogExtraFields = "ROLE=bt-mqtt-gateway";
+    };
+    unitConfig = {
+      # Käynnistä palvelu kun "Bluetooth interface has gone down" virhe tapahtuu, mutta rajoita
+      # kuinka monta kertaa uudelleen käynnistys saa tapahtua jotta monitorointi havaitsee ongelman
+      StartLimitIntervalSec = "200";
+      StartLimitBurst = "5";
     };
   };
 
