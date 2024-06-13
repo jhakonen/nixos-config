@@ -54,22 +54,32 @@ in
     wantedBy = [ "multi-user.target" ];
     path = [
       pkgs.bluez  # Lisää hci* työkalut polulle
+      pkgs.coreutils  # head
       pkgs.envsubst
+      pkgs.gnugrep
     ];
     preStart = ''
       umask 077
       mkdir -p ${dataDir}
       envsubst -i "${configFile}" -o "${dataDir}/bt-mqtt-gateway.yaml"
-      hciconfig hci0 down
-      hciconfig hci0 up
+      DEV_NAME=$(hcitool dev | grep -o 'hci[0-9]' | head -n1)
+      hciconfig $DEV_NAME down
+      hciconfig $DEV_NAME up
       '';
     serviceConfig = {
       Environment = "CONFIG_FILE=${dataDir}/bt-mqtt-gateway.yaml";
       EnvironmentFile = [ config.age.secrets.bt-mqtt-gateway-environment.path ];
       ExecStart = "${my-packages.bt-mqtt-gateway}/bin/bt-mqtt-gateway";
-      Restart = "always";
-      RestartSec = "5s";
+      #Restart = "always";
+      #RestartSec = "5s";
       LogExtraFields = "ROLE=bt-mqtt-gateway";
     };
   };
+
+  my.services.monitoring.checks = [{
+    type = "systemd service";
+    description = "bt-mqtt-gateway";
+    name = config.systemd.services.bt-mqtt-gateway.name;
+    expected = "running";
+  }];
 }

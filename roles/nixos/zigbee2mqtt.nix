@@ -102,4 +102,20 @@ in
     paths = [ "${config.services.zigbee2mqtt.dataDir}/" ];
     excludes = [ "${config.services.zigbee2mqtt.dataDir}/log" ];
   };
+
+  my.services.monitoring.checks = [
+    {
+      type = "systemd service";
+      description = "zigbee2mqtt - service";
+      name = config.systemd.services.zigbee2mqtt.name;
+      expected = "running";
+    }
+    {
+      type = "http check";
+      description = "zigbee2mqtt - web interface";
+      domain = catalog.services.zigbee2mqtt.public.domain;
+      response.code = 200;
+      alertAfterSec = 15 * 60;
+    }
+  ];
 }

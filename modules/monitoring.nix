@@ -2,6 +2,7 @@
 let
   cfg = config.my.services.monitoring;
   MONIT_PORT = 2812;
+  PERIOD = 60;
 
   checkSystemdService = pkgs.writeScript "check-systemd-service" ''
     #!/bin/sh
@@ -80,7 +81,7 @@ in {
     enable = true;
     config = builtins.concatStringsSep "\n" (
       [''
-        set daemon 60
+        set daemon ${toString PERIOD}
         set limits { programoutput: 5 kB }
         set httpd port ${toString MONIT_PORT}
             allow localhost
@@ -103,11 +104,12 @@ in {
           ''
             check host "${check.description}" with address ${check.domain}
               if failed
-                port ${if check.secure then "443" else "80"}
-                ${if check.secure then "certificate valid > 30 days" else ""}
-                protocol ${if check.secure then "https" else "http"}
+                port ${if check ? secure && check.secure then "443" else "80"}
+                ${if check ? secure && check.secure then "certificate valid > 30 days" else ""}
+                protocol ${if check ? secure && check.secure then "https" else "http"}
                   ${if check ? path then "request ${check.path}" else ""}
                   ${if check ? response.code then "status ${toString check.response.code}" else ""}
+                ${if check ? alertAfterSec then "for ${toString (check.alertAfterSec / PERIOD)} cycles" else ""}
               then
                 exec "${mqttAlertCmd} ${config.networking.hostName} - HTTP check '${check.description}' has failed"
           ''

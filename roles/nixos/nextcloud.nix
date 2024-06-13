@@ -209,6 +209,7 @@ in
       domain = config.services.nextcloud.hostName;
       path = "/login";
       response.code = 200;
+      alertAfterSec = 15 * 60;
     }
   ];
 }
