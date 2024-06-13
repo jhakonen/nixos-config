@@ -105,7 +105,7 @@ in
 
   my.services.monitoring = {
     enable = true;
-    acmeHost = "mervi.lan.jhakonen.com";
+    acmeHost = "kota-portti.lan.jhakonen.com";
     virtualHost = catalog.services.monit-kota-portti.public.domain;
     mqttAlert = {
       address = catalog.services.mosquitto.public.domain;
@@ -191,7 +191,7 @@ in
       dnsProvider = "joker";
       credentialsFile = config.age.secrets.acme-joker-credentials.path;
     };
-    certs."mervi.lan.jhakonen.com".extraDomainNames = [ "*.mervi.lan.jhakonen.com" ];
+    certs."kota-portti.lan.jhakonen.com".extraDomainNames = [ "*.kota-portti.lan.jhakonen.com" ];
   };
 
   # Salaisuudet
