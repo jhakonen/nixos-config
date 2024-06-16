@@ -58,7 +58,7 @@ in {
       appConfig = {
         theme = "nord-frost";
         iconSize = "large";
-        layout = "vertical";
+        layout = "auto";
         preventWriteToDisk = true;
         preventLocalSave = true;
         disableConfiguration = false;
