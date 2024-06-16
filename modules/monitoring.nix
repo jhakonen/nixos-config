@@ -4,6 +4,39 @@ let
   MONIT_PORT = 2812;
   PERIOD = 60;
 
+  secsToCycles = seconds: toString (seconds / PERIOD);
+
+  buildConfig = check:
+    if builtins.isString check then
+      check
+    else if check.type == "systemd service" then
+      ''
+        check program "${if check ? description then check.description else check.name}" with path "${checkSystemdService} ${check.name} ${check.expected}"
+          if status != 0 then
+            exec "${mqttAlertCmd} ${config.networking.hostName} - System service '${if check ? description then check.description else check.name}' has failed"
+      ''
+    else if check.type == "program" then
+      ''
+        check program "${check.description}" with path "${check.path}"
+          if status != 0 then
+            exec "${mqttAlertCmd} ${config.networking.hostName} - Check '${check.description}' has failed"
+      ''
+    else if check.type == "http check" then
+      ''
+        check host "${check.description}" with address ${check.domain}
+          if failed
+            port ${if check ? secure && check.secure then "443" else "80"}
+            ${if check ? secure && check.secure then "certificate valid > 30 days" else ""}
+            protocol ${if check ? secure && check.secure then "https" else "http"}
+              ${if check ? path then "request ${check.path}" else ""}
+              ${if check ? response.code then "status ${toString check.response.code}" else ""}
+            ${if check ? alertAfterSec then "for ${secsToCycles check.alertAfterSec} cycles" else ""}
+          then
+            exec "${mqttAlertCmd} ${config.networking.hostName} - HTTP check '${check.description}' has failed"
+      ''
+    else abort "Unknown check type for monioring: ${check.type}";
+
+
   checkSystemdService = pkgs.writeScript "check-systemd-service" ''
     #!/bin/sh
     LOGS=$(${pkgs.systemd}/bin/systemctl status "$1")
@@ -24,6 +57,11 @@ let
       elif [ "$2" == "succeeded" ]; then
         if $(echo "''${LOGS}" | ${pkgs.gnugrep}/bin/grep --quiet 'Deactivated successfully'); then
           echo "Last run ok"
+          echo "''${LOGS}"
+          exit 0
+        fi
+        if $(echo "''${LOGS}" | ${pkgs.gnugrep}/bin/grep --quiet 'Active: inactive'); then
+          echo "Not run yet"
           echo "''${LOGS}"
           exit 0
         fi
@@ -51,7 +89,11 @@ in {
   options.my.services.monitoring = {
     enable = lib.mkEnableOption "valvonta palvelu";
     checks = lib.mkOption {
-      type = lib.types.listOf lib.types.attrs;
+      type = lib.types.listOf (lib.types.oneOf [
+        lib.types.attrs
+        lib.types.str
+        lib.types.anything  # No type for function :(
+      ]);
     };
     acmeHost = lib.mkOption {
       type = lib.types.str;
@@ -87,33 +129,17 @@ in {
             allow localhost
       '']
       ++
-      (builtins.map (check: 
-        if check.type == "systemd service" then
-          ''
-            check program "${if check ? description then check.description else check.name}" with path "${checkSystemdService} ${check.name} ${check.expected}"
-              if status != 0 then
-                exec "${mqttAlertCmd} ${config.networking.hostName} - System service '${if check ? description then check.description else check.name}' has failed"
-          ''
-        else if check.type == "program" then
-          ''
-            check program "${check.description}" with path "${check.path}"
-              if status != 0 then
-                exec "${mqttAlertCmd} ${config.networking.hostName} - Check '${check.description}' has failed"
-          ''
-        else if check.type == "http check" then
-          ''
-            check host "${check.description}" with address ${check.domain}
-              if failed
-                port ${if check ? secure && check.secure then "443" else "80"}
-                ${if check ? secure && check.secure then "certificate valid > 30 days" else ""}
-                protocol ${if check ? secure && check.secure then "https" else "http"}
-                  ${if check ? path then "request ${check.path}" else ""}
-                  ${if check ? response.code then "status ${toString check.response.code}" else ""}
-                ${if check ? alertAfterSec then "for ${toString (check.alertAfterSec / PERIOD)} cycles" else ""}
-              then
-                exec "${mqttAlertCmd} ${config.networking.hostName} - HTTP check '${check.description}' has failed"
-          ''
-        else abort "Unknown check type for monioring: ${check.type}"
+      (builtins.map (check:
+        buildConfig (
+          if builtins.isFunction check then
+            check {
+              inherit checkSystemdService;
+              inherit secsToCycles;
+              notify = mqttAlertCmd;
+            }
+          else
+            check
+        )
       ) cfg.checks)
     );
   };

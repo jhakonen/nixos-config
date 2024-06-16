@@ -3,6 +3,10 @@ let
   catalog = config.dep-inject.catalog;
   my-packages = config.dep-inject.my-packages;
 
+  checkBluetoothExists = pkgs.writeShellScript "bluetooth-exists" ''
+    ${pkgs.bluez}/bin/hcitool dev | ${pkgs.gnugrep}/bin/grep -o 'hci[0-9]' >/dev/null
+  '';
+
   gatewayConfig = {
     mqtt = {
       host = catalog.services.mosquitto.public.domain;
@@ -57,16 +61,30 @@ in
       pkgs.coreutils  # head
       pkgs.envsubst
       pkgs.gnugrep
+      pkgs.uhubctl
     ];
     preStart = ''
+      set +e
+
+      function get-bt-device() {
+        hcitool dev | grep -o 'hci[0-9]' | head -n1
+      }
+
       umask 077
       mkdir -p ${dataDir}
       envsubst -i "${configFile}" -o "${dataDir}/bt-mqtt-gateway.yaml"
 
       # "Korjaa" virhe: Bluetooth interface has gone down
-      DEV_NAME=$(hcitool dev | grep -o 'hci[0-9]' | head -n1)
-      hciconfig $DEV_NAME down
-      hciconfig $DEV_NAME up
+      DEV_NAME=$(get-bt-device)
+      if [ "$DEV_NAME" == "" ]; then
+        echo "Bluetooth laite katosi, laita bt usb laitteesta virta pois / päälle"
+        uhubctl --action=cycle --search='Realtek ASUS USB-BT500'
+
+        echo "Odota hetki jotta Bluetooth laite käynnistyy"
+        sleep 5
+
+        #DEV_NAME=$(get-bt-device)
+      fi
       '';
     serviceConfig = {
       Environment = "CONFIG_FILE=${dataDir}/bt-mqtt-gateway.yaml";
@@ -84,10 +102,22 @@ in
     };
   };
 
-  my.services.monitoring.checks = [{
-    type = "systemd service";
-    description = "bt-mqtt-gateway";
-    name = config.systemd.services.bt-mqtt-gateway.name;
-    expected = "running";
-  }];
+  environment.systemPackages = [ pkgs.uhubctl ];
+
+  my.services.monitoring.checks = [
+    {
+      type = "systemd service";
+      description = "bt-mqtt-gateway";
+      name = config.systemd.services.bt-mqtt-gateway.name;
+      expected = "running";
+    }
+    ({ notify, secsToCycles, ... }: ''
+      check program "Reboot if Bluetooth device disappears" with path "${checkBluetoothExists}"
+        if status != 0 then alert
+        if status != 0 for ${secsToCycles (15 * 60)} cycles then
+          exec "${notify} Bluetooth ${config.networking.hostName} koneella on ollut alhaalla 15 minuuttia, uudelleen käynnistys kohta"
+        if status != 0 for ${secsToCycles (20 * 60)} cycles then
+          exec "${pkgs.systemd}/bin/systemctl reboot"
+    '')
+  ];
 }
