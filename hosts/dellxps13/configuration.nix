@@ -156,6 +156,7 @@ in
         "/.Trash*"
         "/.local/share/Trash"
         "/.local/share/baloo"
+        "/.steam"
         "/Calibre"
         "/Keepass"
         "/Nextcloud"
