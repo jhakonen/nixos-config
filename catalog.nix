@@ -379,7 +379,7 @@ in rec {
       };
       public = {
         domain = "zigbee2mqtt.jhakonen.com";
-        port = 80;
+        port = 443;
       };
     };
   };

@@ -81,6 +81,24 @@ in
     };
   };
 
+  services.nginx = {
+    enable = true;
+    virtualHosts.${catalog.services.zigbee2mqtt.public.domain} = {
+      locations."/" = {
+        proxyPass = "http://127.0.0.1:${toString catalog.services.zigbee2mqtt.port}";
+        proxyWebsockets = true;
+        recommendedProxySettings = true;
+      };
+      # Käytä Let's Encrypt sertifikaattia
+      addSSL = true;
+      useACMEHost = "kota-portti.lan.jhakonen.com";
+    };
+  };
+
+  security.acme.certs."kota-portti.lan.jhakonen.com".extraDomainNames = [
+    catalog.services.zigbee2mqtt.public.domain
+  ];
+
   # Lisää MQTT salasana salatun ympäristömuuttujan kautta
   age.secrets.zigbee2mqtt-environment.file = ../../secrets/zigbee2mqtt-environment.age;
   systemd.services.zigbee2mqtt.serviceConfig.EnvironmentFile = [
@@ -114,6 +132,7 @@ in
       type = "http check";
       description = "zigbee2mqtt - web interface";
       domain = catalog.services.zigbee2mqtt.public.domain;
+      secure = true;
       response.code = 200;
       alertAfterSec = 15 * 60;
     }
