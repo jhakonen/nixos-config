@@ -267,6 +267,7 @@ in
     mqttx
     nextcloud-client
     obsidian
+    renameutils  # qmv
     spotify
     sublime4
     syncthingtray-minimal
@@ -309,6 +310,10 @@ in
   programs.direnv = {
     enable = true;
     silent = true;
+  };
+
+  programs.zsh.shellAliases = {
+    qmv = "qmv --editor='subl --new-window --wait' --format=destination-only --verbose";
   };
 
   # List services that you want to enable:
