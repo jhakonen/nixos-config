@@ -43,6 +43,7 @@ in {
     virtualHosts.${catalog.services.paperless.public.domain} = {
       locations."/" = {
         proxyPass = "http://127.0.0.1:${toString catalog.services.paperless.port}";
+        proxyWebsockets = true;
         recommendedProxySettings = true;
       };
       # Käytä Let's Encrypt sertifikaattia
