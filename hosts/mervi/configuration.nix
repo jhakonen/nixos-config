@@ -88,6 +88,15 @@ in
   # Configure console keymap
   console.keyMap = "fi";
 
+  services.avahi = {
+    enable = true;
+    publish = {
+      enable = true;
+      # Tarvitaan Kodi JSON-RPC mDNS tukea varten (Jotta Kore löytää Kodin automaattisesti)
+      userServices = true;
+    };
+  };
+
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
