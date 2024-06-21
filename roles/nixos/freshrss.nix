@@ -38,5 +38,7 @@ in
       "nas-minimal"
     ];
     paths = [ "${config.services.freshrss.dataDir}/" ];
+    preHooks = [ "systemctl stop phpfpm-freshrss.service" ];
+    postHooks = [ "systemctl start phpfpm-freshrss.service" ];
   };
 }
