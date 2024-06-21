@@ -221,6 +221,12 @@ in {
         };
       };
     }) backup-jobs);
+    timers = builtins.listToAttrs (builtins.map (job: {
+      name = "rsync-backup-${job.jobname}";
+      # Käynnistä backup koneen käynnistyksen jälkeen jos kone oli pois päältä
+      # edellisen suoritusajan hetkellä
+      value.timerConfig.Persistent = "true";
+    }) backup-jobs);
   };
 
   config.my.services.monitoring = lib.mkIf cfg.enable {
