@@ -83,6 +83,42 @@ in {
     excludes = [ "${config.services.paperless.dataDir}/consume" ];
   };
 
+  # Palvelun valvonta
+  my.services.monitoring.checks = [
+    {
+      type = "systemd service";
+      description = "Paperless - consumer";
+      name = config.systemd.services.paperless-consumer.name;
+      expected = "running";
+    }
+    {
+      type = "systemd service";
+      description = "Paperless - scheduler";
+      name = config.systemd.services.paperless-scheduler.name;
+      expected = "running";
+    }
+    {
+      type = "systemd service";
+      description = "Paperless - task-queue";
+      name = config.systemd.services.paperless-task-queue.name;
+      expected = "running";
+    }
+    {
+      type = "systemd service";
+      description = "Paperless - web service";
+      name = config.systemd.services.paperless-web.name;
+      expected = "running";
+    }
+    {
+      type = "http check";
+      description = "Paperless - web interface";
+      secure = true;
+      domain = catalog.services.paperless.public.domain;
+      path = "/accounts/login/";
+      response.code = 200;
+    }
+  ];
+
   # Liitä dokumenttien syötekansio NFS:n yli NAS:lta. Tähän kansioon skanneri
   # syöttää skannatut paperit
   fileSystems.${config.services.paperless.consumptionDir} = {

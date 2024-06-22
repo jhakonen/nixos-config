@@ -64,6 +64,23 @@ in
     postHooks = [ "systemctl start home-assistant.service" ];
   };
 
+  # Palvelun valvonta
+  my.services.monitoring.checks = [
+    {
+      type = "systemd service";
+      description = "Home Assistant - service";
+      name = config.systemd.services.home-assistant.name;
+      expected = "running";
+    }
+    {
+      type = "http check";
+      description = "Home Assistant - web interface";
+      secure = true;
+      domain = catalog.services.home-assistant.public.domain;
+      response.code = 200;
+    }
+  ];
+
   # Lisää rooli lokiriveihin jotka Promtail lukee
   systemd.services.home-assistant.serviceConfig.LogExtraFields = "ROLE=home-assistant";
 }

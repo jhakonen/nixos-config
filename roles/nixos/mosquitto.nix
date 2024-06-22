@@ -23,9 +23,16 @@ in {
           certfile = "${certDir}/cert.pem";
           cafile = "${certDir}/chain.pem";
         };
-        users."${user}" = {
-          acl = [ "#" ];
-          passwordFile = config.age.secrets.mosquitto-password.path;
+        users = {
+          "${user}" = {
+            acl = [ "#" ];
+            passwordFile = config.age.secrets.mosquitto-password.path;
+          };
+          # Käyttäjä yhteyden tarkistukseen monit-palvelusta
+          testi = {
+            acl = [ "deny #" ];
+            password = "testi";
+          };
         };
       }
     ];
@@ -45,4 +52,24 @@ in {
 
   # Anna mosquittolle pääsy let's encrypt sertifikaattiin
   users.groups.acme.members = [ "mosquitto" ];
+
+  # Palvelun valvonta
+  my.services.monitoring.checks = [
+    {
+      type = "systemd service";
+      description = "Mosquitto - service";
+      name = config.systemd.services.mosquitto.name;
+      expected = "running";
+    }
+    ({ notify, ... }:
+    ''
+      check host "Mosquitto - MQTT connection" with address ${catalog.services.mosquitto.public.domain}
+        if failed
+          port ${toString catalog.services.mosquitto.port}
+          ssl
+          protocol mqtt username testi password testi
+        then
+          exec "${notify} ${config.networking.hostName} - check Mosquitto - MQTT connection has failed"
+    '')
+  ];
 }

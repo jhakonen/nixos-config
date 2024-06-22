@@ -41,4 +41,28 @@ in
     preHooks = [ "systemctl stop phpfpm-freshrss.service" ];
     postHooks = [ "systemctl start phpfpm-freshrss.service" ];
   };
+
+  # Palvelun valvonta
+  my.services.monitoring.checks = [
+    {
+      type = "systemd service";
+      description = "FreshRSS - service";
+      name = config.systemd.services.phpfpm-freshrss.name;
+      expected = "running";
+    }
+    {
+      type = "systemd service";
+      description = "FreshRSS - updater";
+      name = config.systemd.services.freshrss-updater.name;
+      expected = "succeeded";
+    }
+    {
+      type = "http check";
+      description = "FreshRSS - web interface";
+      secure = true;
+      domain = catalog.services.freshrss.public.domain;
+      path = "/i/";
+      response.code = 200;
+    }
+  ];
 }

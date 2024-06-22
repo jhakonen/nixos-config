@@ -34,4 +34,23 @@ in {
   };
 
   config.networking.firewall.allowedTCPPorts = lib.mkIf cfg.enable [ cfg.gui-port ];
+
+  # Palvelun valvonta
+  config.my.services = lib.mkIf cfg.enable {
+    monitoring.checks = [
+      {
+        type = "systemd service";
+        description = "Syncthing - service";
+        name = config.systemd.services.syncthing.name;
+        expected = "running";
+      }
+      {
+        type = "http check";
+        description = "Syncthing - web interface";
+        domain = config.networking.hostName;
+        port = cfg.gui-port;
+        response.code = 200;
+      }
+    ];
+  };
 }

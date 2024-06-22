@@ -48,4 +48,14 @@ in
       };
     };
   };
+
+  # Palvelun valvonta
+  my.services.monitoring.checks = [
+    {
+      type = "systemd service";
+      description = "Mqttwarn - service";
+      name = config.systemd.services.mqttwarn.name;
+      expected = "running";
+    }
+  ];
 }

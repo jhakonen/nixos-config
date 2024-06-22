@@ -3,6 +3,7 @@ let
   cfg = config.my.services.monitoring;
   MONIT_PORT = 2812;
   PERIOD = 60;
+  DEFAULT_ALERT_AFTER_SEC = 5 * 60;
 
   secsToCycles = seconds: toString (seconds / PERIOD);
 
@@ -12,25 +13,36 @@ let
     else if check.type == "systemd service" then
       ''
         check program "${if check ? description then check.description else check.name}" with path "${checkSystemdService} ${check.name} ${check.expected}"
-          if status != 0 then
+          if status != 0
+            for ${secsToCycles DEFAULT_ALERT_AFTER_SEC} cycles
+          then
             exec "${mqttAlertCmd} ${config.networking.hostName} - System service '${if check ? description then check.description else check.name}' has failed"
       ''
     else if check.type == "program" then
       ''
         check program "${check.description}" with path "${check.path}"
-          if status != 0 then
+          if status != 0
+            for ${secsToCycles DEFAULT_ALERT_AFTER_SEC} cycles
+          then
             exec "${mqttAlertCmd} ${config.networking.hostName} - Check '${check.description}' has failed"
       ''
     else if check.type == "http check" then
       ''
         check host "${check.description}" with address ${check.domain}
           if failed
-            port ${if check ? secure && check.secure then "443" else "80"}
+            port ${
+              if check ? port then
+                toString check.port
+              else if check ? secure && check.secure then
+                "443"
+              else
+                "80"
+            }
             ${if check ? secure && check.secure then "certificate valid > 30 days" else ""}
             protocol ${if check ? secure && check.secure then "https" else "http"}
               ${if check ? path then "request ${check.path}" else ""}
               ${if check ? response.code then "status ${toString check.response.code}" else ""}
-            ${if check ? alertAfterSec then "for ${secsToCycles check.alertAfterSec} cycles" else ""}
+            for ${secsToCycles (if check ? alertAfterSec then check.alertAfterSec else DEFAULT_ALERT_AFTER_SEC)} cycles
           then
             exec "${mqttAlertCmd} ${config.networking.hostName} - HTTP check '${check.description}' has failed"
       ''

@@ -32,6 +32,24 @@ in {
     postHooks = [ "systemctl start influxdb.service" ];
   };
 
+  # Palvelun valvonta
+  my.services.monitoring.checks = [
+    {
+      type = "systemd service";
+      description = "InfluxDB - service";
+      name = config.systemd.services.influxdb.name;
+      expected = "running";
+    }
+    {
+      type = "http check";
+      description = "InfluxDB - http port";
+      domain = catalog.services.influx-db.host.ip.private;
+      port = catalog.services.influx-db.port;
+      path = "/ping";
+      response.code = 204;
+    }
+  ];
+
   # Lisää rooli lokiriveihin jotka Promtail lukee
   systemd.services.influxdb.serviceConfig.LogExtraFields = "ROLE=influxdb";
 }

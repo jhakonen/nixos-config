@@ -53,6 +53,23 @@ in
     postHooks = [ "systemctl start grafana.service" ];
   };
 
+  # Palvelun valvonta
+  my.services.monitoring.checks = [
+    {
+      type = "systemd service";
+      description = "Grafana - service";
+      name = config.systemd.services.grafana.name;
+      expected = "running";
+    }
+    {
+      type = "http check";
+      description = "Grafana - web interface";
+      secure = true;
+      domain = catalog.services.grafana.public.domain;
+      response.code = 200;
+    }
+  ];
+
   # Lisää rooli lokiriveihin jotka Promtail lukee
   systemd.services.grafana.serviceConfig.LogExtraFields = "ROLE=grafana";
 }

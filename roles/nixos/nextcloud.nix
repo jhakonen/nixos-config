@@ -171,6 +171,7 @@ in
     ];
   };
 
+  # Palvelun valvonta
   my.services.monitoring.checks = [
     {
       type = "systemd service";

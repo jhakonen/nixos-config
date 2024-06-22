@@ -87,4 +87,21 @@ in {
       useACMEHost = "jhakonen.com";
     };
   };
+
+  # Palvelun valvonta
+  my.services.monitoring.checks = [
+    {
+      type = "systemd service";
+      description = "Dashy - container";
+      name = config.systemd.services."${config.virtualisation.oci-containers.backend}-dashy".name;
+      expected = "running";
+    }
+    {
+      type = "http check";
+      description = "Dashy - web interface";
+      secure = true;
+      domain = catalog.services.dashy.public.domain;
+      response.code = 200;
+    }
+  ];
 }

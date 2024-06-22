@@ -46,6 +46,23 @@ in
     paths = [ "${config.services.node-red.userDir}/" ];
   };
 
+  # Palvelun valvonta
+  my.services.monitoring.checks = [
+    {
+      type = "systemd service";
+      description = "Node-Red - service";
+      name = config.systemd.services.node-red.name;
+      expected = "running";
+    }
+    {
+      type = "http check";
+      description = "Node-Red - web interface";
+      secure = true;
+      domain = catalog.services.node-red.public.domain;
+      response.code = 200;
+    }
+  ];
+
   # Lisää rooli lokiriveihin jotka Promtail lukee
   systemd.services.node-red.serviceConfig.LogExtraFields = "ROLE=node-red";
 }

@@ -51,4 +51,28 @@ in {
     path = LOCAL_LIBRARY_PATH;
     devices = [ "nas" ];
   };
+
+  # Palvelun valvonta
+  my.services.monitoring.checks = [
+    {
+      type = "systemd service";
+      description = "Calibre-Web - service";
+      name = config.systemd.services.calibre-web.name;
+      expected = "running";
+    }
+    {
+      type = "systemd service";
+      description = "Calibre-Web - db reconnect";
+      name = config.systemd.services.calibre-db-reconnect.name;
+      expected = "succeeded";
+    }
+    {
+      type = "http check";
+      description = "Calibre-Web - web interface";
+      secure = true;
+      domain = catalog.services.calibre-web.public.domain;
+      path = "/login";
+      response.code = 200;
+    }
+  ];
 }

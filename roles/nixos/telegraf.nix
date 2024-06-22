@@ -35,6 +35,16 @@ in
     };
   };
 
+  # Palvelun valvonta
+  my.services.monitoring.checks = [
+    {
+      type = "systemd service";
+      description = "Telegraf - service";
+      name = config.systemd.services.telegraf.name;
+      expected = "running";
+    }
+  ];
+
   # Lisää rooli lokiriveihin jotka Promtail lukee
   systemd.services.telegraf.serviceConfig.LogExtraFields = "ROLE=telegraf";
 }

@@ -1,6 +1,7 @@
 { config, ... }:
 let
   catalog = config.dep-inject.catalog;
+  serviceName = "${config.virtualisation.oci-containers.backend}-huginn";
 
   dataDir = "/var/lib/huginn/data";
   version = "2d5fcafc507da3e8c115c3479e9116a0758c5375";  # 23.7.2023
@@ -31,7 +32,7 @@ in {
     };
   };
 
-  systemd.services."${config.virtualisation.oci-containers.backend}-huginn" = {
+  systemd.services.${serviceName} = {
     # Luo datakansio
     preStart = ''
       mkdir -p ${dataDir}
@@ -52,7 +53,24 @@ in {
       "nas-minimal"
     ];
     paths = [ "${dataDir}/" ];
-    preHooks = [ "systemctl stop ${config.virtualisation.oci-containers.backend}-huginn.service" ];
-    postHooks = [ "systemctl start ${config.virtualisation.oci-containers.backend}-huginn.service" ];
+    preHooks = [ "systemctl stop ${serviceName}.service" ];
+    postHooks = [ "systemctl start ${serviceName}.service" ];
   };
+
+  # Palvelun valvonta
+  my.services.monitoring.checks = [
+    {
+      type = "systemd service";
+      description = "Huginn - service";
+      name = serviceName;
+      expected = "running";
+    }
+    {
+      type = "http check";
+      description = "Huginn - web interface";
+      secure = true;
+      domain = catalog.services.huginn.public.domain;
+      response.code = 200;
+    }
+  ];
 }

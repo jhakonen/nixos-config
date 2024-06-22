@@ -216,6 +216,8 @@ in {
         enable = true;
         startAt = cfg.schedule;
         script = job.binpath;
+        wants = [ "network-online.target" ];
+        after = [ "network-online.target" ];
         serviceConfig = {
           Type = "oneshot";
         };
@@ -229,6 +231,7 @@ in {
     }) backup-jobs);
   };
 
+  # Palveluiden valvonta
   config.my.services.monitoring = lib.mkIf cfg.enable {
     checks = (builtins.map (job:
       {

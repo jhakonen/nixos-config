@@ -117,6 +117,7 @@ in
 
   environment.systemPackages = [ pkgs.uhubctl ];
 
+  # Palvelun valvonta
   my.services.monitoring.checks = [
     {
       type = "systemd service";

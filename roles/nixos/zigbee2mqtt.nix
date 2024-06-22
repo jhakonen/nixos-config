@@ -121,6 +121,7 @@ in
     excludes = [ "${config.services.zigbee2mqtt.dataDir}/log" ];
   };
 
+  # Palvelun valvonta
   my.services.monitoring.checks = [
     {
       type = "systemd service";
