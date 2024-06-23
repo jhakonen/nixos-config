@@ -4,7 +4,7 @@
 
 { config, pkgs, ... }:
 let
-  catalog = config.dep-inject.catalog;
+  inherit (config.dep-inject) catalog private;
 
   # Julkinen avain SSH:lla sisäänkirjautumista varten
   id-rsa-public-key =
@@ -187,7 +187,7 @@ in
   security.acme = {
     acceptTerms = true;
     defaults = {
-      email = "***REMOVED***";
+      email = private.catalog.acmeEmail;
       dnsProvider = "joker";
       credentialsFile = config.age.secrets.acme-joker-credentials.path;
     };
@@ -196,13 +196,13 @@ in
 
   # Salaisuudet
   age.secrets = {
-    acme-joker-credentials.file = ../../secrets/acme-joker-credentials.age;
+    acme-joker-credentials.file = private.secret-files.acme-joker-credentials;
     jhakonen-mosquitto-password = {
-      file = ../../secrets/mqtt-password.age;
+      file = private.secret-files.mqtt-password;
       owner = "jhakonen";
     };
-    mosquitto-password.file = ../../secrets/mqtt-password.age;
-    rsyncbackup-password.file = ../../secrets/rsyncbackup-password.age;
+    mosquitto-password.file = private.secret-files.mqtt-password;
+    rsyncbackup-password.file = private.secret-files.rsyncbackup-password;
   };
 
   # List services that you want to enable:

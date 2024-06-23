@@ -1,13 +1,13 @@
 { config, ... }:
 let
-  catalog = config.dep-inject.catalog;
+  inherit (config.dep-inject) catalog private;
   user = "koti";
   certDir = config.security.acme.certs."jhakonen.com".directory;
 in {
   # Salaisuudet
   age.secrets = {
     mosquitto-password = {
-      file = ../../secrets/mqtt-password.age;
+      file = private.secret-files.mqtt-password;
       owner = "mosquitto";
       group = "mosquitto";
     };

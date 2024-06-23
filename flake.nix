@@ -12,6 +12,10 @@
     agenix.url = "github:ryantm/agenix";
     agenix.inputs.nixpkgs.follows = "nixpkgs";
     agenix.inputs.home-manager.follows = "home-manager";
+    private = {
+      url = "git+ssh://github.com:/jhakonen/nixos-config-private.git";
+      # url = "path:///home/jhakonen/nixos-config/private";
+    };
   };
 
   outputs = { self
@@ -23,6 +27,7 @@
             , nixpkgs
             , nixpkgs-unstable
             , nur
+            , private
             , ... }@inputs:
   let
     inherit (self) outputs;
@@ -34,7 +39,7 @@
       config.dep-inject = {
         # Injektoi riippuvuudet `specialArgs` muuttujan sijaan, lähde:
         #   https://jade.fyi/blog/flakes-arent-real/#injecting-dependencies
-        inherit agenix;
+        inherit agenix private;
         catalog = pkgs.callPackage ./catalog.nix inputs;
         my-packages = pkgs.callPackage ./packages/nix {};
       };

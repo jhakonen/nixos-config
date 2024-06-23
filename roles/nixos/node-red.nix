@@ -1,9 +1,9 @@
 { config, ... }:
 let
-  catalog = config.dep-inject.catalog;
+  inherit (config.dep-inject) catalog private;
 in
 {
-  age.secrets.node-red-environment.file = ../../secrets/node-red-environment.age;
+  age.secrets.node-red-environment.file = private.secret-files.node-red-environment;
 
   services.node-red = {
     enable = true;

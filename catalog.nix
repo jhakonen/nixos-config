@@ -383,38 +383,6 @@ in rec {
       };
     };
   };
-  emailAccounts = {
-    "Henkilökohtainen (***REMOVED***)" = {
-      primary = true;
-      realName = "Janne Hakonen";
-      address = "***REMOVED***";
-      userName = "***REMOVED***";
-      imap = {
-        host = "***REMOVED***";
-        port = 143;
-        tls.useStartTls = true;
-      };
-      smtp = {
-        host = "***REMOVED***";
-        port = 587;
-        tls.useStartTls = true;
-      };
-      thunderbird = {
-        enable = true;
-        settings = id: {
-          # Käytä ikin smtp palvelimella ikin käyttäjänimeä `userName`-kentän sijaan
-          "mail.smtpserver.smtp_${id}.username" = "***REMOVED***";
-        };
-      };
-    };
-    "Roskaposti (***REMOVED***)" = {
-      realName = "Janne Hakonen";
-      address = "***REMOVED***";
-      userName = "***REMOVED***";
-      flavor = "***REMOVED***";
-      thunderbird.enable = true;
-    };
-  };
 
   syncthing-devices = {
     "dellxps13".id = "WKELG45-M6XHPMK-LDYP7FI-AIWMZKK-P6ORZHW-KS3KTNL-GPYKNGX-ZBYIGQX";

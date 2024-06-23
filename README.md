@@ -110,3 +110,26 @@ sudo nix-collect-garbage --delete-older-than 30d
 Huomaa, että kannattaa ensin poistaa vanhoja sukupolvia, jotta garbage collector pystyy poistaan myös niiden viittaamat tiedostot storesta.
 
 Minulla on myös automaattinen puhdistus otettu käyttöön kaikilla NixOS koneilla joten tätä ei tarvitse välttämättä tehdä.
+
+
+# Muutosten testaaminen paikallisella private-flakella
+
+Muuta julkisessa `flake.nix` tiedostossa `private` input muotoon:
+```nix
+private.url = "path:///home/jhakonen/nixos-config/private";
+```
+
+Deploymentti läppärillä:
+```bash
+nix flake lock --update-input private && deploy dellxps13
+```
+
+Deploymentti etäkoneella:
+```bash
+# Aja ensin läppärillä
+rsync -r ~/nixos-config $KONE:
+
+# Aja etäkoneella
+cd ~/nixos-config/public
+nix flake lock --update-input private && sudo nixos-rebuild switch --flake '.#'
+```

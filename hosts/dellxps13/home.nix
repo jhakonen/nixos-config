@@ -3,8 +3,7 @@
 
 { inputs, osConfig, lib, config, pkgs, ... }:
 let
-  agenix = osConfig.dep-inject.agenix;
-  catalog = osConfig.dep-inject.catalog;
+  inherit (osConfig.dep-inject) agenix catalog private;
 in
 {
   imports = [
@@ -50,15 +49,15 @@ in
 
   age.secrets = {
     github-id-rsa = {
-      file = ../../secrets/github-id-rsa.age;
+      file = private.secret-files.github-id-rsa;
       path = "/home/jhakonen/.ssh/github-id-rsa";
     };
     jhakonen-mosquitto-password = {
-      file = ../../secrets/mqtt-password.age;
+      file = private.secret-files.mqtt-password;
     };
   };
 
-  accounts.email.accounts = catalog.emailAccounts;
+  accounts.email.accounts = private.catalog.emailAccounts;
   programs.thunderbird = {
     enable = true;
     package = pkgs.thunderbird;  # Thunderbird 115 paremmalla käyttöliittymällä

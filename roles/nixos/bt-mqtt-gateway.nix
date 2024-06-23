@@ -1,7 +1,6 @@
 { config, pkgs, ... }:
 let
-  catalog = config.dep-inject.catalog;
-  my-packages = config.dep-inject.my-packages;
+  inherit (config.dep-inject) catalog my-packages private;
 
   # checkBluetoothExists = pkgs.writeShellScript "bluetooth-exists" ''
   #   ${pkgs.bluez}/bin/hcitool dev | ${pkgs.gnugrep}/bin/grep -o 'hci[0-9]' >/dev/null
@@ -71,7 +70,7 @@ in
   # -työkaluja ilman salasanaa. Vaihda toteutus Bleak-kirjastoon, näin sudo
   # -vaatimuskin saattaa poistua
 
-  age.secrets.bt-mqtt-gateway-environment.file = ../../secrets/bt-mqtt-gateway-environment.age;
+  age.secrets.bt-mqtt-gateway-environment.file = private.secret-files.bt-mqtt-gateway-environment;
 
   systemd.services.bt-mqtt-gateway = {
     description = "bt-mqtt-gateway palvelu";

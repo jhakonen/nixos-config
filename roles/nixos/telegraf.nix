@@ -1,9 +1,9 @@
 { config, ... }:
 let
-  catalog = config.dep-inject.catalog;
+  inherit (config.dep-inject) catalog private;
 in
 {
-  age.secrets.telegraf-environment.file = ../../secrets/telegraf-environment.age;
+  age.secrets.telegraf-environment.file = private.secret-files.telegraf-environment;
 
   services.telegraf = {
     enable = true;

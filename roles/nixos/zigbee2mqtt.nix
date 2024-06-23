@@ -1,6 +1,6 @@
 { config, ... }:
 let
-  catalog = config.dep-inject.catalog;
+  inherit (config.dep-inject) catalog private;
 in
 {
   services.zigbee2mqtt = {
@@ -100,7 +100,7 @@ in
   ];
 
   # Lisää MQTT salasana salatun ympäristömuuttujan kautta
-  age.secrets.zigbee2mqtt-environment.file = ../../secrets/zigbee2mqtt-environment.age;
+  age.secrets.zigbee2mqtt-environment.file = private.secret-files.zigbee2mqtt-environment;
   systemd.services.zigbee2mqtt.serviceConfig.EnvironmentFile = [
     config.age.secrets.zigbee2mqtt-environment.path
   ];

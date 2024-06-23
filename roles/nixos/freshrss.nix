@@ -1,10 +1,10 @@
 { config, pkgs, ... }:
 let
-  catalog = config.dep-inject.catalog;
+  inherit (config.dep-inject) catalog private;
 in
 {
   age.secrets.freshrss-admin-password = {
-    file = ../../secrets/freshrss-admin-password.age;
+    file = private.secret-files.freshrss-admin-password;
     owner = config.services.freshrss.user;
   };
 

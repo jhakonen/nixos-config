@@ -204,6 +204,21 @@
         "type": "github"
       }
     },
+    "private": {
+      "locked": {
+        "lastModified": 1719131410,
+        "narHash": "sha256-3fM9sFF2LovYOsyzILSwujT+uZU8sYbgLOwi1KRE9Js=",
+        "ref": "refs/heads/main",
+        "rev": "1b5f1ab6c2a9845c5b72203f94d21949f372688b",
+        "revCount": 2,
+        "type": "git",
+        "url": "ssh://github.com:/jhakonen/nixos-config-private.git"
+      },
+      "original": {
+        "type": "git",
+        "url": "ssh://github.com:/jhakonen/nixos-config-private.git"
+      }
+    },
     "root": {
       "inputs": {
         "agenix": "agenix",
@@ -213,7 +228,8 @@
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs_2",
         "nixpkgs-unstable": "nixpkgs-unstable",
-        "nur": "nur"
+        "nur": "nur",
+        "private": "private"
       }
     },
     "systems": {

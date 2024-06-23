@@ -1,9 +1,9 @@
 { config, ... }:
 let
-  catalog = config.dep-inject.catalog;
+  inherit (config.dep-inject) catalog private;
 in
 {
-  age.secrets.mqttwarn-environment.file = ../../secrets/mqttwarn-environment.age;
+  age.secrets.mqttwarn-environment.file = private.secret-files.mqttwarn-environment;
 
   services.mqttwarn = {
     enable = true;
@@ -28,7 +28,7 @@ in
         targets.jhakonen = [ "$ENV:TELEGRAM_CHAT_ID" ];
       };
       "config:smtp" = {
-        server = "***REMOVED***:587";
+        server = "posteo.de:587";
         sender = "$ENV:SMTP_FROM";
         username = "$ENV:SMTP_USERNAME";
         password = "$ENV:SMTP_PASSWORD";

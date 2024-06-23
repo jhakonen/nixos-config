@@ -4,7 +4,7 @@
 
 { config, pkgs, ... }:
 let
-  catalog = config.dep-inject.catalog;
+  inherit (config.dep-inject) catalog private;
 
   # Julkinen avain SSH:lla sisäänkirjautumista varten
   id-rsa-public-key =
@@ -128,7 +128,7 @@ in
 
   # Salaisuudet
   age.secrets = {
-    rsyncbackup-password.file = ../../secrets/rsyncbackup-password.age;
+    rsyncbackup-password.file = private.secret-files.rsyncbackup-password;
   };
 
   # Varmuuskopiointi
@@ -276,7 +276,7 @@ in
       name = "deploy";
       runtimeInputs = [ ];
       text = ''
-        cd /home/jhakonen/nixos-config
+        cd /home/jhakonen/nixos-config/public
         nix run '.' -- "$@"
       '';
     })
