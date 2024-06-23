@@ -1,3 +1,24 @@
+# Valmistelevat toimenpiteet uudella koneella
+
+Kopioi Github identity tiedosto kohde koneelle:
+```bash
+scp ~/.ssh/github-id-rsa <kone>:
+ssh <kone>
+sudo su
+mv github-id-rsa ~/.ssh/
+chown root:root ~/.ssh/github-id-rsa
+```
+
+Lisää rootin `~/.ssh/config` tiedostoon:
+```
+Host github.com
+  User git
+  IdentityFile /root/.ssh/github-id-rsa
+  StrictHostKeyChecking no
+  UserKnownHostsFile /dev/null
+```
+
+
 # Taskien listaus
 
 ```bash
@@ -127,7 +148,7 @@ nix flake lock --update-input private && deploy dellxps13
 Deploymentti etäkoneella:
 ```bash
 # Aja ensin läppärillä
-rsync -r ~/nixos-config $KONE:
+rsync -r ~/nixos-config <kone>:
 
 # Aja etäkoneella
 cd ~/nixos-config/public
