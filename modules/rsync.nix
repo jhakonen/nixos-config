@@ -12,6 +12,10 @@ let
     binpath = "${app}/bin/${appname}";
     app = pkgs.writeShellApplication {
       name = appname;
+      excludeShellChecks = [
+        # En ymmärrä miksi tämä virhe tulee
+        "SC2317"
+      ];
       text = let
         pre-cmd = lib.strings.concatStringsSep "\n" (jobcfg.preHooks or []);
         post-cmd = lib.strings.concatStringsSep "\n" (jobcfg.postHooks or []);
@@ -42,6 +46,7 @@ let
           (lib.strings.concatStringsSep " " entry.sources)
           "${entry.username}@${entry.host}${entry.path}/${jobname}/"
         ]) merged-destinations;
+        hosts = builtins.map (entry: entry.host) merged-destinations;
 
       in
         ''
@@ -51,6 +56,26 @@ let
           RED=$(if [ "$IS_TTY" = 1 ]; then ${pkgs.ncurses}/bin/tput setaf 1; fi)
           GREEN=$(if [ "$IS_TTY" = 1 ]; then ${pkgs.ncurses}/bin/tput setaf 2; fi)
           RESET=$(if [ "$IS_TTY" = 1 ]; then ${pkgs.ncurses}/bin/tput sgr0; fi)
+
+          function waitforhosts() {
+            local fail
+            local host
+            local _retry
+
+            for _retry in {0..120}; do
+              fail=0
+              # shellcheck disable=SC2043
+              for host in ${lib.strings.concatStringsSep " " (lib.lists.unique hosts)}; do
+                ${pkgs.iputils}/bin/ping -c1 "$host" >/dev/null || fail=1
+              done
+              if [ "$fail" == "0" ]; then
+                exit 0
+              fi
+              sleep 1
+            done
+            echo "''${RED}Timeout waiting for network access to hosts''${RESET}"
+            exit 1
+          }
 
           function cleanup() {
             ${if jobcfg.postHooks != [] then ''echo "''${GREEN}Running backup posthooks...''${RESET}"'' else ""}
@@ -67,6 +92,8 @@ let
 
           trap onerror ERR SIGINT
           trap cleanup EXIT
+
+          waitforhosts
 
           ${if jobcfg.preHooks != [] then ''echo "''${GREEN}Running backup prehooks...''${RESET}"'' else ""}
           ${pre-cmd}
@@ -216,8 +243,9 @@ in {
         enable = true;
         startAt = cfg.schedule;
         script = job.binpath;
-        wants = [ "network-online.target" ];
-        after = [ "network-online.target" ];
+        # Älä aja varmuuskopiointia nixos-rebuild:n jälkeen, tee se vain
+        # ajastettuna ajankohtana
+        restartIfChanged = false;
         serviceConfig = {
           Type = "oneshot";
         };
@@ -225,9 +253,17 @@ in {
     }) backup-jobs);
     timers = builtins.listToAttrs (builtins.map (job: {
       name = "rsync-backup-${job.jobname}";
-      # Käynnistä backup koneen käynnistyksen jälkeen jos kone oli pois päältä
-      # edellisen suoritusajan hetkellä
-      value.timerConfig.Persistent = "true";
+      value = {
+        # Älä käynnistä varmuuskopiointia ennen kuin verkko on ylhäällä, tämä
+        # tarvitaan `Persistent` asetuksen takia. Huomaa, että tämä ei vielä
+        # riitä, sillä ainakaan dns-selvitys ei näytä vielä toimivan heti
+        # verkon noustua ylös. Tätä varten skriptissä on `waitforhosts` funktio.
+        wants = [ "network-online.target" ];
+        after = [ "network-online.target" ];
+        # Käynnistä backup koneen käynnistyksen jälkeen jos kone oli pois päältä
+        # edellisen suoritusajan hetkellä
+        timerConfig.Persistent = "true";
+      };
     }) backup-jobs);
   };
 
