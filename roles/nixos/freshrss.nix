@@ -38,8 +38,13 @@ in
       "nas-minimal"
     ];
     paths = [ "${config.services.freshrss.dataDir}/" ];
-    preHooks = [ "systemctl stop phpfpm-freshrss.service" ];
-    postHooks = [ "systemctl start phpfpm-freshrss.service" ];
+    preHooks = [
+      "systemctl stop freshrss-updater.timer"
+      "systemctl stop freshrss-updater.service"
+    ];
+    postHooks = [
+      "systemctl start freshrss-updater.timer"
+    ];
   };
 
   # Palvelun valvonta
