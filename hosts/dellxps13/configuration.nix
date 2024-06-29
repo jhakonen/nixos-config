@@ -319,6 +319,7 @@ in
 
   programs.zsh.shellAliases = {
     qmv = "qmv --editor='subl --launch-or-new-window --wait' --format=destination-only --verbose";
+    nixos-edit = "subl --project ~/nixos-config/nixos-config.sublime-project";
   };
 
   # List services that you want to enable:
