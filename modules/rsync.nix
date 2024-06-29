@@ -12,10 +12,6 @@ let
     binpath = "${app}/bin/${appname}";
     app = pkgs.writeShellApplication {
       name = appname;
-      excludeShellChecks = [
-        # En ymmärrä miksi tämä virhe tulee
-        "SC2317"
-      ];
       text = let
         pre-cmd = lib.strings.concatStringsSep "\n" (jobcfg.preHooks or []);
         post-cmd = lib.strings.concatStringsSep "\n" (jobcfg.postHooks or []);
@@ -69,12 +65,12 @@ let
                 ${pkgs.iputils}/bin/ping -c1 "$host" >/dev/null || fail=1
               done
               if [ "$fail" == "0" ]; then
-                exit 0
+                return 0
               fi
               sleep 1
             done
             echo "''${RED}Timeout waiting for network access to hosts''${RESET}"
-            exit 1
+            return 1
           }
 
           function cleanup() {
