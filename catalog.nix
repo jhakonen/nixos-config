@@ -77,6 +77,7 @@ in rec {
       ip.private = "192.168.1.218";
       useIp = true;
     };
+    tinypilot = {};
   };
 
   services = addServiceNames {
@@ -347,6 +348,16 @@ in rec {
         section = "syncthing";
         description = "Syncthing - nas-toolbox";
         icon = "hl-syncthing";
+      };
+    };
+    tinypilot = {
+      host = nodes.tinypilot;
+      port = 443;
+      dashy = {
+        section = "verkon hallinta";
+        title = "Tinypilot";
+        description = "Tinypilot etähallinta";
+        icon = "hl-tinypilot";
       };
     };
     tulostin-hl-l2445dw = {
