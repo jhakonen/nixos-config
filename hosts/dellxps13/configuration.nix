@@ -318,7 +318,7 @@ in
   };
 
   programs.zsh.shellAliases = {
-    qmv = "qmv --editor='subl --new-window --wait' --format=destination-only --verbose";
+    qmv = "qmv --editor='subl --launch-or-new-window --wait' --format=destination-only --verbose";
   };
 
   # List services that you want to enable:
