@@ -19,6 +19,7 @@
     python3
     tailspin   # https://github.com/bensadeh/tailspin
     eza        # https://github.com/eza-community/eza
+    doggo      # https://doggo.mrkaran.dev/docs/
   ];
 
   # Estä `inetutils` pakettia korvaamasta `nettools`
