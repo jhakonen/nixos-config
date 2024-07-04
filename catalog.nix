@@ -78,6 +78,9 @@ in rec {
       useIp = true;
     };
     tinypilot = {};
+    toukka = {
+      ip.private = "192.168.1.68";
+    };
   };
 
   services = addServiceNames {
@@ -215,6 +218,18 @@ in rec {
       };
       public = {
         domain = "monit.nas-toolbox.lan.jhakonen.com";
+        port = 443;
+      };
+    };
+    monit-toukka = {
+      host = nodes.toukka;
+      dashy = {
+        section = "valvonta";
+        description = "Monit - toukka";
+        icon = "hl-monit";
+      };
+      public = {
+        domain = "monit.toukka.lan.jhakonen.com";
         port = 443;
       };
     };
@@ -381,7 +396,7 @@ in rec {
       };
     };
     zigbee2mqtt = {
-      host = nodes.kota-portti;
+      host = nodes.toukka;
       port = 8880;
       dashy = {
         section = "palvelut";

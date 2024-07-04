@@ -47,6 +47,20 @@
         "type": "github"
       }
     },
+    "flake-compat": {
+      "locked": {
+        "lastModified": 1696426674,
+        "narHash": "sha256-kvjfFW7WAETZlt09AgDn1MrtKzP7t90Vf7vypd3OL1U=",
+        "rev": "0f9255e01c2351cc7d116c072cb317785dd33b33",
+        "revCount": 57,
+        "type": "tarball",
+        "url": "https://api.flakehub.com/f/pinned/edolstra/flake-compat/1.0.1/018afb31-abd1-7bff-a5e4-cff7e18efb7a/source.tar.gz"
+      },
+      "original": {
+        "type": "tarball",
+        "url": "https://flakehub.com/f/edolstra/flake-compat/1.tar.gz"
+      }
+    },
     "flake-utils": {
       "inputs": {
         "systems": "systems_2"
@@ -125,6 +139,26 @@
         "type": "github"
       }
     },
+    "nix-rpi5": {
+      "inputs": {
+        "flake-compat": "flake-compat",
+        "nixpkgs": "nixpkgs_2"
+      },
+      "locked": {
+        "lastModified": 1704485878,
+        "narHash": "sha256-i7UH31IZyil99EUB5qnQJAiszFkea1B1yZf5pQEDIYg=",
+        "owner": "vriska",
+        "repo": "nix-rpi5",
+        "rev": "ac9942532e1dc2f825ad2aa3a6d31bfbd3b42eed",
+        "type": "gitlab"
+      },
+      "original": {
+        "owner": "vriska",
+        "ref": "main",
+        "repo": "nix-rpi5",
+        "type": "gitlab"
+      }
+    },
     "nixos-hardware": {
       "locked": {
         "lastModified": 1718459188,
@@ -175,6 +209,21 @@
     },
     "nixpkgs_2": {
       "locked": {
+        "lastModified": 1704322682,
+        "narHash": "sha256-0FK10TWEYkEP5sloguzmDfM+hXIyPzlmZCFx/5c+ilQ=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "054533f5c84884e3186a722c07cbb4a6c1a2af19",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_3": {
+      "locked": {
         "lastModified": 1718208800,
         "narHash": "sha256-US1tAChvPxT52RV8GksWZS415tTS7PV42KTc2PNDBmc=",
         "owner": "nixos",
@@ -206,11 +255,11 @@
     },
     "private": {
       "locked": {
-        "lastModified": 1719131410,
-        "narHash": "sha256-3fM9sFF2LovYOsyzILSwujT+uZU8sYbgLOwi1KRE9Js=",
+        "lastModified": 1720112444,
+        "narHash": "sha256-jLVdd7gC3y6zZpA3r9ecSsrVR6bmODJNVdVXA6bs73c=",
         "ref": "refs/heads/main",
-        "rev": "1b5f1ab6c2a9845c5b72203f94d21949f372688b",
-        "revCount": 2,
+        "rev": "facfd4b1305d26f4174a7f5aa594212b4f31fdba",
+        "revCount": 3,
         "type": "git",
         "url": "ssh://github.com:/jhakonen/nixos-config-private.git"
       },
@@ -225,8 +274,9 @@
         "home-manager": "home-manager",
         "home-manager-unstable": "home-manager-unstable",
         "lollypops": "lollypops",
+        "nix-rpi5": "nix-rpi5",
         "nixos-hardware": "nixos-hardware",
-        "nixpkgs": "nixpkgs_2",
+        "nixpkgs": "nixpkgs_3",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "nur": "nur",
         "private": "private"

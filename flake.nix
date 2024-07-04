@@ -3,6 +3,7 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+    nix-rpi5.url = "gitlab:vriska/nix-rpi5/main";
     nur.url = "github:nix-community/NUR";
     home-manager.url = "github:nix-community/home-manager/release-24.05";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
@@ -26,6 +27,7 @@
             , nixos-hardware
             , nixpkgs
             , nixpkgs-unstable
+            , nix-rpi5
             , nur
             , private
             , ... }@inputs:
@@ -39,7 +41,7 @@
       config.dep-inject = {
         # Injektoi riippuvuudet `specialArgs` muuttujan sijaan, lähde:
         #   https://jade.fyi/blog/flakes-arent-real/#injecting-dependencies
-        inherit agenix private;
+        inherit agenix nix-rpi5 private;
         catalog = pkgs.callPackage ./catalog.nix inputs;
         my-packages = pkgs.callPackage ./packages/nix {};
       };
@@ -131,6 +133,19 @@
       system = "aarch64-linux";
       modules = [
         ./hosts/kota-portti/configuration.nix
+        depInject
+        agenix.nixosModules.default
+        home-manager.nixosModules.default
+        lollypops.nixosModules.lollypops
+        lollypops-reboot-task
+        lollypops-rebuild-debug-task
+      ];
+    };
+
+    nixosConfigurations.toukka = nixpkgs.lib.nixosSystem {
+      system = "aarch64-linux";
+      modules = [
+        ./hosts/toukka/configuration.nix
         depInject
         agenix.nixosModules.default
         home-manager.nixosModules.default
