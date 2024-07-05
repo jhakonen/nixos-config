@@ -22,6 +22,7 @@ in
 
   imports = [
     ./hardware-configuration.nix
+    ../../modules
     ../../roles/nixos/common-programs.nix
   ];
 
@@ -66,6 +67,10 @@ in
       packages = with pkgs; [];
       openssh.authorizedKeys.keys = [ id-rsa-public-key ];
     };
+
+    # Anna nginxille pääsy let's encrypt serifikaattiin
+    nginx.extraGroups = [ "acme" ];
+
     root = {
       openssh.authorizedKeys.keys = [ id-rsa-public-key ];
     };
@@ -91,8 +96,22 @@ in
   # Listaa paketit jotka ovat saatavilla PATH:lla
   environment.systemPackages = with pkgs; [];
 
+  # Ota Let's Encryptin sertifikaatti käyttöön
+  security.acme = {
+    acceptTerms = true;
+    defaults = {
+      email = private.catalog.acmeEmail;
+      dnsProvider = "joker";
+      credentialsFile = config.age.secrets.acme-joker-credentials.path;
+    };
+    certs."kanto.lan.jhakonen.com".extraDomainNames = [ "*.kanto.lan.jhakonen.com" ];
+  };
+
   # Salaisuudet
   age.secrets = {
+    acme-joker-credentials.file = private.secret-files.acme-joker-credentials;
+    mosquitto-password.file = private.secret-files.mqtt-password;
+    rsyncbackup-password.file = private.secret-files.rsyncbackup-password;
     wireless-password.file = private.secret-files.wireless-password;
   };
 
@@ -106,6 +125,41 @@ in
       };
     };
   };
+
+  # Valvonnan asetukset
+  my.services.monitoring = {
+    enable = true;
+    acmeHost = "kanto.lan.jhakonen.com";
+    virtualHost = catalog.services.monit-kanto.public.domain;
+    mqttAlert = {
+      address = catalog.services.mosquitto.public.domain;
+      port = catalog.services.mosquitto.port;
+      passwordFile = config.age.secrets.mosquitto-password.path;
+    };
+  };
+
+  # Varmuuskopiointi
+  my.services.rsync = {
+    enable = true;
+    schedule = "*-*-* 0:00:00";
+    destinations = {
+      nas-minimal = {
+        username = "rsync-backup";
+        passwordFile = config.age.secrets.rsyncbackup-password.path;
+        host = catalog.nodes.nas.hostName;
+        path = "::backups/minimal/${config.networking.hostName}";
+      };
+      nas-normal = {
+        username = "rsync-backup";
+        passwordFile = config.age.secrets.rsyncbackup-password.path;
+        host = catalog.nodes.nas.hostName;
+        path = "::backups/normal/${config.networking.hostName}";
+      };
+    };
+  };
+
+  # Palomuurin asetukset
+  networking.firewall.allowedTCPPorts = [ 80 443 ];  # nginx
 
   # Älä muuta ellei ole pakko, ei edes uudempaan versioon päivittäessä
   system.stateVersion = "24.05";

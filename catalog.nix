@@ -56,6 +56,9 @@ in rec {
       useIp = true;
     };
     dellxps13 = {};
+    kanto = {
+      ip.private = "192.168.1.86";
+    };
     kota-portti = {
       ip.private = "192.168.1.132";
     };
@@ -184,6 +187,18 @@ in rec {
     loki = {
       host = nodes.nas-toolbox;
       port = 15000;
+    };
+    monit-kanto = {
+      host = nodes.kanto;
+      dashy = {
+        section = "valvonta";
+        description = "Monit - kanto";
+        icon = "hl-monit";
+      };
+      public = {
+        domain = "monit.kanto.lan.jhakonen.com";
+        port = 443;
+      };
     };
     monit-kota-portti = {
       host = nodes.nas-toolbox;

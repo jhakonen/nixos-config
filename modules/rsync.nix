@@ -152,6 +152,7 @@ let
             exit ''${RESULT}
           '';
   };
+  has-backup-jobs = backup-jobs != [];
 in {
   options.my.services.rsync = {
     enable = lib.mkEnableOption "rsync palvelu";
@@ -225,7 +226,7 @@ in {
     };
   };
 
-  config.environment.systemPackages = lib.mkIf cfg.enable
+  config.environment.systemPackages = lib.mkIf (cfg.enable && has-backup-jobs)
     ((builtins.map (job: job.app) backup-jobs) ++ [
       backup-all-app
       check-backup-times
@@ -272,12 +273,12 @@ in {
         name = "rsync-backup-${job.jobname}.service";
         expected = "succeeded";
       }
-    ) backup-jobs) ++ [
+    ) backup-jobs) ++ (if has-backup-jobs then [
       {
         type = "program";
         description = "Backups - Check backups are fresh";
         path = "${check-backup-times}/bin/rsync-check-backup-times.sh";
       }
-    ];
+    ] else []);
   };
 }
