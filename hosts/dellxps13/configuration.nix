@@ -257,6 +257,7 @@ in
     kate
     keepassxc
     libreoffice
+    kdePackages.isoimagewriter
     kdePackages.kaccounts-integration  # Lisää KDE asetuksiin Verkkotilit osion
     kdePackages.kaccounts-providers  # Lisää Verkkotilit osioon mahdollisuudeksi asentaa NextCloud tilin
     kdePackages.kdeconnect-kde
