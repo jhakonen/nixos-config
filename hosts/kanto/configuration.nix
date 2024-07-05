@@ -1,6 +1,6 @@
 { config, pkgs, ... }:
 let
-  inherit (config.dep-inject) catalog nix-rpi5 private;
+  inherit (config.dep-inject) catalog private;
 
   # Julkinen avain SSH:lla sisäänkirjautumista varten
   id-rsa-public-key =
@@ -22,6 +22,7 @@ in
 
   imports = [
     ./hardware-configuration.nix
+    ../../roles/nixos/common-programs.nix
   ];
 
   # Käytä systemd-boot EFI boot loaderia
@@ -32,7 +33,7 @@ in
   # Wifi tuki käyttäen wpa_supplicant palvelua
   networking.wireless = {
     enable = true;
-    environmentFile = "/root/wireless.env";
+    environmentFile = config.age.secrets.wireless-password.path;
     networks = {
       POSEIDON_5G.psk = "@POSEIDON_5G_PASSWORD@";
     };
@@ -90,6 +91,11 @@ in
   # Listaa paketit jotka ovat saatavilla PATH:lla
   environment.systemPackages = with pkgs; [];
 
+  # Salaisuudet
+  age.secrets = {
+    wireless-password.file = private.secret-files.wireless-password;
+  };
+
   services = {
     openssh = {
       enable = true;
@@ -101,5 +107,6 @@ in
     };
   };
 
-  system.stateVersion = "24.05"; # Did you read the comment?
+  # Älä muuta ellei ole pakko, ei edes uudempaan versioon päivittäessä
+  system.stateVersion = "24.05";
 }
