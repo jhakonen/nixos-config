@@ -102,6 +102,19 @@
       ];
     };
 
+    nixosConfigurations.kanto = nixpkgs.lib.nixosSystem {
+      system = "x86_64-linux";
+      modules = [
+        ./hosts/kanto/configuration.nix
+        depInject
+        agenix.nixosModules.default
+        home-manager.nixosModules.default
+        lollypops.nixosModules.lollypops
+        lollypops-reboot-task
+        lollypops-rebuild-debug-task
+      ];
+    };
+
     nixosConfigurations.nas-toolbox = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
