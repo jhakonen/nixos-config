@@ -2,12 +2,13 @@
 let
   inherit (config.dep-inject) catalog my-packages private;
 
-  resetBtDongle = pkgs.writeShellScript "reset-bt-dongle-and-service" ''
-    echo "Kytke virrat pois/päälle Bluetooth donglesta"
-    uhubctl --action=cycle --search='Realtek ASUS USB-BT500'
-    echo "Odota hetki jotta Bluetooth laite käynnistyy"
-    sleep 5
-  '';
+  # # Poistettu käytöstä, ehkä tätä ei tarvita rpi5:ssä?
+  # resetBtDongle = pkgs.writeShellScript "reset-bt-dongle-and-service" ''
+  #   echo "Kytke virrat pois/päälle Bluetooth donglesta"
+  #   uhubctl --action=cycle --search='Realtek ASUS USB-BT500'
+  #   echo "Odota hetki jotta Bluetooth laite käynnistyy"
+  #   sleep 5
+  # '';
 
   gatewayConfig = {
     mqtt = {
@@ -72,7 +73,7 @@ in
       mkdir -p ${dataDir}
       envsubst -i "${configFile}" -o "${dataDir}/bt-mqtt-gateway.yaml"
 
-      ${resetBtDongle}
+      # ''${resetBtDongle}
       '';
     serviceConfig = {
       Environment = "CONFIG_FILE=${dataDir}/bt-mqtt-gateway.yaml";
