@@ -2,29 +2,12 @@
 let
   inherit (config.dep-inject) catalog my-packages private;
 
-  # checkBluetoothExists = pkgs.writeShellScript "bluetooth-exists" ''
-  #   ${pkgs.bluez}/bin/hcitool dev | ${pkgs.gnugrep}/bin/grep -o 'hci[0-9]' >/dev/null
-  # '';
-
-  # checkRuuviTagsUpdated = pkgs.writeShellScript "check-ruuvitags-updated" ''
-  #   if [ $(${pkgs.systemd}/bin/systemctl show -p ActiveState --value bt-mqtt-gateway.service) != "inactive" ]; then
-  #     ${pkgs.systemd}/bin/journalctl -u bt-mqtt-gateway.service --since "15 min ago" | grep -s "Updating ruuvitag"
-  #   fi
-  # '';
-
   resetBtDongle = pkgs.writeShellScript "reset-bt-dongle-and-service" ''
     echo "Kytke virrat pois/päälle Bluetooth donglesta"
     uhubctl --action=cycle --search='Realtek ASUS USB-BT500'
     echo "Odota hetki jotta Bluetooth laite käynnistyy"
     sleep 5
   '';
-
-  # resetBtDongleAndService = pkgs.writeShellScript "reset-bt-dongle-and-service" ''
-  #   systemctl stop bt-mqtt-gateway.service
-  #   ${resetBtDongle}
-  #   systemctl start bt-mqtt-gateway.service
-  # '';
-
 
   gatewayConfig = {
     mqtt = {
@@ -85,18 +68,11 @@ in
     preStart = ''
       set +e
 
-      function get-bt-device() {
-        hcitool dev | grep -o 'hci[0-9]' | head -n1
-      }
-
       umask 077
       mkdir -p ${dataDir}
       envsubst -i "${configFile}" -o "${dataDir}/bt-mqtt-gateway.yaml"
 
-      #DEV_NAME=$(get-bt-device)
-      #if [ "$DEV_NAME" == "" ]; then
-        ${resetBtDongle}
-      #fi
+      ${resetBtDongle}
       '';
     serviceConfig = {
       Environment = "CONFIG_FILE=${dataDir}/bt-mqtt-gateway.yaml";
@@ -124,21 +100,5 @@ in
       name = config.systemd.services.bt-mqtt-gateway.name;
       expected = "running";
     }
-    # ({ notify, secsToCycles, ... }: ''
-    #   check program "Reboot if Bluetooth device disappears" with path "${checkBluetoothExists}"
-    #     if status != 0 then alert
-    #     if status != 0 for ${secsToCycles (15 * 60)} cycles then
-    #       exec "${notify} Bluetooth ${config.networking.hostName} koneella on ollut alhaalla 15 minuuttia, uudelleen käynnistys kohta"
-    #     if status != 0 for ${secsToCycles (20 * 60)} cycles then
-    #       exec "${pkgs.systemd}/bin/systemctl reboot"
-    # '')
-    # ({ notify, secsToCycles, ... }: ''
-    #   check program "Power cycle Bluetooth if no data" with path "${checkRuuviTagsUpdated}"
-    #     if status != 0 then alert
-    #     if status != 0 for ${secsToCycles (5 * 60)} cycles then
-    #       exec "${notify} Ei ruuvitag dataa ${config.networking.hostName} koneella on 20 minuuttiin, nollaa bt dongle"
-    #     if status != 0 for ${secsToCycles (5 * 60)} cycles then
-    #       exec "${resetBtDongleAndService}"
-    # '')
   ];
 }
