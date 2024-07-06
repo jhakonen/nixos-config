@@ -57,7 +57,7 @@ deploy -p all
 
 Koneiden uudelleen käynnistys:
 ```
-deploy kota-portti:reboot mervi:reboot kanto:reboot
+deploy kanto:reboot mervi:reboot toukka:reboot
 sudo reboot
 ```
 

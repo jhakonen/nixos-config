@@ -1,6 +1,7 @@
 { config, ... }:
 let
   inherit (config.dep-inject) catalog private;
+  acmeHost = "${config.networking.hostName}.lan.jhakonen.com";
 in
 {
   services.zigbee2mqtt = {
@@ -90,11 +91,11 @@ in
       };
       # Käytä Let's Encrypt sertifikaattia
       addSSL = true;
-      useACMEHost = "kota-portti.lan.jhakonen.com";
+      useACMEHost = acmeHost;
     };
   };
 
-  security.acme.certs."kota-portti.lan.jhakonen.com".extraDomainNames = [
+  security.acme.certs.${acmeHost}.extraDomainNames = [
     catalog.services.zigbee2mqtt.public.domain
   ];
 

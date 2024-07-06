@@ -62,9 +62,6 @@ in rec {
     kanto = {
       ip.private = "192.168.1.86";
     };
-    kota-portti = {
-      ip.private = "192.168.1.132";
-    };
     mervi = {};
     nas = {
       ip.private = "192.168.1.101";
@@ -180,18 +177,6 @@ in rec {
       };
       public = {
         domain = "monit.kanto.lan.jhakonen.com";
-        port = 443;
-      };
-    };
-    monit-kota-portti = {
-      host = nodes.kota-portti;
-      dashy = {
-        section = "valvonta";
-        description = "Monit - kota-portti";
-        icon = "hl-monit";
-      };
-      public = {
-        domain = "monit.kota-portti.lan.jhakonen.com";
         port = 443;
       };
     };
