@@ -154,7 +154,7 @@ in
     enable = true;
     gui-port = catalog.services.syncthing-mervi.port;
     settings = {
-      devices = catalog.syncthing-devices;
+      devices = catalog.pickSyncthingDevices ["dellxps13" "nas"];
       folders = {
         "Keepass" = {
           path = "/home/jhakonen/Keepass";

@@ -28,25 +28,47 @@ in
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ../../modules
-      ../../roles/nixos/calibre.nix
+      #../../roles/nixos/calibre.nix
       ../../roles/nixos/common-programs.nix
-      ../../roles/nixos/dashy.nix
-      ../../roles/nixos/freshrss.nix
-      ../../roles/nixos/grafana.nix
-      ../../roles/nixos/home-assistant.nix
-      ../../roles/nixos/huginn.nix
-      ../../roles/nixos/influxdb.nix
+      #../../roles/nixos/dashy.nix
+      #../../roles/nixos/freshrss.nix
+      #../../roles/nixos/grafana.nix
+      #../../roles/nixos/home-assistant.nix
+      #../../roles/nixos/huginn.nix
+      #../../roles/nixos/influxdb.nix
       # ../../roles/nixos/loki.nix - Tässä on jotain konfiguraatio-ongelmia, en tajua
-      ../../roles/nixos/mosquitto.nix
-      ../../roles/nixos/mqttwarn.nix
-      ../../roles/nixos/nextcloud.nix
+      #../../roles/nixos/mosquitto.nix
+      #../../roles/nixos/mqttwarn.nix
+      #../../roles/nixos/nextcloud.nix
       ../../roles/nixos/nix-cleanup.nix
-      ../../roles/nixos/node-red.nix
-      ../../roles/nixos/paperless.nix
+      #../../roles/nixos/node-red.nix
+      #../../roles/nixos/paperless.nix
       # ../../roles/nixos/promtail.nix - Loki on poissa käytöstä
-      ../../roles/nixos/telegraf.nix
+      #../../roles/nixos/telegraf.nix
       ../../roles/nixos/zsh.nix
     ];
+
+
+
+
+
+  fileSystems."/var/lib/nextcloud" = {
+    device = "${catalog.nodes.nas.ip.private}:/volume1/nextcloud";
+    fsType = "nfs";
+    options = [
+      "noauto"
+      "x-systemd.automount"
+      "x-systemd.after=network-online.target"
+      "x-systemd.mount-timeout=90"
+    ];
+  };
+
+
+
+
+
+
+
 
   # Bootloader.
   boot.loader.grub = {
@@ -229,7 +251,7 @@ in
     user = "root";
     data-dir = "/root";
     settings = {
-      devices = catalog.syncthing-devices;
+      devices = catalog.pickSyncthingDevices ["nas"];
     };
   };
 

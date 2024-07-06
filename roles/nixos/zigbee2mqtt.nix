@@ -13,7 +13,6 @@ in
         base_topic = "zigbee2mqtt";
         server = "mqtts://mqtt.jhakonen.com";
         user = "koti";
-        ca = "/etc/ssl/certs/ca-bundle.crt";
         reject_unauthorized = true;
       };
       advanced.report = true;

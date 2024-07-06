@@ -196,10 +196,14 @@ in
     enable = true;
     gui-port = catalog.services.syncthing-dellxps13.port;
     settings = {
-      devices = catalog.syncthing-devices;
+      devices = catalog.pickSyncthingDevices ["mervi" "nas"];
       folders = {
         "Calibre" = {
           path = "/home/jhakonen/Calibre";
+          devices = [ "nas" ];
+        };
+        "Jaot" = {
+          path = "/home/jhakonen/Jaot";
           devices = [ "nas" ];
         };
         "Keepass" = {

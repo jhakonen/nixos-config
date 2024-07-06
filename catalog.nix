@@ -46,6 +46,9 @@ in rec {
   inherit getServicePort;
   inherit getServiceAddress;
 
+  pickSyncthingDevices = names:
+    lib.filterAttrs (n: v: lib.elem n names) syncthing-devices;
+
   nodes = addHostNames {
     asus-router = {
       ip.private = "192.168.1.1";
@@ -101,7 +104,7 @@ in rec {
       };
     };
     calibre-web = {
-      host = nodes.nas-toolbox;
+      host = nodes.kanto;
       port = 17000;
       dashy = {
         section = "viihde";
@@ -114,14 +117,14 @@ in rec {
       };
     };
     dashy = {
-      host = nodes.nas-toolbox;
+      host = nodes.kanto;
       port = 13000;
       public = {
         domain = "dashy.jhakonen.com";
       };
     };
     freshrss = {
-      host = nodes.nas-toolbox;
+      host = nodes.kanto;
       dashy = {
         section = "palvelut";
         description = "RSS lukija";
@@ -133,7 +136,7 @@ in rec {
       };
     };
     grafana = {
-      host = nodes.nas-toolbox;
+      host = nodes.kanto;
       port = 3000;
       dashy = {
         section = "valvonta";
@@ -146,7 +149,7 @@ in rec {
       };
     };
     home-assistant = {
-      host = nodes.nas-toolbox;
+      host = nodes.kanto;
       port = 8123;
       dashy = {
         section = "palvelut";
@@ -159,7 +162,7 @@ in rec {
       };
     };
     huginn = {
-      host = nodes.nas-toolbox;
+      host = nodes.kanto;
       port = 14000;
       dashy = {
         section = "palvelut";
@@ -172,7 +175,7 @@ in rec {
       };
     };
     influx-db = {
-      host = nodes.nas-toolbox;
+      host = nodes.kanto;
       port = 8086;
     };
     kodi = {
@@ -259,7 +262,7 @@ in rec {
       };
     };
     mosquitto = {
-      host = nodes.nas-toolbox;
+      host = nodes.kanto;
       port = 8883;
       public = {
         domain = "mqtt.jhakonen.com";
@@ -275,7 +278,7 @@ in rec {
       };
     };
     nextcloud = {
-      host = nodes.nas-toolbox;
+      host = nodes.kanto;
       port = 16000;
       dashy = {
         section = "palvelut";
@@ -288,7 +291,7 @@ in rec {
       };
     };
     node-red = {
-      host = nodes.nas-toolbox;
+      host = nodes.kanto;
       port = 1880;
       dashy = {
         section = "palvelut";
@@ -301,7 +304,7 @@ in rec {
       };
     };
     paperless = {
-      host = nodes.nas-toolbox;
+      host = nodes.kanto;
       port = 12000;
       dashy = {
         section = "palvelut";
@@ -350,6 +353,15 @@ in rec {
       dashy = {
         section = "syncthing";
         description = "Syncthing - Dell XPS 13";
+        icon = "hl-syncthing";
+      };
+    };
+    syncthing-kanto = {
+      host = nodes.kanto;
+      port = 8384;
+      dashy = {
+        section = "syncthing";
+        description = "Syncthing - kanto";
         icon = "hl-syncthing";
       };
     };

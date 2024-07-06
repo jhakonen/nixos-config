@@ -123,24 +123,6 @@ in
   # Avaa palomuuriin palvelulle reikä
   networking.firewall.allowedTCPPorts = [ catalog.services.nextcloud.port ];
 
-  users = lib.mkIf config.services.nextcloud.enable {
-    # Nämä ID arvot tulee olla samat kuin Synologyssä
-    users.nextcloud.uid = 1032;
-    groups.nextcloud.gid = 65538;
-  };
-
-  # Liitä Nextcloudin datakansio NFS:n yli NAS:lta
-  fileSystems.${config.services.nextcloud.datadir} = {
-    device = "${catalog.nodes.nas.ip.private}:/volume1/nextcloud";
-    fsType = "nfs";
-    options = [
-      "noauto"
-      "x-systemd.automount"
-      "x-systemd.after=network-online.target"
-      "x-systemd.mount-timeout=90"
-    ];
-  };
-
   # Varmuuskopiointi
   my.services.rsync.jobs.nextcloud = {
     preHooks = [ "${backupPrepare}/bin/nextcloud-backup-pre" ];

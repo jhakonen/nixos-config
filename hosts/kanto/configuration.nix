@@ -24,6 +24,22 @@ in
     ./hardware-configuration.nix
     ../../modules
     ../../roles/nixos/common-programs.nix
+
+    ../../roles/nixos/calibre.nix
+    ../../roles/nixos/dashy.nix
+    ../../roles/nixos/freshrss.nix
+    ../../roles/nixos/grafana.nix
+    ../../roles/nixos/home-assistant.nix
+    ../../roles/nixos/huginn.nix
+    ../../roles/nixos/influxdb.nix
+    ../../roles/nixos/mosquitto.nix
+    ../../roles/nixos/mqttwarn.nix
+    ../../roles/nixos/nextcloud.nix
+    ../../roles/nixos/nix-cleanup.nix
+    ../../roles/nixos/node-red.nix
+    ../../roles/nixos/paperless.nix
+    ../../roles/nixos/telegraf.nix
+    ../../roles/nixos/zsh.nix
   ];
 
   # Käytä systemd-boot EFI boot loaderia
@@ -104,7 +120,10 @@ in
       dnsProvider = "joker";
       credentialsFile = config.age.secrets.acme-joker-credentials.path;
     };
-    certs."kanto.lan.jhakonen.com".extraDomainNames = [ "*.kanto.lan.jhakonen.com" ];
+    certs."jhakonen.com".extraDomainNames = [
+      "*.jhakonen.com"
+      "*.kanto.lan.jhakonen.com"
+    ];
   };
 
   # Salaisuudet
@@ -129,7 +148,7 @@ in
   # Valvonnan asetukset
   my.services.monitoring = {
     enable = true;
-    acmeHost = "kanto.lan.jhakonen.com";
+    acmeHost = "jhakonen.com";
     virtualHost = catalog.services.monit-kanto.public.domain;
     mqttAlert = {
       address = catalog.services.mosquitto.public.domain;
@@ -155,6 +174,17 @@ in
         host = catalog.nodes.nas.hostName;
         path = "::backups/normal/${config.networking.hostName}";
       };
+    };
+  };
+
+  # Tiedostojen synkkaus
+  my.services.syncthing = {
+    enable = true;
+    gui-port = catalog.services.syncthing-kanto.port;
+    user = "root";
+    data-dir = "/root";
+    settings = {
+      devices = catalog.pickSyncthingDevices ["nas"];
     };
   };
 
