@@ -61,13 +61,14 @@ in {
       name = config.systemd.services.mosquitto.name;
       expected = "running";
     }
-    ({ notify, ... }:
+    ({ notify, secsToCycles, ... }:
     ''
       check host "Mosquitto - MQTT connection" with address ${catalog.services.mosquitto.public.domain}
         if failed
           port ${toString catalog.services.mosquitto.port}
           ssl
           protocol mqtt username testi password testi
+          for ${secsToCycles (60 * 5)} cycles
         then
           exec "${notify} ${config.networking.hostName} - check Mosquitto - MQTT connection has failed"
     '')
