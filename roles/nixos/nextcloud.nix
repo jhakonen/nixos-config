@@ -42,6 +42,13 @@ let
       rm -f "${backupDbPath}"
     '';
   };
+  generateThumbnails = pkgs.writeShellApplication {
+    name = "nextcloud-generate-thumbnails";
+    runtimeInputs = [
+      config.services.nextcloud.occ
+    ];
+    text = "nextcloud-occ preview:pre-generate";
+  };
 in
 {
   services = {
@@ -119,6 +126,16 @@ in
     backupPrepare
     backupCleanup
   ];
+
+  # Generoi esikatselukuvat automaattisesti
+  systemd.services."nextcloud-thumbnail-generate" = {
+    script = lib.getExe generateThumbnails;
+    startAt = "daily";
+    serviceConfig = {
+      User = "nextcloud";
+      Group = "nextcloud";
+    };
+  };
 
   # Avaa palomuuriin palvelulle reikä
   networking.firewall.allowedTCPPorts = [ catalog.services.nextcloud.port ];
