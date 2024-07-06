@@ -173,9 +173,24 @@ in
     rsyncbackup-password.file = private.secret-files.rsyncbackup-password;
   };
 
-  # SSH palvelimen asetukset
-  services.openssh.enable = true;
-  services.openssh.settings.PermitRootLogin = "yes";
+  services = {
+    nginx.virtualHosts."default" = {
+      default = true;
+      # Vastaa määrittelemättömään domainiin tai porttiin 403 virheellä
+      locations."/".extraConfig = ''
+        deny all;
+      '';
+    };
+
+    openssh = {
+      enable = true;
+      settings = {
+        # Vaadi SSH sisäänkirjautuminen käyttäen vain yksityistä avainta
+        PasswordAuthentication = false;
+        KbdInteractiveAuthentication = false;
+      };
+    };
+  };
 
   # Palomuurin asetukset
   networking.firewall.allowedTCPPorts = [ 80 443 ];  # nginx

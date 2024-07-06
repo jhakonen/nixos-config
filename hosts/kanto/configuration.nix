@@ -23,9 +23,8 @@ in
   imports = [
     ./hardware-configuration.nix
     ../../modules
-    ../../roles/nixos/common-programs.nix
-
     ../../roles/nixos/calibre.nix
+    ../../roles/nixos/common-programs.nix
     ../../roles/nixos/dashy.nix
     ../../roles/nixos/freshrss.nix
     ../../roles/nixos/grafana.nix
@@ -95,10 +94,10 @@ in
   home-manager.users = {
     jhakonen = {
       imports = [
-        # ../../roles/home-manager/mqtt-client.nix
+        ../../roles/home-manager/mqtt-client.nix
         ../../roles/home-manager/zsh.nix
       ];
-      # roles.mqtt-client.passwordFile = config.age.secrets.jhakonen-mosquitto-password.path;
+      roles.mqtt-client.passwordFile = config.age.secrets.jhakonen-mosquitto-password.path;
       home.stateVersion = "24.05";
     };
     root = {
@@ -129,12 +128,24 @@ in
   # Salaisuudet
   age.secrets = {
     acme-joker-credentials.file = private.secret-files.acme-joker-credentials;
+    jhakonen-mosquitto-password = {
+      file = private.secret-files.mqtt-password;
+      owner = "jhakonen";
+    };
     mosquitto-password.file = private.secret-files.mqtt-password;
     rsyncbackup-password.file = private.secret-files.rsyncbackup-password;
     wireless-password.file = private.secret-files.wireless-password;
   };
 
   services = {
+    nginx.virtualHosts."default" = {
+      default = true;
+      # Vastaa määrittelemättömään domainiin tai porttiin 403 virheellä
+      locations."/".extraConfig = ''
+        deny all;
+      '';
+    };
+
     openssh = {
       enable = true;
       settings = {
