@@ -57,18 +57,18 @@ deploy -p all
 
 Koneiden uudelleen käynnistys:
 ```
-deploy kota-portti:reboot mervi:reboot nas-toolbox:reboot
+deploy kota-portti:reboot mervi:reboot kanto:reboot
 sudo reboot
 ```
 
 Jos etäkone ei löydä pakettia cache.nixos.org:sta ja sen käännös epäonnistuu, paketin voi kokeilla asentaa läppärillä ja lähettää sen etäkoneelle ennen deployn uudelleenyritystä.
 
-Esimerkkinä grafanan käännös feilaa nas-toolbox koneella:
+Esimerkkinä grafanan käännös feilaa kanto koneella:
 ```
 nix shell --inputs-from . nixpkgs#grafana
 which grafana
 > /nix/store/bgxpkjnfx9dp3yyjvkcrmcpmga0qiy1w-grafana-10.2.6/bin/grafana
-nix-copy-closure --to root@nas-toolbox /nix/store/bgxpkjnfx9dp3yyjvkcrmcpmga0qiy1w-grafana-10.2.6
+nix-copy-closure --to root@kanto /nix/store/bgxpkjnfx9dp3yyjvkcrmcpmga0qiy1w-grafana-10.2.6
 ```
 
 # Järjestelmän päivitys uudempaan Nixos julkaisuun

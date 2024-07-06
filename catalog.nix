@@ -69,9 +69,6 @@ in rec {
     nas = {
       ip.private = "192.168.1.101";
     };
-    nas-toolbox = {
-      ip.private = "192.168.1.171";
-    };
     nas-nextcloud-vm = {
       ip.private = "192.168.1.49";
     };
@@ -90,19 +87,6 @@ in rec {
   };
 
   services = addServiceNames {
-    bitwarden = {
-      host = nodes.nas-toolbox;
-      port = 10000;
-      dashy = {
-        section = "palvelut";
-        description = "Salasanojen hallinta";
-        icon = "hl-bitwarden";
-      };
-      public = {
-        domain = "bitwarden.jhakonen.com";
-        port = 443;
-      };
-    };
     calibre-web = {
       host = nodes.kanto;
       port = 17000;
@@ -187,10 +171,6 @@ in rec {
         icon = "hl-kodi";
       };
     };
-    loki = {
-      host = nodes.nas-toolbox;
-      port = 15000;
-    };
     monit-kanto = {
       host = nodes.kanto;
       dashy = {
@@ -204,7 +184,7 @@ in rec {
       };
     };
     monit-kota-portti = {
-      host = nodes.nas-toolbox;
+      host = nodes.kota-portti;
       dashy = {
         section = "valvonta";
         description = "Monit - kota-portti";
@@ -224,18 +204,6 @@ in rec {
       };
       public = {
         domain = "monit.mervi.lan.jhakonen.com";
-        port = 443;
-      };
-    };
-    monit-nas-toolbox = {
-      host = nodes.nas-toolbox;
-      dashy = {
-        section = "valvonta";
-        description = "Monit - nas-toolbox";
-        icon = "hl-monit";
-      };
-      public = {
-        domain = "monit.nas-toolbox.lan.jhakonen.com";
         port = 443;
       };
     };
@@ -380,15 +348,6 @@ in rec {
       dashy = {
         section = "syncthing";
         description = "Syncthing - NAS";
-        icon = "hl-syncthing";
-      };
-    };
-    syncthing-nas-toolbox = {
-      host = nodes.nas-toolbox;
-      port = 8384;
-      dashy = {
-        section = "syncthing";
-        description = "Syncthing - nas-toolbox";
         icon = "hl-syncthing";
       };
     };

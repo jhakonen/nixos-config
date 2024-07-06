@@ -19,7 +19,7 @@ in
           "bt-mqtt-gateway/ruuvitag/+/temperature"
         ];
         topic_tag = "topic";
-        client_id = "telegraf-nas-toolbox";
+        client_id = "${config.networking.hostName}-telegraf";
         username = "koti";
         password = "$MQTT_PASSWORD";
         data_format = "value";

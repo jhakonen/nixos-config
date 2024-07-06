@@ -115,19 +115,6 @@
       ];
     };
 
-    nixosConfigurations.nas-toolbox = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
-      modules = [
-        ./hosts/nas-toolbox/configuration.nix
-        depInject
-        agenix.nixosModules.default
-        home-manager.nixosModules.default
-        lollypops.nixosModules.lollypops
-        lollypops-reboot-task
-        lollypops-rebuild-debug-task
-      ];
-    };
-
     nixosConfigurations.mervi = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
@@ -137,19 +124,6 @@
         home-manager.nixosModules.default
         lollypops.nixosModules.lollypops
         nur.nixosModules.nur
-        lollypops-reboot-task
-        lollypops-rebuild-debug-task
-      ];
-    };
-
-    nixosConfigurations.kota-portti = nixpkgs.lib.nixosSystem {
-      system = "aarch64-linux";
-      modules = [
-        ./hosts/kota-portti/configuration.nix
-        depInject
-        agenix.nixosModules.default
-        home-manager.nixosModules.default
-        lollypops.nixosModules.lollypops
         lollypops-reboot-task
         lollypops-rebuild-debug-task
       ];

@@ -14,7 +14,7 @@ in
         port = catalog.services.mosquitto.port;
         username = "koti";
         password = "$ENV:MQTT_PASSWORD";
-        clientid = "nas-toolbox-mqttwarn";
+        clientid = "${config.networking.hostName}-mqttwarn";
         tls = true;
         tls_version = "tlsv1_2";
         tls_insecure = false;
