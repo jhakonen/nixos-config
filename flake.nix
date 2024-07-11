@@ -9,6 +9,8 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     home-manager-unstable.url = "github:nix-community/home-manager";
     home-manager-unstable.inputs.nixpkgs.follows = "nixpkgs-unstable";
+    lix-module.url = "https://git.lix.systems/lix-project/nixos-module/archive/2.90.0.tar.gz";
+    lix-module.inputs.nixpkgs.follows = "nixpkgs";
     lollypops.url = "github:pinpox/lollypops";
     agenix.url = "github:ryantm/agenix";
     agenix.inputs.nixpkgs.follows = "nixpkgs";
@@ -23,6 +25,7 @@
             , agenix
             , home-manager
             , home-manager-unstable
+            , lix-module
             , lollypops
             , nixos-hardware
             , nixpkgs
@@ -87,6 +90,7 @@
         depInject
         agenix.nixosModules.default
         home-manager.nixosModules.home-manager
+        lix-module.nixosModules.default
         lollypops.nixosModules.lollypops
         lollypops-rebuild-debug-task
         nixos-hardware.nixosModules.common-cpu-intel
@@ -109,6 +113,7 @@
         depInject
         agenix.nixosModules.default
         home-manager.nixosModules.default
+        lix-module.nixosModules.default
         lollypops.nixosModules.lollypops
         lollypops-reboot-task
         lollypops-rebuild-debug-task
@@ -122,6 +127,7 @@
         depInject
         agenix.nixosModules.default
         home-manager.nixosModules.default
+        lix-module.nixosModules.default
         lollypops.nixosModules.lollypops
         nur.nixosModules.nur
         lollypops-reboot-task
@@ -136,6 +142,7 @@
         depInject
         agenix.nixosModules.default
         home-manager.nixosModules.default
+        lix-module.nixosModules.default
         lollypops.nixosModules.lollypops
         lollypops-reboot-task
         lollypops-rebuild-debug-task
