@@ -31,6 +31,7 @@ in
     virtualHosts.${catalog.services.grafana.public.domain} = {
       locations."/" = {
         proxyPass = "http://127.0.0.1:${toString catalog.services.grafana.port}";
+        proxyWebsockets = true;
         recommendedProxySettings = true;
       };
       # Käytä Let's Encrypt sertifikaattia
