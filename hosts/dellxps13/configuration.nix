@@ -126,6 +126,9 @@ in
     #media-session.enable = true;
   };
 
+  # Ota Flirc USB-mokkulan ohjelmointityökalut käyttöön
+  hardware.flirc.enable = true;
+
   # Salaisuudet
   age.secrets = {
     rsyncbackup-password.file = private.secret-files.rsyncbackup-password;
@@ -222,7 +225,12 @@ in
   users.users.jhakonen = {
     isNormalUser = true;
     description = "Janne Hakonen";
-    extraGroups = [ "adbusers" "networkmanager" "wheel" ];
+    extraGroups = [
+      "adbusers"
+      "networkmanager"
+      "vboxusers"
+      "wheel"
+    ];
     openssh.authorizedKeys.keys = [ id-rsa-public-key ];
   };
   users.users.root = {
@@ -314,6 +322,12 @@ in
 
   programs.adb.enable = true;
 
+  # Ota AppImage tuki käyttöön
+  # programs.appimage = {
+  #   enable = true;
+  #   binfmt = true;
+  # };
+
   programs.steam.enable = true;
 
   programs.dconf.enable = true;  # Easyeffects tarvitsee tämän
@@ -362,4 +376,10 @@ in
   }];
 
   services.fwupd.enable = true;
+
+  # Ota Oracle Virtualbox tuki käyttöön
+  virtualisation.virtualbox.host = {
+    enable = true;
+    enableExtensionPack = true;
+  };
 }
