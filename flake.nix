@@ -46,6 +46,7 @@
         #   https://jade.fyi/blog/flakes-arent-real/#injecting-dependencies
         inherit agenix nix-rpi5 private;
         catalog = pkgs.callPackage ./catalog.nix inputs;
+        koti = (pkgs.callPackage ./tools/koti {}).package;
         my-packages = pkgs.callPackage ./packages/nix {};
       };
     };

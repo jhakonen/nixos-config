@@ -3,6 +3,11 @@
   programs.zsh = {
     enable = true;
     autosuggestion.enable = true;
+
+    # Ota completion tuki pois päältä jotta HM ei heitä järjestelmätason
+    # completion asetuksia roskiin
+    enableCompletion = false;
+
     initExtra = ''
       # Kopioitu osoitteesta https://wiki.archlinux.org/title/Zsh#Key_bindings
       typeset -g -A key

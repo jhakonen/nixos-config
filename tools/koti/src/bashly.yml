@@ -1,0 +1,50 @@
+name: koti
+help: Työkalu NixOS koneiden hallintaan
+version: <%= ENV.fetch('KOTI_VERSION', '0.0.0') %>
+
+commands:
+- name: muokkaa
+  help: Avaa NixOS asetustiedostot editoriin
+  examples:
+  - koti muokkaa
+
+- name: rakenna
+  help: Uudelleenrakenna NixOS-koneita
+  args:
+  - name: kone
+    help: Lista NixOS-koneita jotka rakennetaan
+    allowed: &koneet
+    - dellxps13
+    - kanto
+    - mervi
+    - toukka
+    default: *koneet
+    repeatable: true
+    unique: true
+
+  flags:
+    - long: --toiminto
+      short: -t
+      help: Uudelleenrakennuksen toiminto
+      arg: toiminto
+      default: switch
+      allowed: [boot, dry-activate, switch, test]
+    - long: --debug
+      short: -d
+      help: Käytä debug-tulostusta
+
+  examples:
+  - koti rakenna dellxps13 kanto
+
+- name: buuttaa
+  help: Uudelleenkäynnistä NixOS-koneet
+  args:
+  - name: kone
+    help: Lista NixOS-koneita jotka käynnistetään uudelleen
+    allowed: &koneet
+    - kanto
+    - mervi
+    - toukka
+    default: *koneet
+    repeatable: true
+    unique: true

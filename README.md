@@ -19,28 +19,22 @@ Host github.com
 ```
 
 
-# Taskien listaus
-
-```bash
-deploy --list-all
-```
-
 # Konfiguraation deployaus
 
 ```bash
-deploy <kone>
+koti rakenna <kone>
 ```
 
 Esim.
 
 ```bash
-deploy dellxps13
+koti rakenna dellxps13
 ```
 
 Debuggaus:
 
 ```bash
-deploy <kone>:rebuild-debug
+koti rakenna --debug <kone>
 ```
 
 # Järjestelmien päivitys
@@ -52,12 +46,12 @@ nix flake update
 
 Kaikkien koneiden päivitys:
 ```bash
-deploy -p all
+koti rakenna
 ```
 
 Koneiden uudelleen käynnistys:
 ```
-deploy kanto:reboot mervi:reboot toukka:reboot
+koti buuttaa kanto mervi toukka
 sudo reboot
 ```
 
@@ -93,14 +87,14 @@ Estä läppärin meneminen valmiustilaan jotta verkkoyhteys ei katkea kesken kai
 Testaa että päivitys onnistuu:
 
 ```bash
-REBUILD_ACTION=test deploy <kone>
+koti rakenna -t test <kone>
 ```
 
 Lopuksi tee boot entry ja käynnistä kone uudelleen:
 
 ```bash
-REBUILD_ACTION=boot deploy <kone>
-deploy <kone>:reboot
+koti rakenna -t boot <kone>
+koti buuttaa <kone>
 ```
 
 Toista kullekkin koneelle.
@@ -142,7 +136,7 @@ private.url = "path:///home/jhakonen/nixos-config/private";
 
 Deploymentti läppärillä:
 ```bash
-nix flake lock --update-input private && deploy dellxps13
+nix flake lock --update-input private && koti rakenna dellxps13
 ```
 
 Deploymentti etäkoneella:

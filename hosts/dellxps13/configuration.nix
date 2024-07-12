@@ -47,6 +47,7 @@ in
     ../../modules
     ../../roles/nixos/beeper.nix
     ../../roles/nixos/common-programs.nix
+    ../../roles/nixos/koti.nix
     ../../roles/nixos/nix-cleanup.nix
     ../../roles/nixos/zsh.nix
   ];
@@ -291,14 +292,6 @@ in
     sublime4
     syncthingtray-minimal
     trayscale
-    (pkgs.writeShellApplication {
-      name = "deploy";
-      runtimeInputs = [ ];
-      text = ''
-        cd /home/jhakonen/nixos-config/public
-        nix run '.' -- "$@"
-      '';
-    })
   ];
 
   # Esimerkki miten ohjelman paketin voi overridata käyttäen overlaytä
@@ -339,7 +332,6 @@ in
 
   programs.zsh.shellAliases = {
     qmv = "qmv --editor='subl --launch-or-new-window --wait' --format=destination-only --verbose";
-    nixos-edit = "subl --project ~/nixos-config/nixos-config.sublime-project";
   };
 
   # List services that you want to enable:
