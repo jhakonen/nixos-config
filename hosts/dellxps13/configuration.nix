@@ -184,11 +184,6 @@ in
       PasswordAuthentication = false;
       KbdInteractiveAuthentication = false;
     };
-    # Salli yhteydenotto vain localhostin kautta (tarvitaan lollypopsia varten)
-    listenAddresses = [{
-      addr = "127.0.0.1";
-      port = 22;
-    }];
   };
 
   # Thunderbolt tuki

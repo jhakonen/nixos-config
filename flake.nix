@@ -11,7 +11,6 @@
     home-manager-unstable.inputs.nixpkgs.follows = "nixpkgs-unstable";
     lix-module.url = "https://git.lix.systems/lix-project/nixos-module/archive/2.90.0.tar.gz";
     lix-module.inputs.nixpkgs.follows = "nixpkgs";
-    lollypops.url = "github:pinpox/lollypops";
     agenix.url = "github:ryantm/agenix";
     agenix.inputs.nixpkgs.follows = "nixpkgs";
     agenix.inputs.home-manager.follows = "home-manager";
@@ -26,7 +25,6 @@
             , home-manager
             , home-manager-unstable
             , lix-module
-            , lollypops
             , nixos-hardware
             , nixpkgs
             , nixpkgs-unstable
@@ -50,30 +48,6 @@
         my-packages = pkgs.callPackage ./packages/nix {};
       };
     };
-    lollypops-reboot-task = { config, ... }: {
-      lollypops.extraTasks.reboot = {
-        desc = "Reboot machine";
-        cmds = [
-          "echo Rebooting machine"
-          "ssh ${config.lollypops.deployment.ssh.user}@${config.lollypops.deployment.ssh.host} reboot"
-        ];
-      };
-    };
-    lollypops-rebuild-debug-task = { config, ... }: {
-      lollypops.extraTasks.rebuild-debug = {
-        desc = "Rebuild with debug output";
-        deps = [ "deploy-flake" "deploy-secrets" ];
-        cmds = [
-          "echo Rebuilding with debug information"
-          ''
-          ssh ${config.lollypops.deployment.ssh.user}@${config.lollypops.deployment.ssh.host} \
-            'nixos-rebuild switch \
-              --flake "$(readlink -f ${config.lollypops.deployment.config-dir}/flake)#${config.lollypops.deployment.ssh.host}" \
-              --show-trace --verbose --option eval-cache false'
-          ''
-        ];
-      };
-    };
   in {
     overlays = {
       unstable-packages = final: prev: {
@@ -92,8 +66,6 @@
         agenix.nixosModules.default
         home-manager.nixosModules.home-manager
         lix-module.nixosModules.default
-        lollypops.nixosModules.lollypops
-        lollypops-rebuild-debug-task
         nixos-hardware.nixosModules.common-cpu-intel
         nixos-hardware.nixosModules.common-pc-laptop
         nixos-hardware.nixosModules.common-pc-ssd
@@ -102,7 +74,6 @@
           nixpkgs.overlays = [
             outputs.overlays.unstable-packages
           ];
-          lollypops.deployment.ssh.host = "localhost";
         }
       ];
     };
@@ -115,9 +86,6 @@
         agenix.nixosModules.default
         home-manager.nixosModules.default
         lix-module.nixosModules.default
-        lollypops.nixosModules.lollypops
-        lollypops-reboot-task
-        lollypops-rebuild-debug-task
       ];
     };
 
@@ -129,10 +97,7 @@
         agenix.nixosModules.default
         home-manager.nixosModules.default
         lix-module.nixosModules.default
-        lollypops.nixosModules.lollypops
         nur.nixosModules.nur
-        lollypops-reboot-task
-        lollypops-rebuild-debug-task
       ];
     };
 
@@ -144,12 +109,7 @@
         agenix.nixosModules.default
         home-manager.nixosModules.default
         lix-module.nixosModules.default
-        lollypops.nixosModules.lollypops
-        lollypops-reboot-task
-        lollypops-rebuild-debug-task
       ];
     };
-
-    apps."x86_64-linux".default = lollypops.apps."x86_64-linux".default { configFlake = self; };
   };
 }
