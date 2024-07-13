@@ -4,6 +4,13 @@ rec {
   shell = pkgs.mkShellNoCC {
     packages = with pkgs; [
       bashly
+      coreutils
+      ets
+      findutils
+      iputils
+      ncurses
+      nettools
+      openssh
     ];
   };
 }
