@@ -4,6 +4,7 @@
   coreutils,
   ets,
   findutils,
+  glibcLocales,
   gnugrep,
   installShellFiles,
   iputils,
@@ -20,12 +21,15 @@ resholve.mkDerivation rec {
 
   nativeBuildInputs = [
     bashly
+    glibcLocales
     installShellFiles
   ];
 
   buildPhase = ''
     runHook preBuild
-    KOTI_VERSION="${version}" bashly generate
+    export LANG=en_US.UTF-8
+    export KOTI_VERSION="${version}"
+    bashly generate
     bashly add completions_script
     runHook postBuild
   '';
@@ -41,6 +45,7 @@ resholve.mkDerivation rec {
   solutions = {
     default = {
       execer = [
+        "cannot:${openssh}/bin/ssh"
         "cannot:${openssh}/bin/ssh-keygen"
         "cannot:${openssh}/bin/ssh-keyscan"
 

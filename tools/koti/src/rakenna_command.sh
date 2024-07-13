@@ -12,13 +12,18 @@ koneet=($(suodata_koneet "${koneet[@]}"))
 komennot=()
 for kone in "${koneet[@]}"; do
   komento="nixos-rebuild $toiminto --flake '.#$kone' --fast"
+
   if [ "$kone" != "$(hostname)" ]; then
-    # Varmista etta SSH-komento ei kysy etta luotetaanko koneeseen
+    komento+=" --build-host root@$kone --target-host root@$kone"
+
+    # Varmista että SSH-komento ei kysy että luotetaanko koneeseen
     ssh-keygen -R "$kone" >/dev/null
     ssh-keyscan "$kone" 2>/dev/null >> ~/.ssh/known_hosts
-
-    komento+=" --build-host root@$kone --target-host root@$kone"
+  elif [ "root" != "$(whoami)" ]; then
+    echo "${PUNAINEN}Koneen '$kone' uudelleenrakennus vaatii sudo-oikeudet${NOLLAA}" >&2
+    exit 1
   fi
+
   if [ $debug ]; then
     komento+=" --show-trace"
   fi
@@ -32,7 +37,7 @@ for i in "${!koneet[@]}"; do
   kone="${koneet[$i]}"
   komento="${komennot[$i]}"
   echo $komento
-  # Aja nixos-rebuild taustalla jotta koneiden rebuild voidaan tehda samaan
+  # Aja nixos-rebuild taustalla jotta koneiden rebuild voidaan tehdä samaan
   # aikaan kaikille koneille rinnakkain
   ets -f "[%T.%L - $kone]" "$komento" 2>/dev/null &
 done
@@ -40,8 +45,8 @@ done
 # Odota nixos-rebuild komentojen valmistumista
 while [ "$(jobs -p)" != "" ]; do
   if ! wait -n; then
-    # Jokin tehtavista epaonnistui, joten poistu ja trapin kautta lopeta muut
-    # ajossa olevat tehtavat
+    # Jokin tehtävistä epäonnistui, joten poistu ja trapin kautta lopeta muut
+    # ajossa olevat tehtävät
     exit 1
   fi
 done
