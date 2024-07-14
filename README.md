@@ -46,12 +46,12 @@ nix flake update
 
 Kaikkien koneiden päivitys:
 ```bash
-koti rakenna
+koti rakenna -t boot
 ```
 
 Koneiden uudelleen käynnistys:
 ```
-koti buuttaa kanto mervi toukka
+koti buuttaa
 sudo reboot
 ```
 
