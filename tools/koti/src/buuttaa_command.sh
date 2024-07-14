@@ -1,6 +1,6 @@
 koneet=()
 eval "koneet=(${args[kone]:-})"
-koneet=($(suodata_koneet "${koneet[@]}"))
+mapfile -t koneet < <(suodata_koneet "${koneet[@]}")
 
 for kone in "${koneet[@]}"; do
   echo "Käynnistä kone '$kone' uudelleen"

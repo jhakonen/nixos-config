@@ -11,6 +11,7 @@ rec {
       ncurses
       nettools
       openssh
+      systemd
     ];
   };
 }

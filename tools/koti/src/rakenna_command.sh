@@ -2,19 +2,26 @@ function lopeta_tehtavat() {
   jobs -p | xargs -r kill
 }
 
+function suodata_stderr() {
+  # Tämä tulee ets-komennosta kun se ajetaan taustalla
+  sed 's/error resizing pty: bad address//g'
+}
+
 toiminto="${args[--toiminto]}"
 debug=${args[--debug]}
 
 koneet=()
 eval "koneet=(${args[kone]:-})"
-koneet=($(suodata_koneet "${koneet[@]}"))
+mapfile -t koneet < <(suodata_koneet "${koneet[@]}")
 
-komennot=()
+# Aja nixos-rebuild kullekkin koneelle
+trap lopeta_tehtavat EXIT
+cd /home/jhakonen/nixos-config/public
 for kone in "${koneet[@]}"; do
-  komento="nixos-rebuild $toiminto --flake '.#$kone' --fast"
+  komento=("nixos-rebuild" "$toiminto" "--flake" ".#$kone" "--fast")
 
   if [ "$kone" != "$(hostname)" ]; then
-    komento+=" --build-host root@$kone --target-host root@$kone"
+    komento+=("--build-host" "root@$kone" "--target-host" "root@$kone")
 
     # Varmista että SSH-komento ei kysy että luotetaanko koneeseen
     ssh-keygen -R "$kone" >/dev/null
@@ -24,22 +31,15 @@ for kone in "${koneet[@]}"; do
     exit 1
   fi
 
-  if [ $debug ]; then
-    komento+=" --show-trace"
+  if [ "$debug" ]; then
+    komento+=("--show-trace")
   fi
-  komennot+=("$komento")
-done
 
-# Aja nixos-rebuild kullekkin koneelle
-trap lopeta_tehtavat EXIT
-cd /home/jhakonen/nixos-config/public
-for i in "${!koneet[@]}"; do
-  kone="${koneet[$i]}"
-  komento="${komennot[$i]}"
-  echo $komento
-  # Aja nixos-rebuild taustalla jotta koneiden rebuild voidaan tehdä samaan
-  # aikaan kaikille koneille rinnakkain
-  ets -f "[%T.%L - $kone]" "$komento" 2>/dev/null &
+  echo "${komento[@]}"
+  apu_komento=("systemd-inhibit" "--who" "nixos-rebuild $kone" "--why" "Rakennetaan $kone konetta")
+  apu_komento+=("ets" "-f" "[%T.%L - $kone]")
+  apu_komento+=("${komento[@]}")
+  eval "${apu_komento[*]@Q}" 2> >(suodata_stderr >&2) &
 done
 
 # Odota nixos-rebuild komentojen valmistumista

@@ -1,28 +1,31 @@
 {
-  bash,
   bashly,
   coreutils,
   ets,
   findutils,
   glibcLocales,
-  gnugrep,
   installShellFiles,
   iputils,
+  lib,
+  makeWrapper,
   ncurses,
   nettools,
   openssh,
-  resholve,
+  shellcheck-minimal,
+  stdenv,
+  systemd,
 }:
-# https://github.com/nixos/nixpkgs/blob/master/pkgs/development/misc/resholve/README.md
-resholve.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "koti";
   version = "0.1.0";
   src = ./.;
+  doCheck = true;
 
   nativeBuildInputs = [
     bashly
     glibcLocales
     installShellFiles
+    makeWrapper
   ];
 
   buildPhase = ''
@@ -34,40 +37,31 @@ resholve.mkDerivation rec {
     runHook postBuild
   '';
 
+  checkPhase = ''
+    runHook preCheck
+    ${lib.getExe shellcheck-minimal} koti \
+      --exclude=${lib.concatStringsSep "," [
+        "SC2154" # https://github.com/DannyBen/bashly/issues/534
+      ]}
+    runHook postCheck
+  '';
+
   installPhase = ''
     runHook preInstall
     mkdir -p $out/bin
     cp koti $out/bin
+    wrapProgram $out/bin/koti \
+      --prefix PATH : ${lib.makeBinPath [
+          coreutils
+          ets
+          findutils
+          iputils
+          ncurses
+          nettools
+          openssh
+          systemd
+        ]}
     installShellCompletion --name koti completions.bash
     runHook postInstall
   '';
-
-  solutions = {
-    default = {
-      execer = [
-        "cannot:${openssh}/bin/ssh"
-        "cannot:${openssh}/bin/ssh-keygen"
-        "cannot:${openssh}/bin/ssh-keyscan"
-
-        # Ei pidä paikkaansa, 'ets' ajaa sille annetun komennon. Mutta
-        # valehdellaan nyt että se ei pysty ajamaan komentoja. Tämä vaatisi
-        # lore-säännön jotta resholve tietäisi mitä pitää tehdä.
-        "cannot:${ets}/bin/ets"
-      ];
-      fake.external = [ "nix" "subl" ];
-      fix.ping = true;
-      interpreter = "${bash}/bin/bash";
-      inputs = [
-        # koti-skriptin ajonaikaiset riippuvuudet
-        coreutils
-        ets
-        findutils
-        iputils
-        ncurses
-        nettools
-        openssh
-      ];
-      scripts = [ "bin/koti" ];
-    };
-  };
 }
