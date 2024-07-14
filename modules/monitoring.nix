@@ -53,7 +53,12 @@ let
     #!/bin/sh
     LOGS=$(${pkgs.systemd}/bin/systemctl status "$1")
     if [ $? == 0 ]; then
-      echo "Running"
+      # Test service that has RemainAfterExit=true
+      if $(echo "''${LOGS}" | ${pkgs.gnugrep}/bin/grep --quiet 'Active: active (exited)'); then
+        echo "Last run ok"
+      else
+        echo "Running"
+      fi
       echo "''${LOGS}"
       exit 0
     else

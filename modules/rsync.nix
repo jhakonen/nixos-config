@@ -240,12 +240,15 @@ in {
         enable = true;
         startAt = cfg.schedule;
         script = job.binpath;
-        # Älä aja varmuuskopiointia nixos-rebuild:n jälkeen, tee se vain
-        # ajastettuna ajankohtana
-        restartIfChanged = false;
         serviceConfig = {
           Type = "oneshot";
+          script = job.binpath;
         };
+        # Älä aja varmuuskopiointia nixos-rebuild:n jälkeen, tee se vain
+        # ajastettuna ajankohtana:
+        #   https://discourse.nixos.org/t/how-to-prevent-custom-systemd-service-from-restarting-on-nixos-rebuild-switch/43431/3
+        restartIfChanged = false;
+        serviceConfig.RemainAfterExit = true;
       };
     }) backup-jobs);
     timers = builtins.listToAttrs (builtins.map (job: {
