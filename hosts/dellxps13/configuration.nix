@@ -262,7 +262,6 @@ in
       '';
     }))
     # itch  # itch.io - Riippuu rikkinäisestä butler kirjastosta
-    kate
     keepassxc
     libreoffice
     livecaptions
