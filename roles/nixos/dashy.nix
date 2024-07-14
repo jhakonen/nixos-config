@@ -94,7 +94,6 @@ in {
       type = "systemd service";
       description = "Dashy - container";
       name = config.systemd.services."${config.virtualisation.oci-containers.backend}-dashy".name;
-      expected = "running";
     }
     {
       type = "http check";

@@ -70,7 +70,6 @@ in
       type = "systemd service";
       description = "Home Assistant - service";
       name = config.systemd.services.home-assistant.name;
-      expected = "running";
     }
     {
       type = "http check";

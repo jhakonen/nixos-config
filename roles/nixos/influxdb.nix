@@ -38,7 +38,6 @@ in {
       type = "systemd service";
       description = "InfluxDB - service";
       name = config.systemd.services.influxdb.name;
-      expected = "running";
     }
     {
       type = "http check";

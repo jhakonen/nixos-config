@@ -89,25 +89,21 @@ in {
       type = "systemd service";
       description = "Paperless - consumer";
       name = config.systemd.services.paperless-consumer.name;
-      expected = "running";
     }
     {
       type = "systemd service";
       description = "Paperless - scheduler";
       name = config.systemd.services.paperless-scheduler.name;
-      expected = "running";
     }
     {
       type = "systemd service";
       description = "Paperless - task-queue";
       name = config.systemd.services.paperless-task-queue.name;
-      expected = "running";
     }
     {
       type = "systemd service";
       description = "Paperless - web service";
       name = config.systemd.services.paperless-web.name;
-      expected = "running";
     }
     {
       type = "http check";

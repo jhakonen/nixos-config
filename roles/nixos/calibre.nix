@@ -58,13 +58,15 @@ in {
       type = "systemd service";
       description = "Calibre-Web - service";
       name = config.systemd.services.calibre-web.name;
-      expected = "running";
     }
     {
       type = "systemd service";
       description = "Calibre-Web - db reconnect";
       name = config.systemd.services.calibre-db-reconnect.name;
-      expected = "succeeded";
+      extraStates = [
+        "LAST_RUN_OK"
+        "NOT_RUN_YET"
+      ];
     }
     {
       type = "http check";

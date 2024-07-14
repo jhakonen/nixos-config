@@ -176,31 +176,38 @@ in
       type = "systemd service";
       description = "Nextcloud - phpfpm";
       name = config.systemd.services.phpfpm-nextcloud.name;
-      expected = "running";
     }
     {
       type = "systemd service";
       description = "Nextcloud - redis";
       name = config.systemd.services.redis-nextcloud.name;
-      expected = "running";
     }
     {
       type = "systemd service";
       description = "Nextcloud - cron";
       name = config.systemd.services.nextcloud-cron.name;
-      expected = "succeeded";
+      extraStates = [
+        "LAST_RUN_OK"
+        "NOT_RUN_YET"
+      ];
     }
     {
       type = "systemd service";
       description = "Nextcloud - setup";
       name = config.systemd.services.nextcloud-setup.name;
-      expected = "succeeded";
+      extraStates = [
+        "LAST_RUN_OK"
+        "NOT_RUN_YET"
+      ];
     }
     {
       type = "systemd service";
       description = "Nextcloud - update db";
       name = config.systemd.services.nextcloud-update-db.name;
-      expected = "succeeded";
+      extraStates = [
+        "LAST_RUN_OK"
+        "NOT_RUN_YET"
+      ];
     }
     {
       type = "http check";

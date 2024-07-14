@@ -274,7 +274,10 @@ in {
         type = "systemd service";
         description = "Backups - Job: ${job.jobname}";
         name = "rsync-backup-${job.jobname}.service";
-        expected = "succeeded";
+        extraStates = [
+          "LAST_RUN_OK"
+          "NOT_RUN_YET"
+        ];
       }
     ) backup-jobs) ++ (if has-backup-jobs then [
       {

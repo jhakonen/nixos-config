@@ -63,7 +63,6 @@ in {
       type = "systemd service";
       description = "Huginn - service";
       name = serviceName;
-      expected = "running";
     }
     {
       type = "http check";

@@ -127,7 +127,6 @@ in
       type = "systemd service";
       description = "zigbee2mqtt - service";
       name = config.systemd.services.zigbee2mqtt.name;
-      expected = "running";
     }
     {
       type = "http check";

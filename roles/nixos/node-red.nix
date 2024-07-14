@@ -52,7 +52,6 @@ in
       type = "systemd service";
       description = "Node-Red - service";
       name = config.systemd.services.node-red.name;
-      expected = "running";
     }
     {
       type = "http check";

@@ -11,8 +11,10 @@ let
     if builtins.isString check then
       check
     else if check.type == "systemd service" then
-      ''
-        check program "${if check ? description then check.description else check.name}" with path "${checkSystemdService} ${check.name} ${check.expected}"
+      let
+        serviceCheck = "${checkSystemdService} ${check.name} ${builtins.concatStringsSep " " (if check ? extraStates then check.extraStates else [])}";
+      in ''
+        check program "${if check ? description then check.description else check.name}" with path "${serviceCheck}"
           if status != 0
             for ${secsToCycles DEFAULT_ALERT_AFTER_SEC} cycles
           then
@@ -49,47 +51,34 @@ let
     else abort "Unknown check type for monioring: ${check.type}";
 
 
-  checkSystemdService = pkgs.writeScript "check-systemd-service" ''
-    #!/bin/sh
-    LOGS=$(${pkgs.systemd}/bin/systemctl status "$1")
-    if [ $? == 0 ]; then
-      # Test service that has RemainAfterExit=true
-      if $(echo "''${LOGS}" | ${pkgs.gnugrep}/bin/grep --quiet 'Active: active (exited)'); then
-        echo "Last run ok"
-      else
-        echo "Running"
-      fi
-      echo "''${LOGS}"
-      exit 0
+  # Arguments
+  #  $1    - Systemd service name
+  #  $2..n - List of extra ok states, choices: LAST_RUN_OK, NOT_RUN_YET
+  checkSystemdService = pkgs.writeShellScript "check-systemd-service" ''
+    SERVICE="$1"
+    shift
+    OK_STATES="$@"
+    STATUS=$(${pkgs.systemd}/bin/systemctl status "$SERVICE")
+    EXIT_CODE=0
+
+    if [[ "$STATUS" =~ (Active: inactive \(dead\)) ]] && ! [[ "$STATUS" =~ (Main PID) ]] && [[ "$OK_STATES" =~ NOT_RUN_YET ]]; then
+      echo "Not run yet"
+    elif ([[ "$STATUS" =~ (Active: inactive \(dead\)) ]] || [[ "$STATUS" =~ (Active: active \(exited\)) ]]) \
+         && [[ "$STATUS" =~ (Main PID: .+ status=0/SUCCESS) ]] \
+         && [[ "$OK_STATES" =~ LAST_RUN_OK ]]; then
+      echo "Last run ok"
+    elif [[ "$STATUS" =~ (Active: active \(running\)) ]]; then
+      echo "Running"
+    elif [[ "$STATUS" =~ (Active: activating) ]]; then
+      echo "Starting up"
+      EXIT_CODE=1
     else
-      if $(echo "''${LOGS}" | ${pkgs.gnugrep}/bin/grep --quiet 'Active: activating'); then
-        echo "Starting up"
-        echo "''${LOGS}"
-        exit 0
-      fi
-      if [ "$2" == "running" ]; then
-        echo "Stopped"
-        echo "''${LOGS}"
-        exit 1
-      elif [ "$2" == "succeeded" ]; then
-        if $(echo "''${LOGS}" | ${pkgs.gnugrep}/bin/grep --quiet 'Deactivated successfully'); then
-          echo "Last run ok"
-          echo "''${LOGS}"
-          exit 0
-        fi
-        if $(echo "''${LOGS}" | ${pkgs.gnugrep}/bin/grep --quiet 'Active: inactive'); then
-          echo "Not run yet"
-          echo "''${LOGS}"
-          exit 0
-        fi
-        echo "Last run failed"
-        echo "''${LOGS}"
-        exit 1
-      else
-        echo "Invalid expected state"
-        exit 2
-      fi
+      echo "Failed"
+      EXIT_CODE=1
     fi
+
+    echo "$STATUS"
+    exit $EXIT_CODE
   '';
 
   mqttAlertCmd = pkgs.writeShellScript "mqtt-alert" ''

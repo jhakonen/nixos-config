@@ -42,7 +42,6 @@ in {
         type = "systemd service";
         description = "Syncthing - service";
         name = config.systemd.services.syncthing.name;
-        expected = "running";
       }
       {
         type = "http check";

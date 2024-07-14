@@ -99,7 +99,6 @@ in
       type = "systemd service";
       description = "bt-mqtt-gateway";
       name = config.systemd.services.bt-mqtt-gateway.name;
-      expected = "running";
     }
   ];
 }

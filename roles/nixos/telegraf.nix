@@ -41,7 +41,6 @@ in
       type = "systemd service";
       description = "Telegraf - service";
       name = config.systemd.services.telegraf.name;
-      expected = "running";
     }
   ];
 

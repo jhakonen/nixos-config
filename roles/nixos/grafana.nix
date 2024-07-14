@@ -60,7 +60,6 @@ in
       type = "systemd service";
       description = "Grafana - service";
       name = config.systemd.services.grafana.name;
-      expected = "running";
     }
     {
       type = "http check";

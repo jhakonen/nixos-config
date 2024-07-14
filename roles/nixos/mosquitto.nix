@@ -59,7 +59,6 @@ in {
       type = "systemd service";
       description = "Mosquitto - service";
       name = config.systemd.services.mosquitto.name;
-      expected = "running";
     }
     ({ notify, secsToCycles, ... }:
     ''

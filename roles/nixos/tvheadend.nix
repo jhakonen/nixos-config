@@ -26,7 +26,6 @@ in
       type = "systemd service";
       description = "Tvheadend - service";
       name = config.systemd.services.tvheadend.name;
-      expected = "running";
     }
     {
       type = "http check";

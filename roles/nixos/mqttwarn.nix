@@ -55,7 +55,6 @@ in
       type = "systemd service";
       description = "Mqttwarn - service";
       name = config.systemd.services.mqttwarn.name;
-      expected = "running";
     }
   ];
 }

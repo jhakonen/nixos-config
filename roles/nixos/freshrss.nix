@@ -53,13 +53,15 @@ in
       type = "systemd service";
       description = "FreshRSS - service";
       name = config.systemd.services.phpfpm-freshrss.name;
-      expected = "running";
     }
     {
       type = "systemd service";
       description = "FreshRSS - updater";
       name = config.systemd.services.freshrss-updater.name;
-      expected = "succeeded";
+      extraStates = [
+        "LAST_RUN_OK"
+        "NOT_RUN_YET"
+      ];
     }
     {
       type = "http check";
