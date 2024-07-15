@@ -216,7 +216,6 @@ in
   environment.systemPackages = with pkgs; [
     # TODO: Enable itch once is done: https://github.com/NixOS/nixpkgs/issues/298410
     # itch  # itch.io
-    kate
     keepassxc
     kodi  # lisää Kodin puuttuvan ikonin
     spotify
