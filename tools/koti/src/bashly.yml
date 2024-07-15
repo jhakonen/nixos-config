@@ -53,27 +53,15 @@ commands:
   help: Vamuuskopioiden hallinta
   commands:
   - name: listaa
-    help: Listaa palvelut tai palvelun tiedostot varmuuskopiossa
-    args:
-    - name: kone
-      allowed:
-      - dellxps13
-      - kanto
-      - mervi
-      - toukka
-    - name: palvelu
+    help: Listaa varmuuskopiotaltiot kullekin koneelle ja palvelulle
 
   - name: palauta
     help: Palauta koneen KONE palvelun PALVELU tiedostot paikalliseen kansioon KOHDE
     args:
-    - name: kone
-      allowed:
-      - dellxps13
-      - kanto
-      - mervi
-      - toukka
+    - name: taltio
       required: true
-    - name: palvelu
-      required: true
+      validate: on_taltio
     - name: kohde
       required: true
+    completions:
+    - $(koti varmistukset listaa)

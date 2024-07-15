@@ -9,6 +9,7 @@ rec {
       findutils
       gawk
       gnugrep
+      gnused
       iputils
       ncurses
       nettools

@@ -3,7 +3,10 @@
   coreutils,
   ets,
   findutils,
+  gawk,
   glibcLocales,
+  gnugrep,
+  gnused,
   installShellFiles,
   iputils,
   lib,
@@ -11,6 +14,7 @@
   ncurses,
   nettools,
   openssh,
+  rsync,
   shellcheck-minimal,
   stdenv,
   systemd,
@@ -57,6 +61,7 @@ stdenv.mkDerivation rec {
           findutils
           gawk
           gnugrep
+          gnused
           iputils
           ncurses
           nettools

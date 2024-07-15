@@ -148,3 +148,32 @@ rsync -r ~/nixos-config <kone>:
 cd ~/nixos-config/public
 nix flake lock --update-input private && sudo nixos-rebuild switch --flake '.#'
 ```
+
+# Varmuuskopiot
+
+## Varmuuskopioiden listaus
+```bash
+koti varmistukset listaa
+```
+
+## Varmuuskopion palauttaminen
+```bash
+koti varmistukset palauta <taltio> <kohde>
+
+# Esimerkkiksi:
+sudo koti varmistukset palauta taltio:kanto/grafana /var/lib/grafana
+```
+
+## Palvelun varmuuskopiointi
+Yksittäinen palvelu:
+```bash
+sudo rsync-backup-<palvelu>.sh
+
+# Esimerkkiksi:
+sudo rsync-backup-grafana.sh
+```
+
+Kaikki palvelut:
+```bash
+sudo rsync-backup-all.sh
+```
