@@ -39,6 +39,7 @@ in
     ../../roles/nixos/node-red.nix
     ../../roles/nixos/paperless.nix
     ../../roles/nixos/telegraf.nix
+    ../../roles/nixos/tvheadend.nix
     ../../roles/nixos/zsh.nix
   ];
 

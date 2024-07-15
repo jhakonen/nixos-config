@@ -5,10 +5,11 @@ in
 {
   services.tvheadend = {
     enable = true;
-    httpPort = catalog.services.tvheadend-webui.port;
+    httpPort = catalog.services.tvheadend.port;
   };
   networking.firewall.allowedTCPPorts = [
-    catalog.services.tvheadend-webui.port
+    catalog.services.tvheadend.port
+    catalog.services.tvheadend.htsp_port
   ];
 
   # Varmuuskopiointi
@@ -31,7 +32,7 @@ in
       type = "http check";
       description = "Tvheadend - web interface";
       domain = config.networking.hostName;
-      port = catalog.services.tvheadend-webui.port;
+      port = catalog.services.tvheadend.port;
       path = "/extjs.html";
       response.code = 200;
     }

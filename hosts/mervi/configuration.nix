@@ -33,7 +33,6 @@ in
       ../../roles/nixos/koti.nix
       ../../roles/nixos/nix-cleanup.nix
       ../../roles/nixos/sunshine.nix
-      ../../roles/nixos/tvheadend.nix
       ../../roles/nixos/zsh.nix
     ];
 

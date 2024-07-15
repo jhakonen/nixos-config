@@ -356,9 +356,10 @@ in rec {
         icon = "hl-printer";
       };
     };
-    tvheadend-webui = {
-      host = nodes.mervi;
+    tvheadend = {
+      host = nodes.kanto;
       port = 9981;
+      htsp_port = 9982;
       dashy = {
         section = "viihde";
         title = "Tvheadend";
