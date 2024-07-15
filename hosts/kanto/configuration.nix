@@ -31,6 +31,7 @@ in
     ../../roles/nixos/home-assistant.nix
     ../../roles/nixos/huginn.nix
     ../../roles/nixos/influxdb.nix
+    ../../roles/nixos/koti.nix
     ../../roles/nixos/mosquitto.nix
     ../../roles/nixos/mqttwarn.nix
     ../../roles/nixos/nextcloud.nix

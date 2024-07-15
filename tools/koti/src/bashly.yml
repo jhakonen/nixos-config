@@ -48,3 +48,32 @@ commands:
     default: *koneet
     repeatable: true
     unique: true
+
+- name: varmistukset
+  help: Vamuuskopioiden hallinta
+  commands:
+  - name: listaa
+    help: Listaa palvelut tai palvelun tiedostot varmuuskopiossa
+    args:
+    - name: kone
+      allowed:
+      - dellxps13
+      - kanto
+      - mervi
+      - toukka
+    - name: palvelu
+
+  - name: palauta
+    help: Palauta koneen KONE palvelun PALVELU tiedostot paikalliseen kansioon KOHDE
+    args:
+    - name: kone
+      allowed:
+      - dellxps13
+      - kanto
+      - mervi
+      - toukka
+      required: true
+    - name: palvelu
+      required: true
+    - name: kohde
+      required: true

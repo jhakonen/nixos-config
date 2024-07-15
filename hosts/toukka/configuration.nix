@@ -37,6 +37,7 @@ in
     ../../modules
     ../../roles/nixos/bt-mqtt-gateway.nix
     ../../roles/nixos/common-programs.nix
+    ../../roles/nixos/koti.nix
     ../../roles/nixos/nix-cleanup.nix
     ../../roles/nixos/zigbee2mqtt.nix
     ../../roles/nixos/zsh.nix

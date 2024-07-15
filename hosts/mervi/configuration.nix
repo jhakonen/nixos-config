@@ -30,6 +30,7 @@ in
       ../../modules
       ../../roles/nixos/common-programs.nix
       ../../roles/nixos/gamepads.nix
+      ../../roles/nixos/koti.nix
       ../../roles/nixos/nix-cleanup.nix
       ../../roles/nixos/sunshine.nix
       ../../roles/nixos/tvheadend.nix

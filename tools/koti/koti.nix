@@ -55,10 +55,13 @@ stdenv.mkDerivation rec {
           coreutils
           ets
           findutils
+          gawk
+          gnugrep
           iputils
           ncurses
           nettools
           openssh
+          rsync
           systemd
         ]}
     installShellCompletion --name koti completions.bash
