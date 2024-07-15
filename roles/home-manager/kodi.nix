@@ -6,7 +6,7 @@
       exts.inputstream-adaptive
       #exts.netflix
       exts.pvr-hts  # TVheadend
-      exts.sendtokodi
+      # exts.sendtokodi  # insecure riippuvuus: python3.11-youtube-dl-2021.12.17
       exts.youtube
       #(exts.callPackage ../../packages/kodi-addons/plugin.video.twitch { })
       (exts.callPackage ../../packages/kodi-addons/plugin.video.yleareena.jade.nix {})
