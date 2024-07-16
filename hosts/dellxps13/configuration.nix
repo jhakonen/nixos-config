@@ -4,7 +4,7 @@
 
 { config, pkgs, ... }:
 let
-  inherit (config.dep-inject) catalog private;
+  inherit (config.dep-inject) catalog my-packages private;
 
   # Julkinen avain SSH:lla sisäänkirjautumista varten
   id-rsa-public-key =
@@ -289,6 +289,8 @@ in
     sublime4
     syncthingtray-minimal
     trayscale
+
+    my-packages.replace-plasma
   ];
 
   # Esimerkki miten ohjelman paketin voi overridata käyttäen overlaytä
