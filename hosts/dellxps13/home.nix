@@ -77,10 +77,10 @@ in
   # Nicely reload system units when changing configs
   systemd.user.startServices = "sd-switch";
 
-  # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
+  # https://wiki.nixos.org/wiki/FAQ/When_do_I_update_stateVersion
   home.stateVersion = "23.05";
 
-  # https://nixos.wiki/wiki/Home_Manager#Usage_on_non-NixOS_Linux
+  # https://wiki.nixos.org/wiki/Home_Manager#Usage_on_non-NixOS_Linux
   targets.genericLinux.enable = true;
 
   roles.git.githubIdentityFile = config.age.secrets.github-id-rsa.path;
