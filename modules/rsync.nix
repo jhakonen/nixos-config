@@ -240,10 +240,7 @@ in {
         enable = true;
         startAt = cfg.schedule;
         script = job.binpath;
-        serviceConfig = {
-          Type = "oneshot";
-          script = job.binpath;
-        };
+        serviceConfig.Type = "oneshot";
         # Älä aja varmuuskopiointia nixos-rebuild:n jälkeen, tee se vain
         # ajastettuna ajankohtana:
         #   https://discourse.nixos.org/t/how-to-prevent-custom-systemd-service-from-restarting-on-nixos-rebuild-switch/43431/3
