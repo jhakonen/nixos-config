@@ -243,9 +243,8 @@ in {
         serviceConfig.Type = "oneshot";
         # Älä aja varmuuskopiointia nixos-rebuild:n jälkeen, tee se vain
         # ajastettuna ajankohtana:
-        #   https://discourse.nixos.org/t/how-to-prevent-custom-systemd-service-from-restarting-on-nixos-rebuild-switch/43431/3
-        restartIfChanged = false;
-        serviceConfig.RemainAfterExit = true;
+        #   https://github.com/NixOS/nixpkgs/blob/fbbeadbe17d3e9ae09ca743472d57c909563ac67/nixos/doc/manual/development/unit-handling.section.md?plain=1#L48
+        unitConfig.X-OnlyManualStart = true;
       };
     }) backup-jobs);
     timers = builtins.listToAttrs (builtins.map (job: {
@@ -260,6 +259,12 @@ in {
         # Käynnistä backup koneen käynnistyksen jälkeen jos kone oli pois päältä
         # edellisen suoritusajan hetkellä
         timerConfig.Persistent = "true";
+
+        # HUOMAA: systemd:ssä on bugi jossa timeri saattaa käynnistää servicen
+        # jos timeri käynnistetään uudelleen:
+        #   https://github.com/systemd/systemd/issues/31231
+        # Tämä saattaa aiheuttaa varmuuskopioinnin käynnistymisen
+        # nixos-rebuildin aikana.
       };
     }) backup-jobs);
   };
