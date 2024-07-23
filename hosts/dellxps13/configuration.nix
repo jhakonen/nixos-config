@@ -132,10 +132,11 @@ in
 
   # Salaisuudet
   age.secrets = {
-    rsyncbackup-password = {
+    jhakonen-rsyncbackup-password = {
       file = private.secret-files.rsyncbackup-password;
       owner = "jhakonen";
     };
+    rsyncbackup-password.file = private.secret-files.rsyncbackup-password;
   };
 
   # Varmuuskopiointi

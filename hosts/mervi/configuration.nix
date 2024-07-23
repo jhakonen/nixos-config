@@ -249,11 +249,12 @@ in
       file = private.secret-files.mqtt-password;
       owner = "jhakonen";
     };
-    mosquitto-password.file = private.secret-files.mqtt-password;
-    rsyncbackup-password = {
+    jhakonen-rsyncbackup-password = {
       file = private.secret-files.rsyncbackup-password;
       owner = "jhakonen";
     };
+    mosquitto-password.file = private.secret-files.mqtt-password;
+    rsyncbackup-password.file = private.secret-files.rsyncbackup-password;
   };
 
   programs.fcast-receiver = {
