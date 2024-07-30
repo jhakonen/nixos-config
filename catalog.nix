@@ -54,10 +54,6 @@ in rec {
       ip.private = "192.168.1.1";
       useIp = true;
     };
-    modeemi = {
-      ip.private = "192.168.100.1";
-      useIp = true;
-    };
     dellxps13 = {};
     kanto = {
       ip.private = "192.168.1.86";
@@ -202,16 +198,6 @@ in rec {
       public = {
         domain = "monit.toukka.lan.jhakonen.com";
         port = 443;
-      };
-    };
-    modeemi = {
-      name = "5G Modeemi";
-      host = nodes.modeemi;
-      port = 80;
-      dashy = {
-        section = "verkon hallinta";
-        description = "Modeemin hallintapaneeli";
-        icon = "mdi-router-network";
       };
     };
     mosquitto = {
