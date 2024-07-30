@@ -218,6 +218,7 @@ in
     # itch  # itch.io
     keepassxc
     kodi  # lisää Kodin puuttuvan ikonin
+    livecaptions
     spotify
     ngrep  # verkkopakettien greppaus, hyödyllinen WoLin testaukseen
     my-packages.kde-hide-cursor-effect
