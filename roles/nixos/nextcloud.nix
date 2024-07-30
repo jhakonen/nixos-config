@@ -65,6 +65,7 @@ in
       # Käytä Redisiä parammin toimivaan tiedostojen lukintaan:
       #   https://help.nextcloud.com/t/file-is-locked-how-to-unlock/1883
       configureRedis = true;
+      maxUploadSize = "10G";
       # SMB External Storage: Asenna smbclient kirjasto
       phpExtraExtensions = all: [ all.smbclient ];
       phpPackage = lib.mkForce (pkgs.php.override {
