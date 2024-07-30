@@ -230,6 +230,15 @@ in rec {
         icon = "http://nas:5000/webman/favicon.ico";
       };
     };
+    netdata-kanto = {
+      host = nodes.kanto;
+      port = 19999;
+      dashy = {
+        section = "valvonta";
+        description = "Netdata - kanto";
+        icon = "hl-netdata";
+      };
+    };
     nextcloud = {
       host = nodes.kanto;
       port = 16000;
