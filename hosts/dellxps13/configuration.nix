@@ -49,6 +49,7 @@ in
     ../../roles/nixos/common-programs.nix
     ../../roles/nixos/koti.nix
     ../../roles/nixos/nix-cleanup.nix
+    ../../roles/nixos/tailscale.nix
     ../../roles/nixos/zsh.nix
   ];
 
@@ -194,8 +195,6 @@ in
 
   # Thunderbolt tuki
   services.hardware.bolt.enable = true;
-
-  services.tailscale.enable = true;
 
   my.services.syncthing = {
     enable = true;
