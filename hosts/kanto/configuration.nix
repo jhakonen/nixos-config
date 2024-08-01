@@ -44,6 +44,8 @@ in
     ../../roles/nixos/zsh.nix
   ];
 
+  nixpkgs.config.allowUnfree = true;
+
   # Käytä systemd-boot EFI boot loaderia
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
