@@ -62,6 +62,9 @@ in rec {
     nas = {
       ip.private = "192.168.1.101";
     };
+    nassuvm = {
+      ip.private = "192.168.1.86";
+    };
     nas-nextcloud-vm = {
       ip.private = "192.168.1.49";
     };
@@ -216,12 +219,12 @@ in rec {
         icon = "http://nas:5000/webman/favicon.ico";
       };
     };
-    netdata-kanto = {
-      host = nodes.kanto;
+    netdata-nassuvm = {
+      host = nodes.nassuvm;
       port = 19999;
       dashy = {
         section = "valvonta";
-        description = "Netdata - kanto";
+        description = "Netdata - nassuvm";
         icon = "hl-netdata";
       };
     };

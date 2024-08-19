@@ -8,6 +8,19 @@
     package = pkgs.netdata.override {
       withCloudUi = true;
     };
+    # https://github.com/netdata/netdata/blob/master/src/streaming/stream.conf
+    configDir."stream.conf" =
+      let
+        mkChildNode = apiKey: allowFrom: ''
+          [${apiKey}]
+            enabled = yes
+            allow from = ${allowFrom}
+        '';
+      in pkgs.writeText "stream.conf" ''
+        ${mkChildNode "b2a07267-adf6-40ae-bfcd-ec24e3d1a68f" "192.168.1.86"}
+      '';
+
+    # https://learn.netdata.cloud/docs/netdata-agent/configuration/daemon-configuration
     config = {
       global = {
         # uncomment to reduce memory to 32 MB

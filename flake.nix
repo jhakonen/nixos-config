@@ -101,6 +101,17 @@
       ];
     };
 
+    nixosConfigurations.nassuvm = nixpkgs.lib.nixosSystem {
+      system = "x86_64-linux";
+      modules = [
+        ./hosts/nassuvm/configuration.nix
+        depInject
+        agenix.nixosModules.default
+        home-manager.nixosModules.default
+        lix-module.nixosModules.default
+      ];
+    };
+
     nixosConfigurations.toukka = nixpkgs.lib.nixosSystem {
       system = "aarch64-linux";
       modules = [

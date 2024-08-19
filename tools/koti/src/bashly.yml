@@ -17,6 +17,7 @@ commands:
     - dellxps13
     - kanto
     - mervi
+    - nassuvm
     - toukka
     default: *koneet
     repeatable: true
@@ -44,6 +45,7 @@ commands:
     allowed: &koneet
     - kanto
     - mervi
+    - nassuvm
     - toukka
     default: *koneet
     repeatable: true

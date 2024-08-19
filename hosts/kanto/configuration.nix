@@ -34,7 +34,7 @@ in
     ../../roles/nixos/koti.nix
     ../../roles/nixos/mosquitto.nix
     ../../roles/nixos/mqttwarn.nix
-    ../../roles/nixos/netdata.nix
+    ../../roles/nixos/netdata-child.nix
     ../../roles/nixos/nextcloud.nix
     ../../roles/nixos/nix-cleanup.nix
     ../../roles/nixos/node-red.nix
