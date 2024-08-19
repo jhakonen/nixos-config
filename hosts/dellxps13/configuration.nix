@@ -250,6 +250,7 @@ in
     bitwarden
     brave
     cachix
+    config.nur.repos.shadowrz.klassy-qt6  # KDE6+ teema
     google-chrome  # Chromecastin tukea varten
     easyeffects
     unstable.errands
