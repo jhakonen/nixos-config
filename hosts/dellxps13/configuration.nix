@@ -252,6 +252,7 @@ in
     cachix
     config.nur.repos.shadowrz.klassy-qt6  # KDE6+ teema
     google-chrome  # Chromecastin tukea varten
+    haruna  # video soitin
     easyeffects
     unstable.errands
     gnumake
@@ -292,6 +293,7 @@ in
     sublime4
     syncthingtray-minimal
     trayscale
+    vlc
 
     my-packages.replace-plasma
   ];
