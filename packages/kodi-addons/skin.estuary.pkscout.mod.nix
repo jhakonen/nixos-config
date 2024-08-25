@@ -9,6 +9,6 @@ buildKodiAddon rec {
     owner = "pkscout";
     repo = namespace;
     rev = "omega";
-    sha256 = "sha256-IXV8/7fEuSGVav85M1+FaAifjAxWK/1iLmaUc7d4Ia0=";
+    sha256 = "sha256-hK1lpjzwL+OMssg3vRiOldewWtmIfAGpUDDG0zlHMlw=";
   };
 }
