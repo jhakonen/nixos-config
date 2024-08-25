@@ -121,6 +121,14 @@ in
         };
       }];
     };
+
+    # Tarvitaan hakuun tiedostojen sisällöistä
+    elasticsearch = {
+      enable = true;
+      plugins = [
+        pkgs.elasticsearchPlugins.ingest-attachment
+      ];
+    };
   };
 
   environment.systemPackages = [
