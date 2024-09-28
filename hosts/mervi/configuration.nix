@@ -74,9 +74,10 @@ in
   #services.xserver.enable = true;
 
   # Enable the KDE Plasma Desktop Environment.
+  services.xserver.enable = true;
   services.displayManager.sddm.enable = true;
-  services.displayManager.sddm.wayland.enable = true;
   services.desktopManager.plasma6.enable = true;
+  services.displayManager.defaultSession = "plasmax11";
 
   # Configure keymap in X11
   services.xserver.xkb = {
@@ -262,6 +263,7 @@ in
     enable = true;
     openFirewall = true;
   };
+  programs.gamemode.enable = true;
   programs.kdeconnect.enable = true;
   programs.steam.enable = true;
   programs.zsh.shellAliases = {
