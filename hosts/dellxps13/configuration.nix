@@ -282,6 +282,7 @@ in
     }))
     # itch  # itch.io - Riippuu rikkinäisestä butler kirjastosta
     keepassxc
+    lazygit
     libreoffice
     livecaptions
     kdePackages.isoimagewriter
@@ -347,6 +348,7 @@ in
   };
 
   programs.zsh.shellAliases = {
+    lg = "lazygit";
     qmv = "qmv --editor='subl --launch-or-new-window --wait' --format=destination-only --verbose";
   };
 
