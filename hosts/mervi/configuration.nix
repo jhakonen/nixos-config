@@ -25,7 +25,7 @@ in
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   imports =
-    [ # Include the results of the hardware scan.
+    [
       ./hardware-configuration.nix
       ../../modules
       ../../roles/nixos/common-programs.nix
@@ -40,12 +40,7 @@ in
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "mervi"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+  networking.hostName = "mervi";
 
   # Enable networking
   networking.networkmanager.enable = true;
@@ -57,7 +52,6 @@ in
 
   # Select internationalisation properties.
   i18n.defaultLocale = "fi_FI.UTF-8";
-
   i18n.extraLocaleSettings = {
     LC_ADDRESS = "fi_FI.UTF-8";
     LC_IDENTIFICATION = "fi_FI.UTF-8";
@@ -87,18 +81,6 @@ in
   # Configure console keymap
   console.keyMap = "fi";
 
-  services.avahi = {
-    enable = true;
-    publish = {
-      enable = true;
-      # Tarvitaan Kodi JSON-RPC mDNS tukea varten (Jotta Kore löytää Kodin automaattisesti)
-      userServices = true;
-    };
-  };
-
-  # Enable CUPS to print documents.
-  services.printing.enable = true;
-
   # Enable sound with pipewire.
   sound.enable = true;
   hardware.pulseaudio.enable = false;
@@ -108,16 +90,7 @@ in
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
-    # If you want to use JACK applications, uncomment this
-    #jack.enable = true;
-
-    # use the example session manager (no others are packaged yet so this is enabled by default,
-    # no need to redefine it in your config for now)
-    #media-session.enable = true;
   };
-
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
 
   my.services.monitoring = {
     enable = true;
@@ -164,7 +137,6 @@ in
     };
   };
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users = {
     jhakonen = {
       openssh.authorizedKeys.keys = [ id-rsa-public-key ];
@@ -190,17 +162,11 @@ in
     };
     jhakonen = {
       imports = [
-        ../../roles/home-manager/firefox.nix
-        ../../roles/home-manager/kodi.nix
         ../../roles/home-manager/mqtt-client.nix
         ../../roles/home-manager/zsh.nix
       ];
       home.stateVersion = "23.05";
       roles.mqtt-client.passwordFile = config.age.secrets.jhakonen-mosquitto-password.path;
-      my.programs.firefox = {
-        enable = true;
-        nur = config.nur;
-      };
     };
   };
 
@@ -211,26 +177,12 @@ in
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
   environment.systemPackages = with pkgs; [
     # TODO: Enable itch once is done: https://github.com/NixOS/nixpkgs/issues/298410
     # itch  # itch.io
     keepassxc
-    kodi  # lisää Kodin puuttuvan ikonin
-    livecaptions
-    spotify
     ngrep  # verkkopakettien greppaus, hyödyllinen WoLin testaukseen
-    my-packages.kde-hide-cursor-effect
   ];
-
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
 
   # Ota Let's Encryptin sertifikaatti käyttöön
   security.acme = {
@@ -258,10 +210,6 @@ in
     rsyncbackup-password.file = private.secret-files.rsyncbackup-password;
   };
 
-  programs.fcast-receiver = {
-    enable = true;
-    openFirewall = true;
-  };
   programs.gamemode.enable = true;
   programs.kdeconnect.enable = true;
   programs.steam.enable = true;
@@ -284,28 +232,10 @@ in
 
   networking.firewall.allowedTCPPorts = [
     80 443  # nginx
-    catalog.services.kodi.port  # Kodi hallintapaneeli + Kore Android appi
   ];
-
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-
   networking.firewall.allowedUDPPorts = [
     40000  # WoL portti, ei pakollinen mutta tarpeellinen WoLin testaukseen ngrepillä
   ];
 
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
-
-  # This value determines the NixOS release from which the default
-  # settings for stateful data, like file locations and database versions
-  # on your system were taken. It‘s perfectly fine and recommended to leave
-  # this value at the release version of the first install of this system.
-  # Before changing this value read the documentation for this option
-  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "23.05"; # Did you read the comment?
-
-  nixpkgs.config.permittedInsecurePackages = [
-    "electron-11.5.0"  # itch paketti vaatii tämän
-  ];
+  system.stateVersion = "23.05";
 }
