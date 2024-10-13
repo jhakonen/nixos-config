@@ -302,9 +302,9 @@ in
     nextcloud-client
     obsidian
     renameutils  # qmv
-    spotify
     sublime4
     syncthingtray-minimal
+    unstable.tidal-hifi
     trayscale
     vlc
 
