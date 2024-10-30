@@ -263,6 +263,7 @@ in
     brave
     cachix
     config.nur.repos.shadowrz.klassy-qt6  # KDE6+ teema
+    discord
     google-chrome  # Chromecastin tukea varten
     haruna  # video soitin
     easyeffects
@@ -304,6 +305,7 @@ in
     renameutils  # qmv
     sublime4
     syncthingtray-minimal
+    teams-for-linux
     unstable.tidal-hifi
     trayscale
     vlc
