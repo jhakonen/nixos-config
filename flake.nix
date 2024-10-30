@@ -89,7 +89,7 @@
       ];
     };
 
-    nixosConfigurations.mervi = nixpkgs.lib.nixosSystem {
+    nixosConfigurations.mervi = nixpkgs-unstable.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
         ./hosts/mervi/configuration.nix

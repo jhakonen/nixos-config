@@ -28,6 +28,10 @@ in
     steam-run-url
   ];
 
+  systemd.user.services.sunshine.environment = {
+    AMD_DEBUG = "lowlatencyenc";
+  };
+
   # Allow running `steam-run-url` from shell for testing purposes
   environment.systemPackages = [ steam-run-url ];
 
