@@ -158,6 +158,7 @@ in
         ../../roles/home-manager/zsh.nix
       ];
       home.stateVersion = "23.05";
+      home.enableNixpkgsReleaseCheck = false;
     };
     jhakonen = {
       imports = [
@@ -165,6 +166,7 @@ in
         ../../roles/home-manager/zsh.nix
       ];
       home.stateVersion = "23.05";
+      home.enableNixpkgsReleaseCheck = false;
       roles.mqtt-client.passwordFile = config.age.secrets.jhakonen-mosquitto-password.path;
     };
   };

@@ -60,9 +60,9 @@ in
   # Wifi tuki käyttäen wpa_supplicant palvelua
   networking.wireless = {
     enable = true;
-    environmentFile = "/root/wireless.env";
+    secretsFile = "/root/wireless.env";
     networks = {
-      POSEIDON_5G.psk = "@POSEIDON_5G_PASSWORD@";
+      POSEIDON_5G.pskRaw = "ext:POSEIDON_5G_PASSWORD";
     };
   };
 

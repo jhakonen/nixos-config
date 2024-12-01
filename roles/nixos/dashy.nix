@@ -44,7 +44,7 @@ let
     target = "newtab";
   };
 in {
-  services.dashy = {
+  my.services.dashy = {
     enable = true;
     port = catalog.services.dashy.port;
     settings = {

@@ -2,9 +2,11 @@
 let
   inherit (config.dep-inject) catalog my-packages private;
 
+  # Disabloin uhubctl kutsun 1.12.2024 kun NixOS 24.11 päivityksen
+  # jälkeen bt-adapteri ei enää herää power cyclen jälkeen.
   resetBtDongle = pkgs.writeShellScript "reset-bt-dongle-and-service" ''
     echo "Kytke virrat pois/päälle Bluetooth donglesta"
-    uhubctl --action=cycle --search='Realtek ASUS USB-BT500'
+    # uhubctl --action=cycle --search='Realtek ASUS USB-BT500'
     echo "Odota hetki jotta Bluetooth laite käynnistyy"
     sleep 5
   '';

@@ -21,6 +21,7 @@ let
       + "QZdUqOqF3C79F3f/MCrYk3/CvtbDtQ== jhakonen";
 in
 {
+  nix.package = pkgs.lix;
   # Ota flaket käyttöön
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nix.settings.substituters = [
@@ -57,17 +58,17 @@ in
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  boot.kernelPatches = [
-    # Korjaa toimimattomat äänilaitteet
-    #   https://discourse.nixos.org/t/no-sound-after-upgrade-dell-xps/52085/2
-    {
-      name = "fuck-your-soundwire";
-      patch = pkgs.fetchurl {
-        url = "https://github.com/torvalds/linux/commit/233a95fd574fde1c375c486540a90304a2d2d49f.diff";
-        hash = "sha256-E7K1gLmjwvk93m/dom19gXkBj3/o+5TLZGamv9Oesv0=";
-      };
-    }
-  ];
+  # boot.kernelPatches = [
+  #   # Korjaa toimimattomat äänilaitteet
+  #   #   https://discourse.nixos.org/t/no-sound-after-upgrade-dell-xps/52085/2
+  #   {
+  #     name = "fuck-your-soundwire";
+  #     patch = pkgs.fetchurl {
+  #       url = "https://github.com/torvalds/linux/commit/233a95fd574fde1c375c486540a90304a2d2d49f.diff";
+  #       hash = "sha256-E7K1gLmjwvk93m/dom19gXkBj3/o+5TLZGamv9Oesv0=";
+  #     };
+  #   }
+  # ];
 
   networking.hostName = "dellxps13"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -126,7 +127,6 @@ in
   hardware.bluetooth.enable = true;
 
   # Enable sound with pipewire.
-  sound.enable = true;
   hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {

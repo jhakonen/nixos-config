@@ -1,6 +1,6 @@
-{ bluez, fetchPypi, python3 }:
+{ bluez, fetchPypi, python311 }:
 
-python3.pkgs.buildPythonPackage rec {
+python311.pkgs.buildPythonPackage rec {
   pname = "ruuvitag-sensor";
   version = "2.1.0";
   src = fetchPypi {
@@ -11,10 +11,10 @@ python3.pkgs.buildPythonPackage rec {
   format = "pyproject";
 
   nativeBuildInputs = [
-    python3.pkgs.setuptools
+    python311.pkgs.setuptools
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with python311.pkgs; [
     ptyprocess
     reactivex
   ];

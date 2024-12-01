@@ -1,16 +1,14 @@
 {
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     nix-rpi5.url = "gitlab:vriska/nix-rpi5/main";
     nur.url = "github:nix-community/NUR";
-    home-manager.url = "github:nix-community/home-manager/release-24.05";
+    home-manager.url = "github:nix-community/home-manager/release-24.11";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
-    home-manager-unstable.url = "github:nix-community/home-manager";
+    home-manager-unstable.url = "github:nix-community/home-manager/master";
     home-manager-unstable.inputs.nixpkgs.follows = "nixpkgs-unstable";
-    lix-module.url = "https://git.lix.systems/lix-project/nixos-module/archive/2.90.0.tar.gz";
-    lix-module.inputs.nixpkgs.follows = "nixpkgs";
     agenix.url = "github:ryantm/agenix";
     agenix.inputs.nixpkgs.follows = "nixpkgs";
     agenix.inputs.home-manager.follows = "home-manager";
@@ -24,7 +22,6 @@
             , agenix
             , home-manager
             , home-manager-unstable
-            , lix-module
             , nixos-hardware
             , nixpkgs
             , nixpkgs-unstable
@@ -65,7 +62,6 @@
         depInject
         agenix.nixosModules.default
         home-manager.nixosModules.home-manager
-        lix-module.nixosModules.default
         nixos-hardware.nixosModules.common-cpu-intel
         nixos-hardware.nixosModules.common-pc-laptop
         nixos-hardware.nixosModules.common-pc-ssd
@@ -85,7 +81,6 @@
         depInject
         agenix.nixosModules.default
         home-manager.nixosModules.default
-        lix-module.nixosModules.default
       ];
     };
 
@@ -95,8 +90,7 @@
         ./hosts/mervi/configuration.nix
         depInject
         agenix.nixosModules.default
-        home-manager.nixosModules.default
-        lix-module.nixosModules.default
+        home-manager-unstable.nixosModules.default
         nur.nixosModules.nur
       ];
     };
@@ -108,7 +102,6 @@
         depInject
         agenix.nixosModules.default
         home-manager.nixosModules.default
-        lix-module.nixosModules.default
       ];
     };
 
@@ -119,7 +112,6 @@
         depInject
         agenix.nixosModules.default
         home-manager.nixosModules.default
-        lix-module.nixosModules.default
       ];
     };
   };

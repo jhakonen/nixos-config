@@ -1,6 +1,6 @@
-{ fetchFromGitHub, python3, ruuvitag-sensor }:
+{ fetchFromGitHub, python311, ruuvitag-sensor }:
 
-python3.pkgs.buildPythonApplication rec {
+python311.pkgs.buildPythonApplication rec {
   pname = "bt-mqtt-gateway";
   version = "1.0.0";
   src = fetchFromGitHub {
@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
   };
   # src = /home/jhakonen/code/bt-mqtt-gateway;
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with python311.pkgs; [
     # Perusriippuvuudet
     apscheduler
     interruptingcow

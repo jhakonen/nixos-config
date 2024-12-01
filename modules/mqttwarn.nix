@@ -1,7 +1,7 @@
 { lib, pkgs, config, ... }:
 let
   cfg = config.services.mqttwarn;
-  mqttwarn = pkgs.python3.pkgs.buildPythonApplication rec {
+  mqttwarn = pkgs.python311.pkgs.buildPythonApplication rec {
     pname = "mqttwarn";
     version = "0.34.1";
 
@@ -21,7 +21,7 @@ let
     # Tarvitaan kun ei käytetä fetchPypi() funktiota
     # nativeBuildInputs = [ pkgs.git ];
 
-    propagatedBuildInputs = with pkgs.python3.pkgs; [
+    propagatedBuildInputs = with pkgs.python311.pkgs; [
       attrs
       docopt
       funcy
