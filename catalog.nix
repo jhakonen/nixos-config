@@ -103,6 +103,15 @@ in rec {
         domain = "dashy.jhakonen.com";
       };
     };
+    esphome = {
+      host = nodes.kanto;
+      port = 6052;
+      dashy = {
+        section = "palvelut";
+        description = "ESPHome hallinta";
+        icon = "hl-home-assistant";
+      };
+    };
     freshrss = {
       host = nodes.kanto;
       dashy = {

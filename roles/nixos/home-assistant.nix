@@ -33,7 +33,20 @@ in
       };
       default_config = {};
     };
-    extraComponents = [ "default_config" "github" "met" "mqtt" ];
+    extraComponents = [
+      "default_config"
+      "esphome"
+      "github"
+      "met"
+      "mqtt"
+    ];
+  };
+
+  services.esphome = {
+    enable = true;
+    openFirewall = true;
+    address = "0.0.0.0";
+    port = catalog.services.esphome.port;
   };
 
   services.nginx = {
