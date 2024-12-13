@@ -39,7 +39,7 @@
       config.dep-inject = {
         # Injektoi riippuvuudet `specialArgs` muuttujan sijaan, lähde:
         #   https://jade.fyi/blog/flakes-arent-real/#injecting-dependencies
-        inherit agenix nix-rpi5 private;
+        inherit agenix nix-rpi5 nur private;
         catalog = pkgs.callPackage ./catalog.nix inputs;
         koti = (pkgs.callPackage ./tools/koti {}).package;
         my-packages = pkgs.callPackage ./packages/nix {};
@@ -65,7 +65,7 @@
         nixos-hardware.nixosModules.common-cpu-intel
         nixos-hardware.nixosModules.common-pc-laptop
         nixos-hardware.nixosModules.common-pc-ssd
-        nur.nixosModules.nur
+        nur.modules.nixos.default
         {
           nixpkgs.overlays = [
             outputs.overlays.unstable-packages
@@ -91,7 +91,7 @@
         depInject
         agenix.nixosModules.default
         home-manager-unstable.nixosModules.default
-        nur.nixosModules.nur
+        nur.modules.nixos.default
       ];
     };
 

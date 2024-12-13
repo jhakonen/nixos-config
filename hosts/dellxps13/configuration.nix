@@ -262,7 +262,7 @@ in
     bitwarden
     brave
     cachix
-    config.nur.repos.shadowrz.klassy-qt6  # KDE6+ teema
+    nur.repos.shadowrz.klassy-qt6  # KDE6+ teema
     discord
     google-chrome  # Chromecastin tukea varten
     haruna  # video soitin

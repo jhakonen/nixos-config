@@ -4,14 +4,13 @@ let
 in {
   options.my.programs.firefox = {
     enable = lib.mkEnableOption "Firefox web browser";
-    nur = lib.mkOption { };
   };
 
   config = lib.mkIf cfg.enable {
     programs.firefox = {
       enable = true;
       profiles.hakonen = {
-        extensions = with cfg; [
+        extensions = with pkgs; [
           nur.repos.rycee.firefox-addons.floccus
           nur.repos.rycee.firefox-addons.kagi-search
           nur.repos.rycee.firefox-addons.keepassxc-browser

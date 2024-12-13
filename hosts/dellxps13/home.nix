@@ -3,7 +3,7 @@
 
 { inputs, osConfig, lib, config, pkgs, ... }:
 let
-  inherit (osConfig.dep-inject) agenix catalog private;
+  inherit (osConfig.dep-inject) agenix catalog nur private;
 in
 {
   imports = [
@@ -13,6 +13,7 @@ in
     ../../roles/home-manager/neofetch.nix
     ../../roles/home-manager/zsh.nix
     agenix.homeManagerModules.age
+    nur.modules.homeManager.default
   ];
 
   home = {
@@ -86,8 +87,5 @@ in
   roles.git.githubIdentityFile = config.age.secrets.github-id-rsa.path;
   roles.mqtt-client.passwordFile = config.age.secrets.jhakonen-mosquitto-password.path;
 
-  my.programs.firefox = {
-    enable = true;
-    nur = osConfig.nur;
-  };
+  my.programs.firefox.enable = true;
 }
