@@ -309,6 +309,7 @@ in
     unstable.tidal-hifi
     trayscale
     vlc
+    zoom-us
 
     my-packages.replace-plasma
   ];
