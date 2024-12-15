@@ -232,6 +232,8 @@ in
     };
   };
 
+  services.flatpak.enable = true;
+
   networking.firewall.allowedTCPPorts = [
     80 443  # nginx
   ];
