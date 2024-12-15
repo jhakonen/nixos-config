@@ -44,13 +44,20 @@ in
 
   services.esphome = {
     enable = true;
-    openFirewall = true;
-    address = "0.0.0.0";
     port = catalog.services.esphome.port;
   };
 
   services.nginx = {
     enable = true;
+    virtualHosts.${catalog.services.esphome.public.domain} = {
+      locations."/" = {
+        proxyPass = "http://127.0.0.1:${toString catalog.services.esphome.port}";
+        recommendedProxySettings = true;
+      };
+      # Käytä Let's Encrypt sertifikaattia
+      addSSL = true;
+      useACMEHost = "jhakonen.com";
+    };
     virtualHosts.${catalog.services.home-assistant.public.domain} = {
       locations."/" = {
         proxyPass = "http://127.0.0.1:${toString catalog.services.home-assistant.port}";

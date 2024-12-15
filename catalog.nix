@@ -109,7 +109,11 @@ in rec {
       dashy = {
         section = "palvelut";
         description = "ESPHome hallinta";
-        icon = "hl-home-assistant";
+        icon = "hl-esphome";
+      };
+      public = {
+        domain = "esphome.jhakonen.com";
+        port = 443;
       };
     };
     freshrss = {
