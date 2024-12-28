@@ -35,7 +35,7 @@ in
   imports = [
     ./hardware-configuration.nix
     ../../modules
-    ../../roles/nixos/bt-mqtt-gateway.nix
+    #../../roles/nixos/bt-mqtt-gateway.nix
     ../../roles/nixos/common-programs.nix
     # ../../roles/nixos/koti.nix  <-- bashly ei tue aarch64-linux platformia
     ../../roles/nixos/nix-cleanup.nix

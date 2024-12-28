@@ -240,6 +240,7 @@ in
     description = "Janne Hakonen";
     extraGroups = [
       "adbusers"
+      "dialout"  # Sarjaportin käyttöoikeus
       "networkmanager"
       "vboxusers"
       "wheel"

@@ -219,6 +219,7 @@ in rec {
     mosquitto = {
       host = nodes.kanto;
       port = 8883;
+      insecure_port = 1883;
       public = {
         domain = "mqtt.jhakonen.com";
       };

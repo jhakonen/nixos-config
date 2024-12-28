@@ -17,6 +17,14 @@ in {
     enable = true;
     listeners = [
       {
+        port = catalog.services.mosquitto.insecure_port;
+        # Käyttäjä esp32 laitteille koska ne eivät tue kryptattua MQTT:tä
+        users.esphomeuser = {
+          acl = [ "#" ];
+          passwordFile = config.age.secrets.mosquitto-esphome-password.path;
+        };
+      }
+      {
         port = catalog.services.mosquitto.port;
         settings = {
           keyfile = "${certDir}/key.pem";
@@ -45,7 +53,10 @@ in {
     startAt = "daily";
   };
 
-  networking.firewall.allowedTCPPorts = [ catalog.services.mosquitto.port ];
+  networking.firewall.allowedTCPPorts = [
+    catalog.services.mosquitto.port
+    catalog.services.mosquitto.insecure_port
+  ];
 
   # Lisää rooli lokiriveihin jotka Promtail lukee
   systemd.services.mosquitto.serviceConfig.LogExtraFields = "ROLE=mosquitto";

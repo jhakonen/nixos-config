@@ -142,6 +142,7 @@ in
       owner = "jhakonen";
     };
     mosquitto-password.file = private.secret-files.mqtt-password;
+    mosquitto-esphome-password.file = private.secret-files.mqtt-espuser-password;
     rsyncbackup-password.file = private.secret-files.rsyncbackup-password;
     wireless-password.file = private.secret-files.wireless-password;
   };

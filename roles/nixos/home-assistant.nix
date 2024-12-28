@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, lib, pkgs, ... }:
 let
   catalog = config.dep-inject.catalog;
 in
@@ -42,16 +42,35 @@ in
     ];
   };
 
+  # Ota mDNS käyttöön jotta Esphome tunnistaa esp32-laiteen olevan online tilassa
+  services.avahi.enable = true;
+
   services.esphome = {
     enable = true;
     port = catalog.services.esphome.port;
   };
+  # https://github.com/NixOS/nixpkgs/issues/339557
+  systemd.services.esphome = let
+    cfg = config.services.esphome;
+    stateDir = "/var/lib/private/esphome";
+  in {
+    environment.PLATFORMIO_CORE_DIR = lib.mkForce "/var/lib/private/esphome/.platformio";
+    serviceConfig = {
+      ExecStart = lib.mkForce "${cfg.package}/bin/esphome dashboard --address ${cfg.address} --port ${toString cfg.port} ${stateDir}";
+      WorkingDirectory = lib.mkForce stateDir;
+    };
+  };
+
+  environment.systemPackages = with pkgs; [
+    esphome
+  ];
 
   services.nginx = {
     enable = true;
     virtualHosts.${catalog.services.esphome.public.domain} = {
       locations."/" = {
         proxyPass = "http://127.0.0.1:${toString catalog.services.esphome.port}";
+        proxyWebsockets = true;
         recommendedProxySettings = true;
       };
       # Käytä Let's Encrypt sertifikaattia
