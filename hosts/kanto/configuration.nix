@@ -56,7 +56,7 @@ in
     enable = true;
     secretsFile = config.age.secrets.wireless-password.path;
     networks = {
-      POSEIDON_5G.pskRaw = "ext:POSEIDON_5G_PASSWORD";
+      Hyttysverkko.pskRaw = "ext:HYTTYSVERKKO_PASSWORD";
     };
   };
 
