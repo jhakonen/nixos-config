@@ -80,6 +80,28 @@ in
   # Enable networking
   networking.networkmanager.enable = true;
 
+  # Yhteys GL-iNet reititimeen katkeilee jos sekä WIFI että Ethernet yhteys on
+  # päällä samaan aikaan. Kierrä ongelma laittamalla WIFI pois päältä kun
+  # läppäri on verkossa telakan kautta.
+  # Skripti otettu Arch Linuxin wikistä: https://wiki.archlinux.org/title/NetworkManager
+  networking.networkmanager.dispatcherScripts = [{
+    source = pkgs.writeShellScript "wlan_auto_toggle.sh" ''
+      if [ "$1" = "enp6s0" ]; then
+          case "$2" in
+              up)
+                  ${pkgs.networkmanager}/bin/nmcli radio wifi off
+                  ;;
+              down)
+                  ${pkgs.networkmanager}/bin/nmcli radio wifi on
+                  ;;
+          esac
+      elif [ "$(${pkgs.networkmanager}/bin/nmcli -g GENERAL.STATE device show enp6s0)" = "20 (unavailable)" ]; then
+          ${pkgs.networkmanager}/bin/nmcli radio wifi on
+      fi
+    '';
+    type = "basic";
+  }];
+
   # Set your time zone.
   time.timeZone = "Europe/Helsinki";
 
