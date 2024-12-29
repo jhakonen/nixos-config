@@ -21,7 +21,7 @@ in
           {
             type = "trusted_networks";
             trusted_networks = [
-              "192.168.1.0/24"  # lähiverkko
+              "10.0.0.0/24"  # lähiverkko
               "100.0.0.0/8"  # häntäverkko
             ];
             allow_bypass_login = true;
