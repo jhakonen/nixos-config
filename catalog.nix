@@ -50,35 +50,32 @@ in rec {
     lib.filterAttrs (n: v: lib.elem n names) syncthing-devices;
 
   nodes = addHostNames {
-    asus-router = {
-      ip.private = "192.168.1.1";
+    ads-1700w = { # skanneri
+      ip.private = "10.0.0.108";
       useIp = true;
     };
     dellxps13 = {};
+    hl-l2445dw = { # tulostin
+      ip.private = "10.0.0.107";
+      useIp = true;
+    };
     kanto = {
-      ip.private = "192.168.1.86";
+      ip.private = "10.0.0.100";
     };
     mervi = {};
     nas = {
-      ip.private = "192.168.1.101";
+      ip.private = "10.0.0.101";
     };
     nassuvm = {
-      ip.private = "192.168.1.158";
+      ip.private = "10.0.0.103";
     };
-    nas-nextcloud-vm = {
-      ip.private = "192.168.1.49";
-    };
-    hl-l2445dw = { # tulostin
-      ip.private = "192.168.1.76";
-      useIp = true;
-    };
-    ads-1700w = { # skanneri
-      ip.private = "192.168.1.218";
+    reititin = {
+      ip.private = "10.0.0.1";
       useIp = true;
     };
     tinypilot = {};
     toukka = {
-      ip.private = "192.168.1.68";
+      ip.private = "10.0.0.102";
     };
   };
 
@@ -282,7 +279,7 @@ in rec {
       };
     };
     reititin = {
-      host = nodes.asus-router;
+      host = nodes.reititin;
       port = 80;
       dashy = {
         section = "verkon hallinta";

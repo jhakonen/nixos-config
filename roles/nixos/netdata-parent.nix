@@ -1,4 +1,7 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
+let
+  inherit (config.dep-inject) catalog;
+in
 {
   # - Perustuu blogiin https://dataswamp.org/~solene/2022-09-16-netdata-cloud-nixos.html
   # - Historiadata tallennetaan hakemistoon: /var/cache/netdata
@@ -17,7 +20,7 @@
             allow from = ${allowFrom}
         '';
       in pkgs.writeText "stream.conf" ''
-        ${mkChildNode "b2a07267-adf6-40ae-bfcd-ec24e3d1a68f" "192.168.1.86"}
+        ${mkChildNode "b2a07267-adf6-40ae-bfcd-ec24e3d1a68f" catalog.nodes.kanto.ip.private}
       '';
 
     # https://learn.netdata.cloud/docs/netdata-agent/configuration/daemon-configuration
