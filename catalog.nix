@@ -138,6 +138,19 @@ in rec {
         port = 443;
       };
     };
+    hoarder = {
+      host = node.kanto;
+      port = 18000;
+      dashy = {
+        section = "palvelut";
+        description = "Kirjanmerkkien hallinta";
+        icon = "https://hoarder.jhakonen.com/favicon.ico";
+      };
+      public = {
+        domain = "hoarder.jhakonen.com";
+        port = 443;
+      };
+    };
     home-assistant = {
       host = nodes.kanto;
       port = 8123;

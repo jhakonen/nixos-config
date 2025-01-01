@@ -28,6 +28,7 @@ in
     ../../roles/nixos/dashy.nix
     ../../roles/nixos/freshrss.nix
     ../../roles/nixos/grafana.nix
+    ../../roles/nixos/hoarder.nix
     ../../roles/nixos/home-assistant.nix
     ../../roles/nixos/huginn.nix
     ../../roles/nixos/influxdb.nix
