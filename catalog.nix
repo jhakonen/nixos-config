@@ -177,6 +177,19 @@ in rec {
         port = 443;
       };
     };
+    immich = {
+      host = node.kanto;
+      port = 19000;
+      dashy = {
+        section = "palvelut";
+        description = "Mediakirjasto";
+        icon = "hl-immich";
+      };
+      public = {
+        domain = "immich.jhakonen.com";
+        port = 443;
+      };
+    };
     influx-db = {
       host = nodes.kanto;
       port = 8086;

@@ -304,6 +304,7 @@ in
           "''${gappsWrapperArgs[@]}"
       '';
     }))
+    immich-cli
     # itch  # itch.io - Riippuu rikkinäisestä butler kirjastosta
     keepassxc
     lazygit
