@@ -70,4 +70,33 @@ in {
       useACMEHost = "jhakonen.com";
     };
   };
+
+  # Varmuuskopiointi
+  my.services.rsync.jobs.hoarder = {
+    destinations = [
+      "nas-normal"
+      "nas-minimal"
+    ];
+    preHooks = [ "systemctl stop podman-hoarder-web.service" ];
+    paths = [ hoarder-dir ];
+    postHooks = [ "systemctl start podman-hoarder-web.service" ];
+  };
+
+  # Palvelun valvonta
+  my.services.monitoring.checks = [
+    {
+      type = "systemd service";
+      description = "hoarder - service";
+      name = "podman-hoarder-web.service";
+    }
+    {
+      type = "http check";
+      description = "hoarder - web interface";
+      domain = catalog.services.hoarder.public.domain;
+      path = "/signin";
+      secure = true;
+      response.code = 200;
+      alertAfterSec = 15 * 60;
+    }
+  ];
 }
