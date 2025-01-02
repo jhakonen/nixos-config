@@ -48,7 +48,7 @@ in
       "nas-normal"
       "nas-minimal"
     ];
-    paths = [ "/var/lib/tvheadend/.hts" ];
+    paths = [ "/var/lib/tvheadend/config" ];
   };
 
   # Palvelun valvonta
