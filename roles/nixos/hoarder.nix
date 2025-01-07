@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 let
   inherit (config.dep-inject) catalog private;
 
@@ -40,6 +40,16 @@ in {
       ];
       ports = [ "${toString chrome-port}:9222" ];
     };
+  };
+
+  systemd.services.podman-hoarder-web = {
+    # Hoarderin pysäyttäminen ei toimi kunnolla, ohjeista systemd jättämään
+    # epäonnistuminen huomiotta (`|| true` lopussa)
+    preStop = lib.mkForce
+      "podman stop --ignore --cidfile=/run/podman-hoarder-web.ctr-id || true";
+    # Kun serveriprosessi kuolee SIGKILL takia, processi palauttaa 137, merkkaa
+    # se onnistumiseksi
+    serviceConfig.SuccessExitStatus="137";
   };
 
   # Hoarder käyttää meilisearchia hakujen tekoon
