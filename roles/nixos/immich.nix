@@ -7,7 +7,6 @@ in {
   services.immich = {
     enable = true;
     port = catalog.services.immich.port;
-    settings.server.externalDomain = "https://${catalog.services.immich.public.domain}";
   };
 
   # Ota käyttöön videon laitteistopohjainen koodaustuki
