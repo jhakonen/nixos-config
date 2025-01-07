@@ -164,19 +164,6 @@ in rec {
         port = 443;
       };
     };
-    huginn = {
-      host = nodes.kanto;
-      port = 14000;
-      dashy = {
-        section = "palvelut";
-        description = "Tehtävien automatisointi";
-        icon = "hl-huginn";
-      };
-      public = {
-        domain = "huginn.jhakonen.com";
-        port = 443;
-      };
-    };
     immich = {
       host = node.kanto;
       port = 19000;

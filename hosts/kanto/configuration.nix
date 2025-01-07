@@ -30,7 +30,6 @@ in
     ../../roles/nixos/grafana.nix
     ../../roles/nixos/hoarder.nix
     ../../roles/nixos/home-assistant.nix
-    ../../roles/nixos/huginn.nix
     ../../roles/nixos/immich.nix
     ../../roles/nixos/influxdb.nix
     ../../roles/nixos/koti.nix
