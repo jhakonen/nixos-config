@@ -20,6 +20,7 @@
     tailspin   # https://github.com/bensadeh/tailspin
     eza        # https://github.com/eza-community/eza
     doggo      # https://doggo.mrkaran.dev/docs/
+    nvd        # listaa erot kahden nixos sukupolven väliltä
   ];
 
   # Estä `inetutils` pakettia korvaamasta `nettools`
@@ -38,4 +39,15 @@
     sortedUnique = builtins.sort builtins.lessThan (lib.unique packages);
     formatted = builtins.concatStringsSep "\n" sortedUnique;
   in formatted;
+
+  # Listaa muuttuneet paketit nixos-rebuild komennon lopussa. Otettu täältä:
+  #   https://discourse.nixos.org/t/nvd-simple-nix-nixos-version-diff-tool/12397/42
+  system.activationScripts.preActivation = ''
+    if [[ -e /run/current-system ]]; then
+      echo "--- diff to current-system"
+      ${pkgs.nvd}/bin/nvd --nix-bin-dir=${config.nix.package}/bin \
+        diff /run/current-system "$systemConfig"
+      echo "---"
+    fi
+  '';
 }
