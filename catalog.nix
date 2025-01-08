@@ -293,7 +293,7 @@ in rec {
     };
     reititin = {
       host = nodes.reititin;
-      port = 80;
+      port = 443;
       dashy = {
         section = "verkon hallinta";
         description = "Reititimen hallintapaneeli";
