@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 let
-  inherit (config.dep-inject) catalog nix-rpi5 private;
+  inherit (config.dep-inject) catalog private;
 
   # Julkinen avain SSH:lla sisäänkirjautumista varten
   id-rsa-public-key =
@@ -47,8 +47,8 @@ in
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = false;
 
-  # Käytä rpi5 kohtaista kerneliä
-  boot.kernelPackages = nix-rpi5.legacyPackages.aarch64-linux.linuxPackages_rpi5;
+  # Käytä rpi4 kohtaista kerneliä
+  boot.kernelPackages = pkgs.linuxPackages_rpi4;
   # (import (builtins.fetchTarball {
   #   url = https://gitlab.com/vriska/nix-rpi5/-/archive/main.tar.gz;
   #   sha256 = "12110c0sbycpr5sm0sqyb76aq214s2lyc0a5yiyjkjhrabghgdcb";

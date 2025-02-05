@@ -3,8 +3,8 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
-    nix-rpi5.url = "gitlab:vriska/nix-rpi5/main";
     nur.url = "github:nix-community/NUR";
+    nur.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager/release-24.11";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     home-manager-unstable.url = "github:nix-community/home-manager/master";
@@ -25,7 +25,6 @@
             , nixos-hardware
             , nixpkgs
             , nixpkgs-unstable
-            , nix-rpi5
             , nur
             , private
             , ... }@inputs:
@@ -39,7 +38,7 @@
       config.dep-inject = {
         # Injektoi riippuvuudet `specialArgs` muuttujan sijaan, lähde:
         #   https://jade.fyi/blog/flakes-arent-real/#injecting-dependencies
-        inherit agenix nix-rpi5 nur private;
+        inherit agenix nur private;
         catalog = pkgs.callPackage ./catalog.nix inputs;
         koti = (pkgs.callPackage ./tools/koti {}).package;
         my-packages = pkgs.callPackage ./packages/nix {};
@@ -56,7 +55,6 @@
     };
 
     nixosConfigurations.dellxps13 = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
       modules = [
         ./hosts/dellxps13/configuration.nix
         depInject
@@ -75,7 +73,6 @@
     };
 
     nixosConfigurations.kanto = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
       modules = [
         ./hosts/kanto/configuration.nix
         depInject
@@ -85,7 +82,6 @@
     };
 
     nixosConfigurations.mervi = nixpkgs-unstable.lib.nixosSystem {
-      system = "x86_64-linux";
       modules = [
         ./hosts/mervi/configuration.nix
         depInject
@@ -96,7 +92,6 @@
     };
 
     nixosConfigurations.nassuvm = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
       modules = [
         ./hosts/nassuvm/configuration.nix
         depInject
@@ -106,7 +101,6 @@
     };
 
     nixosConfigurations.toukka = nixpkgs.lib.nixosSystem {
-      system = "aarch64-linux";
       modules = [
         ./hosts/toukka/configuration.nix
         depInject
