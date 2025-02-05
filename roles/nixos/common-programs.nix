@@ -4,7 +4,6 @@
   # keskiyöllä
   services.locate = {
     enable = true;
-    localuser = null;
     package = pkgs.plocate;
   };
 
