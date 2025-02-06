@@ -48,7 +48,4 @@ in {
       response.code = 204;
     }
   ];
-
-  # Lisää rooli lokiriveihin jotka Promtail lukee
-  systemd.services.influxdb.serviceConfig.LogExtraFields = "ROLE=influxdb";
 }

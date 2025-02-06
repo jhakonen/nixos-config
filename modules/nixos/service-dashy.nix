@@ -27,9 +27,5 @@ in {
       volumes = [ "${configFile}:/app/public/conf.yml" ];
       ports = [ "${toString cfg.port}:80" ];
     };
-
-    # Lisää rooli lokiriveihin jotka Promtail lukee
-    systemd.services."${config.virtualisation.oci-containers.backend}-dashy"
-      .serviceConfig.LogExtraFields = "ROLE=dashy";
   };
 }

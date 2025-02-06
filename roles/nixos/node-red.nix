@@ -61,7 +61,4 @@ in
       response.code = 200;
     }
   ];
-
-  # Lisää rooli lokiriveihin jotka Promtail lukee
-  systemd.services.node-red.serviceConfig.LogExtraFields = "ROLE=node-red";
 }

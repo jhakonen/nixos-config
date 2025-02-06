@@ -69,7 +69,4 @@ in
       response.code = 200;
     }
   ];
-
-  # Lisää rooli lokiriveihin jotka Promtail lukee
-  systemd.services.grafana.serviceConfig.LogExtraFields = "ROLE=grafana";
 }

@@ -58,9 +58,6 @@ in {
     catalog.services.mosquitto.insecure_port
   ];
 
-  # Lisää rooli lokiriveihin jotka Promtail lukee
-  systemd.services.mosquitto.serviceConfig.LogExtraFields = "ROLE=mosquitto";
-
   # Anna mosquittolle pääsy let's encrypt sertifikaattiin
   users.groups.acme.members = [ "mosquitto" ];
 

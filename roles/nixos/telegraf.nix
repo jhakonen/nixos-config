@@ -43,7 +43,4 @@ in
       name = config.systemd.services.telegraf.name;
     }
   ];
-
-  # Lisää rooli lokiriveihin jotka Promtail lukee
-  systemd.services.telegraf.serviceConfig.LogExtraFields = "ROLE=telegraf";
 }

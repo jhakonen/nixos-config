@@ -118,7 +118,4 @@ in
       response.code = 200;
     }
   ];
-
-  # Lisää rooli lokiriveihin jotka Promtail lukee
-  systemd.services.home-assistant.serviceConfig.LogExtraFields = "ROLE=home-assistant";
 }
