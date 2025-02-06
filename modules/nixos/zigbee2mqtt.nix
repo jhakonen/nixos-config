@@ -1,6 +1,5 @@
-{ config, ... }:
+{ config, flake, inputs, ... }:
 let
-  inherit (config.dep-inject) catalog private;
   acmeHost = "${config.networking.hostName}.lan.jhakonen.com";
 in
 {
@@ -77,15 +76,15 @@ in
         };
       };
       groups = {};
-      frontend.port = catalog.services.zigbee2mqtt.port;
+      frontend.port = flake.lib.catalog.services.zigbee2mqtt.port;
     };
   };
 
   services.nginx = {
     enable = true;
-    virtualHosts.${catalog.services.zigbee2mqtt.public.domain} = {
+    virtualHosts.${flake.lib.catalog.services.zigbee2mqtt.public.domain} = {
       locations."/" = {
-        proxyPass = "http://127.0.0.1:${toString catalog.services.zigbee2mqtt.port}";
+        proxyPass = "http://127.0.0.1:${toString flake.lib.catalog.services.zigbee2mqtt.port}";
         proxyWebsockets = true;
         recommendedProxySettings = true;
       };
@@ -96,11 +95,11 @@ in
   };
 
   security.acme.certs.${acmeHost}.extraDomainNames = [
-    catalog.services.zigbee2mqtt.public.domain
+    flake.lib.catalog.services.zigbee2mqtt.public.domain
   ];
 
   # Lisää MQTT salasana salatun ympäristömuuttujan kautta
-  age.secrets.zigbee2mqtt-environment.file = private.secret-files.zigbee2mqtt-environment;
+  age.secrets.zigbee2mqtt-environment.file = inputs.private.secret-files.zigbee2mqtt-environment;
   systemd.services.zigbee2mqtt.serviceConfig.EnvironmentFile = [
     config.age.secrets.zigbee2mqtt-environment.path
   ];
@@ -109,7 +108,7 @@ in
   systemd.services.zigbee2mqtt.serviceConfig.LogExtraFields = "ROLE=zigbee2mqtt";
 
   # Avaa palomuuriin hallintapaneelille reikä
-  networking.firewall.allowedTCPPorts = [ catalog.services.zigbee2mqtt.port ];
+  networking.firewall.allowedTCPPorts = [ flake.lib.catalog.services.zigbee2mqtt.port ];
 
   # Varmuuskopiointi
   my.services.rsync.jobs.zigbee2mqtt = {
@@ -131,7 +130,7 @@ in
     {
       type = "http check";
       description = "zigbee2mqtt - web interface";
-      domain = catalog.services.zigbee2mqtt.public.domain;
+      domain = flake.lib.catalog.services.zigbee2mqtt.public.domain;
       secure = true;
       response.code = 200;
       alertAfterSec = 15 * 60;

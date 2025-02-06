@@ -1,7 +1,5 @@
-{ config, lib, pkgs, ... }:
+{ config, flake, inputs, lib, pkgs, ... }:
 let
-  inherit (config.dep-inject) catalog private;
-
   # Julkinen avain SSH:lla sisäänkirjautumista varten
   id-rsa-public-key =
       "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDMqorF45N0aG+QqJbRt7kRcmXXbsgvXw7"
@@ -34,13 +32,18 @@ in
 
   imports = [
     ./hardware-configuration.nix
-    ../../modules
-    #../../roles/nixos/bt-mqtt-gateway.nix
-    ../../roles/nixos/common-programs.nix
     # ../../roles/nixos/koti.nix  <-- bashly ei tue aarch64-linux platformia
-    ../../roles/nixos/nix-cleanup.nix
-    ../../roles/nixos/zigbee2mqtt.nix
-    ../../roles/nixos/zsh.nix
+
+    inputs.agenix.nixosModules.default
+    inputs.home-manager.nixosModules.home-manager
+
+    flake.modules.nixos.service-rsync
+    flake.modules.nixos.service-monitoring
+
+    flake.modules.nixos.common-programs
+    flake.modules.nixos.nix-cleanup
+    flake.modules.nixos.zigbee2mqtt
+    flake.modules.nixos.zsh
   ];
 
   # Käytä systemd-boot EFI boot loaderia
@@ -92,10 +95,10 @@ in
   my.services.monitoring = {
     enable = true;
     acmeHost = "toukka.lan.jhakonen.com";
-    virtualHost = catalog.services.monit-toukka.public.domain;
+    virtualHost = flake.lib.catalog.services.monit-toukka.public.domain;
     mqttAlert = {
-      address = catalog.services.mosquitto.public.domain;
-      port = catalog.services.mosquitto.port;
+      address = flake.lib.catalog.services.mosquitto.public.domain;
+      port = flake.lib.catalog.services.mosquitto.port;
       passwordFile = config.age.secrets.mosquitto-password.path;
     };
   };
@@ -108,13 +111,13 @@ in
       nas-minimal = {
         username = "rsync-backup";
         passwordFile = config.age.secrets.rsyncbackup-password.path;
-        host = catalog.nodes.nas.hostName;
+        host = flake.lib.catalog.nodes.nas.hostName;
         path = "::backups/minimal/${config.networking.hostName}";
       };
       nas-normal = {
         username = "rsync-backup";
         passwordFile = config.age.secrets.rsyncbackup-password.path;
-        host = catalog.nodes.nas.hostName;
+        host = flake.lib.catalog.nodes.nas.hostName;
         path = "::backups/normal/${config.networking.hostName}";
       };
     };
@@ -135,28 +138,11 @@ in
     };
   };
 
-  home-manager.users = {
-    jhakonen = {
-      imports = [
-        ../../roles/home-manager/mqtt-client.nix
-        ../../roles/home-manager/zsh.nix
-      ];
-      roles.mqtt-client.passwordFile = config.age.secrets.jhakonen-mosquitto-password.path;
-      home.stateVersion = "23.11";
-    };
-    root = {
-      imports = [
-        ../../roles/home-manager/zsh.nix
-      ];
-      home.stateVersion = "23.11";
-    };
-  };
-
   # Ota Let's Encryptin sertifikaatti käyttöön
   security.acme = {
     acceptTerms = true;
     defaults = {
-      email = private.catalog.acmeEmail;
+      email = inputs.private.catalog.acmeEmail;
       dnsProvider = "joker";
       credentialsFile = config.age.secrets.acme-joker-credentials.path;
     };
@@ -165,13 +151,9 @@ in
 
   # Salaisuudet
   age.secrets = {
-    acme-joker-credentials.file = private.secret-files.acme-joker-credentials;
-    jhakonen-mosquitto-password = {
-      file = private.secret-files.mqtt-password;
-      owner = "jhakonen";
-    };
-    mosquitto-password.file = private.secret-files.mqtt-password;
-    rsyncbackup-password.file = private.secret-files.rsyncbackup-password;
+    acme-joker-credentials.file = inputs.private.secret-files.acme-joker-credentials;
+    mosquitto-password.file = inputs.private.secret-files.mqtt-password;
+    rsyncbackup-password.file = inputs.private.secret-files.rsyncbackup-password;
   };
 
   services = {
