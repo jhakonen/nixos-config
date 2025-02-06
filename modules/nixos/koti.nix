@@ -1,6 +1,6 @@
 { config, pkgs, ... }:
 let
-  inherit (config.dep-inject) koti;
+  koti = (pkgs.callPackage .../../../../tools/koti {}).package;
 in
 {
   environment.systemPackages = [ koti ];

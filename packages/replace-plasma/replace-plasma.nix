@@ -21,7 +21,8 @@ let
   };
 in
 stdenv.mkDerivation {
-  name = "${name}-wrapper";
+  pname = "replace-plasma";
+  version = "1.0.0";
   dontUnpack = true;  # Tämä mahdolistaa src attribuutin pois jäätämisen
   # Lisää skripti polulle
   installPhase = ''

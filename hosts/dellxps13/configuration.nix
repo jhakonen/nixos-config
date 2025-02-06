@@ -2,9 +2,16 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ config, flake, inputs, perSystem, pkgs, ... }:
 let
-  inherit (config.dep-inject) catalog my-packages private;
+  overlays = {
+    unstable-packages = final: prev: {
+      unstable = import inputs.nixpkgs-unstable {
+        config.allowUnfree = true;
+        system = final.system;
+      };
+    };
+  };
 
   # Julkinen avain SSH:lla sisäänkirjautumista varten
   id-rsa-public-key =
@@ -45,13 +52,30 @@ in
 
   imports = [
     ./hardware-configuration.nix
-    ../../modules
-    ../../roles/nixos/beeper.nix
-    ../../roles/nixos/common-programs.nix
-    ../../roles/nixos/koti.nix
-    ../../roles/nixos/nix-cleanup.nix
-    ../../roles/nixos/tailscale.nix
-    ../../roles/nixos/zsh.nix
+
+    inputs.agenix.nixosModules.default
+    inputs.home-manager.nixosModules.home-manager
+    inputs.nixos-hardware.nixosModules.common-cpu-intel
+    inputs.nixos-hardware.nixosModules.common-pc-laptop
+    inputs.nixos-hardware.nixosModules.common-pc-ssd
+    inputs.nur.modules.nixos.default
+
+    flake.modules.nixos.service-rsync
+    flake.modules.nixos.service-monitoring
+    flake.modules.nixos.service-syncthing
+
+    flake.modules.nixos.beeper
+    flake.modules.nixos.common-programs
+    flake.modules.nixos.koti
+    flake.modules.nixos.nix-cleanup
+    flake.modules.nixos.tailscale
+    flake.modules.nixos.zsh
+
+    {
+      nixpkgs.overlays = [
+        overlays.unstable-packages
+      ];
+    }
   ];
 
   # Bootloader.
@@ -170,10 +194,10 @@ in
   # Salaisuudet
   age.secrets = {
     jhakonen-rsyncbackup-password = {
-      file = private.secret-files.rsyncbackup-password;
+      file = inputs.private.secret-files.rsyncbackup-password;
       owner = "jhakonen";
     };
-    rsyncbackup-password.file = private.secret-files.rsyncbackup-password;
+    rsyncbackup-password.file = inputs.private.secret-files.rsyncbackup-password;
   };
 
   # Varmuuskopiointi
@@ -184,13 +208,13 @@ in
       nas-minimal = {
         username = "rsync-backup";
         passwordFile = config.age.secrets.rsyncbackup-password.path;
-        host = catalog.nodes.nas.hostName;
+        host = flake.lib.catalog.nodes.nas.hostName;
         path = "::backups/minimal/${config.networking.hostName}";
       };
       nas-normal = {
         username = "rsync-backup";
         passwordFile = config.age.secrets.rsyncbackup-password.path;
-        host = catalog.nodes.nas.hostName;
+        host = flake.lib.catalog.nodes.nas.hostName;
         path = "::backups/normal/${config.networking.hostName}";
       };
     };
@@ -232,9 +256,9 @@ in
 
   my.services.syncthing = {
     enable = true;
-    gui-port = catalog.services.syncthing-dellxps13.port;
+    gui-port = flake.lib.catalog.services.syncthing-dellxps13.port;
     settings = {
-      devices = catalog.pickSyncthingDevices ["mervi" "nas"];
+      devices = flake.lib.catalog.pickSyncthingDevices ["mervi" "nas"];
       folders = {
         "Calibre" = {
           path = "/home/jhakonen/Calibre";
@@ -273,7 +297,7 @@ in
     openssh.authorizedKeys.keys = [ id-rsa-public-key ];
   };
 
-  home-manager.users.jhakonen = import ./home.nix;
+  #home-manager.users.jhakonen = import ./home.nix;
   home-manager.users.root.home.stateVersion = "23.11";
 
   # List packages installed in system profile. To search, run:
@@ -335,7 +359,7 @@ in
     vlc
     zoom-us
 
-    my-packages.replace-plasma
+    perSystem.self.replace-plasma
   ];
 
   # Esimerkki miten ohjelman paketin voi overridata käyttäen overlaytä

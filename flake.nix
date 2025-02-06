@@ -12,6 +12,8 @@
     agenix.url = "github:ryantm/agenix";
     agenix.inputs.nixpkgs.follows = "nixpkgs";
     agenix.inputs.home-manager.follows = "home-manager";
+    blueprint.url = "github:numtide/blueprint";
+    blueprint.inputs.nixpkgs.follows = "nixpkgs";
     private = {
       url = "git+ssh://github.com:/jhakonen/nixos-config-private.git";
       # url = "path:///home/jhakonen/nixos-config/private";
@@ -20,8 +22,8 @@
 
   outputs = { self
             , agenix
-            , home-manager
-            , home-manager-unstable
+            #, home-manager
+            #, home-manager-unstable
             , nixos-hardware
             , nixpkgs
             , nixpkgs-unstable
@@ -44,7 +46,12 @@
         my-packages = pkgs.callPackage ./packages/nix {};
       };
     };
-  in {
+  in 
+    inputs.blueprint {
+      inherit inputs;
+    };
+
+  /* {
     overlays = {
       unstable-packages = final: prev: {
         unstable = import inputs.nixpkgs-unstable {
@@ -71,42 +78,42 @@
         }
       ];
     };
+*/
+    # nixosConfigurations.kanto = nixpkgs.lib.nixosSystem {
+    #   modules = [
+    #     ./hosts/kanto/configuration.nix
+    #     depInject
+    #     agenix.nixosModules.default
+    #     home-manager.nixosModules.default
+    #   ];
+    # };
 
-    nixosConfigurations.kanto = nixpkgs.lib.nixosSystem {
-      modules = [
-        ./hosts/kanto/configuration.nix
-        depInject
-        agenix.nixosModules.default
-        home-manager.nixosModules.default
-      ];
-    };
+    # nixosConfigurations.mervi = nixpkgs.lib.nixosSystem {
+    #   modules = [
+    #     ./hosts/mervi/configuration.nix
+    #     depInject
+    #     agenix.nixosModules.default
+    #     home-manager.nixosModules.default
+    #     nur.modules.nixos.default
+    #   ];
+    # };
 
-    nixosConfigurations.mervi = nixpkgs-unstable.lib.nixosSystem {
-      modules = [
-        ./hosts/mervi/configuration.nix
-        depInject
-        agenix.nixosModules.default
-        home-manager-unstable.nixosModules.default
-        nur.modules.nixos.default
-      ];
-    };
+    # nixosConfigurations.nassuvm = nixpkgs.lib.nixosSystem {
+    #   modules = [
+    #     ./hosts/nassuvm/configuration.nix
+    #     depInject
+    #     agenix.nixosModules.default
+    #     home-manager.nixosModules.default
+    #   ];
+    # };
 
-    nixosConfigurations.nassuvm = nixpkgs.lib.nixosSystem {
-      modules = [
-        ./hosts/nassuvm/configuration.nix
-        depInject
-        agenix.nixosModules.default
-        home-manager.nixosModules.default
-      ];
-    };
-
-    nixosConfigurations.toukka = nixpkgs.lib.nixosSystem {
-      modules = [
-        ./hosts/toukka/configuration.nix
-        depInject
-        agenix.nixosModules.default
-        home-manager.nixosModules.default
-      ];
-    };
-  };
+    # nixosConfigurations.toukka = nixpkgs.lib.nixosSystem {
+    #   modules = [
+    #     ./hosts/toukka/configuration.nix
+    #     depInject
+    #     agenix.nixosModules.default
+    #     home-manager.nixosModules.default
+    #   ];
+    # };
+#  };
 }

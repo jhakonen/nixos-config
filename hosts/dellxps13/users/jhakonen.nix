@@ -1,30 +1,19 @@
-# This is your home-manager configuration file
-# Use this to configure your home environment (it replaces ~/.config/nixpkgs/home.nix)
-
-{ inputs, osConfig, lib, config, pkgs, ... }:
-let
-  inherit (osConfig.dep-inject) agenix catalog nur private;
-in
+{ config, flake, inputs, lib, osConfig, perSystem, pkgs, ... }:
 {
   imports = [
-    ../../roles/home-manager/firefox.nix
-    ../../roles/home-manager/git.nix
-    ../../roles/home-manager/mqtt-client.nix
-    ../../roles/home-manager/neofetch.nix
-    ../../roles/home-manager/zsh.nix
-    agenix.homeManagerModules.age
-    nur.modules.homeManager.default
+    flake.modules.home.firefox
+    flake.modules.home.git
+    flake.modules.home.mqtt-client
+    flake.modules.home.neofetch
+    flake.modules.home.zsh
+    inputs.agenix.homeManagerModules.age
+    inputs.nur.modules.homeManager.default
   ];
-
-  home = {
-    username = "jhakonen";
-    homeDirectory = "/home/jhakonen";
-  };
 
   # Add stuff for your user as you see fit:
   # programs.neovim.enable = true;
   home.packages = [
-    agenix.packages."x86_64-linux".default  # agenix komento
+    perSystem.agenix.default  # agenix komento
     pkgs.calibre
     pkgs.nixos-rebuild  # rebuildaus etäkoneelle
     pkgs.nix-index  # Nixpkgs pakettien sisällön etsiminen
@@ -50,15 +39,15 @@ in
 
   age.secrets = {
     github-id-rsa = {
-      file = private.secret-files.github-id-rsa;
+      file = inputs.private.secret-files.github-id-rsa;
       path = "/home/jhakonen/.ssh/github-id-rsa";
     };
     jhakonen-mosquitto-password = {
-      file = private.secret-files.mqtt-password;
+      file = inputs.private.secret-files.mqtt-password;
     };
   };
 
-  accounts.email.accounts = private.catalog.emailAccounts;
+  accounts.email.accounts = inputs.private.catalog.emailAccounts;
   programs.thunderbird = {
     enable = true;
     package = pkgs.thunderbird;  # Thunderbird 115 paremmalla käyttöliittymällä

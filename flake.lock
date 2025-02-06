@@ -25,6 +25,27 @@
         "type": "github"
       }
     },
+    "blueprint": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "systems": "systems_2"
+      },
+      "locked": {
+        "lastModified": 1738618197,
+        "narHash": "sha256-7YnBFwUc+86BLzeZsGufS2M3on9aiBS/h+iKtOdIv7Q=",
+        "owner": "numtide",
+        "repo": "blueprint",
+        "rev": "8853ea68f376237e9d9b896a8bb7e0c6ae980901",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "blueprint",
+        "type": "github"
+      }
+    },
     "darwin": {
       "inputs": {
         "nixpkgs": [
@@ -198,6 +219,7 @@
     "root": {
       "inputs": {
         "agenix": "agenix",
+        "blueprint": "blueprint",
         "home-manager": "home-manager",
         "home-manager-unstable": "home-manager-unstable",
         "nixos-hardware": "nixos-hardware",
@@ -208,6 +230,21 @@
       }
     },
     "systems": {
+      "locked": {
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "owner": "nix-systems",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-systems",
+        "repo": "default",
+        "type": "github"
+      }
+    },
+    "systems_2": {
       "locked": {
         "lastModified": 1681028828,
         "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
