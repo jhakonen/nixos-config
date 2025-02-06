@@ -2,10 +2,8 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ config, flake, inputs, pkgs, ... }:
 let
-  inherit (config.dep-inject) catalog my-packages private;
-
   # Julkinen avain SSH:lla sisäänkirjautumista varten
   id-rsa-public-key =
       "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDMqorF45N0aG+QqJbRt7kRcmXXbsgvXw7"
@@ -24,17 +22,23 @@ in
   # Ota flaket käyttöön
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
-  imports =
-    [
-      ./hardware-configuration.nix
-      ../../modules
-      ../../roles/nixos/common-programs.nix
-      ../../roles/nixos/gamepads.nix
-      ../../roles/nixos/koti.nix
-      ../../roles/nixos/nix-cleanup.nix
-      ../../roles/nixos/sunshine.nix
-      ../../roles/nixos/zsh.nix
-    ];
+  imports = [
+    ./hardware-configuration.nix
+
+    inputs.agenix.nixosModules.default
+    inputs.home-manager.nixosModules.home-manager
+
+    flake.modules.nixos.service-rsync
+    flake.modules.nixos.service-monitoring
+    flake.modules.nixos.service-syncthing
+
+    flake.modules.nixos.common-programs
+    flake.modules.nixos.gamepads
+    flake.modules.nixos.koti
+    flake.modules.nixos.nix-cleanup
+    flake.modules.nixos.sunshine
+    flake.modules.nixos.zsh
+  ];
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -94,10 +98,10 @@ in
   my.services.monitoring = {
     enable = true;
     acmeHost = "mervi.lan.jhakonen.com";
-    virtualHost = catalog.services.monit-mervi.public.domain;
+    virtualHost = flake.lib.catalog.services.monit-mervi.public.domain;
     mqttAlert = {
-      address = catalog.services.mosquitto.public.domain;
-      port = catalog.services.mosquitto.port;
+      address = flake.lib.catalog.services.mosquitto.public.domain;
+      port = flake.lib.catalog.services.mosquitto.port;
       passwordFile = config.age.secrets.mosquitto-password.path;
     };
   };
@@ -110,13 +114,13 @@ in
       nas-minimal = {
         username = "rsync-backup";
         passwordFile = config.age.secrets.rsyncbackup-password.path;
-        host = catalog.nodes.nas.hostName;
+        host = flake.lib.catalog.nodes.nas.hostName;
         path = "::backups/minimal/${config.networking.hostName}";
       };
       nas-normal = {
         username = "rsync-backup";
         passwordFile = config.age.secrets.rsyncbackup-password.path;
-        host = catalog.nodes.nas.hostName;
+        host = flake.lib.catalog.nodes.nas.hostName;
         path = "::backups/normal/${config.networking.hostName}";
       };
     };
@@ -124,9 +128,9 @@ in
 
   my.services.syncthing = {
     enable = true;
-    gui-port = catalog.services.syncthing-mervi.port;
+    gui-port = flake.lib.catalog.services.syncthing-mervi.port;
     settings = {
-      devices = catalog.pickSyncthingDevices ["dellxps13" "nas"];
+      devices = flake.lib.catalog.pickSyncthingDevices ["dellxps13" "nas"];
       folders = {
         "Keepass" = {
           path = "/home/jhakonen/Keepass";
@@ -152,24 +156,6 @@ in
       openssh.authorizedKeys.keys = [ id-rsa-public-key ];
     };
   };
-  home-manager.users = {
-    root = {
-      imports = [
-        ../../roles/home-manager/zsh.nix
-      ];
-      home.stateVersion = "23.05";
-      home.enableNixpkgsReleaseCheck = false;
-    };
-    jhakonen = {
-      imports = [
-        ../../roles/home-manager/mqtt-client.nix
-        ../../roles/home-manager/zsh.nix
-      ];
-      home.stateVersion = "23.05";
-      home.enableNixpkgsReleaseCheck = false;
-      roles.mqtt-client.passwordFile = config.age.secrets.jhakonen-mosquitto-password.path;
-    };
-  };
 
   # Enable automatic login for the user.
   services.displayManager.autoLogin.enable = true;
@@ -191,7 +177,7 @@ in
   security.acme = {
     acceptTerms = true;
     defaults = {
-      email = private.catalog.acmeEmail;
+      email = inputs.private.catalog.acmeEmail;
       dnsProvider = "joker";
       credentialsFile = config.age.secrets.acme-joker-credentials.path;
     };
@@ -200,17 +186,13 @@ in
 
   # Salaisuudet
   age.secrets = {
-    acme-joker-credentials.file = private.secret-files.acme-joker-credentials;
-    jhakonen-mosquitto-password = {
-      file = private.secret-files.mqtt-password;
-      owner = "jhakonen";
-    };
+    acme-joker-credentials.file = inputs.private.secret-files.acme-joker-credentials;
     jhakonen-rsyncbackup-password = {
-      file = private.secret-files.rsyncbackup-password;
+      file = inputs.private.secret-files.rsyncbackup-password;
       owner = "jhakonen";
     };
-    mosquitto-password.file = private.secret-files.mqtt-password;
-    rsyncbackup-password.file = private.secret-files.rsyncbackup-password;
+    mosquitto-password.file = inputs.private.secret-files.mqtt-password;
+    rsyncbackup-password.file = inputs.private.secret-files.rsyncbackup-password;
   };
 
   programs.gamemode.enable = true;
