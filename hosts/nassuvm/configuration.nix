@@ -2,10 +2,8 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ config, flake, inputs, pkgs, ... }:
 let
-  inherit (config.dep-inject) catalog private;
-
   # Julkinen avain SSH:lla sisäänkirjautumista varten
   id-rsa-public-key =
       "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDMqorF45N0aG+QqJbRt7kRcmXXbsgvXw7"
@@ -26,12 +24,14 @@ in
 
   imports = [
     ./hardware-configuration.nix
-    ../../modules
-    ../../roles/nixos/common-programs.nix
-    ../../roles/nixos/koti.nix
-    ../../roles/nixos/netdata-parent.nix
-    ../../roles/nixos/nix-cleanup.nix
-    ../../roles/nixos/zsh.nix
+
+    inputs.home-manager.nixosModules.home-manager
+
+    flake.modules.nixos.common-programs
+    flake.modules.nixos.koti
+    flake.modules.nixos.netdata-parent
+    flake.modules.nixos.nix-cleanup
+    flake.modules.nixos.zsh
   ];
 
   boot.loader.grub.enable = true;
@@ -86,21 +86,6 @@ in
     };
     root = {
       openssh.authorizedKeys.keys = [ id-rsa-public-key ];
-    };
-  };
-
-  home-manager.users = {
-    jhakonen = {
-      imports = [
-        ../../roles/home-manager/zsh.nix
-      ];
-      home.stateVersion = "24.05";
-    };
-    root = {
-      imports = [
-        ../../roles/home-manager/zsh.nix
-      ];
-      home.stateVersion = "24.05";
     };
   };
 
