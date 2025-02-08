@@ -1,13 +1,10 @@
-{ config, pkgs, ... }:
-let
-  koti = (pkgs.callPackage .../../../../tools/koti {}).package;
-in
+{ perSystem, ... }:
 {
-  environment.systemPackages = [ koti ];
+  environment.systemPackages = [ perSystem.self.koti.package ];
   programs.zsh = {
     enableBashCompletion = true;
     interactiveShellInit = ''
-      source ${koti}/share/bash-completion/completions/koti
+      source ${perSystem.self.koti.package}/share/bash-completion/completions/koti
     '';
   };
 }
