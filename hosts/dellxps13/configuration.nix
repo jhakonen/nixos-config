@@ -4,15 +4,6 @@
 
 { config, flake, inputs, perSystem, pkgs, ... }:
 let
-  overlays = {
-    unstable-packages = final: prev: {
-      unstable = import inputs.nixpkgs-unstable {
-        config.allowUnfree = true;
-        system = final.system;
-      };
-    };
-  };
-
   # Julkinen avain SSH:lla sisäänkirjautumista varten
   id-rsa-public-key =
       "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDMqorF45N0aG+QqJbRt7kRcmXXbsgvXw7"
@@ -70,12 +61,6 @@ in
     flake.modules.nixos.nix-cleanup
     flake.modules.nixos.tailscale
     flake.modules.nixos.zsh
-
-    {
-      nixpkgs.overlays = [
-        overlays.unstable-packages
-      ];
-    }
   ];
 
   # Bootloader.
@@ -314,7 +299,6 @@ in
     google-chrome  # Chromecastin tukea varten
     haruna  # video soitin
     easyeffects
-    unstable.errands
     gnumake
     (hakuneko.overrideAttrs(attrs: {  # Manga downloader
       version = "8.3.4";
@@ -354,11 +338,12 @@ in
     sublime4
     syncthingtray-minimal
     teams-for-linux
-    unstable.tidal-hifi
     trayscale
     vlc
     zoom-us
 
+    perSystem.nixpkgs-unstable.errands
+    perSystem.nixpkgs-unstable.tidal-hifi
     perSystem.self.replace-plasma
   ];
 
