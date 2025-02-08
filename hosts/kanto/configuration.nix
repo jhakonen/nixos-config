@@ -1,7 +1,5 @@
-{ config, pkgs, ... }:
+{ config, flake, inputs, pkgs, ... }:
 let
-  inherit (config.dep-inject) catalog private;
-
   # Julkinen avain SSH:lla sisäänkirjautumista varten
   id-rsa-public-key =
       "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDMqorF45N0aG+QqJbRt7kRcmXXbsgvXw7"
@@ -22,27 +20,36 @@ in
 
   imports = [
     ./hardware-configuration.nix
-    ../../modules
-    ../../roles/nixos/calibre.nix
-    ../../roles/nixos/common-programs.nix
-    ../../roles/nixos/dashy.nix
-    ../../roles/nixos/freshrss.nix
-    ../../roles/nixos/grafana.nix
-    ../../roles/nixos/hoarder.nix
-    ../../roles/nixos/home-assistant.nix
-    ../../roles/nixos/immich.nix
-    ../../roles/nixos/influxdb.nix
-    ../../roles/nixos/koti.nix
-    ../../roles/nixos/mosquitto.nix
-    ../../roles/nixos/mqttwarn.nix
-    ../../roles/nixos/netdata-child.nix
-    ../../roles/nixos/nextcloud.nix
-    ../../roles/nixos/nix-cleanup.nix
-    ../../roles/nixos/node-red.nix
-    ../../roles/nixos/paperless.nix
-    ../../roles/nixos/telegraf.nix
-    ../../roles/nixos/tvheadend.nix
-    ../../roles/nixos/zsh.nix
+
+    inputs.agenix.nixosModules.default
+    inputs.home-manager.nixosModules.home-manager
+
+    flake.modules.nixos.service-dashy
+    flake.modules.nixos.service-monitoring
+    flake.modules.nixos.service-mqttwarn
+    flake.modules.nixos.service-rsync
+    flake.modules.nixos.service-syncthing
+
+    flake.modules.nixos.calibre
+    flake.modules.nixos.common-programs
+    flake.modules.nixos.dashy
+    flake.modules.nixos.freshrss
+    flake.modules.nixos.grafana
+    flake.modules.nixos.hoarder
+    flake.modules.nixos.home-assistant
+    flake.modules.nixos.immich
+    flake.modules.nixos.influxdb
+    flake.modules.nixos.koti
+    flake.modules.nixos.mosquitto
+    flake.modules.nixos.mqttwarn
+    flake.modules.nixos.netdata-child
+    flake.modules.nixos.nextcloud
+    flake.modules.nixos.nix-cleanup
+    flake.modules.nixos.node-red
+    flake.modules.nixos.paperless
+    flake.modules.nixos.telegraf
+    flake.modules.nixos.tvheadend
+    flake.modules.nixos.zsh
   ];
 
   nixpkgs.config.allowUnfree = true;
@@ -97,23 +104,6 @@ in
     };
   };
 
-  home-manager.users = {
-    jhakonen = {
-      imports = [
-        ../../roles/home-manager/mqtt-client.nix
-        ../../roles/home-manager/zsh.nix
-      ];
-      roles.mqtt-client.passwordFile = config.age.secrets.jhakonen-mosquitto-password.path;
-      home.stateVersion = "24.05";
-    };
-    root = {
-      imports = [
-        ../../roles/home-manager/zsh.nix
-      ];
-      home.stateVersion = "24.05";
-    };
-  };
-
   # Listaa paketit jotka ovat saatavilla PATH:lla
   environment.systemPackages = with pkgs; [];
 
@@ -121,7 +111,7 @@ in
   security.acme = {
     acceptTerms = true;
     defaults = {
-      email = private.catalog.acmeEmail;
+      email = inputs.private.catalog.acmeEmail;
       dnsProvider = "joker";
       credentialsFile = config.age.secrets.acme-joker-credentials.path;
     };
@@ -133,19 +123,15 @@ in
 
   # Salaisuudet
   age.secrets = {
-    acme-joker-credentials.file = private.secret-files.acme-joker-credentials;
-    jhakonen-mosquitto-password = {
-      file = private.secret-files.mqtt-password;
-      owner = "jhakonen";
-    };
+    acme-joker-credentials.file = inputs.private.secret-files.acme-joker-credentials;
     jhakonen-rsyncbackup-password = {
-      file = private.secret-files.rsyncbackup-password;
+      file = inputs.private.secret-files.rsyncbackup-password;
       owner = "jhakonen";
     };
-    mosquitto-password.file = private.secret-files.mqtt-password;
-    mosquitto-esphome-password.file = private.secret-files.mqtt-espuser-password;
-    rsyncbackup-password.file = private.secret-files.rsyncbackup-password;
-    wireless-password.file = private.secret-files.wireless-password;
+    mosquitto-password.file = inputs.private.secret-files.mqtt-password;
+    mosquitto-esphome-password.file = inputs.private.secret-files.mqtt-espuser-password;
+    rsyncbackup-password.file = inputs.private.secret-files.rsyncbackup-password;
+    wireless-password.file = inputs.private.secret-files.wireless-password;
   };
 
   services = {
@@ -171,10 +157,10 @@ in
   my.services.monitoring = {
     enable = true;
     acmeHost = "jhakonen.com";
-    virtualHost = catalog.services.monit-kanto.public.domain;
+    virtualHost = flake.lib.catalog.services.monit-kanto.public.domain;
     mqttAlert = {
-      address = catalog.services.mosquitto.public.domain;
-      port = catalog.services.mosquitto.port;
+      address = flake.lib.catalog.services.mosquitto.public.domain;
+      port = flake.lib.catalog.services.mosquitto.port;
       passwordFile = config.age.secrets.mosquitto-password.path;
     };
   };
@@ -187,13 +173,13 @@ in
       nas-minimal = {
         username = "rsync-backup";
         passwordFile = config.age.secrets.rsyncbackup-password.path;
-        host = catalog.nodes.nas.hostName;
+        host = flake.lib.catalog.nodes.nas.hostName;
         path = "::backups/minimal/${config.networking.hostName}";
       };
       nas-normal = {
         username = "rsync-backup";
         passwordFile = config.age.secrets.rsyncbackup-password.path;
-        host = catalog.nodes.nas.hostName;
+        host = flake.lib.catalog.nodes.nas.hostName;
         path = "::backups/normal/${config.networking.hostName}";
       };
     };
@@ -202,11 +188,11 @@ in
   # Tiedostojen synkkaus
   my.services.syncthing = {
     enable = true;
-    gui-port = catalog.services.syncthing-kanto.port;
+    gui-port = flake.lib.catalog.services.syncthing-kanto.port;
     user = "root";
     data-dir = "/root";
     settings = {
-      devices = catalog.pickSyncthingDevices ["nas"];
+      devices = flake.lib.catalog.pickSyncthingDevices ["nas"];
     };
   };
 

@@ -1,6 +1,7 @@
-{ config, lib, pkgs, ... }:
+{ config, flake, lib, pkgs, ... }:
 let
-  catalog = config.dep-inject.catalog;
+  inherit (flake.lib) catalog;
+
   LOCAL_LIBRARY_PATH = "/var/lib/calibre-library";
   LOCAL_URL = "http://127.0.0.1:${toString config.services.calibre-web.listen.port}";
 in {

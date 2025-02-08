@@ -1,9 +1,9 @@
-{ config, ... }:
+{ config, flake, inputs, ... }:
 let
-  inherit (config.dep-inject) catalog private;
+  inherit (flake.lib) catalog;
 in
 {
-  age.secrets.node-red-environment.file = private.secret-files.node-red-environment;
+  age.secrets.node-red-environment.file = inputs.private.secret-files.node-red-environment;
 
   services.node-red = {
     enable = true;

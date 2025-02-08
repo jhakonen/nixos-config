@@ -1,6 +1,6 @@
-{ config, ... }:
+{ config, flake, ... }:
 let
-  catalog = config.dep-inject.catalog;
+  inherit (flake.lib) catalog;
   videoGroupId = 26;
 in
 {

@@ -1,6 +1,6 @@
-{ pkgs, config, ... }:
+{ config, flake, pkgs, ... }:
 let
-  catalog = config.dep-inject.catalog;
+  inherit (flake.lib) catalog;
 
   # Näiden tulee vastata vastaavaa käyttäjää NAS:lla sillä tällä käyttäjällä
   # on luku/kirjoitus oikeus skannerin syötekansioon

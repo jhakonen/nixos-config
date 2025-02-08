@@ -1,13 +1,13 @@
-{ config, ... }:
+{ config, flake, inputs, ... }:
 let
-  inherit (config.dep-inject) catalog private;
+  inherit (flake.lib) catalog;
   user = "koti";
   certDir = config.security.acme.certs."jhakonen.com".directory;
 in {
   # Salaisuudet
   age.secrets = {
     mosquitto-password = {
-      file = private.secret-files.mqtt-password;
+      file = inputs.private.secret-files.mqtt-password;
       owner = "mosquitto";
       group = "mosquitto";
     };

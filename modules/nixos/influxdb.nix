@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, flake, pkgs, ... }:
 let
-  catalog = config.dep-inject.catalog;
+  inherit (flake.lib) catalog;
   backupDir = "/var/backup/influxdb";
 in {
   # Työkalut influxdb varmuuskopiointiin ja palatukseen

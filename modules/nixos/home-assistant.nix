@@ -1,6 +1,6 @@
-{ config, lib, pkgs, ... }:
+{ config, flake, lib, pkgs, ... }:
 let
-  catalog = config.dep-inject.catalog;
+  inherit (flake.lib) catalog;
 in
 {
   services.home-assistant = {

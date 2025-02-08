@@ -1,9 +1,9 @@
-{ config, ... }:
+{ config, flake, inputs, ... }:
 let
-  inherit (config.dep-inject) catalog private;
+  inherit (flake.lib) catalog;
 in
 {
-  age.secrets.telegraf-environment.file = private.secret-files.telegraf-environment;
+  age.secrets.telegraf-environment.file = inputs.private.secret-files.telegraf-environment;
 
   services.telegraf = {
     enable = true;

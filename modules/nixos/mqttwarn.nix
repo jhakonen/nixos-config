@@ -1,9 +1,9 @@
-{ config, ... }:
+{ config, flake, inputs, ... }:
 let
-  inherit (config.dep-inject) catalog private;
+  inherit (flake.lib) catalog;
 in
 {
-  age.secrets.mqttwarn-environment.file = private.secret-files.mqttwarn-environment;
+  age.secrets.mqttwarn-environment.file = inputs.private.secret-files.mqttwarn-environment;
 
   services.mqttwarn = {
     enable = true;

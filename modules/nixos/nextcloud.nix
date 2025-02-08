@@ -1,6 +1,6 @@
-{ config, lib, pkgs, ... }:
+{ config, flake, lib, pkgs, ... }:
 let
-  catalog = config.dep-inject.catalog;
+  inherit (flake.lib) catalog;
 
   nextcloudPackage = pkgs.nextcloud29;
   backupDbPath = "${config.services.nextcloud.datadir}/nextcloud-mariadb.backup";

@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, flake, pkgs, ... }:
 let
-  inherit (config.dep-inject) catalog;
+  inherit (flake.lib) catalog;
 in {
   environment.systemPackages = [ pkgs.immich-cli ];
 

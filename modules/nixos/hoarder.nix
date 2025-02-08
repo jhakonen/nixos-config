@@ -1,13 +1,13 @@
-{ config, lib, pkgs, ... }:
+{ config, flake, inputs, lib, pkgs, ... }:
 let
-  inherit (config.dep-inject) catalog private;
+  inherit (flake.lib) catalog;
 
   chrome-port = catalog.services.hoarder.port + 1;
   chrome-version = "123";
   hoarder-version = "0.20.0";
   hoarder-dir = "/var/lib/hoarder";
 in {
-  age.secrets.hoarder-environment.file = private.secret-files.hoarder-environment;
+  age.secrets.hoarder-environment.file = inputs.private.secret-files.hoarder-environment;
 
   virtualisation.oci-containers.containers = {
     # Hoarder palvelu

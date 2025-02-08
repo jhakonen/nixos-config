@@ -1,10 +1,10 @@
-{ config, pkgs, ... }:
+{ config, flake, inputs, pkgs, ... }:
 let
-  inherit (config.dep-inject) catalog private;
+  inherit (flake.lib) catalog;
 in
 {
   age.secrets.freshrss-admin-password = {
-    file = private.secret-files.freshrss-admin-password;
+    file = inputs.private.secret-files.freshrss-admin-password;
     owner = config.services.freshrss.user;
   };
 

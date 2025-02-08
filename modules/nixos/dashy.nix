@@ -1,7 +1,7 @@
 # Lähde: https://github.com/jdheyburn/nixos-configs/blob/5175593745a27de7afc5249bc130a2f1c5edb64c/modules/dashy/default.nix
-{ config, lib, pkgs, ... }:
+{ config, flake, lib, pkgs, ... }:
 let
-  catalog = config.dep-inject.catalog;
+  inherit (flake.lib) catalog;
 
   # Start to build the elements in sections, this is then used to discover in catalog.services
   sections = [
