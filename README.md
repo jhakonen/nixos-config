@@ -126,29 +126,6 @@ Huomaa, että kannattaa ensin poistaa vanhoja sukupolvia, jotta garbage collecto
 
 Minulla on myös automaattinen puhdistus otettu käyttöön kaikilla NixOS koneilla joten tätä ei tarvitse välttämättä tehdä.
 
-
-# Muutosten testaaminen paikallisella private-flakella
-
-Muuta julkisessa `flake.nix` tiedostossa `private` input muotoon:
-```nix
-private.url = "path:///home/jhakonen/nixos-config/private";
-```
-
-Deploymentti läppärillä:
-```bash
-nix flake lock --update-input private && koti rakenna dellxps13
-```
-
-Deploymentti etäkoneella:
-```bash
-# Aja ensin läppärillä
-rsync -r ~/nixos-config <kone>:
-
-# Aja etäkoneella
-cd ~/nixos-config/public
-nix flake lock --update-input private && sudo nixos-rebuild switch --flake '.#'
-```
-
 # Salaisuudet
 
 Salaisuudet on jaettu kahteen eri kansioon:
