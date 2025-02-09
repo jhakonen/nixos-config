@@ -142,7 +142,7 @@ in
   security.acme = {
     acceptTerms = true;
     defaults = {
-      email = inputs.private.catalog.acmeEmail;
+      email = flake.lib.catalog.acmeEmail;
       dnsProvider = "joker";
       credentialsFile = config.age.secrets.acme-joker-credentials.path;
     };
@@ -151,9 +151,9 @@ in
 
   # Salaisuudet
   age.secrets = {
-    acme-joker-credentials.file = inputs.private.secret-files.acme-joker-credentials;
-    mosquitto-password.file = inputs.private.secret-files.mqtt-password;
-    rsyncbackup-password.file = inputs.private.secret-files.rsyncbackup-password;
+    acme-joker-credentials.file = ../../agenix/acme-joker-credentials.age;
+    mosquitto-password.file = ../../agenix/mqtt-password.age;
+    rsyncbackup-password.file = ../../agenix/rsyncbackup-password.age;
   };
 
   services = {

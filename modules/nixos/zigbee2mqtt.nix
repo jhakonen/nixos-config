@@ -99,7 +99,7 @@ in
   ];
 
   # Lisää MQTT salasana salatun ympäristömuuttujan kautta
-  age.secrets.zigbee2mqtt-environment.file = inputs.private.secret-files.zigbee2mqtt-environment;
+  age.secrets.zigbee2mqtt-environment.file = ../../agenix/zigbee2mqtt-environment.nix;
   systemd.services.zigbee2mqtt.serviceConfig.EnvironmentFile = [
     config.age.secrets.zigbee2mqtt-environment.path
   ];

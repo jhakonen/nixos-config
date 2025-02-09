@@ -3,7 +3,7 @@ let
   inherit (flake.lib) catalog;
 in
 {
-  age.secrets.node-red-environment.file = inputs.private.secret-files.node-red-environment;
+  age.secrets.node-red-environment.file = ../../agenix/node-red-environment.age;
 
   services.node-red = {
     enable = true;

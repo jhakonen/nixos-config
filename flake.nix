@@ -12,10 +12,6 @@
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     nur.url = "github:nix-community/NUR";
     nur.inputs.nixpkgs.follows = "nixpkgs";
-    private = {
-      url = "git+ssh://github.com:/jhakonen/nixos-config-private.git";
-      # url = "path:///home/jhakonen/nixos-config/private";
-    };
   };
 
   outputs = inputs: inputs.blueprint {

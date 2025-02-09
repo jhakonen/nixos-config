@@ -179,10 +179,10 @@ in
   # Salaisuudet
   age.secrets = {
     jhakonen-rsyncbackup-password = {
-      file = inputs.private.secret-files.rsyncbackup-password;
+      file = ../../agenix/rsyncbackup-password.age;
       owner = "jhakonen";
     };
-    rsyncbackup-password.file = inputs.private.secret-files.rsyncbackup-password;
+    rsyncbackup-password.file = ../../agenix/rsyncbackup-password.age;
   };
 
   # Varmuuskopiointi
@@ -296,6 +296,7 @@ in
     cachix
     nur.repos.shadowrz.klassy-qt6  # KDE6+ teema
     discord
+    git-crypt
     google-chrome  # Chromecastin tukea varten
     haruna  # video soitin
     easyeffects

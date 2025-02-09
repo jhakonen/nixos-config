@@ -3,7 +3,7 @@ let
   inherit (flake.lib) catalog;
 in
 {
-  age.secrets.telegraf-environment.file = inputs.private.secret-files.telegraf-environment;
+  age.secrets.telegraf-environment.file = ../../agenix/telegraf-environment.age;
 
   services.telegraf = {
     enable = true;

@@ -9,7 +9,7 @@
 
   age.secrets = {
     jhakonen-mosquitto-password = {
-      file = inputs.private.secret-files.mqtt-password;
+      file = ../../../agenix/mqtt-password.age;
     };
   };
 

@@ -7,7 +7,7 @@ let
   hoarder-version = "0.20.0";
   hoarder-dir = "/var/lib/hoarder";
 in {
-  age.secrets.hoarder-environment.file = inputs.private.secret-files.hoarder-environment;
+  age.secrets.hoarder-environment.file = ../../agenix/hoarder-environment.age;
 
   virtualisation.oci-containers.containers = {
     # Hoarder palvelu

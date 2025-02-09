@@ -39,15 +39,15 @@
 
   age.secrets = {
     github-id-rsa = {
-      file = inputs.private.secret-files.github-id-rsa;
+      file = ../../../agenix/github-id-rsa.age;
       path = "/home/jhakonen/.ssh/github-id-rsa";
     };
     jhakonen-mosquitto-password = {
-      file = inputs.private.secret-files.mqtt-password;
+      file = ../../../agenix/mqtt-password.age;
     };
   };
 
-  accounts.email.accounts = inputs.private.catalog.emailAccounts;
+  accounts.email.accounts = flake.lib.catalog.emailAccounts;
   programs.thunderbird = {
     enable = true;
     package = pkgs.thunderbird;  # Thunderbird 115 paremmalla käyttöliittymällä

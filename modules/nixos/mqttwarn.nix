@@ -3,7 +3,7 @@ let
   inherit (flake.lib) catalog;
 in
 {
-  age.secrets.mqttwarn-environment.file = inputs.private.secret-files.mqttwarn-environment;
+  age.secrets.mqttwarn-environment.file = ../../agenix/mqttwarn-environment.age;
 
   services.mqttwarn = {
     enable = true;

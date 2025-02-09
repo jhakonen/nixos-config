@@ -149,6 +149,54 @@ cd ~/nixos-config/public
 nix flake lock --update-input private && sudo nixos-rebuild switch --flake '.#'
 ```
 
+# Salaisuudet
+
+Salaisuudet on jaettu kahteen eri kansioon:
+
+- `agenix`: Agenix työkalulla kryptatut salaisuudet, nämä ovat kryptattuna nix-storessa ja salaus puretaan vasta aktivointivaiheessa.
+- `encrypted`: Git-crypt työkalulla kryptatut salaisuudet, nämä on selkokielisenä nix-storessa. Salaus puretaan git pullin yhteydessä.
+
+## Agenix
+
+Tiedostot `agenix` kansiossa joiden pääte on `.age` ovat salattuja tiedostoja.
+
+Uuden salatun tiedoston lisäys tapahtuu lisäämällä tiedostolle rivi `agenix/secrets.nix` tiedostoon. Sen jälkeen luo tiedosto komennolla:
+
+```bash
+cd agenix
+agenix -e <salaisuus>.age
+```
+
+Salatun tiedoston muokkaus tapahtuu samalla komennolla.
+
+Salatun tiedoston poistaminen tapahtuu poistamalla sen `.age`-tiedosto. Poista myös sen rivi `agenix/secrets.nix` tiedostosta.
+
+Jos muutat tiedostojen julkisia avaimia `agenix/secrets.nix` tiedostossa, niin silloin tulee ajaa komento:
+
+```bash
+cd agenix
+agenix --rekey
+```
+
+## Git-crypt
+
+Kaikki tiedostot `encrypted` kansiossa (ja alikansioissa) salataan ja puretaan automaattisesti `git` komentojen yhteydessä.
+
+Tiedostot voi halutessaan salata niin että tiedostot ovat salattuna levyllä käyttäen komentoa:
+
+```bash
+git crypt lock
+```
+
+Tiedostojen palautus kryptaamattomiksi tapahtuu komennolla:
+
+```bash
+git crypt unlock ./nixos-config.key
+```
+
+Avaintiedosto on salasanakannassa.
+
+
 # Varmuuskopiot
 
 ## Varmuuskopioiden listaus

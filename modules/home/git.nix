@@ -1,4 +1,4 @@
-{ config, inputs, lib, osConfig, ... }:
+{ config, flake, lib, osConfig, ... }:
 let
   cfg = config.roles.git;
 in {
@@ -12,7 +12,7 @@ in {
     git = {
       enable = true;
       userName = "Janne Hakonen";
-      userEmail = inputs.private.catalog.githubEmail;
+      userEmail = flake.lib.catalog.githubEmail;
       aliases.l = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit";
       extraConfig.init.defaultBranch = "main";
     };

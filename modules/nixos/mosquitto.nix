@@ -7,7 +7,7 @@ in {
   # Salaisuudet
   age.secrets = {
     mosquitto-password = {
-      file = inputs.private.secret-files.mqtt-password;
+      file = ../../agenix/mqtt-password.age;
       owner = "mosquitto";
       group = "mosquitto";
     };

@@ -4,7 +4,7 @@ let
 in
 {
   age.secrets.freshrss-admin-password = {
-    file = inputs.private.secret-files.freshrss-admin-password;
+    file = ../../agenix/freshrss-admin-password.age;
     owner = config.services.freshrss.user;
   };
 
