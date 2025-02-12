@@ -5,7 +5,7 @@ koneet=()
 eval "koneet=(${args[kone]:-})"
 mapfile -t koneet < <(suodata_koneet "${koneet[@]}")
 
-cd /home/jhakonen/nixos-config/public
+cd /home/jhakonen/nixos-config
 for kone in "${koneet[@]}"; do
   komento=("nixos-rebuild" "$toiminto" "--flake" ".#$kone" "--fast")
 
