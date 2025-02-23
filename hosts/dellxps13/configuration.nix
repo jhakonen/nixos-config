@@ -294,12 +294,13 @@ in
     bitwarden
     brave
     cachix
+    chromium
     nur.repos.shadowrz.klassy-qt6  # KDE6+ teema
     discord
+    easyeffects
     git-crypt
     google-chrome  # Chromecastin tukea varten
     haruna  # video soitin
-    easyeffects
     gnumake
     (hakuneko.overrideAttrs(attrs: {  # Manga downloader
       version = "8.3.4";
