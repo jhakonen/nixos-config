@@ -3,7 +3,7 @@
   imports = [
     inputs.agenix.homeManagerModules.age
     flake.modules.home.mqtt-client
-    flake.modules.home.zsh
+    flake.modules.home.common
   ];
 
   age.secrets = {

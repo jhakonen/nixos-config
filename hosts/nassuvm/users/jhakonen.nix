@@ -1,7 +1,7 @@
 { flake, ... }:
 {
   imports = [
-    flake.modules.home.zsh
+    flake.modules.home.common
   ];
 
   home.stateVersion = "24.05";
