@@ -1,9 +1,9 @@
 { pkgs, ... }:
 {
-  home.packages = [ pkgs.neofetch ];
+  home.packages = [ pkgs.fastfetch ];
   programs.zsh = {
     initExtraFirst = ''
-      neofetch
+      fastfetch
     '';
   };
 }

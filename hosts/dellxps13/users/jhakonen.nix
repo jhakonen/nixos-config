@@ -4,7 +4,7 @@
     flake.modules.home.firefox
     flake.modules.home.git
     flake.modules.home.mqtt-client
-    flake.modules.home.neofetch
+    flake.modules.home.systeminfo
     flake.modules.home.zsh
     inputs.agenix.homeManagerModules.age
     inputs.nur.modules.homeManager.default
