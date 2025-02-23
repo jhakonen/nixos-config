@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, flake, inputs, perSystem, pkgs, ... }:
+{ config, flake, inputs, lib, perSystem, pkgs, ... }:
 let
   # Julkinen avain SSH:lla sisäänkirjautumista varten
   id-rsa-public-key =
@@ -424,6 +424,9 @@ in
   }];
 
   services.fwupd.enable = true;
+
+  # https://github.com/NixOS/nixpkgs/issues/180175#issuecomment-1473408913
+  systemd.services.NetworkManager-wait-online.enable = lib.mkForce false;
 
   # Ota Oracle Virtualbox tuki käyttöön
   virtualisation.virtualbox.host = {
