@@ -377,7 +377,14 @@ in
   #   binfmt = true;
   # };
 
-  programs.steam.enable = true;
+  programs.steam = {
+    enable = true;
+    package = pkgs.steam.override {
+      # Älä näytä steamin pääikkunaa, hyödyllinen kun käynnistää steam pelin
+      # pikakuvakkeesta
+      extraArgs = "-silent";
+    };
+  };
 
   programs.dconf.enable = true;  # Easyeffects tarvitsee tämän
 
