@@ -345,6 +345,7 @@ in
     zoom-us
 
     perSystem.nixpkgs-unstable.errands
+    perSystem.nixpkgs-unstable.nixos-rebuild-ng
     perSystem.nixpkgs-unstable.tidal-hifi
     perSystem.self.replace-plasma
   ];

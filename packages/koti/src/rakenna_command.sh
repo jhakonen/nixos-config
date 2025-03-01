@@ -7,7 +7,7 @@ mapfile -t koneet < <(suodata_koneet "${koneet[@]}")
 
 cd /home/jhakonen/nixos-config
 for kone in "${koneet[@]}"; do
-  komento=("nixos-rebuild" "$toiminto" "--flake" ".#$kone" "--fast")
+  komento=("nixos-rebuild-ng" "$toiminto" "--flake" ".#$kone" "--no-reexec")
 
   if [ "$kone" != "$(hostname)" ]; then
     komento+=("--build-host" "root@$kone" "--target-host" "root@$kone")
