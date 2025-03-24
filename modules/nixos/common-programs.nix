@@ -35,11 +35,12 @@
 
   # Listaa kaikki asennetut paketit polussa /etc/current-system-packages
   # Lähde: https://www.reddit.com/r/NixOS/comments/fsummx/comment/fm45htj/
-  environment.etc."current-system-packages".text = let
-    packages = builtins.map (p: "${p.name}") config.environment.systemPackages;
-    sortedUnique = builtins.sort builtins.lessThan (lib.unique packages);
-    formatted = builtins.concatStringsSep "\n" sortedUnique;
-  in formatted;
+  environment.etc."current-system-packages".text = lib.pipe config.environment.systemPackages [
+    (builtins.map (p: "${p.name}"))
+    lib.unique
+    (builtins.sort builtins.lessThan)
+    (builtins.concatStringsSep "\n")
+  ];
 
   # Listaa muuttuneet paketit nixos-rebuild komennon lopussa. Otettu täältä:
   #   https://discourse.nixos.org/t/nvd-simple-nix-nixos-version-diff-tool/12397/42

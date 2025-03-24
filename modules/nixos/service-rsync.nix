@@ -233,40 +233,47 @@ in {
     ]);
 
   config.systemd = lib.mkIf cfg.enable {
-    services = builtins.listToAttrs (builtins.map (job: {
-      name = "rsync-backup-${job.jobname}";
-      value = {
-        description = "rsync backup ${job.jobname}";
-        enable = true;
-        startAt = cfg.schedule;
-        script = job.binpath;
-        serviceConfig.Type = "oneshot";
-        # Älä aja varmuuskopiointia nixos-rebuild:n jälkeen, tee se vain
-        # ajastettuna ajankohtana:
-        #   https://github.com/NixOS/nixpkgs/blob/fbbeadbe17d3e9ae09ca743472d57c909563ac67/nixos/doc/manual/development/unit-handling.section.md?plain=1#L48
-        unitConfig.X-OnlyManualStart = true;
-      };
-    }) backup-jobs);
-    timers = builtins.listToAttrs (builtins.map (job: {
-      name = "rsync-backup-${job.jobname}";
-      value = {
-        # Älä käynnistä varmuuskopiointia ennen kuin verkko on ylhäällä, tämä
-        # tarvitaan `Persistent` asetuksen takia. Huomaa, että tämä ei vielä
-        # riitä, sillä ainakaan dns-selvitys ei näytä vielä toimivan heti
-        # verkon noustua ylös. Tätä varten skriptissä on `waitforhosts` funktio.
-        wants = [ "network-online.target" ];
-        after = [ "network-online.target" ];
-        # Käynnistä backup koneen käynnistyksen jälkeen jos kone oli pois päältä
-        # edellisen suoritusajan hetkellä
-        timerConfig.Persistent = "true";
+    services = lib.pipe backup-jobs [
+      (builtins.map (job: {
+        name = "rsync-backup-${job.jobname}";
+        value = {
+          description = "rsync backup ${job.jobname}";
+          enable = true;
+          startAt = cfg.schedule;
+          script = job.binpath;
+          serviceConfig.Type = "oneshot";
+          # Älä aja varmuuskopiointia nixos-rebuild:n jälkeen, tee se vain
+          # ajastettuna ajankohtana:
+          #   https://github.com/NixOS/nixpkgs/blob/fbbeadbe17d3e9ae09ca743472d57c909563ac67/nixos/doc/manual/development/unit-handling.section.md?plain=1#L48
+          unitConfig.X-OnlyManualStart = true;
+        };
+      }))
+      builtins.listToAttrs
+    ];
 
-        # HUOMAA: systemd:ssä on bugi jossa timeri saattaa käynnistää servicen
-        # jos timeri käynnistetään uudelleen:
-        #   https://github.com/systemd/systemd/issues/31231
-        # Tämä saattaa aiheuttaa varmuuskopioinnin käynnistymisen
-        # nixos-rebuildin aikana.
-      };
-    }) backup-jobs);
+    timers = lib.pipe backup-jobs [
+      (builtins.map (job: {
+        name = "rsync-backup-${job.jobname}";
+        value = {
+          # Älä käynnistä varmuuskopiointia ennen kuin verkko on ylhäällä, tämä
+          # tarvitaan `Persistent` asetuksen takia. Huomaa, että tämä ei vielä
+          # riitä, sillä ainakaan dns-selvitys ei näytä vielä toimivan heti
+          # verkon noustua ylös. Tätä varten skriptissä on `waitforhosts` funktio.
+          wants = [ "network-online.target" ];
+          after = [ "network-online.target" ];
+          # Käynnistä backup koneen käynnistyksen jälkeen jos kone oli pois päältä
+          # edellisen suoritusajan hetkellä
+          timerConfig.Persistent = "true";
+
+          # HUOMAA: systemd:ssä on bugi jossa timeri saattaa käynnistää servicen
+          # jos timeri käynnistetään uudelleen:
+          #   https://github.com/systemd/systemd/issues/31231
+          # Tämä saattaa aiheuttaa varmuuskopioinnin käynnistymisen
+          # nixos-rebuildin aikana.
+        };
+      }))
+      builtins.listToAttrs
+    ];
   };
 
   # Palveluiden valvonta

@@ -28,21 +28,20 @@ let
   ];
 
   getSectionItems = sectionName: services:
-    map buildSectionItem (getServicesInSection sectionName services);
-
-  getServicesInSection = sectionName: services:
-    lib.attrValues (lib.filterAttrs (_: service: isInDashySection sectionName service) services);
-
-  isInDashySection = sectionName: service:
-    service ? dashy.section && service.dashy.section == (lib.toLower sectionName);
-
-  buildSectionItem = service: {
-    title = if service ? dashy.title then service.dashy.title else catalog.getServiceName(service);
-    description = service.dashy.description;
-    url = "${catalog.getServiceScheme service}://${catalog.getServiceAddress service}:${toString (catalog.getServicePort service)}";
-    icon = service.dashy.icon;
-    target = "newtab";
-  };
+    lib.pipe services [
+      lib.attrValues
+      (builtins.filter (service:
+        service ? dashy.section
+          && service.dashy.section == (lib.toLower sectionName)
+      ))
+      (map (service: {
+        title = if service ? dashy.title then service.dashy.title else catalog.getServiceName(service);
+        description = service.dashy.description;
+        url = "${catalog.getServiceScheme service}://${catalog.getServiceAddress service}:${toString (catalog.getServicePort service)}";
+        icon = service.dashy.icon;
+        target = "newtab";
+      }))
+    ];
 in {
   my.services.dashy = {
     enable = true;
