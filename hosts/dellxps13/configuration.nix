@@ -347,6 +347,7 @@ in
     perSystem.nixpkgs-unstable.errands
     perSystem.nixpkgs-unstable.nixos-rebuild-ng
     perSystem.nixpkgs-unstable.tidal-hifi
+    perSystem.zen-browser.default
     perSystem.self.replace-plasma
   ];
 
