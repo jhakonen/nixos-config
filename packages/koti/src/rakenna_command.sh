@@ -17,7 +17,7 @@ for kone in "${koneet[@]}"; do
     ssh-keyscan "$kone" 2>/dev/null >> ~/.ssh/known_hosts
   elif [ "root" != "$(whoami)" ]; then
     echo "${PUNAINEN}Koneen '$kone' uudelleenrakennus vaatii sudo-oikeudet${NOLLAA}" >&2
-    exit 1
+    continue
   fi
 
   if [ "$debug" ]; then
