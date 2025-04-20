@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, perSystem, pkgs, ... }:
 {
   # Asenna locate ja updatedb komennot, updatedb ajetaan myös kerran päivässä
   # keskiyöllä
@@ -22,6 +22,8 @@
     eza        # https://github.com/eza-community/eza
     doggo      # https://doggo.mrkaran.dev/docs/
     nvd        # listaa erot kahden nixos sukupolven väliltä
+
+    perSystem.nixpkgs-unstable.isd
   ];
 
   # Estä `inetutils` pakettia korvaamasta `nettools`
