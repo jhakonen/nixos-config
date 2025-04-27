@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, flake, inputs, lib, perSystem, pkgs, ... }:
+{ config, flake, inputs, lib, perSystem, pkgs, pkgsUnstable, ... }:
 let
   # Julkinen avain SSH:lla sisäänkirjautumista varten
   id-rsa-public-key =
@@ -50,6 +50,8 @@ in
     inputs.nixos-hardware.nixosModules.common-pc-laptop
     inputs.nixos-hardware.nixosModules.common-pc-ssd
     inputs.nur.modules.nixos.default
+
+    flake.modules.nixos.nixpkgs-unstable
 
     flake.modules.nixos.service-rsync
     flake.modules.nixos.service-monitoring
@@ -345,6 +347,7 @@ in
     zoom-us
 
     perSystem.nixpkgs-unstable.errands
+    pkgsUnstable.grayjay
     perSystem.nixpkgs-unstable.nixos-rebuild-ng
     perSystem.nixpkgs-unstable.tidal-hifi
     perSystem.zen-browser.default
@@ -405,7 +408,9 @@ in
   # services.openssh.enable = true;
 
   # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
+  networking.firewall.allowedTCPPorts = [
+    12315  # Grayjay Sync
+  ];
   # networking.firewall.allowedUDPPorts = [ ... ];
 
   networking.firewall.allowedTCPPortRanges = [
