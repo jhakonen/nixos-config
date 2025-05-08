@@ -95,19 +95,33 @@ in
   # päällä samaan aikaan. Kierrä ongelma laittamalla WIFI pois päältä kun
   # läppäri on verkossa telakan kautta.
   # Skripti otettu Arch Linuxin wikistä: https://wiki.archlinux.org/title/NetworkManager
+  # Skriptin lokituksen näkee komennolla:
+  #   journalctl -fu NetworkManager-dispatcher.service
   networking.networkmanager.dispatcherScripts = [{
     source = pkgs.writeShellScript "wlan_auto_toggle.sh" ''
-      if [ "$1" = "enp6s0" ]; then
+      export LANG=C
+      LOG_PREFIX="WiFi Auto-Toggle"
+      ETHERNET_INTERFACE="enp6s0"
+      echo "$LOG_PREFIX - Starting script, iface=$1, status=$2"
+
+      if [ "$1" = "$ETHERNET_INTERFACE" ]; then
           case "$2" in
               up)
+                  echo "$LOG_PREFIX - Ethernet up, turn wifi off"
                   ${pkgs.networkmanager}/bin/nmcli radio wifi off
                   ;;
               down)
+                  echo "$LOG_PREFIX - Ethernet down, turn wifi on"
                   ${pkgs.networkmanager}/bin/nmcli radio wifi on
                   ;;
           esac
-      elif [ "$(${pkgs.networkmanager}/bin/nmcli -g GENERAL.STATE device show enp6s0)" = "20 (unavailable)" ]; then
-          ${pkgs.networkmanager}/bin/nmcli radio wifi on
+      else
+          STATUS="$(${pkgs.networkmanager}/bin/nmcli -g GENERAL.STATE device show $ETHERNET_INTERFACE 2>&1)"
+          echo "$LOG_PREFIX - iface state: '$STATUS'"
+          if [ "$STATUS" = "20 (unavailable)" ] || [[ "$STATUS" = *"not found"* ]]; then
+              echo "$LOG_PREFIX - Failsafe, turn wifi on"
+              ${pkgs.networkmanager}/bin/nmcli radio wifi on
+          fi
       fi
     '';
     type = "basic";
