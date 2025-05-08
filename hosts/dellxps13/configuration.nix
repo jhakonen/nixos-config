@@ -364,6 +364,7 @@ in
     pkgsUnstable.grayjay
     perSystem.nixpkgs-unstable.nixos-rebuild-ng
     perSystem.nixpkgs-unstable.tidal-hifi
+    perSystem.qjournalctl.default
     perSystem.zen-browser.default
     perSystem.self.replace-plasma
   ];

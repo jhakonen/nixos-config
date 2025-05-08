@@ -201,6 +201,26 @@
         "type": "github"
       }
     },
+    "qjournalctl": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1746388455,
+        "narHash": "sha256-F8C7BI7GkM+mS2+6lHOKe9QS1FcP3jqfLu1ppmn7U5Q=",
+        "owner": "jhakonen",
+        "repo": "qjournalctl",
+        "rev": "d91bb39db530a8de81b823df3b329abe8b185f0c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jhakonen",
+        "repo": "qjournalctl",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "agenix": "agenix",
@@ -210,6 +230,7 @@
         "nixpkgs": "nixpkgs",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "nur": "nur",
+        "qjournalctl": "qjournalctl",
         "zen-browser": "zen-browser"
       }
     },
