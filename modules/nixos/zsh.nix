@@ -11,7 +11,7 @@
   programs.zsh.enable = true;
 
   # Ota ZSH käyttöön `nix develop`, 'nix shell' ja `nix-shell` tulkeissa
-  programs.zsh.interactiveShellInit = ''
-    ${lib.getExe pkgs.nix-your-shell} zsh | source /dev/stdin
-  '';
+  # programs.zsh.interactiveShellInit = ''
+  #   ${lib.getExe pkgs.nix-your-shell} zsh | source /dev/stdin
+  # '';
 }
