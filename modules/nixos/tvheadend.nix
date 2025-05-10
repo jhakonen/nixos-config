@@ -25,6 +25,7 @@ in
     volumes = [
       "/var/lib/tvheadend/config:/config:rw"
       "/var/lib/tvheadend/recordings:/recordings:rw"
+      "/dev/log:/dev/log:rw"  # laite syslogille
     ];
     ports = [
       "${toString catalog.services.tvheadend.port}:9981"
@@ -34,6 +35,9 @@ in
       "--device" "/dev/dri:/dev/dri"
       "--device" "/dev/dvb:/dev/dvb"
     ];
+    # Älä loggaa kontin stdout/stderr ulostuloa, käytä sensijaan syslogia jota
+    # Tvheadend antaa myös ulos. Tällä saa paremman lokitason tunnistuksen
+    log-driver = "none";
     #user = "${toString config.users.users.tvheadend.uid}:${toString videoGroupId}";
   };
 
