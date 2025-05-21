@@ -4,6 +4,7 @@
     flake.modules.home.common
     flake.modules.home.firefox
     flake.modules.home.git
+    flake.modules.home.hyprland-home
     flake.modules.home.mqtt-client
     flake.modules.home.systeminfo
     inputs.agenix.homeManagerModules.age

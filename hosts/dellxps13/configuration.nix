@@ -59,6 +59,7 @@ in
 
     flake.modules.nixos.beeper
     flake.modules.nixos.common-programs
+    flake.modules.nixos.hyprland
     flake.modules.nixos.koti
     flake.modules.nixos.nix-cleanup
     flake.modules.nixos.tailscale
@@ -152,7 +153,7 @@ in
   # Enable the KDE Plasma Desktop Environment.
   services.displayManager.sddm.enable = true;
   services.displayManager.sddm.wayland.enable = true;
-  services.desktopManager.plasma6.enable = true;
+  #services.desktopManager.plasma6.enable = true;  # kommentoi pois hyprlandia varten
 
   # Configure keymap in X11
   services.xserver.xkb = {
@@ -350,7 +351,7 @@ in
     meld
     moonlight-qt
     mqttx
-    nextcloud-client
+    #nextcloud-client
     obsidian
     renameutils  # qmv
     sublime4
