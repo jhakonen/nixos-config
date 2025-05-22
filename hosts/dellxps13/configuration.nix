@@ -59,11 +59,13 @@ in
 
     flake.modules.nixos.beeper
     flake.modules.nixos.common-programs
-    flake.modules.nixos.hyprland
     flake.modules.nixos.koti
     flake.modules.nixos.nix-cleanup
     flake.modules.nixos.tailscale
     flake.modules.nixos.zsh
+
+    # Hyprland modules
+    flake.modules.nixos.hyprland
   ];
 
   # Bootloader.
@@ -351,7 +353,7 @@ in
     meld
     moonlight-qt
     mqttx
-    #nextcloud-client
+    nextcloud-client
     obsidian
     renameutils  # qmv
     sublime4

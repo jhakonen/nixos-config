@@ -56,52 +56,18 @@
     qtwayland # Hack? To make everything run on Wayland
     qtsvg # Needed to render SVG icons
 
-    # Frameworks with globally loadable bits
-    frameworkintegration # provides Qt plugin
-    kauth # provides helper service
-    kcoreaddons # provides extra mime type info
-    kded # provides helper service
-    kfilemetadata # provides Qt plugins
-    kguiaddons # provides geo URL handlers
-    kiconthemes # provides Qt plugins
-    kimageformats # provides Qt plugins
-    qtimageformats # provides optional image formats such as .webp and .avif
-    kio # provides helper service + a bunch of other stuff
-    kio-admin # managing files as admin
-    kio-extras # stuff for MTP, AFC, etc
-    kio-fuse # fuse interface for KIO
-    kpackage # provides kpackagetool tool
-    kservice # provides kbuildsycoca6 tool
-    kunifiedpush # provides a background service and a KCM
-    kwallet # provides helper service
-    kwallet-pam # provides helper service
+    #kwallet # provides helper service
+    kwallet-pam  # Tarjoaa skriptin /run/current-system/sw/libexec/pam_kwallet_init
     kwalletmanager # provides KCMs and stuff
-    plasma-activities # provides plasma-activities-cli tool
-    solid # provides solid-hardware6 tool
-    phonon-vlc # provides Phonon plugin
 
-    # Core Plasma parts
-    kwin
-    kscreen
-    libkscreen
-    kscreenlocker
-    kactivitymanagerd
-    kde-cli-tools
-    kglobalacceld # keyboard shortcut daemon
-    kwrited # wall message proxy, not to be confused with kwrite
-    baloo # system indexer
-    milou # search engine atop baloo
-    kdegraphics-thumbnailers # pdf etc thumbnailer
-    polkit-kde-agent-1 # polkit auth ui
-    plasma-desktop
-    plasma-workspace
-    drkonqi # crash handler
-    kde-inotify-survey # warns the user on low inotifywatch limits
+    plasma-desktop # TARVITAAN JOTTA SDDM EI NÄYTÄ RIKKINÄISELTÄ
 
-    # Application integration
-    libplasma # provides Kirigami platform theme
-    plasma-integration # provides Qt platform theme
-    kde-gtk-config # syncs KDE settings to GTK
+
+
+    # # Application integration
+    # libplasma # provides Kirigami platform theme
+    # plasma-integration # provides Qt platform theme
+    # kde-gtk-config # syncs KDE settings to GTK
 
     # Artwork + themes
     breeze
@@ -113,40 +79,40 @@
     qqc2-breeze-style
     qqc2-desktop-style
 
-    # misc Plasma extras
-    kdeplasma-addons
-    pkgs.xdg-user-dirs # recommended upstream
+    # # misc Plasma extras
+    # kdeplasma-addons
+    # pkgs.xdg-user-dirs # recommended upstream
 
-    # Plasma utilities
-    kmenuedit
-    kinfocenter
-    plasma-systemmonitor
-    ksystemstats
-    libksysguard
-    systemsettings
-    kcmutils
+    # # Plasma utilities
+    # kmenuedit
+    # kinfocenter
+    # plasma-systemmonitor
+    # ksystemstats
+    # libksysguard
+    # systemsettings
+    # kcmutils
 
-    plasma-browser-integration
-    konsole
-    (lib.getBin qttools) # Expose qdbus in PATH
-    ark
-    elisa
-    gwenview
-    okular
-    kate
-    khelpcenter
-    dolphin
-    baloo-widgets # baloo information in Dolphin
-    dolphin-plugins
-    spectacle
-    ffmpegthumbs
-    krdp
-    xwaylandvideobridge # exposes Wayland windows to X11 screen capture
+    # # plasma-browser-integration
+    # konsole
+    # (lib.getBin qttools) # Expose qdbus in PATH
+    # ark
+    # elisa
+    # gwenview
+    # okular
+    # kate
+    # khelpcenter
+    # dolphin
+    # baloo-widgets # baloo information in Dolphin
+    # dolphin-plugins
+    # spectacle
+    # ffmpegthumbs
+    # krdp
+    # xwaylandvideobridge # exposes Wayland windows to X11 screen capture
 
-    bluedevil
-    bluez-qt
-    pkgs.openobex
-    pkgs.obexftp
+    # bluedevil
+    # bluez-qt
+    # pkgs.openobex
+    # pkgs.obexftp
   ]);
 
 
@@ -193,9 +159,9 @@
     serif = [ "Noto Serif" ];
   };
 
-  programs.gnupg.agent.pinentryPackage = lib.mkDefault pkgs.pinentry-qt;
-  programs.kde-pim.enable = lib.mkDefault true;
-  programs.ssh.askPassword = lib.mkDefault "${pkgs.kdePackages.ksshaskpass.out}/bin/ksshaskpass";
+  # programs.gnupg.agent.pinentryPackage = lib.mkDefault pkgs.pinentry-qt;
+  # programs.kde-pim.enable = lib.mkDefault true;
+  # programs.ssh.askPassword = lib.mkDefault "${pkgs.kdePackages.ksshaskpass.out}/bin/ksshaskpass";
 
   # Enable helpful DBus services.
   services.accounts-daemon.enable = true;
@@ -203,10 +169,10 @@
   systemd.services.accounts-daemon.serviceConfig.PrivateTmp = false;
 
   #services.power-profiles-daemon.enable = lib.mkDefault true;
-  services.system-config-printer.enable = lib.mkIf config.services.printing.enable (lib.mkDefault true);
-  services.udisks2.enable = true;
-  services.upower.enable = config.powerManagement.enable;
-  services.libinput.enable = lib.mkDefault true;
+  # services.system-config-printer.enable = lib.mkIf config.services.printing.enable (lib.mkDefault true);
+  # services.udisks2.enable = true;
+  # services.upower.enable = config.powerManagement.enable;
+  # services.libinput.enable = lib.mkDefault true;
 
   # Extra UDEV rules used by Solid
   services.udev.packages = [
@@ -215,9 +181,9 @@
     pkgs.media-player-info
   ];
 
-  # Set up Dr. Konqi as crash handler
-  systemd.packages = [ pkgs.kdePackages.drkonqi ];
-  systemd.services."drkonqi-coredump-processor@".wantedBy = [ "systemd-coredump@.service" ];
+  # # Set up Dr. Konqi as crash handler
+  # systemd.packages = [ pkgs.kdePackages.drkonqi ];
+  # systemd.services."drkonqi-coredump-processor@".wantedBy = [ "systemd-coredump@.service" ];
 
   xdg.icons.enable = true;
   xdg.icons.fallbackCursorThemes = lib.mkDefault [ "breeze_cursors" ];
@@ -229,22 +195,18 @@
     pkgs.xdg-desktop-portal-gtk
   ];
   xdg.portal.configPackages = lib.mkDefault [ pkgs.kdePackages.plasma-workspace ];
-  services.pipewire.enable = lib.mkDefault true;
+  # services.pipewire.enable = lib.mkDefault true;
 
-  # Enable screen reader by default
-  services.orca.enable = lib.mkDefault true;
+  # # Enable screen reader by default
+  # services.orca.enable = lib.mkDefault true;
 
-  services.displayManager = {
-    sessionPackages = [ pkgs.kdePackages.plasma-workspace ];
-    defaultSession = lib.mkDefault "plasma";
-  };
+  # services.displayManager = {
+  #   sessionPackages = [ pkgs.kdePackages.plasma-workspace ];
+  #   defaultSession = lib.mkDefault "plasma";
+  # };
   services.displayManager.sddm = {
     package = pkgs.kdePackages.sddm;
     theme = lib.mkDefault "breeze";
-    #wayland = lib.mkDefault {
-    #  enable = true;
-    #  compositor = "kwin";
-    #};
     extraPackages = with pkgs.kdePackages; [
       breeze-icons
       kirigami
@@ -260,37 +222,37 @@
       enable = true;
       package = pkgs.kdePackages.kwallet-pam;
     };
-    kde = {
-      allowNullPassword = true;
-      kwallet = {
-        enable = true;
-        package = pkgs.kdePackages.kwallet-pam;
-      };
-    };
-    kde-fingerprint = lib.mkIf config.services.fprintd.enable { fprintAuth = true; };
-    kde-smartcard = lib.mkIf config.security.pam.p11.enable { p11Auth = true; };
+    # kde = {
+    #   allowNullPassword = true;
+    #   kwallet = {
+    #     enable = true;
+    #     package = pkgs.kdePackages.kwallet-pam;
+    #   };
+    # };
+    # kde-fingerprint = lib.mkIf config.services.fprintd.enable { fprintAuth = true; };
+    # kde-smartcard = lib.mkIf config.security.pam.p11.enable { p11Auth = true; };
   };
 
-  security.wrappers = {
-    kwin_wayland = {
-      owner = "root";
-      group = "root";
-      capabilities = "cap_sys_nice+ep";
-      source = "${lib.getBin pkgs.kdePackages.kwin}/bin/kwin_wayland";
-    };
-  };
+  # security.wrappers = {
+  #   kwin_wayland = {
+  #     owner = "root";
+  #     group = "root";
+  #     capabilities = "cap_sys_nice+ep";
+  #     source = "${lib.getBin pkgs.kdePackages.kwin}/bin/kwin_wayland";
+  #   };
+  # };
 
-  programs.dconf.enable = true;
+  # programs.dconf.enable = true;
 
-  programs.firefox.nativeMessagingHosts.packages = [ pkgs.kdePackages.plasma-browser-integration ];
+  # programs.firefox.nativeMessagingHosts.packages = [ pkgs.kdePackages.plasma-browser-integration ];
 
-  programs.chromium = {
-    enablePlasmaBrowserIntegration = true;
-    plasmaBrowserIntegrationPackage = pkgs.kdePackages.plasma-browser-integration;
-  };
+  # programs.chromium = {
+  #   enablePlasmaBrowserIntegration = true;
+  #   plasmaBrowserIntegrationPackage = pkgs.kdePackages.plasma-browser-integration;
+  # };
 
-  programs.kdeconnect.package = pkgs.kdePackages.kdeconnect-kde;
-  programs.partition-manager.package = pkgs.kdePackages.partitionmanager;
+  # programs.kdeconnect.package = pkgs.kdePackages.kdeconnect-kde;
+  # programs.partition-manager.package = pkgs.kdePackages.partitionmanager;
 
   # FIXME: ugly hack. See #292632 for details.
   #system.userActivationScripts.rebuildSycoca = activationScript;

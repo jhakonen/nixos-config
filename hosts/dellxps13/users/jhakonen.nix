@@ -4,11 +4,14 @@
     flake.modules.home.common
     flake.modules.home.firefox
     flake.modules.home.git
-    flake.modules.home.hyprland-home
     flake.modules.home.mqtt-client
     flake.modules.home.systeminfo
     inputs.agenix.homeManagerModules.age
     inputs.nur.modules.homeManager.default
+
+    # Hyprland modules
+    flake.modules.home.hyprland-home
+    flake.modules.home.waybar
   ];
 
   # Add stuff for your user as you see fit:
