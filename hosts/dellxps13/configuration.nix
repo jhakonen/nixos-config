@@ -314,7 +314,7 @@ in
     brave
     cachix
     chromium
-    nur.repos.shadowrz.klassy-qt6  # KDE6+ teema
+    #nur.repos.shadowrz.klassy-qt6  # KDE6+ teema
     discord
     easyeffects
     git-crypt
@@ -366,7 +366,7 @@ in
     perSystem.nixpkgs-unstable.errands
     pkgsUnstable.grayjay
     perSystem.nixpkgs-unstable.nixos-rebuild-ng
-    perSystem.nixpkgs-unstable.tidal-hifi
+    pkgsUnstable.tidal-hifi
     perSystem.qjournalctl.default
     perSystem.zen-browser.default
     perSystem.self.replace-plasma
