@@ -54,6 +54,9 @@
       # https://wiki.hyprland.org/Nix/Hyprland-on-Home-Manager/#programs-dont-work-in-systemd-services-but-do-on-the-terminal
       # "dbus-update-activation-environment --systemd --all"
 
+      # Notifikaatio-palvelu
+      "dunst"
+
       # See https://github.com/Vladimir-csp/uwsm/issues/72
       "PAM_KWALLET5_LOGIN=/run/user/1000/kwallet5.socket /run/current-system/sw/libexec/pam_kwallet_init"
 
