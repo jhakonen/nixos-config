@@ -10,7 +10,7 @@ in {
     programs.firefox = {
       enable = true;
       profiles.hakonen = {
-        extensions = with pkgs; [
+        extensions.packages = with pkgs; [
           nur.repos.rycee.firefox-addons.floccus
           nur.repos.rycee.firefox-addons.kagi-search
           nur.repos.rycee.firefox-addons.keepassxc-browser
@@ -25,14 +25,14 @@ in {
               urls = [{
                 template = "https://kagi.com/search?q={searchTerms}";
               }];
-              iconUpdateURL = "https://kagi.com/favicon.ico";
+              icon = "https://kagi.com/favicon.ico";
               definedAliases = [ "@k" ];
             };
             "StartPage" = {
               urls = [{
                 template = "https://www.startpage.com/sp/search?query={searchTerms}";
               }];
-              iconUpdateURL = "https://www.startpage.com/favicon.ico";
+              icon = "https://www.startpage.com/favicon.ico";
               definedAliases = [ "@sp" ];
             };
             "Noogle" = {
@@ -63,9 +63,9 @@ in {
               icon = "file://${../../data/nix-wiki.png}";
               definedAliases = [ "@nw" ];
             };
-            "Bing".metaData.hidden = true;
-            "Amazon.nl".metaData.hidden = true;
-            "Google".metaData.hidden = true;
+            "bing".metaData.hidden = true;
+            "amazon.nl".metaData.hidden = true;
+            "google".metaData.hidden = true;
           };
           order = [ "Kagi" "Noogle" "Nix Packages" "Nix Options" "NixOS Wiki" "StartPage" ];
         };

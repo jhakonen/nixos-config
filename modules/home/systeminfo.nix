@@ -2,7 +2,7 @@
 {
   home.packages = [ pkgs.fastfetch ];
   programs.zsh = {
-    initExtraFirst = ''
+    initContent = ''
       fastfetch
     '';
   };

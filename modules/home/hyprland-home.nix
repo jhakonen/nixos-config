@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 {
   fonts.fontconfig.enable = true;
   home.packages = [
@@ -7,11 +7,12 @@
     pkgs.font-awesome
     pkgs.liberation_ttf
     pkgs.mplus-outline-fonts.githubRelease
-    pkgs.nerdfonts
-    pkgs.noto-fonts
     pkgs.noto-fonts-emoji
     pkgs.proggyfonts
-  ];
+  ]
+    # Kaikki 74 nerdfonts pakettia
+    ++ builtins.filter lib.attrsets.isDerivation 
+      (builtins.attrValues pkgs.nerd-fonts);
 
 
   wayland.windowManager.hyprland = {

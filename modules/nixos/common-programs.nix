@@ -5,7 +5,6 @@
   services.locate = {
     enable = true;
     package = pkgs.plocate;
-    localuser = null;
   };
 
   environment.systemPackages = with pkgs; [
@@ -14,7 +13,9 @@
     git
     inetutils  # telnet
     inotify-info
+    isd
     jq
+    kitty
     usbutils   # lsusb
     binutils   # strings
     python3
@@ -22,8 +23,6 @@
     eza        # https://github.com/eza-community/eza
     doggo      # https://doggo.mrkaran.dev/docs/
     nvd        # listaa erot kahden nixos sukupolven väliltä
-
-    perSystem.nixpkgs-unstable.isd
   ];
 
   # Estä `inetutils` pakettia korvaamasta `nettools`

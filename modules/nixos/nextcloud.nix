@@ -2,7 +2,7 @@
 let
   inherit (flake.lib) catalog;
 
-  nextcloudPackage = pkgs.nextcloud30;
+  nextcloudPackage = pkgs.nextcloud31;
   backupDbPath = "${config.services.nextcloud.datadir}/nextcloud-mariadb.backup";
   adminPassFile = pkgs.writeText "nextcloud-initialadminpass" "initial-pass";
   backupPrepare = pkgs.writeShellApplication {

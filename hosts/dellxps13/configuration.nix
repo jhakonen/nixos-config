@@ -177,7 +177,7 @@ in
   hardware.bluetooth.enable = true;
 
   # Enable sound with pipewire.
-  hardware.pulseaudio.enable = false;
+  services.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
@@ -317,8 +317,10 @@ in
     #nur.repos.shadowrz.klassy-qt6  # KDE6+ teema
     discord
     easyeffects
+    errands
     git-crypt
     google-chrome  # Chromecastin tukea varten
+    grayjay
     haruna  # video soitin
     gnumake
     (hakuneko.overrideAttrs(attrs: {  # Manga downloader
@@ -354,22 +356,23 @@ in
     moonlight-qt
     mqttx
     nextcloud-client
+    nixos-rebuild-ng
     obsidian
     renameutils  # qmv
     sublime4
     syncthingtray-minimal
     teams-for-linux
+    tidal-hifi
     trayscale
     vlc
     zoom-us
 
-    perSystem.nixpkgs-unstable.errands
-    pkgsUnstable.grayjay
-    perSystem.nixpkgs-unstable.nixos-rebuild-ng
-    pkgsUnstable.tidal-hifi
     perSystem.qjournalctl.default
     perSystem.zen-browser.default
     perSystem.self.replace-plasma
+
+    #perSystem.nixpkgs-unstable.errands
+    #pkgsUnstable.tidal-hifi
   ];
 
   # Esimerkki miten ohjelman paketin voi overridata käyttäen overlaytä
@@ -448,6 +451,8 @@ in
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "23.11"; # Did you read the comment?
+
+  system.rebuild.enableNg = true;
 
   # Lisää swappiä jotta nix-index komennolle riittää muistia
   swapDevices = [{

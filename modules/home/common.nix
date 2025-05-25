@@ -8,7 +8,7 @@
     # completion asetuksia roskiin
     enableCompletion = false;
 
-    initExtra = ''
+    initContent = ''
       # Kopioitu osoitteesta https://wiki.archlinux.org/title/Zsh#Key_bindings
       typeset -g -A key
 
