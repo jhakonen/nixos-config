@@ -51,6 +51,7 @@
     pkgs.kdePackages.dolphin
     #kdePackages.plasma-pa
     pavucontrol
+    playerctl
 
   ]) ++ (with pkgs.kdePackages; [
     qtwayland # Hack? To make everything run on Wayland
