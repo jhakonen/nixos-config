@@ -466,8 +466,9 @@ in
   systemd.services.NetworkManager-wait-online.enable = lib.mkForce false;
 
   # Ota Oracle Virtualbox tuki käyttöön
-  virtualisation.virtualbox.host = {
-    enable = true;
-    enableExtensionPack = true;
-  };
+  # TODO: systemd-modules-load.service palvelun ajossa kestää 10s kun insertoi vboxnetflt moduulia, miksi?
+  # virtualisation.virtualbox.host = {
+  #   enable = true;
+  #   enableExtensionPack = true;
+  # };
 }
