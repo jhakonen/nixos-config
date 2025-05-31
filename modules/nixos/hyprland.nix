@@ -16,42 +16,19 @@
   ];
   services.power-profiles-daemon.enable = true;
 
-  # nixpkgs.overlays = [
-  #   (final: prev: {
-  #     kdePackages = prev.kdePackages.overrideScope (
-  #       kfinal: kprev: {
-  #         kwallet-pam = kprev.kwallet-pam.overrideAttrs (oldAttrs: {
-  #           patches = (oldAttrs.patches or [ ]) ++ [
-  #             ./kwallet-pam.patch
-  #           ];
-  #         });
-  #       }
-  #     );
-  #   })
-  # ];
-
   environment.systemPackages = (with pkgs; [
     kitty
     wofi
     playerctl
     hyprpanel
     myxer
-    fira-code
-    fira-code-symbols
-    font-awesome
-    liberation_ttf
-    mplus-outline-fonts.githubRelease
-    noto-fonts-emoji
-    proggyfonts
 
-    # Hyprpanel tarvitsee nämä
-    pkgs.nerd-fonts.jetbrains-mono
+    # Hyprpanel tarvitsee tämän
     pkgs.adwaita-icon-theme
 
   ]) ++ (with pkgs.kdePackages; [
     qtwayland # Hack? To make everything run on Wayland
     qtsvg # Needed to render SVG icons
-
     dolphin
 
     # KWallet tuki
@@ -99,9 +76,17 @@
   # Enable GTK applications to load SVG icons
   programs.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];
 
-  fonts.packages = [
-    pkgs.noto-fonts
-    pkgs.hack-font
+  fonts.packages = with pkgs; [
+    fira-code
+    fira-code-symbols
+    font-awesome
+    hack-font
+    liberation_ttf
+    mplus-outline-fonts.githubRelease
+    noto-fonts
+    noto-fonts-emoji
+    proggyfonts
+    nerd-fonts.jetbrains-mono  # hyprpanel
   ];
   fonts.fontconfig.defaultFonts = {
     monospace = [
@@ -121,7 +106,6 @@
   # when changing an account picture the accounts-daemon reads a temporary file containing the image which systemsettings5 may place under /tmp
   systemd.services.accounts-daemon.serviceConfig.PrivateTmp = false;
 
-  #services.power-profiles-daemon.enable = lib.mkDefault true;
   # services.system-config-printer.enable = lib.mkIf config.services.printing.enable (lib.mkDefault true);
   # services.udisks2.enable = true;
 
@@ -137,10 +121,6 @@
     pkgs.media-player-info
   ];
 
-  # # Set up Dr. Konqi as crash handler
-  # systemd.packages = [ pkgs.kdePackages.drkonqi ];
-  # systemd.services."drkonqi-coredump-processor@".wantedBy = [ "systemd-coredump@.service" ];
-
   xdg.icons.enable = true;
   xdg.icons.fallbackCursorThemes = lib.mkDefault [ "breeze_cursors" ];
 
@@ -151,15 +131,7 @@
     pkgs.xdg-desktop-portal-gtk
   ];
   xdg.portal.configPackages = lib.mkDefault [ pkgs.kdePackages.plasma-workspace ];
-  # services.pipewire.enable = lib.mkDefault true;
 
-  # # Enable screen reader by default
-  # services.orca.enable = lib.mkDefault true;
-
-  # services.displayManager = {
-  #   sessionPackages = [ pkgs.kdePackages.plasma-workspace ];
-  #   defaultSession = lib.mkDefault "plasma";
-  # };
   services.displayManager.sddm = {
     package = pkgs.kdePackages.sddm;
     theme = lib.mkDefault "breeze";
@@ -178,65 +150,5 @@
       enable = true;
       package = pkgs.kdePackages.kwallet-pam;
     };
-    # kde = {
-    #   allowNullPassword = true;
-    #   kwallet = {
-    #     enable = true;
-    #     package = pkgs.kdePackages.kwallet-pam;
-    #   };
-    # };
-    # kde-fingerprint = lib.mkIf config.services.fprintd.enable { fprintAuth = true; };
-    # kde-smartcard = lib.mkIf config.security.pam.p11.enable { p11Auth = true; };
   };
-
-  # security.wrappers = {
-  #   kwin_wayland = {
-  #     owner = "root";
-  #     group = "root";
-  #     capabilities = "cap_sys_nice+ep";
-  #     source = "${lib.getBin pkgs.kdePackages.kwin}/bin/kwin_wayland";
-  #   };
-  # };
-
-  # programs.dconf.enable = true;
-
-  # programs.firefox.nativeMessagingHosts.packages = [ pkgs.kdePackages.plasma-browser-integration ];
-
-  # programs.chromium = {
-  #   enablePlasmaBrowserIntegration = true;
-  #   plasmaBrowserIntegrationPackage = pkgs.kdePackages.plasma-browser-integration;
-  # };
-
-  # programs.kdeconnect.package = pkgs.kdePackages.kdeconnect-kde;
-  # programs.partition-manager.package = pkgs.kdePackages.partitionmanager;
-
-  # FIXME: ugly hack. See #292632 for details.
-  #system.userActivationScripts.rebuildSycoca = activationScript;
-  #systemd.user.services.nixos-rebuild-sycoca = {
-  #  description = "Rebuild KDE system configuration cache";
-  #  wantedBy = [ "graphical-session-pre.target" ];
-  #  serviceConfig.Type = "oneshot";
-  #  script = activationScript;
-  #};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
