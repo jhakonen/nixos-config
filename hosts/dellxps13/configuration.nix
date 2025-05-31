@@ -318,6 +318,7 @@ in
     discord
     easyeffects
     errands
+    eww
     git-crypt
     google-chrome  # Chromecastin tukea varten
     grayjay

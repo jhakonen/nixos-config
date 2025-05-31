@@ -1,4 +1,4 @@
-{ config, lib, perSystem, pkgs, ... }:
+{ config, inputs, lib, perSystem, pkgs, ... }:
 {
   services.displayManager.sddm.enable = true;
   services.displayManager.sddm.wayland.enable = true;
@@ -8,10 +8,9 @@
     withUWSM = true;
     xwayland.enable = true;
   };
-  programs.waybar = {
-    enable = true;
-    #package = perSystem.nixpkgs-unstable.waybar;
-  };
+
+  nixpkgs.overlays = [ inputs.hyprpanel.overlay ];
+
   users.users.jhakonen.extraGroups = [
     "input"  # waybar
   ];
@@ -31,44 +30,36 @@
   #   })
   # ];
 
-  systemd.user.services.waybar.path = [
-    pkgs.pavucontrol  # waybar pulseaudio moduuli tarvitsee tämän
-    # (pkgs.python3.withPackages (python-pkgs: [
-    #   python-pkgs.pygobject3  # waybar custom/media
-    # ]))
-    pkgs.python3
-    pkgs.playerctl  # waybar custom/media
-    pkgs.gobject-introspection
-    pkgs.python3Packages.pygobject3
-  ];
-
   environment.systemPackages = (with pkgs; [
     kitty
-    dunst
-    #qt5-wayland
-    #qt6-wayland
     wofi
-    pkgs.kdePackages.dolphin
-    #kdePackages.plasma-pa
-    pavucontrol
     playerctl
+    hyprpanel
+    myxer
+    fira-code
+    fira-code-symbols
+    font-awesome
+    liberation_ttf
+    mplus-outline-fonts.githubRelease
+    noto-fonts-emoji
+    proggyfonts
+
+    # Hyprpanel tarvitsee nämä
+    pkgs.nerd-fonts.jetbrains-mono
+    pkgs.adwaita-icon-theme
 
   ]) ++ (with pkgs.kdePackages; [
     qtwayland # Hack? To make everything run on Wayland
     qtsvg # Needed to render SVG icons
 
-    #kwallet # provides helper service
+    dolphin
+
+    # KWallet tuki
+    kwallet
     kwallet-pam  # Tarjoaa skriptin /run/current-system/sw/libexec/pam_kwallet_init
     kwalletmanager # provides KCMs and stuff
 
     plasma-desktop # TARVITAAN JOTTA SDDM EI NÄYTÄ RIKKINÄISELTÄ
-
-
-
-    # # Application integration
-    # libplasma # provides Kirigami platform theme
-    # plasma-integration # provides Qt platform theme
-    # kde-gtk-config # syncs KDE settings to GTK
 
     # Artwork + themes
     breeze
@@ -79,49 +70,10 @@
     pkgs.hicolor-icon-theme # fallback icons
     qqc2-breeze-style
     qqc2-desktop-style
-
-    # # misc Plasma extras
-    # kdeplasma-addons
-    # pkgs.xdg-user-dirs # recommended upstream
-
-    # # Plasma utilities
-    # kmenuedit
-    # kinfocenter
-    # plasma-systemmonitor
-    # ksystemstats
-    # libksysguard
-    # systemsettings
-    # kcmutils
-
-    # # plasma-browser-integration
-    # konsole
-    # (lib.getBin qttools) # Expose qdbus in PATH
-    # ark
-    # elisa
-    # gwenview
-    # okular
-    # kate
-    # khelpcenter
-    # dolphin
-    # baloo-widgets # baloo information in Dolphin
-    # dolphin-plugins
-    # spectacle
-    # ffmpegthumbs
-    # krdp
-    # xwaylandvideobridge # exposes Wayland windows to X11 screen capture
-
-    # bluedevil
-    # bluez-qt
-    # pkgs.openobex
-    # pkgs.obexftp
   ]);
-
-
-
 
   qt.enable = true;
   programs.xwayland.enable = true;
-
 
   environment.pathsToLink = [
     # FIXME: modules should link subdirs of `/share` rather than relying on this
@@ -172,7 +124,10 @@
   #services.power-profiles-daemon.enable = lib.mkDefault true;
   # services.system-config-printer.enable = lib.mkIf config.services.printing.enable (lib.mkDefault true);
   # services.udisks2.enable = true;
-  # services.upower.enable = config.powerManagement.enable;
+
+  # ####### Hyprpanel tarvitsee tämän
+  services.upower.enable = true;
+
   # services.libinput.enable = lib.mkDefault true;
 
   # Extra UDEV rules used by Solid

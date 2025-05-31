@@ -12,7 +12,6 @@
 
     # Hyprland modules
     flake.modules.home.hyprland-home
-    flake.modules.home.waybar
   ];
 
   # Add stuff for your user as you see fit:

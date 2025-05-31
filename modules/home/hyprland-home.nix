@@ -1,24 +1,8 @@
 { lib, pkgs, ... }:
 {
   fonts.fontconfig.enable = true;
-  home.packages = [
-    pkgs.fira-code
-    pkgs.fira-code-symbols
-    pkgs.font-awesome
-    pkgs.liberation_ttf
-    pkgs.mplus-outline-fonts.githubRelease
-    pkgs.noto-fonts-emoji
-    pkgs.proggyfonts
-  ]
-    # Kaikki 74 nerdfonts pakettia
-    ++ builtins.filter lib.attrsets.isDerivation 
-      (builtins.attrValues pkgs.nerd-fonts);
 
-
-  wayland.windowManager.hyprland = {
-    enable = true;
-    sourceFirst = false;
-  };
+  wayland.windowManager.hyprland.enable = true;
   wayland.windowManager.hyprland.settings = {
     ################
     ### MONITORS ###
@@ -54,8 +38,7 @@
       # https://wiki.hyprland.org/Nix/Hyprland-on-Home-Manager/#programs-dont-work-in-systemd-services-but-do-on-the-terminal
       # "dbus-update-activation-environment --systemd --all"
 
-      # Notifikaatio-palvelu
-      "dunst"
+      "hyprpanel"
 
       # See https://github.com/Vladimir-csp/uwsm/issues/72
       "PAM_KWALLET5_LOGIN=/run/user/1000/kwallet5.socket /run/current-system/sw/libexec/pam_kwallet_init"
