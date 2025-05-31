@@ -42,36 +42,14 @@
     breeze
     breeze-icons
     breeze-gtk
-    ocean-sound-theme
-    plasma-workspace-wallpapers
-    pkgs.hicolor-icon-theme # fallback icons
-    qqc2-breeze-style
-    qqc2-desktop-style
   ]);
 
   qt.enable = true;
   programs.xwayland.enable = true;
 
   environment.pathsToLink = [
-    # FIXME: modules should link subdirs of `/share` rather than relying on this
-    "/share"
-    "/libexec" # for drkonqi
+    "/libexec" # kwallet
   ];
-
-  environment.etc."X11/xkb".source = config.services.xserver.xkb.dir;
-
-  # Add ~/.config/kdedefaults to XDG_CONFIG_DIRS for shells, since Plasma sets that.
-  # FIXME: maybe we should append to XDG_CONFIG_DIRS in /etc/set-environment instead?
-  environment.sessionVariables.XDG_CONFIG_DIRS = [ "$HOME/.config/kdedefaults" ];
-
-  # Needed for things that depend on other store.kde.org packages to install correctly,
-  # notably Plasma look-and-feel packages (a.k.a. Global Themes)
-  #
-  # FIXME: this is annoyingly impure and should really be fixed at source level somehow,
-  # but kpackage is a library so we can't just wrap the one thing invoking it and be done.
-  # This also means things won't work for people not on Plasma, but at least this way it
-  # works for SOME people.
-  environment.sessionVariables.KPACKAGE_DEP_RESOLVERS_PATH = "${pkgs.kdePackages.frameworkintegration.out}/libexec/kf6/kpackagehandlers";
 
   # Enable GTK applications to load SVG icons
   programs.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];
