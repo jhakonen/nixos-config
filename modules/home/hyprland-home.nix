@@ -3,6 +3,10 @@
   fonts.fontconfig.enable = true;
 
   wayland.windowManager.hyprland.enable = true;
+  wayland.windowManager.hyprland.plugins = [
+    pkgs.hyprlandPlugins.hyprspace  # task switcher / overview
+    pkgs.hyprlandPlugins.hyprexpo   # simpler task switcher
+  ];
   wayland.windowManager.hyprland.settings = {
     ################
     ### MONITORS ###
@@ -152,6 +156,11 @@
     #   "rounding 0, floating:0, onworkspace:f[1]"
     # ];
 
+    workspace = [
+      # Näytä workspace 1 ulkoisella näytöllä
+      "1, monitor:DP-1, default:true"
+    ];
+
     # See https://wiki.hyprland.org/Configuring/Dwindle-Layout/ for more
     dwindle = {
       pseudotile = true; # Master switch for pseudotiling. Enabling is bound to mainMod + P in the keybinds section below
@@ -215,7 +224,7 @@
       "$mainMod, E, exec, $fileManager"
       "$mainMod, V, togglefloating,"
       "$mainMod, R, exec, $menu"
-      "$mainMod, P, pseudo, # dwindle"
+      "$mainMod, P, exec, vaihda-nayttoa"   # Kytkee läppärin näytön päälle/pois kun telakassa
       "$mainMod, J, togglesplit, # dwindle"
 
       # Move focus with mainMod + arrow keys
@@ -255,6 +264,12 @@
       # Scroll through existing workspaces with mainMod + scroll
       "$mainMod, mouse_down, workspace, e+1"
       "$mainMod, mouse_up, workspace, e-1"
+
+      # Näytä overview näkymä
+      "$mainMod, Tab, overview:toggle"
+
+      # Näytä yksinkertainen task switcher
+      "ALT, Tab, hyprexpo:expo, toggle"
     ];
 
     # Move/resize windows with mainMod + LMB/RMB and dragging

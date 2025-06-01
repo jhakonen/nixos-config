@@ -17,14 +17,17 @@
   services.power-profiles-daemon.enable = true;
 
   environment.systemPackages = (with pkgs; [
+    brightnessctl  # Läppärin näytön kirkkauden säätö
     kitty
     wofi
     playerctl
     hyprpanel
     myxer
 
-    # Hyprpanel tarvitsee tämän
-    pkgs.adwaita-icon-theme
+    # Hyprpanel tarvitsee nämä
+    adwaita-icon-theme  # Sisältää osan puuttuvista ikoneista
+    wf-recorder         # videon nauhoitus
+    grimblast           # Kuvan kaappaus
 
   ]) ++ (with pkgs.kdePackages; [
     qtwayland # Hack? To make everything run on Wayland
