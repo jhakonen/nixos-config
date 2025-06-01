@@ -30,19 +30,13 @@
 
     # KWallet tuki
     kdePackages.kwallet
-    kdePackages.kwallet-pam  # Tarjoaa skriptin /run/current-system/sw/libexec/pam_kwallet_init
-    kdePackages.kwalletmanager # provides KCMs and stuff
+    kdePackages.kwalletmanager
 
     # Artwork + themes
     kdePackages.breeze
     kdePackages.breeze-icons
     kdePackages.breeze-gtk
   ];
-
-  #programs.xwayland.enable = true;
-
-  # Enable GTK applications to load SVG icons
-  programs.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];
 
   fonts.packages = with pkgs; [
     hack-font
