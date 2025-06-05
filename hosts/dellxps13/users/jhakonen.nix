@@ -81,4 +81,24 @@
   roles.mqtt-client.passwordFile = config.age.secrets.jhakonen-mosquitto-password.path;
 
   my.programs.firefox.enable = true;
+
+  # https://wiki.nixos.org/wiki/Default_applications
+  # Tiedostotyypin näkee komennolla "file -i <tiedoston polku>"
+  xdg.mimeApps = {
+    enable = true;
+    defaultApplications = {
+      "application/pdf" = "org.kde.okular.desktop";
+      "inode/directory" = "org.kde.dolphin.desktop";
+      "text/html" = "firefox.desktop";
+      "text/markdown" = "sublime_text.desktop";
+      "video/mp4" = "vlc.desktop";
+      "video/webm" = "vlc.desktop";
+      "x-scheme-handler/about" = "firefox.desktop";
+      "x-scheme-handler/element" = "Beeper.desktop";
+      "x-scheme-handler/http" = "firefox.desktop";
+      "x-scheme-handler/https" = "firefox.desktop";
+      "x-scheme-handler/mailto" = "thunderbird.desktop";
+      "x-scheme-handler/unknown" = "firefox.desktop";
+    };
+  };
 }

@@ -10,6 +10,7 @@
   environment.systemPackages = with pkgs; [
     btop
     comma
+    file
     git
     inetutils  # telnet
     inotify-info
