@@ -1,9 +1,9 @@
 { pkgs, ... }:
 {
   home.packages = [ pkgs.fastfetch ];
-  programs.zsh = {
-    initContent = ''
-      fastfetch
-    '';
-  };
+  # programs.zsh = {
+  #   initContent = ''
+  #     fastfetch
+  #   '';
+  # };
 }
