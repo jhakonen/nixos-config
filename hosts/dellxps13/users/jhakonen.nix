@@ -113,4 +113,17 @@
     templates = "${config.home.homeDirectory}/Mallit";
     videos = "${config.home.homeDirectory}/Videot";
   };
+
+  gtk.theme = {
+    package = pkgs.flat-remix-gtk;
+    # Mahdolliset teemojen nimet löytää komennolla:
+    #   ll $(nix eval --raw nixpkgs#flat-remix-gtk.outPath)/share/themes/
+    name = "Flat-Remix-GTK-Yellow-Dark";
+  };
+  gtk.iconTheme = {
+    package = pkgs.yaru-remix-theme;
+    # Mahdolliset teemojen nimet löytää komennolla:
+    #   ll $(nix eval --raw nixpkgs#yaru-remix-theme.outPath)/share/icons/
+    name = "Yaru-remix-light";
+  };
 }
