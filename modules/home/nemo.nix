@@ -1,4 +1,7 @@
 { config, flake, pkgs, ... }:
+let
+  mkFileBookmark = path: "file://${path} ${builtins.baseNameOf path}";
+in
 {
   dconf.settings."org/cinnamon/desktop/applications/terminal" = {
     exec = "kitty";
@@ -6,13 +9,13 @@
   gtk.enable = true;
   gtk.gtk3.bookmarks = [
     "davs://${flake.lib.catalog.nextcloud-user}@nextcloud.jhakonen.com/remote.php/dav/files/${flake.lib.catalog.nextcloud-user} Nextcloud"
-    "file://${config.xdg.userDirs.documents}"
-    "file://${config.xdg.userDirs.download}"
-    "file://${config.xdg.userDirs.music}"
-    "file://${config.xdg.userDirs.pictures}"
-    "file://${config.xdg.userDirs.publicShare}"
-    "file://${config.xdg.userDirs.templates}"
-    "file://${config.xdg.userDirs.videos}"
+    (mkFileBookmark config.xdg.userDirs.documents)
+    (mkFileBookmark config.xdg.userDirs.download)
+    (mkFileBookmark config.xdg.userDirs.music)
+    (mkFileBookmark config.xdg.userDirs.pictures)
+    (mkFileBookmark config.xdg.userDirs.videos)
+    (mkFileBookmark config.xdg.userDirs.publicShare)
+    (mkFileBookmark config.xdg.userDirs.templates)
   ];
   xdg.configFile."gtk-3.0/bookmarks".force = true;
   xdg.mimeApps.defaultApplications = {
