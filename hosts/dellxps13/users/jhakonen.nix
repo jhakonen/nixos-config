@@ -6,6 +6,7 @@
     flake.modules.home.git
     flake.modules.home.kanshi
     flake.modules.home.mqtt-client
+    flake.modules.home.nemo
     flake.modules.home.systeminfo
     inputs.agenix.homeManagerModules.age
     inputs.nur.modules.homeManager.default
@@ -88,7 +89,6 @@
     enable = true;
     defaultApplications = {
       "application/pdf" = "org.kde.okular.desktop";
-      "inode/directory" = "org.kde.dolphin.desktop";
       "text/html" = "firefox.desktop";
       "text/markdown" = "sublime_text.desktop";
       "video/mp4" = "vlc.desktop";
@@ -100,5 +100,17 @@
       "x-scheme-handler/mailto" = "thunderbird.desktop";
       "x-scheme-handler/unknown" = "firefox.desktop";
     };
+  };
+
+  xdg.userDirs = {
+    enable = true;
+    desktop = "${config.home.homeDirectory}/Työpöytä";
+    documents = "${config.home.homeDirectory}/Asiakirjat";
+    download = "${config.home.homeDirectory}/Lataukset";
+    music = "${config.home.homeDirectory}/Musiikki";
+    pictures = "${config.home.homeDirectory}/Kuvat";
+    publicShare = "${config.home.homeDirectory}/Julkinen";
+    templates = "${config.home.homeDirectory}/Mallit";
+    videos = "${config.home.homeDirectory}/Videot";
   };
 }

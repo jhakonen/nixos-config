@@ -60,6 +60,7 @@ in
     flake.modules.nixos.beeper
     flake.modules.nixos.common-programs
     flake.modules.nixos.koti
+    flake.modules.nixos.nemo
     flake.modules.nixos.nix-cleanup
     flake.modules.nixos.tailscale
     flake.modules.nixos.zsh
@@ -301,6 +302,7 @@ in
     openssh.authorizedKeys.keys = [ id-rsa-public-key ];
   };
 
+  home-manager.backupFileExtension = "hm-backup";
   #home-manager.users.jhakonen = import ./home.nix;
   home-manager.users.root.home.stateVersion = "23.11";
 

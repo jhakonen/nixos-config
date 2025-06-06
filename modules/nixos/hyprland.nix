@@ -26,7 +26,6 @@
 
     kdePackages.qtwayland
     kdePackages.qtsvg
-    kdePackages.dolphin
 
     # KWallet tuki
     kdePackages.kwallet
