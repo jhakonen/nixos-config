@@ -1,5 +1,7 @@
 { lib, pkgs, ... }:
 {
+  programs.autojump.enable = true;
+
   programs.zsh = {
     enable = true;
     autosuggestion.enable = true;
