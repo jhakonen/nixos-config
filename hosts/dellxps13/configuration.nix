@@ -63,6 +63,7 @@ in
     flake.modules.nixos.nemo
     flake.modules.nixos.nix-cleanup
     flake.modules.nixos.tailscale
+    flake.modules.nixos.webcamera
     flake.modules.nixos.zsh
 
     # Hyprland modules
