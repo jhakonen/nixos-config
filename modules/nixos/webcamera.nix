@@ -12,6 +12,8 @@
   # En tiedä varmaksi mitkä näistä asetuksista ovat tarpeellisia kun kamera
   # ei toimi luotettavasti.
 
+  boot.kernelPackages = pkgs.linuxKernel.packages.linux_6_14;
+
   environment.systemPackages = with pkgs; [
     cheese
     libcamera
