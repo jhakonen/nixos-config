@@ -467,6 +467,55 @@ in
 
   services.fwupd.enable = true;
 
+  services.pipewire.wireplumber.extraConfig.main = {
+    "monitor.alsa.rules" = [
+      ({
+        matches = [({
+          "node.name" = "alsa_output.pci-0000_00_1f.3-platform-sof_sdw.HiFi__HDMI1__sink";
+        })];
+        actions.update-props."node.description" = "Läppäri - HDMI/DP";
+      })
+      ({
+        matches = [({
+          "node.name" = "alsa_output.pci-0000_00_1f.3-platform-sof_sdw.HiFi__HDMI2__sink";
+        }) ({
+          "node.name" = "alsa_output.pci-0000_00_1f.3-platform-sof_sdw.HiFi__HDMI3__sink";
+        })];
+        actions.update-props."node.disabled" = true;
+      })
+      ({
+        matches = [({
+          "node.name" = "alsa_output.pci-0000_00_1f.3-platform-sof_sdw.HiFi__Speaker__sink";
+        })];
+        actions.update-props."node.description" = "Läppäri - Kaiuttimet";
+      })
+      ({
+        matches = [({
+          "node.name" = "alsa_input.pci-0000_00_1f.3-platform-sof_sdw.HiFi__Mic__source";
+        })];
+        actions.update-props."node.description" = "Läppäri - Mikki";
+      })
+      ({
+        matches = [({
+          "node.name" = "alsa_output.usb-CalDigit__Inc._CalDigit_Thunderbolt_3_Audio-00.analog-stereo";
+        })];
+        actions.update-props."node.description" = "Telakka - Kaiuttimet";
+      })
+      ({
+        matches = [({
+            "node.name" = "alsa_input.usb-CalDigit__Inc._CalDigit_Thunderbolt_3_Audio-00.analog-stereo";
+        })];
+        actions.update-props."node.description" = "Telakka - Mikki";
+      })
+      ({
+        matches = [({
+          "node.name" = "alsa_input.usb-046d_HD_Pro_Webcam_C920_AF6A0BDF-02.analog-stereo";
+        })];
+        actions.update-props."node.description" = "Webbikamera - Mikki";
+      })
+    ];
+  };
+
   # https://github.com/NixOS/nixpkgs/issues/180175#issuecomment-1473408913
   systemd.services.NetworkManager-wait-online.enable = lib.mkForce false;
 
