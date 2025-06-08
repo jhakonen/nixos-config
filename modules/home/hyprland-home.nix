@@ -317,4 +317,26 @@
     ];
 
   }; # end of hyprland settings
+
+  services.hypridle = {
+    enable = true;
+    settings = {
+      listener = [
+        {
+          timeout = 150;                           # 2,5 min
+          on-timeout = "brightnessctl -s set 10";  # Himmennä läppärin näyttö
+          on-resume = "brightnessctl -r";          # Palauta läppärin näytön kirkkaus
+        }
+        {
+          timeout = 330;                            # 5,5 min
+          on-timeout = "hyprctl dispatch dpms off"; # Sammuta näytöt
+          on-resume = "hyprctl dispatch dpms on";  # Herätä näytöt
+        }
+        {
+          timeout = 1800;                    # 30min
+          on-timeout = "systemctl suspend";  # Kone valmiustilaan
+        }
+      ];
+    };
+  };
 }
