@@ -16,6 +16,18 @@ let
       output eDP-1 enable
     }
   '';
+
+  # https://wiki.hyprland.org/Hypr-Ecosystem/hyprpaper/#using-this-keyword-to-randomize-your-wallpaper
+  switch-wallpaper = pkgs.writeShellScriptBin "switch-wallpaper" ''
+    WALLPAPER_DIR="$HOME/Kuvat/Taustakuvat/ultrawide"
+    CURRENT_WALL=$(hyprctl hyprpaper listloaded)
+
+    # Get a random wallpaper that is not the current one
+    WALLPAPER=$(find "$WALLPAPER_DIR" -type f ! -name "$(basename "$CURRENT_WALL")" | shuf -n 1)
+
+    # Apply the selected wallpaper
+    hyprctl hyprpaper reload ,"$WALLPAPER"
+  '';
 in {
   # https://search.nixos.org/options?show=programs.regreet
   programs.regreet = {
@@ -54,6 +66,7 @@ in {
     playerctl
     hyprpanel
     myxer
+    switch-wallpaper
 
     adwaita-icon-theme  # Hyprpanel: Sisältää osan puuttuvista ikoneista
     wf-recorder         # Hyprpanel: Videon nauhoitus

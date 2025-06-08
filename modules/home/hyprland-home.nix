@@ -49,6 +49,7 @@
 
       "trayscale --hide-window"
       "syncthingtray qt-widgets-gui --single-instance --wait"
+      "switch-wallpaper"
     ];
 
     #############################
@@ -338,6 +339,11 @@
         }
       ];
     };
+  };
+
+  services.hyprpaper = {
+    enable = true;
+    settings.ipc = "on";
   };
 
   # Polkit Agent, tämä näyttää salasanadialogin jos yrittää ajaa ohjelman joka
