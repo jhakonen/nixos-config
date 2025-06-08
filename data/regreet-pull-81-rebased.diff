@@ -1,0 +1,90 @@
+diff --git a/README.md b/README.md
+index 4218391..10a502f 100644
+--- a/README.md
++++ b/README.md
+@@ -33,6 +33,7 @@ These screenshots use the [Canta GTK theme](https://github.com/vinceliuice/Canta
+ * Allows manual entry of username and session command
+ * Remembers the last authenticated user
+ * Automatically selects the last used session per user
++* Can also skip selecting the user/session and choose the last user and their last used session.
+ * Allows setting environment variables for created sessions
+ * Supports customizing:
+     - Background image
+@@ -220,6 +221,7 @@ Currently, the following can be configured:
+ For example, if you use Cage, check out the [Cage wiki](https://github.com/cage-kiosk/cage/wiki/Configuration).
+ If you use Sway, check out the [Sway wiki](https://github.com/swaywm/sway/wiki#configuration).
+ If you use Hyprland, check out the [Hyprland wiki](https://wiki.hyprland.org/).
++* Whether to skip selecting the user/session and choose the last user and session.
+ 
+ ### Custom CSS
+ ReGreet supports loading CSS files to act as a custom global stylesheet.
+diff --git a/regreet.sample.toml b/regreet.sample.toml
+index 51bdbcd..96c3487 100644
+--- a/regreet.sample.toml
++++ b/regreet.sample.toml
+@@ -2,6 +2,9 @@
+ #
+ # SPDX-License-Identifier: GPL-3.0-or-later
+ 
++# Whether to skip asking for username and session, and use the last used ones.
++skip_selection = false
++
+ [background]
+ # Path to the background image
+ path = "/usr/share/backgrounds/greeter.jpg"
+diff --git a/src/cache/mod.rs b/src/cache/mod.rs
+index 8062825..99be4a7 100644
+--- a/src/cache/mod.rs
++++ b/src/cache/mod.rs
+@@ -69,6 +69,11 @@ impl Cache {
+         self.last_user.as_deref()
+     }
+ 
++    /// Check whether the cache has the last used session by the given user.
++    pub fn has_last_session(&self, user: &str) -> bool {
++        self.user_to_last_sess.contains(user)
++    }
++
+     /// Get the last used session by the given user.
+     pub fn get_last_session(&mut self, user: &str) -> Option<&str> {
+         self.user_to_last_sess.get(user).map(String::as_str)
+diff --git a/src/config.rs b/src/config.rs
+index 8d14781..b42b312 100644
+--- a/src/config.rs
++++ b/src/config.rs
+@@ -101,6 +101,8 @@ fn default_greeting_msg() -> String {
+ /// The configuration struct
+ #[derive(Default, Deserialize)]
+ pub struct Config {
++    #[serde(default)]
++    skip_selection: bool,
+     #[serde(default)]
+     appearance: AppearanceSettings,
+ 
+@@ -155,4 +157,8 @@ impl Config {
+     pub fn get_default_message(&self) -> String {
+         self.appearance.greeting_msg.clone()
+     }
++
++    pub fn skip_selection(&self) -> bool {
++        self.skip_selection
++    }
+ }
+diff --git a/src/gui/component.rs b/src/gui/component.rs
+index 6b210dd..3d27541 100644
+--- a/src/gui/component.rs
++++ b/src/gui/component.rs
+@@ -383,6 +383,13 @@ impl AsyncComponent for Greeter {
+         // Set the default behaviour of pressing the Return key to act like the login button.
+         root.set_default_widget(Some(&widgets.ui.login_button));
+ 
++        if let Some(user) = model.cache.get_last_user() {
++            if model.config.skip_selection() && model.cache.has_last_session(user) {
++                debug!("Skipping user & session selection and using those from the cache");
++                widgets.ui.login_button.emit_clicked();
++            }
++        }
++
+         AsyncComponentParts { model, widgets }
+     }
+ 
