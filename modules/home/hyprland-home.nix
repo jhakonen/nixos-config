@@ -339,4 +339,8 @@
       ];
     };
   };
+
+  # Polkit Agent, tämä näyttää salasanadialogin jos yrittää ajaa ohjelman joka
+  # tarvitsee rootin oikeudet
+  services.hyprpolkitagent.enable = true;
 }
