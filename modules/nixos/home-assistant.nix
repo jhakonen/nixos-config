@@ -16,6 +16,7 @@ in
       };
       homeassistant = {
         country = "FI";
+        language = "en-GB";
         external_url = "https://${catalog.services.home-assistant.public.domain}";
         auth_providers = [
           {
@@ -34,6 +35,7 @@ in
       default_config = {};
     };
     extraComponents = [
+      "androidtv_remote"
       "default_config"
       "esphome"
       "github"
