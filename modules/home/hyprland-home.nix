@@ -2,6 +2,15 @@
 {
   fonts.fontconfig.enable = true;
 
+  home.pointerCursor = {
+    enable = true;
+    package = pkgs.catppuccin-cursors.latteRed;
+    name = "catppuccin-latte-red-cursors";
+    size = 24;
+    gtk.enable = true;
+    hyprcursor.enable = true;
+  };
+
   wayland.windowManager.hyprland.enable = true;
   wayland.windowManager.hyprland.plugins = [
     pkgs.hyprlandPlugins.hyprspace  # task switcher / overview
@@ -49,7 +58,7 @@
 
       "trayscale --hide-window"
       "syncthingtray qt-widgets-gui --single-instance --wait"
-      "switch-wallpaper"
+      "sleep 2 && switch-wallpaper"
     ];
 
     #############################
@@ -160,6 +169,8 @@
     workspace = [
       # Näytä workspace 1 ulkoisella näytöllä
       "1, monitor:DP-1, default:true"
+      # Jos näytöllä on yksi ikkuna, älä käytä koko näytön alaa
+      "w[t1], gapsout:10 600"
     ];
 
     # See https://wiki.hyprland.org/Configuring/Dwindle-Layout/ for more
