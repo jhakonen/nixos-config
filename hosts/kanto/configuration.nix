@@ -107,18 +107,22 @@ in
   # Listaa paketit jotka ovat saatavilla PATH:lla
   environment.systemPackages = with pkgs; [];
 
-  # Ota Let's Encryptin sertifikaatti käyttöön
-  security.acme = {
-    acceptTerms = true;
-    defaults = {
-      email = flake.lib.catalog.acmeEmail;
-      dnsProvider = "joker";
-      credentialsFile = config.age.secrets.acme-joker-credentials.path;
+  security = {
+    # Ota Let's Encryptin sertifikaatti käyttöön
+    acme = {
+      acceptTerms = true;
+      defaults = {
+        email = flake.lib.catalog.acmeEmail;
+        dnsProvider = "joker";
+        credentialsFile = config.age.secrets.acme-joker-credentials.path;
+      };
+      certs."jhakonen.com".extraDomainNames = [
+        "*.jhakonen.com"
+        "*.kanto.lan.jhakonen.com"
+      ];
     };
-    certs."jhakonen.com".extraDomainNames = [
-      "*.jhakonen.com"
-      "*.kanto.lan.jhakonen.com"
-    ];
+    # Näyttää salasana-kehotteen kun ohjelma tarvitsee root-oikeudet
+    polkit.enable = true;
   };
 
   # Salaisuudet

@@ -138,15 +138,19 @@ in
     };
   };
 
-  # Ota Let's Encryptin sertifikaatti käyttöön
-  security.acme = {
-    acceptTerms = true;
-    defaults = {
-      email = flake.lib.catalog.acmeEmail;
-      dnsProvider = "joker";
-      credentialsFile = config.age.secrets.acme-joker-credentials.path;
+  security = {
+    # Ota Let's Encryptin sertifikaatti käyttöön
+    acme = {
+      acceptTerms = true;
+      defaults = {
+        email = flake.lib.catalog.acmeEmail;
+        dnsProvider = "joker";
+        credentialsFile = config.age.secrets.acme-joker-credentials.path;
+      };
+      certs."toukka.lan.jhakonen.com".extraDomainNames = [ "*.toukka.lan.jhakonen.com" ];
     };
-    certs."toukka.lan.jhakonen.com".extraDomainNames = [ "*.toukka.lan.jhakonen.com" ];
+    # Näyttää salasana-kehotteen kun ohjelma tarvitsee root-oikeudet
+    polkit.enable = true;
   };
 
   # Salaisuudet
