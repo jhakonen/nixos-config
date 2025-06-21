@@ -56,6 +56,7 @@ in
       enable = true;
       package = nextcloudPackage;
       hostName = catalog.services.nextcloud.public.domain;
+      https = true;
       config = {
         adminuser = "valvoja";
         adminpassFile = "${adminPassFile}";
@@ -68,22 +69,6 @@ in
       maxUploadSize = "10G";
       # SMB External Storage: Asenna smbclient kirjasto
       phpExtraExtensions = all: [ all.smbclient ];
-      phpPackage = lib.mkForce (pkgs.php.override {
-        packageOverrides = final: prev: {
-          extensions = prev.extensions // {
-            # SMB External Storage: https://github.com/NixOS/nixpkgs/issues/224769
-            smbclient = prev.extensions.smbclient.overrideAttrs(attrs: {
-              src = pkgs.fetchFromGitHub {
-                owner = "remicollet";
-                repo = "libsmbclient-php";
-                rev = "b066b6bcd75c8741776d312337f3d69e8484482c";
-                sha256 = "sha256-BOY51zYgU2rvMSxbm+N6CwZ6SefY0YktF14zh5uTNU4=";
-              };
-            });
-          };
-        };
-      });
-
       phpOptions = {
         # Asetusten yleiskuvaus valittaa että strings puskuri on täynnä, tämä
         # nostaa rajaa ylemmäs
