@@ -25,7 +25,8 @@ in {
       # Inotify ei toimi FTP jaon kanssa, pollaa sen sijaan
       # TODO: Toimiiko NFS:n yli?
       PAPERLESS_CONSUMER_POLLING = 60;  # sekunnin välein
-      PAPERLESS_FILENAME_FORMAT = "{document_type}/{created_year}-{created_month}-{created_day} {title}";
+      # Formaatin muutoksen jälkeen aja komento: paperless-manage document_renamer
+      PAPERLESS_FILENAME_FORMAT = "{{ created_year }}-{{ created_month }}-{{ created_day }} {{ title }}";
       PAPERLESS_OCR_LANGUAGE = "fin";
       PAPERLESS_OCR_LANGUAGES = "fin";
       # Tämä tarvitaan jotta Paperless ei estä pääsyä CSRF tarkistuksen takia
