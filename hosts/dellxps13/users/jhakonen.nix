@@ -39,6 +39,9 @@
           "~/.ssh/id_rsa"
         ];
       };
+      "codeberg.org" = {
+        user = "git";
+      };
     };
   };
 

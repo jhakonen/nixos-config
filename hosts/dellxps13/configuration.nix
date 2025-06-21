@@ -416,6 +416,10 @@ in
     };
   };
 
+  # Ota SSH-agentti käyttöön, tarvitaan jotta KeepassXC pystyy lisäämään SSH
+  # avaimet agenttiin
+  programs.ssh.startAgent = true;
+
   programs.dconf.enable = true;  # Easyeffects tarvitsee tämän
 
   programs.direnv = {
