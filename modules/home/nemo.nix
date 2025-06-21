@@ -9,6 +9,8 @@ in
   gtk.enable = true;
   gtk.gtk3.bookmarks = [
     "davs://${flake.lib.catalog.nextcloud-user}@nextcloud.jhakonen.com/remote.php/dav/files/${flake.lib.catalog.nextcloud-user} Nextcloud"
+    "sftp://kanto/var/lib/paperless/media/documents/archive Paperless Media"
+    "smb://nas/scans Paperless Syöte"
     (mkFileBookmark config.xdg.userDirs.documents)
     (mkFileBookmark config.xdg.userDirs.download)
     (mkFileBookmark config.xdg.userDirs.music)

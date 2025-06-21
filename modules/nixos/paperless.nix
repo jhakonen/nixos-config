@@ -39,6 +39,13 @@ in {
     user = username;
   };
 
+  systemd.tmpfiles.settings.paperless = {
+    # Anna jhakonen käyttäjälle lukuoikeus dokumentteihin
+    "${config.services.paperless.mediaDir}/documents/archive" = {
+      A.argument = "u:jhakonen:r-x,d:u:jhakonen:r--";
+    };
+  };
+
   services.nginx = {
     enable = true;
     virtualHosts.${catalog.services.paperless.public.domain} = {
