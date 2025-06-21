@@ -9,6 +9,7 @@
     flake.modules.home.nemo
     flake.modules.home.systeminfo
     inputs.agenix.homeManagerModules.age
+    inputs.jhhapanel.homeManagerModules.default
     inputs.nur.modules.homeManager.default
 
     # Hyprland modules
@@ -26,6 +27,10 @@
 
   # Enable home-manager and git
   programs.home-manager.enable = true;
+
+  programs.jhhapanel = {
+    enable = true;
+  };
 
   programs.ssh = {
     enable = true;
