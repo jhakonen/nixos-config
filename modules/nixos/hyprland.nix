@@ -76,6 +76,7 @@ in {
     kdePackages.qtsvg
 
     # KWallet tuki
+    kdePackages.kcmutils  # kwalletmanagerin riippuvuus
     kdePackages.kwallet
     kdePackages.kwalletmanager
 
