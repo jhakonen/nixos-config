@@ -9,7 +9,7 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     hyprpanel.url = "github:Jas-SinghFSU/HyprPanel";
     hyprpanel.inputs.nixpkgs.follows = "nixpkgs";
-    jhhapanel.url = "git+https://codeberg.org/jhakonen/jhhapanel.git?ref=main";
+    jhhapanel.url = "git+https://codeberg.org/jhakonen/jhhapanel.git?ref=test";
     jhhapanel.inputs.nixpkgs.follows = "nixpkgs";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
     nixpkgs-for-mqttwarn.url = "github:nixos/nixpkgs/nixos-24.11";

@@ -270,16 +270,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1750509188,
-        "narHash": "sha256-rKC3x9fmJFnsykGmhBl7g08xmU2rLcDFjD+PepXry+o=",
-        "ref": "main",
-        "rev": "80d8f1b59c540e25cb873545b553c8a66babf7d9",
-        "revCount": 7,
+        "lastModified": 1750527973,
+        "narHash": "sha256-pJDyh1XjIH5ML5m6wl4mAgLivGpqjR04z1JmerDABU8=",
+        "ref": "test",
+        "rev": "8ba661317d19be58dd63d629b5535e3d98db65f9",
+        "revCount": 8,
         "type": "git",
         "url": "https://codeberg.org/jhakonen/jhhapanel.git"
       },
       "original": {
-        "ref": "main",
+        "ref": "test",
         "type": "git",
         "url": "https://codeberg.org/jhakonen/jhhapanel.git"
       }
