@@ -30,6 +30,7 @@
       self.modules.nixos.mqttwarn
       self.modules.nixos.netdata-child
       self.modules.nixos.nextcloud
+      self.modules.nixos.nginx
       self.modules.nixos.nix-cleanup
       self.modules.nixos.node-red
       self.modules.nixos.paperless
@@ -53,33 +54,21 @@
       };
     };
 
-    # Anna nginxille pääsy let's encrypt serifikaattiin
-    users.users.nginx.extraGroups = [ "acme" ];
-
     # Listaa paketit jotka ovat saatavilla PATH:lla
     environment.systemPackages = with pkgs; [];
 
-    security = {
-      # Ota Let's Encryptin sertifikaatti käyttöön
-      acme = {
-        acceptTerms = true;
-        defaults = {
-          email = catalog.acmeEmail;
-          dnsProvider = "joker";
-          credentialsFile = config.age.secrets.acme-joker-credentials.path;
-        };
-        certs."jhakonen.com".extraDomainNames = [
-          "*.jhakonen.com"
-          "*.kanto.lan.jhakonen.com"
-        ];
-      };
-      # Näyttää salasana-kehotteen kun ohjelma tarvitsee root-oikeudet
-      polkit.enable = true;
-    };
+    # Ota Let's Encryptin sertifikaatti käyttöön
+    security.acme.certs."jhakonen.com".extraDomainNames = [
+      "*.jhakonen.com"
+      "*.kanto.lan.jhakonen.com"
+    ];
+
+    # Näyttää salasana-kehotteen kun ohjelma tarvitsee root-oikeudet
+    security.polkit.enable = true;
+
 
     # Salaisuudet
     age.secrets = {
-      acme-joker-credentials.file = ../../../agenix/acme-joker-credentials.age;
       jhakonen-rsyncbackup-password = {
         file = ../../../agenix/rsyncbackup-password.age;
         owner = "jhakonen";
@@ -90,22 +79,12 @@
       wireless-password.file = ../../../agenix/wireless-password.age;
     };
 
-    services = {
-      nginx.virtualHosts."default" = {
-        default = true;
-        # Vastaa määrittelemättömään domainiin tai porttiin 403 virheellä
-        locations."/".extraConfig = ''
-          deny all;
-        '';
-      };
-
-      openssh = {
-        enable = true;
-        settings = {
-          # Vaadi SSH sisäänkirjautuminen käyttäen vain yksityistä avainta
-          PasswordAuthentication = false;
-          KbdInteractiveAuthentication = false;
-        };
+    services.openssh = {
+      enable = true;
+      settings = {
+        # Vaadi SSH sisäänkirjautuminen käyttäen vain yksityistä avainta
+        PasswordAuthentication = false;
+        KbdInteractiveAuthentication = false;
       };
     };
 
@@ -151,9 +130,6 @@
         devices = catalog.pickSyncthingDevices ["nas"];
       };
     };
-
-    # Palomuurin asetukset
-    networking.firewall.allowedTCPPorts = [ 80 443 ];  # nginx
 
     # Älä muuta ellei ole pakko, ei edes uudempaan versioon päivittäessä
     system.stateVersion = "24.05";

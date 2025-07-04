@@ -26,6 +26,7 @@
       self.modules.nixos.service-monitoring
 
       self.modules.nixos.common
+      self.modules.nixos.nginx
       self.modules.nixos.nix-cleanup
       self.modules.nixos.zigbee2mqtt
     ];
@@ -89,52 +90,28 @@
       };
     };
 
-    # Anna nginxille pääsy let's encrypt serifikaattiin
-    users.users.nginx.extraGroups = [ "acme" ];
+    # Ota Let's Encryptin sertifikaatti käyttöön
+    security.acme.certs."toukka.lan.jhakonen.com".extraDomainNames = [
+      "*.toukka.lan.jhakonen.com"
+    ];
 
-    security = {
-      # Ota Let's Encryptin sertifikaatti käyttöön
-      acme = {
-        acceptTerms = true;
-        defaults = {
-          email = catalog.acmeEmail;
-          dnsProvider = "joker";
-          credentialsFile = config.age.secrets.acme-joker-credentials.path;
-        };
-        certs."toukka.lan.jhakonen.com".extraDomainNames = [ "*.toukka.lan.jhakonen.com" ];
-      };
-      # Näyttää salasana-kehotteen kun ohjelma tarvitsee root-oikeudet
-      polkit.enable = true;
-    };
+    # Näyttää salasana-kehotteen kun ohjelma tarvitsee root-oikeudet
+    security.polkit.enable = true;
 
     # Salaisuudet
     age.secrets = {
-      acme-joker-credentials.file = ../../../agenix/acme-joker-credentials.age;
       mosquitto-password.file = ../../../agenix/mqtt-password.age;
       rsyncbackup-password.file = ../../../agenix/rsyncbackup-password.age;
     };
 
-    services = {
-      nginx.virtualHosts."default" = {
-        default = true;
-        # Vastaa määrittelemättömään domainiin tai porttiin 403 virheellä
-        locations."/".extraConfig = ''
-          deny all;
-        '';
-      };
-
-      openssh = {
-        enable = true;
-        settings = {
-          # Vaadi SSH sisäänkirjautuminen käyttäen vain yksityistä avainta
-          PasswordAuthentication = false;
-          KbdInteractiveAuthentication = false;
-        };
+    services.openssh = {
+      enable = true;
+      settings = {
+        # Vaadi SSH sisäänkirjautuminen käyttäen vain yksityistä avainta
+        PasswordAuthentication = false;
+        KbdInteractiveAuthentication = false;
       };
     };
-
-    # Palomuurin asetukset
-    networking.firewall.allowedTCPPorts = [ 80 443 ];  # nginx
 
     # Älä muuta ellei ole pakko, ei edes uudempaan versioon päivittäessä
     system.stateVersion = "23.11";

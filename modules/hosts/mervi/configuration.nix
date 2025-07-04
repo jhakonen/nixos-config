@@ -20,6 +20,7 @@
       self.modules.nixos.common
       self.modules.nixos.gamepads
       self.modules.nixos.koti
+      self.modules.nixos.nginx
       self.modules.nixos.nix-cleanup
       self.modules.nixos.sunshine
     ];
@@ -98,9 +99,6 @@
       };
     };
 
-    # Anna nginxille pääsy let's encrypt serifikaattiin
-    users.users.nginx.extraGroups = [ "acme" ];
-
     # Enable automatic login for the user.
     services.displayManager.autoLogin.enable = true;
     services.displayManager.autoLogin.user = "jhakonen";
@@ -118,19 +116,12 @@
     ];
 
     # Ota Let's Encryptin sertifikaatti käyttöön
-    security.acme = {
-      acceptTerms = true;
-      defaults = {
-        email = catalog.acmeEmail;
-        dnsProvider = "joker";
-        credentialsFile = config.age.secrets.acme-joker-credentials.path;
-      };
-      certs."mervi.lan.jhakonen.com".extraDomainNames = [ "*.mervi.lan.jhakonen.com" ];
-    };
+    security.acme.certs."mervi.lan.jhakonen.com".extraDomainNames = [
+      "*.mervi.lan.jhakonen.com"
+    ];
 
     # Salaisuudet
     age.secrets = {
-      acme-joker-credentials.file = ../../../agenix/acme-joker-credentials.age;
       jhakonen-rsyncbackup-password = {
         file = ../../../agenix/rsyncbackup-password.age;
         owner = "jhakonen";
@@ -161,9 +152,6 @@
 
     services.flatpak.enable = true;
 
-    networking.firewall.allowedTCPPorts = [
-      80 443  # nginx
-    ];
     networking.firewall.allowedUDPPorts = [
       40000  # WoL portti, ei pakollinen mutta tarpeellinen WoLin testaukseen ngrepillä
     ];
