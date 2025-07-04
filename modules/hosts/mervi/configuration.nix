@@ -35,39 +35,13 @@
     # Ota Wake-on-Lan (WoL) käyttöön
     networking.interfaces."enp3s0".wakeOnLan.enable = true;
 
-    # Set your time zone.
-    time.timeZone = "Europe/Helsinki";
-
-    # Select internationalisation properties.
-    i18n.defaultLocale = "fi_FI.UTF-8";
-    i18n.extraLocaleSettings = {
-      LC_ADDRESS = "fi_FI.UTF-8";
-      LC_IDENTIFICATION = "fi_FI.UTF-8";
-      LC_MEASUREMENT = "fi_FI.UTF-8";
-      LC_MONETARY = "fi_FI.UTF-8";
-      LC_NAME = "fi_FI.UTF-8";
-      LC_NUMERIC = "fi_FI.UTF-8";
-      LC_PAPER = "fi_FI.UTF-8";
-      LC_TELEPHONE = "fi_FI.UTF-8";
-      LC_TIME = "fi_FI.UTF-8";
-    };
-
-    # Enable the X11 windowing system.
+     # Enable the X11 windowing system.
     #services.xserver.enable = true;
 
     # Enable the KDE Plasma Desktop Environment.
     services.displayManager.sddm.enable = true;
     services.displayManager.sddm.wayland.enable = true;
     services.desktopManager.plasma6.enable = true;
-
-    # Configure keymap in X11
-    services.xserver.xkb = {
-      layout = "fi";
-      variant = "nodeadkeys";
-    };
-
-    # Configure console keymap
-    console.keyMap = "fi";
 
     # Enable sound with pipewire.
     services.pulseaudio.enable = false;

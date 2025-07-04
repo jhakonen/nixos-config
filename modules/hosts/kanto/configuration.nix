@@ -53,25 +53,6 @@
       };
     };
 
-    # Aika-alueen asetus
-    time.timeZone = "Europe/Helsinki";
-
-    # Määrittele kieliasetukset
-    i18n.defaultLocale = "fi_FI.UTF-8";
-    i18n.extraLocaleSettings = {
-      LC_ADDRESS = "fi_FI.UTF-8";
-      LC_IDENTIFICATION = "fi_FI.UTF-8";
-      LC_MEASUREMENT = "fi_FI.UTF-8";
-      LC_MONETARY = "fi_FI.UTF-8";
-      LC_NAME = "fi_FI.UTF-8";
-      LC_NUMERIC = "fi_FI.UTF-8";
-      LC_PAPER = "fi_FI.UTF-8";
-      LC_TELEPHONE = "fi_FI.UTF-8";
-      LC_TIME = "fi_FI.UTF-8";
-    };
-
-    console.keyMap = "fi";
-
     # Anna nginxille pääsy let's encrypt serifikaattiin
     users.users.nginx.extraGroups = [ "acme" ];
 
