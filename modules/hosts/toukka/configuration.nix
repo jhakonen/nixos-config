@@ -2,20 +2,6 @@
 {
   flake.modules.nixos.toukka = { config, lib, pkgs, ... }: let
     inherit (self) catalog;
-
-    # Julkinen avain SSH:lla sisäänkirjautumista varten
-    id-rsa-public-key =
-        "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDMqorF45N0aG+QqJbRt7kRcmXXbsgvXw7"
-        + "+cfWuVt6JKLLLo8Tr7YY/HQfAI3+u1TPo+h7NMLfr6E1V3kAHt7M5K+fZ+XYqBvfHT7F8"
-        + "jlEsq6azIoLWujiveb7bswvkTdeO/fsg+QZEep32Yx2Na5//9cxdkYYwmmW0+TXemilZH"
-        + "l+mVZ8PeZPj+FQhBMsBM+VGJXCZaW+YWEg8/mqGT0p62U9UkolNFfppS3gKGhkiuly/kS"
-        + "KjVgSuuKy6h0M5WINWNXKh9gNz9sNnzrVi7jx1RXaJ48sx4BAMJi1AqY3Nu50z4e/wUoi"
-        + "AN7fYDxM/AHxtRYg4tBWjuNCaVGB/413h46Alz1Y7C43PbIWbSPAmjw1VDG+i1fOhsXnx"
-        + "cLJQqZUd4Jmmc22NorozaqwZkzRoyf+i604QPuFKMu5LDTSfrDfMvkQFY9E1zZgf1LAZT"
-        + "LePrfld8YYg/e/+EO0iIAO7dNrxg6Hi7c2zN14cYs+Z327T+/Iqe4Dp1KVK1KQLqJF0Hf"
-        + "907fd+UIXhVsd/5ZpVl3G398tYbLk/fnJum4nWUMhNiDQsoEJyZs1QoQFDFD/o1qxXCOo"
-        + "Cq0tb5pheaYWRd1iGOY0x2dI6TC2nl6ZVBB6ABzHoRLhG+FDnTWvPTodY1C7rTzUVyWOn"
-        + "QZdUqOqF3C79F3f/MCrYk3/CvtbDtQ== jhakonen";
   in {
     # Ota flaket käyttöön
     nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -122,20 +108,8 @@
       };
     };
 
-    users.users = {
-      jhakonen = {
-        openssh.authorizedKeys.keys = [ id-rsa-public-key ];
-        isNormalUser = true;
-        extraGroups = [ "wheel" ]; # Salli sudon käyttö
-      };
-
-      # Anna nginxille pääsy let's encrypt serifikaattiin
-      nginx.extraGroups = [ "acme" ];
-
-      root = {
-        openssh.authorizedKeys.keys = [ id-rsa-public-key ];
-      };
-    };
+    # Anna nginxille pääsy let's encrypt serifikaattiin
+    users.users.nginx.extraGroups = [ "acme" ];
 
     security = {
       # Ota Let's Encryptin sertifikaatti käyttöön

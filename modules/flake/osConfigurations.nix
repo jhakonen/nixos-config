@@ -13,6 +13,7 @@ let
     inputs.nixpkgs.lib.nixosSystem {
       inherit system;
       modules = [
+        inputs.self.modules.nixos.nixos
         inputs.self.modules.nixos.${name}
         {
           networking.hostName = lib.mkDefault name;
