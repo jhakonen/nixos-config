@@ -42,18 +42,6 @@
     #   sha256 = "12110c0sbycpr5sm0sqyb76aq214s2lyc0a5yiyjkjhrabghgdcb";
     # })).legacyPackages.aarch64-linux.linuxPackages_rpi5;
 
-    # Laitteen nimi
-    networking.hostName = "toukka";
-
-    # Wifi tuki käyttäen wpa_supplicant palvelua
-    networking.wireless = {
-      enable = true;
-      secretsFile = "/root/wireless.env";
-      networks = {
-        POSEIDON_5G.pskRaw = "ext:POSEIDON_5G_PASSWORD";
-      };
-    };
-
     # Tarvitaan jotta bluetooth toimii, myös kun käytetään asusin usb bluetooth
     # mokkulaa, asentaa myös hcitool ohjelman
     hardware.bluetooth.enable = true;

@@ -29,10 +29,9 @@
     boot.loader.systemd-boot.enable = true;
     boot.loader.efi.canTouchEfiVariables = true;
 
-    networking.hostName = "mervi";
-
-    # Enable networking
+    # Hallitse verkkoyhteyttä NetworkManagerilla
     networking.networkmanager.enable = true;
+
     # Ota Wake-on-Lan (WoL) käyttöön
     networking.interfaces."enp3s0".wakeOnLan.enable = true;
 

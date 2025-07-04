@@ -70,14 +70,7 @@
     #   }
     # ];
 
-    networking.hostName = "dellxps13"; # Define your hostname.
-    # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-
-    # Configure network proxy if necessary
-    # networking.proxy.default = "http://user:password@proxy:port/";
-    # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
-    # Enable networking
+    # Hallitse verkkoyhteyttä NetworkManagerilla
     networking.networkmanager.enable = true;
 
     # Yhteys GL-iNet reititimeen katkeilee jos sekä WIFI että Ethernet yhteys on

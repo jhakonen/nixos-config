@@ -63,6 +63,5 @@ in
   "node-red-environment.age".publicKeys = [ jhakonen kanto ];
   "rsyncbackup-password.age".publicKeys = [ jhakonen kanto mervi toukka ];
   "telegraf-environment.age".publicKeys = [ jhakonen kanto ];
-  "wireless-password.age".publicKeys = [ jhakonen kanto toukka ];
   "zigbee2mqtt-environment.age".publicKeys = [ jhakonen toukka ];
 }

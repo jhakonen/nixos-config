@@ -44,16 +44,6 @@
     boot.loader.systemd-boot.enable = true;
     boot.loader.efi.canTouchEfiVariables = true;
 
-    networking.hostName = "kanto"; # Define your hostname.
-    # Wifi tuki käyttäen wpa_supplicant palvelua
-    networking.wireless = {
-      enable = true;
-      secretsFile = config.age.secrets.wireless-password.path;
-      networks = {
-        Hyttysverkko.pskRaw = "ext:HYTTYSVERKKO_PASSWORD";
-      };
-    };
-
     # Listaa paketit jotka ovat saatavilla PATH:lla
     environment.systemPackages = with pkgs; [];
 
@@ -76,7 +66,6 @@
       mosquitto-password.file = ../../../agenix/mqtt-password.age;
       mosquitto-esphome-password.file = ../../../agenix/mqtt-espuser-password.age;
       rsyncbackup-password.file = ../../../agenix/rsyncbackup-password.age;
-      wireless-password.file = ../../../agenix/wireless-password.age;
     };
 
     services.openssh = {
