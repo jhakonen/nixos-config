@@ -121,10 +121,6 @@
 
     # Salaisuudet
     age.secrets = {
-      jhakonen-rsyncbackup-password = {
-        file = ../../../agenix/rsyncbackup-password.age;
-        owner = "jhakonen";
-      };
       mosquitto-password.file = ../../../agenix/mqtt-password.age;
       rsyncbackup-password.file = ../../../agenix/rsyncbackup-password.age;
     };

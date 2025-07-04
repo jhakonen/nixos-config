@@ -148,13 +148,7 @@
     hardware.flirc.enable = true;
 
     # Salaisuudet
-    age.secrets = {
-      jhakonen-rsyncbackup-password = {
-        file = ../../../agenix/rsyncbackup-password.age;
-        owner = "jhakonen";
-      };
-      rsyncbackup-password.file = ../../../agenix/rsyncbackup-password.age;
-    };
+    age.secrets.rsyncbackup-password.file = ../../../agenix/rsyncbackup-password.age;
 
     # Varmuuskopiointi
     my.services.rsync = {
