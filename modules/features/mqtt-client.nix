@@ -13,7 +13,7 @@
 
     home.packages = [ pkgs.mosquitto ];
 
-    programs.zsh.shellAliases = {
+    home.shellAliases = {
       mosquitto_sub = "mosquitto_sub -h mqtt.jhakonen.com -p 8883 -u koti -P $(cat ${passwordFile})";
       mosquitto_pub = "mosquitto_pub -h mqtt.jhakonen.com -p 8883 -u koti -P $(cat ${passwordFile})";
     };

@@ -49,7 +49,6 @@
       self.modules.nixos.nix-cleanup
       self.modules.nixos.tailscale
       self.modules.nixos.webcamera
-      self.modules.nixos.zsh
 
       # Hyprland modules
       self.modules.nixos.hyprland
@@ -314,7 +313,6 @@
       immich-cli
       # itch  # itch.io - Riippuu rikkinäisestä butler kirjastosta
       keepassxc
-      lazygit
       libreoffice
       livecaptions
       kdePackages.isoimagewriter
@@ -395,8 +393,7 @@
       silent = true;
     };
 
-    programs.zsh.shellAliases = {
-      lg = "lazygit";
+    environment.shellAliases = {
       qmv = "qmv --editor='subl --launch-or-new-window --wait' --format=destination-only --verbose";
     };
 

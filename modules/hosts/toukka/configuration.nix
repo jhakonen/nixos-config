@@ -28,7 +28,6 @@
       self.modules.nixos.common
       self.modules.nixos.nix-cleanup
       self.modules.nixos.zigbee2mqtt
-      self.modules.nixos.zsh
     ];
 
     # Käytä systemd-boot EFI boot loaderia

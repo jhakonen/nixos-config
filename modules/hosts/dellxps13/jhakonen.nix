@@ -8,7 +8,6 @@ in {
       self.modules.homeManager.kanshi
       self.modules.homeManager.mqtt-client
       self.modules.homeManager.nemo
-      self.modules.homeManager.systeminfo
       inputs.agenix.homeManagerModules.age
       inputs.jhhapanel.homeManagerModules.default
       inputs.nur.modules.homeManager.default

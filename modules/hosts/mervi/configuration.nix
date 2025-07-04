@@ -22,7 +22,6 @@
       self.modules.nixos.koti
       self.modules.nixos.nix-cleanup
       self.modules.nixos.sunshine
-      self.modules.nixos.zsh
     ];
 
     # Bootloader.

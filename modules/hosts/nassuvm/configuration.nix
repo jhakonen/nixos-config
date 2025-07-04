@@ -14,7 +14,6 @@
       inputs.self.modules.nixos.koti
       inputs.self.modules.nixos.netdata-parent
       inputs.self.modules.nixos.nix-cleanup
-      inputs.self.modules.nixos.zsh
     ];
 
     boot.loader.grub.enable = true;

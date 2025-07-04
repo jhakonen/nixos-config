@@ -35,7 +35,6 @@
       self.modules.nixos.paperless
       self.modules.nixos.telegraf
       self.modules.nixos.tvheadend
-      self.modules.nixos.zsh
     ];
 
     nixpkgs.config.allowUnfree = true;
