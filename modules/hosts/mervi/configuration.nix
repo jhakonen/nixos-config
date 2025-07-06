@@ -135,16 +135,6 @@
 
     # List services that you want to enable:
 
-    # Enable the OpenSSH daemon.
-    services.openssh = {
-      enable = true;
-      settings = {
-        # Vaadi SSH sisäänkirjautuminen käyttäen vain yksityistä avainta
-        PasswordAuthentication = false;
-        KbdInteractiveAuthentication = false;
-      };
-    };
-
     services.flatpak.enable = true;
 
     networking.firewall.allowedUDPPorts = [

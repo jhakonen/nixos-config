@@ -11,7 +11,6 @@
       inputs.home-manager.nixosModules.home-manager
 
       inputs.self.modules.nixos.common
-      inputs.self.modules.nixos.koti
       inputs.self.modules.nixos.netdata-parent
       inputs.self.modules.nixos.nix-cleanup
     ];
@@ -42,15 +41,6 @@
       firefox
       simplescreenrecorder
     ];
-
-    services.openssh = {
-      enable = true;
-      settings = {
-        # Vaadi SSH sisäänkirjautuminen käyttäen vain yksityistä avainta
-        PasswordAuthentication = false;
-        KbdInteractiveAuthentication = false;
-      };
-    };
 
     system.stateVersion = "23.05";
   };

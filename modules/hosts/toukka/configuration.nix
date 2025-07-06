@@ -92,15 +92,6 @@
       rsyncbackup-password.file = ../../../agenix/rsyncbackup-password.age;
     };
 
-    services.openssh = {
-      enable = true;
-      settings = {
-        # Vaadi SSH sisäänkirjautuminen käyttäen vain yksityistä avainta
-        PasswordAuthentication = false;
-        KbdInteractiveAuthentication = false;
-      };
-    };
-
     # Älä muuta ellei ole pakko, ei edes uudempaan versioon päivittäessä
     system.stateVersion = "23.11";
   };

@@ -38,6 +38,15 @@
       package = pkgs.plocate;
     };
 
+    services.openssh = {
+      enable = true;
+      settings = {
+        # Vaadi SSH sisäänkirjautuminen käyttäen vain yksityistä avainta
+        PasswordAuthentication = false;
+        KbdInteractiveAuthentication = false;
+      };
+    };
+
     environment.systemPackages = with pkgs; [
       btop
       comma
