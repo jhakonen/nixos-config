@@ -57,6 +57,7 @@
       inotify-info
       isd
       jq
+      killall
       kitty
       lazygit
       usbutils   # lsusb
