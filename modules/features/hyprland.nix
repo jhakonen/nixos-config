@@ -299,7 +299,7 @@
         # Näytä workspace 1 ulkoisella näytöllä
         "1, monitor:DP-1, default:true"
         # Jos näytöllä on yksi ikkuna, älä käytä koko näytön alaa
-        "w[t1], gapsout:10 600"
+        #"w[t1], gapsout:10 600"
       ];
 
       # See https://wiki.hyprland.org/Configuring/Dwindle-Layout/ for more
