@@ -34,6 +34,9 @@
       hyprctl hyprpaper reload ,"$WALLPAPER"
     '';
   in {
+    # SVG tuki GDK ohjelmiin (ainakin Tsumiki)
+    programs.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];
+
     # https://search.nixos.org/options?show=programs.regreet
     programs.regreet = {
       enable = true;
