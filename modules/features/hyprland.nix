@@ -72,6 +72,7 @@
       kitty
       wofi
       playerctl
+      hypridle
       hyprpanel
       myxer
       switch-wallpaper
