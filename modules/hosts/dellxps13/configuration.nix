@@ -33,6 +33,7 @@
 
       inputs.agenix.nixosModules.default
       inputs.home-manager.nixosModules.home-manager
+      inputs.nix-flatpak.nixosModules.nix-flatpak
       inputs.nixos-hardware.nixosModules.common-cpu-intel
       inputs.nixos-hardware.nixosModules.common-pc-laptop
       inputs.nixos-hardware.nixosModules.common-pc-ssd
@@ -255,7 +256,6 @@
       eww
       git-crypt
       google-chrome  # Chromecastin tukea varten
-      grayjay
       haruna  # video soitin
       gnumake
       (hakuneko.overrideAttrs(attrs: {  # Manga downloader
@@ -305,6 +305,14 @@
       inputs.qjournalctl.packages.${pkgs.stdenv.system}.default
       inputs.zen-browser.packages.${pkgs.stdenv.system}.default
     ];
+
+    services.flatpak = {
+      enable = true;
+      packages = [
+        "app.grayjay.Grayjay"
+      ];
+      update.onActivation = true;
+    };
 
     # Esimerkki miten ohjelman paketin voi overridata käyttäen overlaytä
     # nixpkgs.overlays = [
