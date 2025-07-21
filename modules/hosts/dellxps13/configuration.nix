@@ -296,6 +296,7 @@
       obsidian
       renameutils  # qmv
       sublime4
+      super-productivity
       syncthingtray-minimal
       teams-for-linux
       tidal-hifi
