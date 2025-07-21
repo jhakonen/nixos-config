@@ -10,6 +10,7 @@
       inputs.agenix.nixosModules.default
       inputs.home-manager.nixosModules.home-manager
       self.modules.nixos.common
+      self.modules.nixos.kotisivu
       self.modules.nixos.nextcloud-tunnel
       self.modules.nixos.nginx
       self.modules.nixos.tailscale
