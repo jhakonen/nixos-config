@@ -38,6 +38,7 @@ in
     mervi = linux "mervi";
     nassuvm = linux "nassuvm";
     toukka = linux-arm "toukka";
+    tunneli = linux "tunneli";
   };
 
   systems = [

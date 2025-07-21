@@ -1,3 +1,8 @@
+# ===========================
+# Lokin seuraaminen:
+#   journalctl -ft Nextcloud
+# ===========================
+
 { lib, self, ... }:
 {
   flake.modules.nixos.nextcloud = { config, pkgs, ... }: let
@@ -77,22 +82,17 @@
 
         # Nämä asetukset tulee config.php tiedostoon
         settings = {
+          "log.condition".apps = [ "admin_audit" ]; # audit lokitus riippumatta lokitasosta
           default_phone_region = "FI";
+          log_type_audit = "syslog";
+          logfile_audit = "";
+          #loglevel = 1; # Lokitaso, oletus on 2 (WARNING)
           maintenance_window_start = 23; # Klo 23 - 03 UTC aikaa
           overwriteprotocol = "https";
+          syslog_tag = "Nextcloud";
+          syslog_tag_audit = "Nextcloud";
+          trusted_proxies = [ catalog.nodes.tunneli.ip.tailscale ];
         };
-      };
-
-      nginx.virtualHosts.${config.services.nextcloud.hostName} = {
-        listen = [{
-          addr = "0.0.0.0";
-          port = catalog.services.nextcloud.port;
-          ssl = true;
-        }];
-
-        # Käytä Let's Encrypt sertifikaattia
-        addSSL = true;
-        useACMEHost = "jhakonen.com";
       };
 
       mysql = {
@@ -130,9 +130,6 @@
         Group = "nextcloud";
       };
     };
-
-    # Avaa palomuuriin palvelulle reikä
-    networking.firewall.allowedTCPPorts = [ catalog.services.nextcloud.port ];
 
     # Varmuuskopiointi
     my.services.rsync.jobs.nextcloud = {
@@ -213,5 +210,21 @@
         alertAfterSec = 15 * 60;
       }
     ];
+  };
+
+  flake.modules.nixos.nextcloud-tunnel = {
+    services.nginx = {
+      enable = true;
+      virtualHosts."nextcloud.jhakonen.com" = {
+        locations."/" = {
+          proxyPass = "http://kanto.tailscale.jhakonen.com";
+          proxyWebsockets = true;
+          recommendedProxySettings = true;
+        };
+        # Käytä Let's Encrypt sertifikaattia
+        addSSL = true;
+        useACMEHost = "jhakonen.com";
+      };
+    };
   };
 }

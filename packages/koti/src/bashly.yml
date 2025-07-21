@@ -19,6 +19,7 @@ commands:
     - mervi
     - nassuvm
     - toukka
+    - tunneli
     default: *koneet
     repeatable: true
     unique: true
@@ -47,6 +48,7 @@ commands:
     - mervi
     - nassuvm
     - toukka
+    - tunneli
     default: *koneet
     repeatable: true
     unique: true

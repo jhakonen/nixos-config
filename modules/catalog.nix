@@ -42,6 +42,9 @@
     toukka = {
       ip.private = "10.0.0.102";
     };
+    tunneli = {
+      ip.tailscale = "100.125.41.58";
+    };
   };
 
   services = addServiceNames {
@@ -219,7 +222,6 @@
     };
     nextcloud = {
       host = nodes.kanto;
-      port = 16000;
       dashy = {
         section = "palvelut";
         description = "Verkkolevy";

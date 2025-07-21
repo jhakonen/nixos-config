@@ -11,8 +11,12 @@ in {
       openFirewall = true;
     };
 
-    environment.systemPackages = [ pkgs.trayscale ];
+    environment.systemPackages = lib.optionals config.services.displayManager.enable [
+      pkgs.trayscale
+    ];
+  };
 
+  flake.modules.nixos.tailscale-receive = { config, ... }: {
     # https://davideger.github.io/blog/taildrop_on_linux
     systemd.services.tailreceive = {
       description = "File Receiver Service for Taildrop";

@@ -49,6 +49,7 @@
       self.modules.nixos.nemo
       self.modules.nixos.nix-cleanup
       self.modules.nixos.tailscale
+      self.modules.nixos.tailscale-receive
       self.modules.nixos.webcamera
 
       # Hyprland modules

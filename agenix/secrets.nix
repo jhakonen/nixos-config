@@ -51,9 +51,22 @@ let
     + "EUyeKeazWk8GPMZM8uZGhwSqjn3r2S5MaoeugRhLw3JebK+VDBwmv35JvM+MC+zJpspya"
     + "9eN+KRbDlOsdYaSuFnlL7L37Wtbix8zWypnzjcv2EqIlxYA0Za78JEVA1oFApKacHFtU8"
     + "QHagpTS1GtFndNZ1Sw0V8CeleXm9uQ== root@toukka";
+  # /etc/ssh/ssh_host_rsa_key.pub
+  tunneli =
+    "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDWGXpckdtgJqLMMT4xals2MN+goueB5H6"
+    + "lDEvQko55kEyrYoTdJnl4rkFx2Kwyt/cb+kddXtKVGv1BSAqDCYAdcKjH6tGFi1C31sev"
+    + "5WQetTzL4ksqxEthq29jGxLVhAhxoLHIUNpFU8PMPjm1/TjbRjZ7hsSBje9pxY7+m0Q7v"
+    + "Mr+sWpogE0WLHaX32T0VsexRacYtva8LNUq8GRk7vWZWs7Ub/I8ysa/ZWeDGWAbbMUr3R"
+    + "axxME8/R6IQPOjxaG51jjViecY3BEOBSjwDYgfkvsq/7BN2qO3+KU2n/WTpSY++CLR30A"
+    + "Pwq5tPHXR2zTXPGNXnZRvOuel5h5iGkHwq3NpnNIVgcV09xnks4VpUhad+1ope9BI4+6P"
+    + "Cyg5anmR0Ijja3BYiSKoal2vj2FIm04MTORx8lQF9JKbvJpA9n1AqA7lxzTrEshMWSB2J"
+    + "gJgdM24ff3BQI0a4lWISj/+VkbDb2Osc23QBHNyO/tkLAetiluyeEIkAv6GebZ8S+YZJJ"
+    + "Z8Ggt2bRT1K+sdMYsW2l7icopuCjIkvzjf4o6LuKwzeUCdP8rRNTyv8aDmFT9t/d+v7k2"
+    + "NTXWK4Q+van2pObz4RYWRqmpysZZDg0oNUV42xQMTcSOGPH8bnfYU/v9vkisr0NzL3j4G"
+    + "VqASH9sE/KgIT+FNOpAu4KwYdfgAbQ== root@tunneli";
 in
 {
-  "acme-joker-credentials.age".publicKeys = [ jhakonen kanto mervi toukka ];
+  "acme-joker-credentials.age".publicKeys = [ jhakonen kanto mervi toukka tunneli ];
   "freshrss-admin-password.age".publicKeys = [ jhakonen kanto ];
   "github-id-rsa.age".publicKeys = [ jhakonen ];
   "hoarder-environment.age".publicKeys = [ jhakonen kanto ];
