@@ -5,6 +5,8 @@
   # ==================
 
   flake.modules.nixos.hyprland = { config, pkgs, ... }: let
+    tsumiki = pkgs.callPackage ../../packages/tsumiki {};
+
     regreet-init = pkgs.writeShellScript "regreet-init" ''
       set +e
       ${lib.getExe pkgs.kanshi} --config ${kanshi-config} &
@@ -76,6 +78,7 @@
       hyprpanel
       myxer
       switch-wallpaper
+      tsumiki
 
       adwaita-icon-theme  # Hyprpanel: Sisältää osan puuttuvista ikoneista
       wf-recorder         # Hyprpanel: Videon nauhoitus
