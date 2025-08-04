@@ -5,6 +5,7 @@
 {
   flake.modules.nixos.dellxps13 = { config, lib, pkgs, ... }: let
     inherit (self) catalog;
+    super-productivity-latest = pkgs.callPackage ../../../packages/super-productivity.nix {};
   in {
     nix.package = pkgs.lix;
     # Ota flaket käyttöön
@@ -296,7 +297,7 @@
       obsidian
       renameutils  # qmv
       sublime4
-      super-productivity
+      super-productivity-latest
       syncthingtray-minimal
       teams-for-linux
       tidal-hifi
