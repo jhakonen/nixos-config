@@ -29,4 +29,5 @@ for kone in "${koneet[@]}"; do
   apu_komento+=("ets" "-f" "[%T.%L - $kone]")
   apu_komento+=("${komento[@]}")
   eval "${apu_komento[*]@Q}"
+  rm -f ./result
 done
