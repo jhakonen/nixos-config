@@ -60,6 +60,7 @@
       killall
       kitty
       lazygit
+      nh
       usbutils   # lsusb
       binutils   # strings
       python3

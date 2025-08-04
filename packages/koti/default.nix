@@ -5,7 +5,6 @@ rec {
     packages = with pkgs; [
       bashly
       coreutils
-      ets
       findutils
       gawk
       gnugrep

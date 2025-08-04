@@ -105,24 +105,11 @@ Toista kullekkin koneelle.
 nixos-rebuild list-generations
 ```
 
-# Vanhojen sukupolvien poistaminen
-
-Poista vanhat sukupolvet profiilista (säästäen 20 viimeisintä):
-```bash
-sudo nix-env -p /nix/var/nix/profiles/system --delete-generations +20
-```
-
-Päivitä bootin lista sukupolvista:
-```bash
-sudo /run/current-system/bin/switch-to-configuration boot
-```
-
-# Tilan tekeminen nix storeen:
+# Tilan tekeminen nix storeen
 
 ```bash
-sudo nix-collect-garbage --delete-older-than 30d
+nh clean all --keep 5 --keep-since 30d
 ```
-Huomaa, että kannattaa ensin poistaa vanhoja sukupolvia, jotta garbage collector pystyy poistaan myös niiden viittaamat tiedostot storesta.
 
 Minulla on myös automaattinen puhdistus otettu käyttöön kaikilla NixOS koneilla joten tätä ei tarvitse välttämättä tehdä.
 

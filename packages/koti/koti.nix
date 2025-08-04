@@ -1,7 +1,6 @@
 {
   bashly,
   coreutils,
-  ets,
   findutils,
   gawk,
   glibcLocales,
@@ -13,6 +12,7 @@
   makeWrapper,
   ncurses,
   nettools,
+  nh,
   openssh,
   rsync,
   shellcheck-minimal,
@@ -57,7 +57,6 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/koti \
       --prefix PATH : ${lib.makeBinPath [
           coreutils
-          ets
           findutils
           gawk
           gnugrep
@@ -65,6 +64,7 @@ stdenv.mkDerivation rec {
           iputils
           ncurses
           nettools
+          nh
           openssh
           rsync
           systemd
