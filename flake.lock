@@ -334,6 +334,22 @@
         "type": "github"
       }
     },
+    "nixpkgs-for-nm-1-48-10": {
+      "locked": {
+        "lastModified": 1740344231,
+        "narHash": "sha256-eEOlHQAQF4jrrs3zs62wJ5GikQpukQPdtAi5mAy/om8=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "0bd7f95e4588643f2c2d403b38d8a2fe44b0fc73",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "0bd7f95e4588643f2c2d403b38d8a2fe44b0fc73",
+        "type": "github"
+      }
+    },
     "nixpkgs-lib": {
       "locked": {
         "lastModified": 1753579242,
@@ -418,6 +434,7 @@
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs",
         "nixpkgs-for-mqttwarn": "nixpkgs-for-mqttwarn",
+        "nixpkgs-for-nm-1-48-10": "nixpkgs-for-nm-1-48-10",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "nur": "nur",
         "qjournalctl": "qjournalctl",
