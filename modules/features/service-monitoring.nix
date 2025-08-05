@@ -89,7 +89,7 @@
         -u koti \
         -P $(${pkgs.coreutils}/bin/cat ${cfg.mqttAlert.passwordFile}) \
         -l \
-        -t 'mqttwarn/telegram'
+        -t 'n8n/telegram'
     '';
   in {
     options.my.services.monitoring = {

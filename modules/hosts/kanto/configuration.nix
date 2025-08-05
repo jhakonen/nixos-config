@@ -28,6 +28,7 @@
       self.modules.nixos.koti
       self.modules.nixos.mqtt-server
       self.modules.nixos.mqttwarn
+      self.modules.nixos.n8n
       self.modules.nixos.netdata-child
       self.modules.nixos.nextcloud
       self.modules.nixos.nginx

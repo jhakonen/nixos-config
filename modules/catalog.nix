@@ -202,6 +202,18 @@
         domain = "mqtt.jhakonen.com";
       };
     };
+    n8n = {
+      host = nodes.kanto;
+      dashy = {
+        section = "palvelut";
+        description = "Kotiautomaation ohjelmointi";
+        icon = "hl-n8n";
+      };
+      public = {
+        domain = "n8n.kanto.lan.jhakonen.com";
+        port = 443;
+      };
+    };
     nas = {
       host = nodes.nas;
       port = 5000;
