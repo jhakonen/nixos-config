@@ -12,7 +12,6 @@
 
       self.modules.nixos.service-dashy
       self.modules.nixos.service-monitoring
-      self.modules.nixos.service-mqttwarn
       self.modules.nixos.service-rsync
       self.modules.nixos.service-syncthing
 
@@ -27,7 +26,6 @@
       self.modules.nixos.influxdb
       self.modules.nixos.koti
       self.modules.nixos.mqtt-server
-      self.modules.nixos.mqttwarn
       self.modules.nixos.n8n
       self.modules.nixos.netdata-child
       self.modules.nixos.nextcloud

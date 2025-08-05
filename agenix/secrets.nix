@@ -72,7 +72,6 @@ in
   "hoarder-environment.age".publicKeys = [ jhakonen kanto ];
   "mqtt-password.age".publicKeys = [ jhakonen kanto mervi toukka ];
   "mqtt-espuser-password.age".publicKeys = [ jhakonen kanto ];
-  "mqttwarn-environment.age".publicKeys = [ jhakonen kanto ];
   "node-red-environment.age".publicKeys = [ jhakonen kanto ];
   "rsyncbackup-password.age".publicKeys = [ jhakonen kanto mervi toukka ];
   "telegraf-environment.age".publicKeys = [ jhakonen kanto ];
