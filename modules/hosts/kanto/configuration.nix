@@ -31,7 +31,6 @@
       self.modules.nixos.nextcloud
       self.modules.nixos.nginx
       self.modules.nixos.nix-cleanup
-      self.modules.nixos.node-red
       self.modules.nixos.paperless
       self.modules.nixos.tailscale
       self.modules.nixos.telegraf

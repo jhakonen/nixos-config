@@ -244,19 +244,6 @@
         port = 443;
       };
     };
-    node-red = {
-      host = nodes.kanto;
-      port = 1880;
-      dashy = {
-        section = "palvelut";
-        description = "Kotiautomaation ohjelmointi";
-        icon = "hl-node-red";
-      };
-      public = {
-        domain = "node-red.jhakonen.com";
-        port = 443;
-      };
-    };
     paperless = {
       host = nodes.kanto;
       port = 12000;
