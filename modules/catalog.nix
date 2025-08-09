@@ -213,6 +213,9 @@
         domain = "n8n.kanto.lan.jhakonen.com";
         port = 443;
       };
+      tunnel = {
+        domain = "n8n.tunneli.public.jhakonen.com";
+      };
     };
     nas = {
       host = nodes.nas;

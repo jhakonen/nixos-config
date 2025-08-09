@@ -11,6 +11,7 @@
       inputs.home-manager.nixosModules.home-manager
       self.modules.nixos.common
       self.modules.nixos.kotisivu
+      self.modules.nixos.n8n-tunnel
       self.modules.nixos.nextcloud-tunnel
       self.modules.nixos.nginx
       self.modules.nixos.tailscale
@@ -21,6 +22,7 @@
     # Ota Let's Encryptin sertifikaatti käyttöön
     security.acme.certs."jhakonen.com".extraDomainNames = [
       "*.jhakonen.com"
+      "*.tunneli.public.jhakonen.com"
     ];
 
     services.openssh.enable = true;
