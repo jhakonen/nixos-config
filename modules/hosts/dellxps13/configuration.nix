@@ -307,6 +307,7 @@
 
       inputs.qjournalctl.packages.${pkgs.stdenv.system}.default
       inputs.zen-browser.packages.${pkgs.stdenv.system}.default
+      inputs.mypanel.packages.${pkgs.stdenv.system}.default
     ];
 
     services.flatpak = {

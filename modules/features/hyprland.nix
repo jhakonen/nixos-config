@@ -158,6 +158,8 @@
         "DP-1, 3440x1440@100, 0x0, 1"
         # Sisäinen näyttö
         "eDP-1, 1920x1200, 3440x0, 1"
+        # Anna tilaa oikeaan reunaan mypanel paneelille
+        ", addreserved, 0, 0, 0, 64"
       ];
 
       ###################
@@ -183,6 +185,8 @@
         # "dbus-update-activation-environment --systemd --all"
 
         "hyprpanel"
+
+        "mypanel 2>&1 >/tmp/mypanel.log"
 
         # See https://github.com/Vladimir-csp/uwsm/issues/72
         "PAM_KWALLET5_LOGIN=/run/user/1000/kwallet5.socket ${pkgs.kdePackages.kwallet-pam}/libexec/pam_kwallet_init"
