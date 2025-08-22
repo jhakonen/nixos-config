@@ -4,6 +4,9 @@
 # ===========================
 
 { lib, self, ... }:
+let
+  maxUploadSize = "10G";
+in
 {
   flake.modules.nixos.nextcloud = { config, pkgs, ... }: let
     inherit (self) catalog;
@@ -71,7 +74,7 @@
         # Käytä Redisiä parammin toimivaan tiedostojen lukintaan:
         #   https://help.nextcloud.com/t/file-is-locked-how-to-unlock/1883
         configureRedis = true;
-        maxUploadSize = "10G";
+        maxUploadSize = maxUploadSize;
         # SMB External Storage: Asenna smbclient kirjasto
         phpExtraExtensions = all: [ all.smbclient ];
         phpOptions = {
@@ -221,6 +224,9 @@
           proxyWebsockets = true;
           recommendedProxySettings = true;
         };
+        extraConfig = ''
+          client_max_body_size ${maxUploadSize};
+        '';
         # Käytä Let's Encrypt sertifikaattia
         addSSL = true;
         useACMEHost = "jhakonen.com";
