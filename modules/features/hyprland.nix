@@ -378,6 +378,8 @@
         "$mainMod, P, exec, vaihda-nayttoa"   # Kytkee läppärin näytön päälle/pois kun telakassa
         "$mainMod, J, togglesplit, # dwindle"
 
+        "$mainMod, F11, fullscreen"  # Laita ikkuna kokoruutuun (Moonlight)
+
         # Move focus with mainMod + arrow keys
         "$mainMod, left, movefocus, l"
         "$mainMod, right, movefocus, r"
