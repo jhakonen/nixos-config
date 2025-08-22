@@ -131,6 +131,10 @@
   # =================
 
   flake.modules.homeManager.hyprland = { pkgs, ... }: {
+    imports = [
+      inputs.mypanel.homeManagerModules.default
+    ];
+
     fonts.fontconfig.enable = true;
 
     home.pointerCursor = {
@@ -141,6 +145,8 @@
       gtk.enable = true;
       hyprcursor.enable = true;
     };
+
+    my.services.mypanel.enable = true;
 
     wayland.windowManager.hyprland.enable = true;
     wayland.windowManager.hyprland.plugins = [
@@ -185,8 +191,6 @@
         # "dbus-update-activation-environment --systemd --all"
 
         "hyprpanel"
-
-        "mypanel 2>&1 >/tmp/mypanel.log"
 
         # See https://github.com/Vladimir-csp/uwsm/issues/72
         "PAM_KWALLET5_LOGIN=/run/user/1000/kwallet5.socket ${pkgs.kdePackages.kwallet-pam}/libexec/pam_kwallet_init"
