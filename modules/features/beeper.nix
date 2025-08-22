@@ -1,6 +1,9 @@
+{ inputs, ... }:
 {
   flake.modules.nixos.beeper = { pkgs, ... }: {
-    environment.systemPackages = [ pkgs.beeper ];
+    environment.systemPackages = [
+      pkgs.unstable.beeper
+    ];
     systemd.user.services.beeper-fix = {
       enable = true;
       description = "Fix Beeper not starting";

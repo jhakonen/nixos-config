@@ -296,11 +296,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1755020788,
-        "narHash": "sha256-R+i5F6hwoDisMoQqGQ+kWcSVQYpzjlh5oB3BMgvT2rk=",
+        "lastModified": 1755448111,
+        "narHash": "sha256-gZIaCPXWbVa5TbPC9l9fT0wCs8+fgPsNyJR0dpD2LKg=",
         "ref": "refs/heads/main",
-        "rev": "37b6db92e4584aaa5757d349d3102811d48a2add",
-        "revCount": 9,
+        "rev": "11c2be5b68574548251cd1401629bf3ace700d34",
+        "revCount": 19,
         "type": "git",
         "url": "file:///home/jhakonen/code/jhakonen/my-panel"
       },
@@ -390,11 +390,11 @@
     },
     "nixpkgs-unstable": {
       "locked": {
-        "lastModified": 1754214453,
-        "narHash": "sha256-Q/I2xJn/j1wpkGhWkQnm20nShYnG7TI99foDBpXm1SY=",
+        "lastModified": 1755615617,
+        "narHash": "sha256-HMwfAJBdrr8wXAkbGhtcby1zGFvs+StOp19xNsbqdOg=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "5b09dc45f24cf32316283e62aec81ffee3c3e376",
+        "rev": "20075955deac2583bb12f07151c2df830ef346b4",
         "type": "github"
       },
       "original": {
