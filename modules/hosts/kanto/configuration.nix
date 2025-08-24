@@ -32,6 +32,7 @@
       self.modules.nixos.nginx
       self.modules.nixos.nix-cleanup
       self.modules.nixos.paperless
+      self.modules.nixos.seafile
       self.modules.nixos.tailscale
       self.modules.nixos.telegraf
       self.modules.nixos.tvheadend

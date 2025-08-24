@@ -269,6 +269,19 @@
         icon = "hl-asus-router";
       };
     };
+    seafile = {
+      host = nodes.kanto;
+      port = 20000;
+      dashy = {
+        section = "palvelut";
+        description = "Verkkolevy";
+        icon = "hl-seafile";
+      };
+      public = {
+        domain = "seafile.jhakonen.com";
+        port = 443;
+      };
+    };
     skanneri-ads-1700w = {
       host = nodes.ads-1700w;
       port = 80;
