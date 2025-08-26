@@ -296,6 +296,7 @@
       nixos-rebuild-ng
       obsidian
       renameutils  # qmv
+      seafile-client
       sublime4
       super-productivity-latest
       syncthingtray-minimal
