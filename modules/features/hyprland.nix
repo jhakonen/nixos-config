@@ -197,7 +197,7 @@
 
         "trayscale --hide-window"
         "syncthingtray qt-widgets-gui --single-instance --wait"
-        "sleep 2 && switch-wallpaper"
+        "sleep 4 && switch-wallpaper"
         "sleep 4 && seafile-applet"
       ];
 
