@@ -54,7 +54,7 @@
 
     # Arguments
     #  $1    - Systemd service name
-    #  $2..n - List of extra ok states, choices: LAST_RUN_OK, NOT_RUN_YET
+    #  $2..n - List of extra ok states, choices: LAST_RUN_OK, NOT_RUN_YET, STARTING_UP
     checkSystemdService = pkgs.writeShellScript "check-systemd-service" ''
       SERVICE="$1"
       shift
@@ -72,7 +72,9 @@
         echo "Running"
       elif [[ "$STATUS" =~ (Active: activating) ]]; then
         echo "Starting up"
-        EXIT_CODE=1
+        if ! [[ "$OK_STATES" =~ STARTING_UP ]]; then
+          EXIT_CODE=1
+        fi
       else
         echo "Failed"
         EXIT_CODE=1

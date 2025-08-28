@@ -287,6 +287,7 @@
           extraStates = [
             "LAST_RUN_OK"
             "NOT_RUN_YET"
+            "STARTING_UP"
           ];
         }
       ) backup-jobs) ++ (if has-backup-jobs then [
