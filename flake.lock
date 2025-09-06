@@ -296,11 +296,10 @@
         ]
       },
       "locked": {
+        "dirtyRev": "11c2be5b68574548251cd1401629bf3ace700d34-dirty",
+        "dirtyShortRev": "11c2be5-dirty",
         "lastModified": 1755448111,
-        "narHash": "sha256-gZIaCPXWbVa5TbPC9l9fT0wCs8+fgPsNyJR0dpD2LKg=",
-        "ref": "refs/heads/main",
-        "rev": "11c2be5b68574548251cd1401629bf3ace700d34",
-        "revCount": 19,
+        "narHash": "sha256-y6y84vpPHcxXYj/qaMpML5JFOt/4hY3FDD54Kp+k2lQ=",
         "type": "git",
         "url": "file:///home/jhakonen/code/jhakonen/my-panel"
       },

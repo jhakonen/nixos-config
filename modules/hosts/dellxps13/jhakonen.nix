@@ -20,7 +20,7 @@ in {
     # programs.neovim.enable = true;
     home.packages = [
       inputs.agenix.packages.${pkgs.stdenv.system}.default  # agenix komento
-      pkgs.calibre
+      #pkgs.calibre
       pkgs.nixos-rebuild  # rebuildaus etäkoneelle
       pkgs.nix-index  # Nixpkgs pakettien sisällön etsiminen
     ];
@@ -86,12 +86,14 @@ in {
 
     # https://wiki.nixos.org/wiki/Default_applications
     # Tiedostotyypin näkee komennolla "file -i <tiedoston polku>"
+    # Tiedostopääte mimetyypiksi, katso: /run/current-system/sw/share/mime/globs
     xdg.mimeApps = {
       enable = true;
       defaultApplications = {
         "application/pdf" = "org.kde.okular.desktop";
         "text/html" = "firefox.desktop";
         "text/markdown" = "sublime_text.desktop";
+        "text/plain" = "org.gnome.TextEditor.desktop";
         "video/mp4" = "vlc.desktop";
         "video/webm" = "vlc.desktop";
         "x-scheme-handler/about" = "firefox.desktop";

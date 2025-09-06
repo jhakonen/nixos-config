@@ -250,6 +250,7 @@
       bitwarden
       brave
       cachix
+      calibre
       chromium
       #nur.repos.shadowrz.klassy-qt6  # KDE6+ teema
       discord
@@ -257,6 +258,7 @@
       errands
       eww
       git-crypt
+      gnome-text-editor
       google-chrome  # Chromecastin tukea varten
       haruna  # video soitin
       gnumake
@@ -277,6 +279,7 @@
       keepassxc
       libreoffice
       livecaptions
+      kdePackages.ark  # Pakkausohjelma (zip, tar.gz, jne...)
       kdePackages.isoimagewriter
       kdePackages.kaccounts-integration  # Lisää KDE asetuksiin Verkkotilit osion
       kdePackages.kaccounts-providers  # Lisää Verkkotilit osioon mahdollisuudeksi asentaa NextCloud tilin
