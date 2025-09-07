@@ -35,13 +35,6 @@
       isNormalUser = true;
       extraGroups = [ "wheel" ];
     };
-    users.users.root = {
-      openssh.authorizedKeys.keys = [
-        # Tarvitaan jotta seafilen access logit saa välitettyä tunnelikoneen
-        # fail2bannille
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFSiO4bqkEy4slae5/oPXW9kMfvE23vOu+hjbaBJZ8rr tunneli-ssh-key"
-      ];
-    };
   };
 
   flake.modules.homeManager.tunneli = {

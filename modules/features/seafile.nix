@@ -3,31 +3,11 @@ let
   inherit (self) catalog;
   hubPort = catalog.services.seafile.port;
   fileServerPort = hubPort + 1;
+  syslogPort = 10514;
 in
 {
   # Kanto-koneen konfiguraatio
-  flake.modules.nixos.seafile = { config, lib, pkgs, ... }: let
-    forwardLogs = pkgs.writeShellApplication {
-      name = "seahub-forward-logs";
-      runtimeInputs = [
-        pkgs.coreutils
-        pkgs.openssh
-      ];
-      text = ''
-        tail --follow=name --retry --lines=0 /var/log/seafile/seahub.log | \
-          ssh -i "$CREDENTIALS_DIRECTORY/ssh-key" root@${catalog.nodes.tunneli.ip.tailscale} \
-            "systemd-cat -t seahub"
-      '';
-    };
-  in {
-    age.secrets = {
-      tunneli-ssh-key = {
-        file = ../../agenix/tunneli-ssh-key.age;
-      };
-    };
-
-    services.openssh.knownHosts.tunneli = catalog.nodes.tunneli.ssh-host;
-
+  flake.modules.nixos.seafile = { config, lib, pkgs, ... }: {
     services.seafile = {
       enable = true;
       gc.enable = true;
@@ -54,23 +34,29 @@ in
     # Puhkaise reikä palomuuriin jotta tunneli-kone saa yhteyden palveluihin
     networking.firewall.allowedTCPPorts = [ hubPort fileServerPort ];
 
-    # Välitä Seahubin loki tunneli koneelle (fail2ban palvelua varten)
-    systemd.services.seahub-log-forward = {
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
-      serviceConfig = {
-        ExecStart = lib.getExe forwardLogs;
-        Restart = "on-failure";
-        RestartSec = 5;
-        DynamicUser = "yes";
-        KillSignal = "SIGINT";
-        LoadCredential = "ssh-key:${config.age.secrets.tunneli-ssh-key.path}";
-      };
-      path = [
-        pkgs.bash
-        pkgs.coreutils
-        pkgs.openssh
-      ];
+    # # Välitä Seahubin loki tunneli koneelle (fail2ban palvelua varten)
+    services.rsyslogd = {
+      enable = true;
+      extraConfig = ''
+        module(load="imfile")
+
+        # Lue Seahubin lokit jotka sisältävät viestit jos sisääkirjautuminen
+        # epäonnistuu. Tunneli-koneen fail2ban tarvitsee ne.
+        input(
+          type="imfile"
+          File="/var/log/seafile/seahub.log"
+          Tag="seahub"
+          Facility="auth"
+        )
+
+        # Välitä lokit tunneli-koneelle
+        :syslogtag, isequal, "seahub" action(
+          type="omfwd"
+          target="${catalog.nodes.tunneli.ip.tailscale}"
+          port="${toString syslogPort}"
+          protocol="tcp"
+        )
+      '';
     };
 
     # Varmuuskopiointi
@@ -144,6 +130,7 @@ in
       };
     };
 
+    # Estä yhteydenotot jos sisäänkirjautuminen epäonnistuu tarpeeksi monta kertaa.
     services.fail2ban = {
       enable = true;
       # Konfiguraatio tehty näiden ohjeiden pohjalta:
@@ -160,5 +147,25 @@ in
         };
       };
     };
+
+    # Seahubin lokien vastaanottava osa. Vastaanotetut lokit kirjoitetaan
+    # journaliin.
+    services.rsyslogd = {
+      enable = true;
+      extraConfig = ''
+        module(load="imtcp")
+        module(load="omjournal")
+
+        # Vastaanota syslog viestit kanto-koneelta
+        input(type="imtcp" port="${toString syslogPort}")
+
+        # Välitä seahub viestit systemd journaliin, fail2ban lukee ne sieltä
+        :syslogtag, isequal, "seahub" action(type="omjournal")
+      '';
+    };
+
+    # Salli lokien vastaanottaminen vain Tailscale verkosta, ei julkisesta
+    # internetistä.
+    networking.firewall.interfaces.tailscale0.allowedTCPPorts = [ syslogPort ];
   };
 }

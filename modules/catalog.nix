@@ -44,10 +44,6 @@
     };
     tunneli = {
       ip.tailscale = "100.125.41.58";
-      ssh-host = {
-        hostNames = [ "100.125.41.58" ];
-        publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIA/QX7LpIRq+OQstSEKC0w+CCRxv525A3T4E1FFMwLFb";
-      };
     };
   };
 
