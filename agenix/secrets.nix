@@ -75,4 +75,5 @@ in
   "rsyncbackup-password.age".publicKeys = [ jhakonen kanto mervi toukka ];
   "telegraf-environment.age".publicKeys = [ jhakonen kanto ];
   "zigbee2mqtt-environment.age".publicKeys = [ jhakonen toukka ];
+  "tunneli-ssh-key.age".publicKeys = [ jhakonen tunneli ];
 }

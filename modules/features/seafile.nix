@@ -6,9 +6,31 @@ let
 in
 {
   # Kanto-koneen konfiguraatio
-  flake.modules.nixos.seafile = { config, ... }: {
+  flake.modules.nixos.seafile = { config, lib, pkgs, ... }: let
+    forwardLogs = pkgs.writeShellApplication {
+      name = "seahub-forward-logs";
+      runtimeInputs = [
+        pkgs.coreutils
+        pkgs.openssh
+      ];
+      text = ''
+        tail --follow=name --retry --lines=0 /var/log/seafile/seahub.log | \
+          ssh -i "$CREDENTIALS_DIRECTORY/ssh-key" root@${catalog.nodes.tunneli.ip.tailscale} \
+            "systemd-cat -t seahub"
+      '';
+    };
+  in {
+    age.secrets = {
+      tunneli-ssh-key = {
+        file = ../../agenix/tunneli-ssh-key.age;
+      };
+    };
+
+    services.openssh.knownHosts.tunneli = catalog.nodes.tunneli.ssh-host;
+
     services.seafile = {
       enable = true;
+      gc.enable = true;
 
       adminEmail = catalog.seafileAdminEmail;
       initialAdminPassword = "carenot";
@@ -23,10 +45,33 @@ in
       };
 
       seahubAddress = "0.0.0.0:${toString hubPort}";
+      seahubExtraConf = ''
+        # Fail2ban tarvitsee tämän asetuksen
+        TIME_ZONE = 'Europe/Helsinki'
+      '';
     };
 
     # Puhkaise reikä palomuuriin jotta tunneli-kone saa yhteyden palveluihin
     networking.firewall.allowedTCPPorts = [ hubPort fileServerPort ];
+
+    # Välitä Seahubin loki tunneli koneelle (fail2ban palvelua varten)
+    systemd.services.seahub-log-forward = {
+      after = [ "network.target" ];
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        ExecStart = lib.getExe forwardLogs;
+        Restart = "on-failure";
+        RestartSec = 5;
+        DynamicUser = "yes";
+        KillSignal = "SIGINT";
+        LoadCredential = "ssh-key:${config.age.secrets.tunneli-ssh-key.path}";
+      };
+      path = [
+        pkgs.bash
+        pkgs.coreutils
+        pkgs.openssh
+      ];
+    };
 
     # Varmuuskopiointi
     my.services.rsync.jobs.seafile = {
@@ -96,6 +141,23 @@ in
         # Käytä Let's Encrypt sertifikaattia
         addSSL = true;
         useACMEHost = "jhakonen.com";
+      };
+    };
+
+    services.fail2ban = {
+      enable = true;
+      # Konfiguraatio tehty näiden ohjeiden pohjalta:
+      #   https://manual.seafile.com/11.0/security/fail2ban/
+      jails.seafile = {
+        filter.Definition = {
+          _daemon = "seaf-server";
+          failregex = "Login attempt limit reached.*, ip: <HOST>";
+          ignoreregex = "";
+        };
+        settings = {
+          maxretry = 3;
+          port = "http,https";
+        };
       };
     };
   };
