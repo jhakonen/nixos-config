@@ -192,8 +192,7 @@
 
         "hyprpanel"
 
-        # See https://github.com/Vladimir-csp/uwsm/issues/72
-        "PAM_KWALLET5_LOGIN=/run/user/1000/kwallet5.socket ${pkgs.kdePackages.kwallet-pam}/libexec/pam_kwallet_init"
+        "${pkgs.kdePackages.kwallet-pam}/libexec/pam_kwallet_init"
 
         "trayscale --hide-window"
         "syncthingtray qt-widgets-gui --single-instance --wait"
