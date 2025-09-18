@@ -45,6 +45,9 @@
     tunneli = {
       ip.tailscale = "100.125.41.58";
     };
+    veljen-nassi = {
+      ip.tailscale = "100.81.76.65";
+    };
   };
 
   services = addServiceNames {
