@@ -66,7 +66,6 @@
     };
     dashy = {
       host = nodes.kanto;
-      port = 13000;
       public = {
         domain = "dashy.jhakonen.com";
       };

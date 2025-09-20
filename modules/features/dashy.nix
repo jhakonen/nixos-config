@@ -44,9 +44,12 @@ let
     ];
 in {
   flake.modules.nixos.dashy = { config, ... }: {
-    my.services.dashy = {
+    services.dashy = {
       enable = true;
-      port = catalog.services.dashy.port;
+      virtualHost = {
+        enableNginx = true;
+        domain = catalog.services.dashy.public.domain;
+      };
       settings = {
         pageInfo = {
           title = "Koti";
@@ -75,26 +78,14 @@ in {
       };
     };
 
-    services.nginx = {
-      enable = true;
-      virtualHosts.${catalog.services.dashy.public.domain} = {
-        locations."/" = {
-          proxyPass = "http://127.0.0.1:${toString catalog.services.dashy.port}";
-          recommendedProxySettings = true;
-        };
-        # Käytä Let's Encrypt sertifikaattia
-        forceSSL = true;
-        useACMEHost = "jhakonen.com";
-      };
+    services.nginx.virtualHosts.${catalog.services.dashy.public.domain} = {
+      # Käytä Let's Encrypt sertifikaattia
+      forceSSL = true;
+      useACMEHost = "jhakonen.com";
     };
 
     # Palvelun valvonta
     my.services.monitoring.checks = [
-      {
-        type = "systemd service";
-        description = "Dashy - container";
-        name = config.systemd.services."${config.virtualisation.oci-containers.backend}-dashy".name;
-      }
       {
         type = "http check";
         description = "Dashy - web interface";
