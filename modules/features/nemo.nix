@@ -9,6 +9,8 @@ in
       pkgs.nemo-with-extensions
     ];
     services.gvfs.enable = true;
+    # Tämä tarvitaan jotta Nemo näkee kaikki ohjelmat johon tiedoston voi avata
+    xdg.mime.enable = true;
   };
 
   flake.modules.homeManager.nemo = { config, ... }: {
