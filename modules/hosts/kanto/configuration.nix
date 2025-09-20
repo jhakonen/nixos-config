@@ -20,10 +20,10 @@
       self.modules.nixos.dashy
       self.modules.nixos.freshrss
       self.modules.nixos.grafana
-      self.modules.nixos.hoarder
       self.modules.nixos.home-assistant
       self.modules.nixos.immich
       self.modules.nixos.influxdb
+      self.modules.nixos.karakeep
       self.modules.nixos.koti
       self.modules.nixos.mqtt-server
       self.modules.nixos.n8n

@@ -41,7 +41,7 @@ in {
     };
 
     # Varmuuskopiointi
-    my.services.rsync.jobs.hoarder = {
+    my.services.rsync.jobs.immich = {
       destinations = [
         "nas-normal"
         "nas-minimal"

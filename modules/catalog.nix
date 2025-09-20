@@ -109,19 +109,6 @@
         port = 443;
       };
     };
-    hoarder = {
-      host = nodes.kanto;
-      port = 18000;
-      dashy = {
-        section = "palvelut";
-        description = "Kirjanmerkkien hallinta";
-        icon = "https://hoarder.jhakonen.com/favicon.ico";
-      };
-      public = {
-        domain = "hoarder.jhakonen.com";
-        port = 443;
-      };
-    };
     home-assistant = {
       host = nodes.kanto;
       port = 8123;
@@ -151,6 +138,19 @@
     influx-db = {
       host = nodes.kanto;
       port = 8086;
+    };
+    karakeep = {
+      host = nodes.kanto;
+      port = 18000;
+      dashy = {
+        section = "palvelut";
+        description = "Kirjanmerkkien hallinta";
+        icon = "https://karakeep.jhakonen.com/favicon.ico";
+      };
+      public = {
+        domain = "karakeep.jhakonen.com";
+        port = 443;
+      };
     };
     kodi = {
       host = nodes.mervi;
