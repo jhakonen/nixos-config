@@ -37,7 +37,7 @@
               }
           ) jobcfg.destinations;
           rsync-cmds = builtins.map (entry: lib.strings.concatStringsSep " " [
-            "${pkgs.rsync}/bin/rsync -av --no-owner --no-group --delete --delete-excluded"
+            "${lib.getExe pkgs.retry} --times=4 -- ${lib.getExe pkgs.rsync} -av --no-owner --no-group --delete --delete-excluded"
             "--password-file=${entry.password-file}"
             (lib.strings.concatStringsSep " " (builtins.map (ex: "--exclude='${ex}'") entry.excludes))
             (lib.strings.concatStringsSep " " entry.sources)
