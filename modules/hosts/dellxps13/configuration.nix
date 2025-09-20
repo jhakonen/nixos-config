@@ -34,7 +34,6 @@
 
       inputs.agenix.nixosModules.default
       inputs.home-manager.nixosModules.home-manager
-      inputs.nix-flatpak.nixosModules.nix-flatpak
       inputs.nixos-hardware.nixosModules.common-cpu-intel
       inputs.nixos-hardware.nixosModules.common-pc-laptop
       inputs.nixos-hardware.nixosModules.common-pc-ssd
@@ -46,6 +45,7 @@
 
       self.modules.nixos.beeper
       self.modules.nixos.common
+      self.modules.nixos.flatpak
       self.modules.nixos.koti
       self.modules.nixos.nemo
       self.modules.nixos.nix-cleanup
@@ -314,13 +314,9 @@
       inputs.mypanel.packages.${pkgs.stdenv.system}.default
     ];
 
-    services.flatpak = {
-      enable = true;
-      packages = [
-        "app.grayjay.Grayjay"
-      ];
-      update.onActivation = true;
-    };
+    services.flatpak.packages = [
+      "app.grayjay.Grayjay"
+    ];
 
     # Esimerkki miten ohjelman paketin voi overridata käyttäen overlaytä
     # nixpkgs.overlays = [
