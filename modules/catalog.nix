@@ -221,11 +221,12 @@
     };
     nas = {
       host = nodes.nas;
-      port = 5000;
+      port = 5001;
+      https = true;
       dashy = {
         section = "palvelut";
         description = "Synology NAS hallintapaneeli";
-        icon = "http://nas:5000/webman/favicon.ico";
+        icon = "https://nas:5001/webman/favicon.ico";
       };
     };
     netdata-nassuvm = {
