@@ -260,7 +260,6 @@
       git-crypt
       gnome-text-editor
       google-chrome  # Chromecastin tukea varten
-      haruna  # video soitin
       gnumake
       (hakuneko.overrideAttrs(attrs: {  # Manga downloader
         version = "8.3.4";
@@ -286,7 +285,6 @@
       kdePackages.kdeconnect-kde
       kdePackages.kmahjongg
       kdePackages.kolourpaint
-      kdePackages.okular
       kdePackages.plasma-thunderbolt  # Asetusvälilehti thunderboltille (lisäksi services.hardware.bolt)
       kdePackages.qtwebsockets  # Tarvitaan Home Assistant plasmoidia varten
       kdePackages.kcalc
@@ -306,7 +304,6 @@
       teams-for-linux
       tidal-hifi
       trayscale
-      vlc
       zoom-us
 
       inputs.qjournalctl.packages.${pkgs.stdenv.system}.default
@@ -316,6 +313,8 @@
 
     services.flatpak.packages = [
       "app.grayjay.Grayjay"
+      "org.gnome.Papers"
+      "org.gnome.Showtime"
     ];
 
     # Esimerkki miten ohjelman paketin voi overridata käyttäen overlaytä

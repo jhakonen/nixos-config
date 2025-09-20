@@ -90,12 +90,9 @@ in {
     xdg.mimeApps = {
       enable = true;
       defaultApplications = {
-        "application/pdf" = "org.kde.okular.desktop";
         "text/html" = "firefox.desktop";
         "text/markdown" = "sublime_text.desktop";
         "text/plain" = "org.gnome.TextEditor.desktop";
-        "video/mp4" = "vlc.desktop";
-        "video/webm" = "vlc.desktop";
         "x-scheme-handler/about" = "firefox.desktop";
         "x-scheme-handler/element" = "Beeper.desktop";
         "x-scheme-handler/http" = "firefox.desktop";
