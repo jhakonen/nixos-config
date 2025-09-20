@@ -54,7 +54,10 @@ in {
     };
 
     # Hoarder käyttää meilisearchia hakujen tekoon
-    services.meilisearch.enable = true;
+    services.meilisearch = {
+      enable = true;
+      package = pkgs.meilisearch;
+    };
 
     # Paljasta meilisearchin portti jotta hoarder-web kontti saa siihen yhteyttä
     services.meilisearch.listenAddress = "0.0.0.0";
