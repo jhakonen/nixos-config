@@ -124,6 +124,12 @@
         package = pkgs.kdePackages.kwallet-pam;
       };
     };
+
+    systemd.user.services.kwallet-unlock = {
+      description = "Unlocks KWallet after user logs in";
+      wantedBy = [ "graphical-session.target" ];
+      script = "${pkgs.kdePackages.kwallet-pam}/libexec/pam_kwallet_init";
+    };
   };
 
   # =================
@@ -191,8 +197,6 @@
         # "dbus-update-activation-environment --systemd --all"
 
         "hyprpanel"
-
-        "${pkgs.kdePackages.kwallet-pam}/libexec/pam_kwallet_init"
 
         "trayscale --hide-window"
         "syncthingtray qt-widgets-gui --single-instance --wait"
