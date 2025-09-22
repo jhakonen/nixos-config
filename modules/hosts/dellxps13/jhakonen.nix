@@ -102,6 +102,10 @@ in {
       };
     };
 
+    # Ylikrjoita mime asetukset jos niitä tulee muokattua käsin, esim. Nemolla
+    # muuttamalla tiedoston oletusohjelmaa
+    xdg.configFile."mimeapps.list".force = true;
+
     xdg.userDirs = {
       enable = true;
       desktop = "${config.home.homeDirectory}/Työpöytä";
