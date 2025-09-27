@@ -2,8 +2,6 @@
 {
   flake.modules.nixos.calibre = { config, pkgs, ... }: let
     inherit (self) catalog;
-
-    LOCAL_LIBRARY_PATH = "/var/lib/calibre-library";
     LOCAL_URL = "http://127.0.0.1:${toString config.services.calibre-web.listen.port}";
   in {
     services = {
@@ -14,7 +12,7 @@
           port = catalog.services.calibre-web.port;
         };
         options = {
-          calibreLibrary = LOCAL_LIBRARY_PATH;
+          calibreLibrary = catalog.paths.syncthing.calibre;
         };
       };
 
@@ -38,7 +36,7 @@
       wantedBy = [ "multi-user.target" ];
       pathConfig = {
         Unit = "calibre-db-reconnect.service";
-        PathModified = "${LOCAL_LIBRARY_PATH}/metadata.db";
+        PathModified = "${catalog.paths.syncthing.calibre}/metadata.db";
       };
     };
 
@@ -50,7 +48,7 @@
     };
 
     my.services.syncthing.settings.folders."Calibre" = {
-      path = LOCAL_LIBRARY_PATH;
+      path = catalog.paths.syncthing.calibre;
       devices = [ "nas" ];
     };
 

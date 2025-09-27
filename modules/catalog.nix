@@ -50,6 +50,14 @@
     };
   };
 
+  paths = {
+    syncthing = {
+      calibre = "/var/lib/calibre-library";
+      muistiinpanot = "/var/lib/syncthing/Muistiinpanot";
+      paivakirja = "/var/lib/syncthing/Päiväkirja";
+    };
+  };
+
   services = addServiceNames {
     calibre-web = {
       host = nodes.kanto;
@@ -461,6 +469,7 @@ in {
 
       inherit id-rsa-public-key;
       inherit nodes;
+      inherit paths;
       inherit services;
       inherit syncthing-devices;
     })

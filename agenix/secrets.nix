@@ -69,6 +69,7 @@ in
   "acme-joker-credentials.age".publicKeys = [ jhakonen kanto mervi toukka tunneli ];
   "freshrss-admin-password.age".publicKeys = [ jhakonen kanto ];
   "github-id-rsa.age".publicKeys = [ jhakonen ];
+  "kanto-gitea-ssh-key.age".publicKeys = [ jhakonen kanto ];
   "karakeep-environment.age".publicKeys = [ jhakonen kanto ];
   "mqtt-password.age".publicKeys = [ jhakonen kanto mervi toukka ];
   "mqtt-espuser-password.age".publicKeys = [ jhakonen kanto ];

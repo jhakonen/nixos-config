@@ -33,6 +33,7 @@
       self.modules.nixos.nix-cleanup
       self.modules.nixos.paperless
       self.modules.nixos.seafile
+      self.modules.nixos.syncthing-to-git
       self.modules.nixos.tailscale
       self.modules.nixos.telegraf
       self.modules.nixos.tvheadend
@@ -104,8 +105,19 @@
       data-dir = "/root";
       settings = {
         devices = catalog.pickSyncthingDevices ["nas"];
+        folders = {
+          "Muistiinpanot" = {
+            path = catalog.paths.syncthing.muistiinpanot;
+            devices = [ "nas" ];
+          };
+          "Päiväkirja" = {
+            path = catalog.paths.syncthing.paivakirja;
+            devices = [ "nas" ];
+          };
+        };
       };
     };
+
 
     # Älä muuta ellei ole pakko, ei edes uudempaan versioon päivittäessä
     system.stateVersion = "24.05";
