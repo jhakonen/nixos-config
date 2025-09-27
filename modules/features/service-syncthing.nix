@@ -18,7 +18,7 @@
         default = "/home/jhakonen";
       };
       settings = lib.mkOption {
-        type = lib.types.attrs;
+        type = lib.types.attrsOf lib.types.anything;
         default = {};
       };
     };
