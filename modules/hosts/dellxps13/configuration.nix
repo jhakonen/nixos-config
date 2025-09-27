@@ -214,19 +214,19 @@
         devices = catalog.pickSyncthingDevices ["mervi" "nas"];
         folders = {
           "Calibre" = {
-            path = "/home/jhakonen/Calibre";
+            path = "/home/jhakonen/Syncthing/Calibre";
             devices = [ "nas" ];
           };
           "Jaot" = {
-            path = "/home/jhakonen/Jaot";
+            path = "/home/jhakonen/Syncthing/Jaot";
             devices = [ "nas" ];
           };
           "Keepass" = {
-            path = "/home/jhakonen/Keepass";
+            path = "/home/jhakonen/Syncthing/Keepass";
             devices = [ "mervi" "nas" ];
           };
           "Muistiinpanot" = {
-            path = "/home/jhakonen/Muistiinpanot";
+            path = "/home/jhakonen/Syncthing/Muistiinpanot";
             devices = [ "nas" ];
           };
         };
