@@ -229,6 +229,10 @@
             path = "/home/jhakonen/Syncthing/Muistiinpanot";
             devices = [ "nas" ];
           };
+          "Päiväkirja" = {
+            path = "/home/jhakonen/Syncthing/Päiväkirja";
+            devices = [ "nas" ];
+          };
         };
       };
     };
@@ -278,6 +282,7 @@
       keepassxc
       libreoffice
       livecaptions
+      logseq
       kdePackages.ark  # Pakkausohjelma (zip, tar.gz, jne...)
       kdePackages.isoimagewriter
       kdePackages.kaccounts-integration  # Lisää KDE asetuksiin Verkkotilit osion
