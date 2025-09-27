@@ -108,6 +108,19 @@
         port = 443;
       };
     };
+    gitea = {
+      host = nodes.kanto;
+      port = 4000;
+      dashy = {
+        section = "palvelut";
+        description = "Git palvelin";
+        icon = "hl-gitea";
+      };
+      public = {
+        domain = "gitea.kanto.lan.jhakonen.com";
+        port = 443;
+      };
+    };
     home-assistant = {
       host = nodes.kanto;
       port = 8123;

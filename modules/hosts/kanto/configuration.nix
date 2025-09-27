@@ -18,6 +18,7 @@
       self.modules.nixos.common
       self.modules.nixos.dashy
       self.modules.nixos.freshrss
+      self.modules.nixos.gitea
       self.modules.nixos.grafana
       self.modules.nixos.home-assistant
       self.modules.nixos.immich
