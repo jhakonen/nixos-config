@@ -246,6 +246,9 @@
             # Älä aja varmuuskopiointia nixos-rebuild:n jälkeen, tee se vain
             # ajastettuna ajankohtana:
             #   https://github.com/NixOS/nixpkgs/blob/fbbeadbe17d3e9ae09ca743472d57c909563ac67/nixos/doc/manual/development/unit-handling.section.md?plain=1#L48
+            # Tämän voi poistaa kun NixOS systemd on versiossa 259:
+            #   https://github.com/systemd/systemd/issues/31231  (milestone: 259)
+            #   https://github.com/NixOS/nixpkgs/issues/228528
             unitConfig.X-OnlyManualStart = true;
           };
         }))
