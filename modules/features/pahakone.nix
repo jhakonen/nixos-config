@@ -8,6 +8,7 @@
       virtualHosts."pahakone.jhakonen.com" = {
         locations."/" = {
           proxyPass = "https://${catalog.nodes.veljen-nassi.ip.tailscale}:20003";
+          proxyWebsockets = true;
           recommendedProxySettings = true;
         };
         # Käytä Let's Encrypt sertifikaattia
