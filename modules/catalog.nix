@@ -364,6 +364,17 @@
         icon = "hl-syncthing";
       };
     };
+    kalenteri = {
+      dashy = {
+        section = "palvelut";
+        description = "Synologyn Kalenteri";
+        icon = "hl-synology-calendar";
+      };
+      public = {
+        domain = "pahakone.jhakonen.com";
+        port = 443;
+      };
+    };
     tinypilot = {
       host = nodes.tinypilot;
       port = 443;
