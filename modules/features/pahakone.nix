@@ -5,7 +5,7 @@
   in {
     services.nginx = {
       enable = true;
-      virtualHosts."pahakone.jhakonen.com" = {
+      virtualHosts.${catalog.services.kalenteri.public.domain} = {
         locations."/" = {
           proxyPass = "https://${catalog.nodes.veljen-nassi.ip.tailscale}:20003";
           proxyWebsockets = true;

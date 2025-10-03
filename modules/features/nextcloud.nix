@@ -5,12 +5,11 @@
 
 { lib, self, ... }:
 let
+  inherit (self) catalog;
   maxUploadSize = "10G";
 in
 {
   flake.modules.nixos.nextcloud = { config, pkgs, ... }: let
-    inherit (self) catalog;
-
     nextcloudPackage = pkgs.nextcloud31;
     backupDbPath = "${config.services.nextcloud.datadir}/nextcloud-mariadb.backup";
     adminPassFile = pkgs.writeText "nextcloud-initialadminpass" "initial-pass";
@@ -218,7 +217,7 @@ in
   flake.modules.nixos.nextcloud-tunnel = {
     services.nginx = {
       enable = true;
-      virtualHosts."nextcloud.jhakonen.com" = {
+      virtualHosts.${catalog.services.nextcloud.public.domain} = {
         locations."/" = {
           proxyPass = "http://kanto.tailscale.jhakonen.com";
           proxyWebsockets = true;

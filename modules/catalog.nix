@@ -68,14 +68,14 @@
         icon = "hl-calibre";
       };
       public = {
-        domain = "calibre-web.jhakonen.com";
+        domain = "calibre-web.kanto.lan.jhakonen.com";
         port = 443;
       };
     };
     dashy = {
       host = nodes.kanto;
       public = {
-        domain = "dashy.jhakonen.com";
+        domain = "dashy.kanto.lan.jhakonen.com";
       };
     };
     esphome = {
@@ -87,7 +87,7 @@
         icon = "hl-esphome";
       };
       public = {
-        domain = "esphome.jhakonen.com";
+        domain = "esphome.kanto.lan.jhakonen.com";
         port = 443;
       };
     };
@@ -99,7 +99,7 @@
         icon = "hl-freshrss";
       };
       public = {
-        domain = "freshrss.jhakonen.com";
+        domain = "freshrss.kanto.lan.jhakonen.com";
         port = 443;
       };
     };
@@ -112,7 +112,7 @@
         icon = "hl-grafana";
       };
       public = {
-        domain = "grafana.jhakonen.com";
+        domain = "grafana.kanto.lan.jhakonen.com";
         port = 443;
       };
     };
@@ -138,7 +138,7 @@
         icon = "hl-home-assistant";
       };
       public = {
-        domain = "home-assistant.jhakonen.com";
+        domain = "home-assistant.kanto.lan.jhakonen.com";
         port = 443;
       };
     };
@@ -151,7 +151,7 @@
         icon = "hl-immich";
       };
       public = {
-        domain = "immich.jhakonen.com";
+        domain = "immich.kanto.lan.jhakonen.com";
         port = 443;
       };
     };
@@ -165,10 +165,10 @@
       dashy = {
         section = "palvelut";
         description = "Kirjanmerkkien hallinta";
-        icon = "https://karakeep.jhakonen.com/favicon.ico";
+        icon = "https://karakeep.kanto.lan.jhakonen.com/favicon.ico";
       };
       public = {
-        domain = "karakeep.jhakonen.com";
+        domain = "karakeep.kanto.lan.jhakonen.com";
         port = 443;
       };
     };
@@ -222,7 +222,7 @@
       port = 8883;
       insecure_port = 1883;
       public = {
-        domain = "mqtt.jhakonen.com";
+        domain = "mqtt.kanto.lan.jhakonen.com";
       };
     };
     n8n = {
@@ -280,7 +280,7 @@
         icon = "hl-paperless";
       };
       public = {
-        domain = "paperless.jhakonen.com";
+        domain = "paperless.kanto.lan.jhakonen.com";
         port = 443;
       };
     };
@@ -415,7 +415,7 @@
         icon = "hl-zigbee2mqtt";
       };
       public = {
-        domain = "zigbee2mqtt.jhakonen.com";
+        domain = "zigbee2mqtt.toukka.lan.jhakonen.com";
         port = 443;
       };
     };

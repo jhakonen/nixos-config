@@ -2,7 +2,6 @@
 {
   flake.modules.nixos.zigbee2mqtt = { config, ... }: let
     inherit (self) catalog;
-    acmeHost = "${config.networking.hostName}.lan.jhakonen.com";
   in {
     services.zigbee2mqtt = {
       enable = true;
@@ -12,7 +11,7 @@
         serial.port = "/dev/ttyUSB0";
         mqtt = {
           base_topic = "zigbee2mqtt";
-          server = "mqtts://mqtt.jhakonen.com";
+          server = "mqtts://${catalog.services.mosquitto.public.domain}";
           user = "koti";
           reject_unauthorized = true;
         };
@@ -91,13 +90,9 @@
         };
         # Käytä Let's Encrypt sertifikaattia
         addSSL = true;
-        useACMEHost = acmeHost;
+        useACMEHost = "toukka.lan.jhakonen.com";
       };
     };
-
-    security.acme.certs.${acmeHost}.extraDomainNames = [
-      catalog.services.zigbee2mqtt.public.domain
-    ];
 
     # Lisää MQTT salasana salatun ympäristömuuttujan kautta
     age.secrets.zigbee2mqtt-environment.file = ../../agenix/zigbee2mqtt-environment.age;

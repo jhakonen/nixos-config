@@ -19,7 +19,7 @@ in {
     # Käytä uudempaa meilisearch versiota, tämän voi poistaa NixOS 25.11 versiossa.
     services.meilisearch.package = pkgs.meilisearch;
 
-    # Paljasta Karakeep karakeep.jhakonen.com domainissa
+    # Paljasta Karakeep karakeep.kanto.lan.jhakonen.com domainissa
     services.nginx = {
       enable = true;
       virtualHosts.${catalog.services.karakeep.public.domain} = {
