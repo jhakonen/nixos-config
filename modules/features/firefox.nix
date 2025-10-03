@@ -12,6 +12,7 @@
         enable = true;
         profiles.hakonen = {
           extensions.packages = with pkgs; [
+            nur.repos.rycee.firefox-addons.consent-o-matic
             nur.repos.rycee.firefox-addons.floccus
             nur.repos.rycee.firefox-addons.kagi-search
             nur.repos.rycee.firefox-addons.keepassxc-browser
