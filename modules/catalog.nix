@@ -271,6 +271,19 @@
         port = 443;
       };
     };
+    opencloud = {
+      host = nodes.kanto;
+      port = 21000;
+      dashy = {
+        section = "palvelut";
+        description = "Verkkolevy";
+        icon = "hl-opencloud";
+      };
+      public = {
+        domain = "opencloud.jhakonen.com";
+        port = 443;
+      };
+    };
     paperless = {
       host = nodes.kanto;
       port = 12000;

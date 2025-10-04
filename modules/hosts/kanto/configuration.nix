@@ -31,6 +31,7 @@
       self.modules.nixos.nextcloud
       self.modules.nixos.nginx
       self.modules.nixos.nix-cleanup
+      self.modules.nixos.opencloud
       self.modules.nixos.paperless
       self.modules.nixos.seafile
       self.modules.nixos.syncthing-to-git

@@ -301,6 +301,7 @@
       nextcloud-client
       nixos-rebuild-ng
       obsidian
+      opencloud-desktop
       renameutils  # qmv
       seafile-client
       sublime4
