@@ -49,6 +49,7 @@
       self.modules.nixos.koti
       self.modules.nixos.nemo
       self.modules.nixos.nix-cleanup
+      self.modules.nixos.opencloud-client
       self.modules.nixos.tailscale
       self.modules.nixos.tailscale-receive
       self.modules.nixos.webcamera
@@ -301,7 +302,6 @@
       nextcloud-client
       nixos-rebuild-ng
       obsidian
-      opencloud-desktop
       renameutils  # qmv
       seafile-client
       sublime4

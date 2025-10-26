@@ -30,6 +30,16 @@
 
     services.openssh.enable = true;
 
+    services.nginx = {
+      enable = true;
+      clientMaxBodySize = "0";
+      proxyTimeout = "10h";
+      recommendedGzipSettings = true;
+      recommendedOptimisation = true;
+      recommendedProxySettings = true;
+      recommendedTlsSettings = true;
+    };
+
     # Älä muuta ellei ole pakko, ei edes uudempaan versioon päivittäessä
     system.stateVersion = "25.05";
 

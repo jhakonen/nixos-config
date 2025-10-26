@@ -45,21 +45,24 @@ in
   };
 
   flake.modules.nixos.opencloud-tunnel = { config, ... }: {
-    services.nginx = {
-      enable = true;
-      virtualHosts.${catalog.services.opencloud.public.domain} = {
-        locations."/" = {
-          proxyPass = "http://kanto.tailscale.jhakonen.com:${toString catalog.services.opencloud.port}";
-          proxyWebsockets = true;
-          recommendedProxySettings = true;
-          extraConfig = ''
-            client_max_body_size 0;
-          '';
-        };
-        # Käytä Let's Encrypt sertifikaattia
-        addSSL = true;
-        useACMEHost = "jhakonen.com";
+    services.nginx.virtualHosts.${catalog.services.opencloud.public.domain} = {
+      locations."/" = {
+        proxyPass = "http://kanto.tailscale.jhakonen.com:${toString catalog.services.opencloud.port}";
+        proxyWebsockets = true;
+        extraConfig = ''
+          proxy_request_buffering off;
+          send_timeout            10h;
+        '';
       };
+      # Käytä Let's Encrypt sertifikaattia
+      addSSL = true;
+      useACMEHost = "jhakonen.com";
     };
+  };
+
+  flake.modules.nixos.opencloud-client = { pkgs, ... }: {
+    environment.systemPackages = [
+      pkgs.unstable.opencloud-desktop
+    ];
   };
 }
