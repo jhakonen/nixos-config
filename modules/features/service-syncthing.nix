@@ -34,6 +34,10 @@
       settings = cfg.settings;
     };
 
+    config.environment.systemPackages = with pkgs; [
+      syncthing
+    ];
+
     config.networking.firewall.allowedTCPPorts = lib.mkIf cfg.enable [ cfg.gui-port ];
 
     # Palvelun valvonta
