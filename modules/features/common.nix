@@ -69,6 +69,7 @@
       eza        # https://github.com/eza-community/eza
       doggo      # https://doggo.mrkaran.dev/docs/
       nvd        # listaa erot kahden nixos sukupolven väliltä
+      wget
     ];
 
     # Estä `inetutils` pakettia korvaamasta `nettools`
