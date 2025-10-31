@@ -55,7 +55,7 @@
       self.modules.nixos.webcamera
 
       # Hyprland modules
-      self.modules.nixos.hyprland
+      #self.modules.nixos.hyprland
     ];
 
     # Bootloader.
@@ -120,7 +120,7 @@
     # Enable the KDE Plasma Desktop Environment.
     services.displayManager.sddm.enable = true;
     services.displayManager.sddm.wayland.enable = true;
-    #services.desktopManager.plasma6.enable = true;  # kommentoi pois hyprlandia varten
+    services.desktopManager.plasma6.enable = true;  # kommentoi pois hyprlandia varten
 
     # Konfiguroi verkkotulostimen tuki
     services.avahi = {
