@@ -297,6 +297,19 @@
         port = 443;
       };
     };
+    radicale = {
+      host = nodes.kanto;
+      port = 5232;
+      dashy = {
+        section = "palvelut";
+        description = "Yhteystietojen hallinta";
+        icon = "hl-radicale";
+      };
+      public = {
+        domain = "radicale.kanto.lan.jhakonen.com";
+        port = 443;
+      };
+    };
     reititin = {
       host = nodes.reititin;
       port = 443;

@@ -33,6 +33,7 @@
       self.modules.nixos.nix-cleanup
       self.modules.nixos.opencloud
       self.modules.nixos.paperless
+      self.modules.nixos.radicale
       self.modules.nixos.seafile
       self.modules.nixos.syncthing-to-git
       self.modules.nixos.tailscale
