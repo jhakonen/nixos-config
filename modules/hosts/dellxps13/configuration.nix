@@ -317,6 +317,10 @@
       inputs.mypanel.packages.${pkgs.stdenv.system}.default
     ];
 
+    fonts.packages = with pkgs; [
+      cascadia-code
+    ];
+
     services.flatpak.packages = [
       "app.grayjay.Grayjay"
       "org.gnome.Papers"
