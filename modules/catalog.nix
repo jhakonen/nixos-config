@@ -259,18 +259,6 @@
         icon = "hl-netdata";
       };
     };
-    nextcloud = {
-      host = nodes.kanto;
-      dashy = {
-        section = "palvelut";
-        description = "Verkkolevy";
-        icon = "hl-nextcloud";
-      };
-      public = {
-        domain = "nextcloud.jhakonen.com";
-        port = 443;
-      };
-    };
     opencloud = {
       host = nodes.kanto;
       port = 21000;

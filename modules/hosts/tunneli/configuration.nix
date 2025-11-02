@@ -12,7 +12,6 @@
       self.modules.nixos.common
       self.modules.nixos.kotisivu
       self.modules.nixos.n8n-tunnel
-      self.modules.nixos.nextcloud-tunnel
       self.modules.nixos.nginx
       self.modules.nixos.opencloud-tunnel
       self.modules.nixos.pahakone-tunnel

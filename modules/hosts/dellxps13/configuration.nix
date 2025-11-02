@@ -182,7 +182,9 @@
           "/.steam"
           "/Calibre"
           "/Keepass"
-          "/Nextcloud"
+          "/OpenCloud"
+          "/Seafile"
+          "/Syncthing"
         ];
         destinations = [
           "nas-normal"
@@ -299,7 +301,6 @@
       meld
       moonlight-qt
       mqttx
-      nextcloud-client
       nixos-rebuild-ng
       obsidian
       renameutils  # qmv

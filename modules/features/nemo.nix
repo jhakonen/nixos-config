@@ -19,7 +19,6 @@ in
     };
     gtk.enable = true;
     gtk.gtk3.bookmarks = [
-      "davs://${catalog.nextcloud-user}@${catalog.services.nextcloud.public.domain}/remote.php/dav/files/${catalog.nextcloud-user} Nextcloud"
       "sftp://kanto/var/lib/paperless/media/documents/archive Paperless Media"
       "smb://nas/scans Paperless Syöte"
       (mkFileBookmark config.xdg.userDirs.documents)
