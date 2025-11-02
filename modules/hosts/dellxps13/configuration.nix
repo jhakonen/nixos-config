@@ -395,6 +395,11 @@
       silent = true;
     };
 
+    programs.kde-pim = {
+      enable = true;
+      kontact = true;
+    };
+
     environment.shellAliases = {
       qmv = "qmv --editor='subl --launch-or-new-window --wait' --format=destination-only --verbose";
     };
