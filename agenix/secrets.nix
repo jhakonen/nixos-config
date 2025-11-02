@@ -73,6 +73,8 @@ in
   "karakeep-environment.age".publicKeys = [ jhakonen kanto ];
   "mqtt-password.age".publicKeys = [ jhakonen kanto mervi toukka ];
   "mqtt-espuser-password.age".publicKeys = [ jhakonen kanto ];
+  "restic-password.age".publicKeys = [ jhakonen kanto mervi toukka ];
+  "restic-nas-smb-config.age".publicKeys = [ jhakonen kanto mervi toukka ];
   "rsyncbackup-password.age".publicKeys = [ jhakonen kanto mervi toukka ];
   "telegraf-environment.age".publicKeys = [ jhakonen kanto ];
   "zigbee2mqtt-environment.age".publicKeys = [ jhakonen toukka ];

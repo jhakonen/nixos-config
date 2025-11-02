@@ -11,6 +11,7 @@
       inputs.home-manager.nixosModules.home-manager
 
       self.modules.nixos.service-monitoring
+      self.modules.nixos.service-restic
       self.modules.nixos.service-rsync
       self.modules.nixos.service-syncthing
 

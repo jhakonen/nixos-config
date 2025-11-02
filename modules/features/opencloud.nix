@@ -42,6 +42,13 @@ in
       "d ${dataDir}/data 0777 root root"
       "d ${dataDir}/apps 0777 root root"
     ];
+
+    my.services.restic.backups.opencloud = {
+      repository = "rclone:nas:/backups/restic/opencloud";
+      paths = [ dataDir ];
+      backupPrepareCommand = "systemctl stop opencloud.service";
+      backupCleanupCommand = "systemctl start opencloud.service";
+    };
   };
 
   flake.modules.nixos.opencloud-tunnel = { config, ... }: {

@@ -39,6 +39,7 @@
       inputs.nixos-hardware.nixosModules.common-pc-ssd
       inputs.nur.modules.nixos.default
 
+      self.modules.nixos.service-restic
       self.modules.nixos.service-rsync
       self.modules.nixos.service-monitoring
       self.modules.nixos.service-syncthing
@@ -196,6 +197,25 @@
           }
         ];
       };
+    };
+
+    my.services.restic.backups.jhakonen = {
+      repository = "rclone:nas:/backups/restic/dellxps13-jhakonen";
+      exclude = [
+        ".cache"
+        ".Trash*"
+        ".local/share/Trash"
+        ".local/share/baloo"
+        ".steam"
+        "Calibre"
+        "Keepass"
+        "OpenCloud"
+        "Seafile"
+        "Syncthing"
+      ];
+      paths = [
+        "/home/jhakonen"
+      ];
     };
 
     services.openssh = {
