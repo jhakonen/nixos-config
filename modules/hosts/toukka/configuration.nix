@@ -22,7 +22,7 @@
       inputs.agenix.nixosModules.default
       inputs.home-manager.nixosModules.home-manager
 
-      self.modules.nixos.service-rsync
+      self.modules.nixos.service-restic
       self.modules.nixos.service-monitoring
 
       self.modules.nixos.common
@@ -58,26 +58,6 @@
       };
     };
 
-    # Varmuuskopiointi
-    my.services.rsync = {
-      enable = true;
-      schedule = "*-*-* 0:00:00";
-      destinations = {
-        nas-minimal = {
-          username = "rsync-backup";
-          passwordFile = config.age.secrets.rsyncbackup-password.path;
-          host = catalog.nodes.nas.hostName;
-          path = "::backups/minimal/${config.networking.hostName}";
-        };
-        nas-normal = {
-          username = "rsync-backup";
-          passwordFile = config.age.secrets.rsyncbackup-password.path;
-          host = catalog.nodes.nas.hostName;
-          path = "::backups/normal/${config.networking.hostName}";
-        };
-      };
-    };
-
     # Ota Let's Encryptin sertifikaatti käyttöön
     security.acme.certs."toukka.lan.jhakonen.com".extraDomainNames = [
       "*.toukka.lan.jhakonen.com"
@@ -89,7 +69,6 @@
     # Salaisuudet
     age.secrets = {
       mosquitto-password.file = ../../../agenix/mqtt-password.age;
-      rsyncbackup-password.file = ../../../agenix/rsyncbackup-password.age;
     };
 
     # Älä muuta ellei ole pakko, ei edes uudempaan versioon päivittäessä

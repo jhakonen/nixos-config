@@ -164,28 +164,27 @@ Avaintiedosto on salasanakannassa.
 # Varmuuskopiot
 
 ## Varmuuskopioiden listaus
+
 ```bash
-koti varmistukset listaa
+sudo restic-<palvelu> snapshots
+
+# Esimerkiksi:
+sudo restic-grafana snapshots
 ```
 
 ## Varmuuskopion palauttaminen
 ```bash
-koti varmistukset palauta <taltio> <kohde>
+sudo restic-<palvelu> restore <snapshot> --target <kohde>
 
 # Esimerkkiksi:
-sudo koti varmistukset palauta taltio:kanto/grafana /var/lib/grafana
+sudo restic-grafana restore latest --target /tmp/restored
 ```
 
 ## Palvelun varmuuskopiointi
-Yksittäinen palvelu:
+
 ```bash
-sudo rsync-backup-<palvelu>.sh
+systemctl start restic-backups-<palvelu>.service
 
 # Esimerkkiksi:
-sudo rsync-backup-grafana.sh
-```
-
-Kaikki palvelut:
-```bash
-sudo rsync-backup-all.sh
+systemctl start restic-backups-grafana.service
 ```

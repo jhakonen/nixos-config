@@ -13,7 +13,6 @@
       inputs.agenix.nixosModules.default
       inputs.home-manager.nixosModules.home-manager
 
-      self.modules.nixos.service-rsync
       self.modules.nixos.service-monitoring
       self.modules.nixos.service-syncthing
 
@@ -64,26 +63,6 @@
       };
     };
 
-    # Varmuuskopiointi
-    my.services.rsync = {
-      enable = true;
-      schedule = "*-*-* 0:00:00";
-      destinations = {
-        nas-minimal = {
-          username = "rsync-backup";
-          passwordFile = config.age.secrets.rsyncbackup-password.path;
-          host = catalog.nodes.nas.hostName;
-          path = "::backups/minimal/${config.networking.hostName}";
-        };
-        nas-normal = {
-          username = "rsync-backup";
-          passwordFile = config.age.secrets.rsyncbackup-password.path;
-          host = catalog.nodes.nas.hostName;
-          path = "::backups/normal/${config.networking.hostName}";
-        };
-      };
-    };
-
     my.services.syncthing = {
       enable = true;
       gui-port = catalog.services.syncthing-mervi.port;
@@ -122,7 +101,6 @@
     # Salaisuudet
     age.secrets = {
       mosquitto-password.file = ../../../agenix/mqtt-password.age;
-      rsyncbackup-password.file = ../../../agenix/rsyncbackup-password.age;
     };
 
     programs.gamemode.enable = true;

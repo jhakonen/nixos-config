@@ -4,7 +4,9 @@ let
   port = 5678;
   webhookHost = catalog.services.n8n.tunnel.domain;
   communityNodes = [
-    "n8n-nodes-imap"
+    # n8n-nodes-imap@2.13.0 ei toimi, joten palautin version käyttöön joka
+    # minulla oli elokuussa kun loin sähköpostiflown. Se toimii.
+    "n8n-nodes-imap@2.10.0"
   ];
 in
 {
@@ -47,14 +49,16 @@ in
     };
 
     # Varmuuskopiointi
-    my.services.rsync.jobs.n8n = {
-      destinations = [
-        "nas-normal"
-        "nas-minimal"
+    #   Käynnistä: systemctl start restic-backups-n8n.service
+    #   Snapshotit: sudo restic-n8n snapshots
+    my.services.restic.backups.n8n = {
+      repository = "rclone:nas:/backups/restic/n8n";
+      paths = [
+        "/var/lib/n8n"
+        "/var/lib/private/n8n"
       ];
-      paths = [ "${config.systemd.services.n8n.environment.N8N_USER_FOLDER}/" ];
-      preHooks = [ "systemctl stop n8n.service" ];
-      postHooks = [ "systemctl start n8n.service" ];
+      backupPrepareCommand = "systemctl stop n8n.service";
+      backupCleanupCommand = "systemctl start n8n.service";
     };
 
     # Palvelun valvonta

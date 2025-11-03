@@ -17,20 +17,17 @@ in {
 
 
     # Varmuuskopiointi
-    my.services.rsync.jobs.influxdb = {
-      destinations = [
-        "nas-normal"
-        "nas-minimal"
-      ];
-      paths = [ "${backupDir}/" ];
-      preHooks = [
-        ''
+    #   Käynnistä: systemctl start restic-backups-influxdb.service
+    #   Snapshotit: sudo restic-influxdb snapshots
+    my.services.restic.backups.influxdb = {
+      repository = "rclone:nas:/backups/restic/influxdb";
+      paths = [ backupDir ];
+      backupPrepareCommand = ''
         rm -rf ${backupDir}
         ${pkgs.influxdb}/bin/influxd backup -portable ${backupDir}
         systemctl stop influxdb.service
-        ''
-      ];
-      postHooks = [ "systemctl start influxdb.service" ];
+      '';
+      backupCleanupCommand = "systemctl start influxdb.service";
     };
 
     # Palvelun valvonta

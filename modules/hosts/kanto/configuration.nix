@@ -12,7 +12,6 @@
 
       self.modules.nixos.service-monitoring
       self.modules.nixos.service-restic
-      self.modules.nixos.service-rsync
       self.modules.nixos.service-syncthing
 
       self.modules.nixos.calibre
@@ -64,7 +63,6 @@
     age.secrets = {
       mosquitto-password.file = ../../../agenix/mqtt-password.age;
       mosquitto-esphome-password.file = ../../../agenix/mqtt-espuser-password.age;
-      rsyncbackup-password.file = ../../../agenix/rsyncbackup-password.age;
     };
 
     # Valvonnan asetukset
@@ -76,26 +74,6 @@
         address = catalog.services.mosquitto.public.domain;
         port = catalog.services.mosquitto.port;
         passwordFile = config.age.secrets.mosquitto-password.path;
-      };
-    };
-
-    # Varmuuskopiointi
-    my.services.rsync = {
-      enable = true;
-      schedule = "*-*-* 0:00:00";
-      destinations = {
-        nas-minimal = {
-          username = "rsync-backup";
-          passwordFile = config.age.secrets.rsyncbackup-password.path;
-          host = catalog.nodes.nas.hostName;
-          path = "::backups/minimal/${config.networking.hostName}";
-        };
-        nas-normal = {
-          username = "rsync-backup";
-          passwordFile = config.age.secrets.rsyncbackup-password.path;
-          host = catalog.nodes.nas.hostName;
-          path = "::backups/normal/${config.networking.hostName}";
-        };
       };
     };
 

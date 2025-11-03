@@ -14,7 +14,6 @@
   nettools,
   nh,
   openssh,
-  rsync,
   shellcheck-minimal,
   stdenv,
   systemd,
@@ -66,7 +65,6 @@ stdenv.mkDerivation rec {
           nettools
           nh
           openssh
-          rsync
           systemd
         ]}
     installShellCompletion --name koti completions.bash

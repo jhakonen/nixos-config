@@ -40,7 +40,6 @@
       inputs.nur.modules.nixos.default
 
       self.modules.nixos.service-restic
-      self.modules.nixos.service-rsync
       self.modules.nixos.service-monitoring
       self.modules.nixos.service-syncthing
 
@@ -152,53 +151,9 @@
     # Ota Flirc USB-mokkulan ohjelmointityökalut käyttöön
     hardware.flirc.enable = true;
 
-    # Salaisuudet
-    age.secrets.rsyncbackup-password.file = ../../../agenix/rsyncbackup-password.age;
-
-    # Varmuuskopiointi
-    my.services.rsync = {
-      enable = true;
-      schedule = "*-*-* 0:00:00";
-      destinations = {
-        nas-minimal = {
-          username = "rsync-backup";
-          passwordFile = config.age.secrets.rsyncbackup-password.path;
-          host = catalog.nodes.nas.hostName;
-          path = "::backups/minimal/${config.networking.hostName}";
-        };
-        nas-normal = {
-          username = "rsync-backup";
-          passwordFile = config.age.secrets.rsyncbackup-password.path;
-          host = catalog.nodes.nas.hostName;
-          path = "::backups/normal/${config.networking.hostName}";
-        };
-      };
-      jobs.jhakonen = {
-        paths = [ "/home/jhakonen/" ];
-        excludes = [
-          "/.cache"
-          "/.Trash*"
-          "/.local/share/Trash"
-          "/.local/share/baloo"
-          "/.steam"
-          "/Calibre"
-          "/Keepass"
-          "/OpenCloud"
-          "/Seafile"
-          "/Syncthing"
-        ];
-        destinations = [
-          "nas-normal"
-          {
-            destination = "nas-minimal";
-            excludes = [
-              "/.local/share/Steam"
-            ];
-          }
-        ];
-      };
-    };
-
+    # Vamuuskopiointi
+    #   Käynnistä: systemctl start restic-backups-jhakonen.service
+    #   Snapshotit: sudo restic-jhakonen snapshots
     my.services.restic.backups.jhakonen = {
       repository = "rclone:nas:/backups/restic/dellxps13-jhakonen";
       exclude = [

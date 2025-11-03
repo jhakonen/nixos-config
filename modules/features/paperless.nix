@@ -65,31 +65,28 @@
     networking.firewall.allowedTCPPorts = [ catalog.services.paperless.public.port ];
 
     # Varmuuskopiointi
-    my.services.rsync.jobs.paperless = {
-      destinations = [
-        "nas-normal"
-        "nas-minimal"
-      ];
-      preHooks = [
+    #   Käynnistä: systemctl start restic-backups-paperless.service
+    #   Snapshotit: sudo restic-paperless snapshots
+    my.services.restic.backups.paperless = {
+      repository = "rclone:nas:/backups/restic/paperless";
+      # Paperlessin tietokanta ja dokumentit
+      paths = [ config.services.paperless.dataDir ];
+      exclude = [ "${config.services.paperless.dataDir}/consume" ];
+      backupPrepareCommand = ''
         # Exporttaa varmuuskopio
-        "ls ${exportDir}" # Herätä NFS mountti niin että se näyttää kirjoitettavalta, muuten document_exporter herjaa siittä
-        "chown ${username}:${userGroup} ${exportDir}"
-        "${pkgs.util-linux}/bin/runuser -u ${username} -- ${config.services.paperless.manage}/bin/paperless-manage document_exporter --delete --use-filename-format --use-folder-prefix ${exportDir}"
+        # Herätä NFS mountti niin että se näyttää kirjoitettavalta, muuten document_exporter herjaa siittä
+        ls ${exportDir}
+        chown ${username}:${userGroup} ${exportDir}
+        ${pkgs.util-linux}/bin/runuser -u ${username} -- ${config.services.paperless.manage}/bin/paperless-manage document_exporter --delete --use-filename-format --use-folder-prefix ${exportDir}
 
         # Vedä alas paperlessin palvelut jotta tietokannan tiedostot voidaan
         # varmuuskopioida turvallisesti
-        "systemctl stop paperless-consumer.service paperless-scheduler.service paperless-task-queue.service paperless-web.service"
-      ];
-      paths = [
-        "${config.services.paperless.dataDir}/"  # Paperlessin tietokanta ja dokumentit
-      ];
-      postHooks = [
+        systemctl stop paperless-consumer.service paperless-scheduler.service paperless-task-queue.service paperless-web.service
+      '';
+      backupCleanupCommand = ''
         # Nosta palvelut takaisin ylös varmuuskopioinnin jälkeen
-        "systemctl start paperless-consumer.service paperless-scheduler.service paperless-task-queue.service paperless-web.service"
-      ];
-      # document_exporter tarvitsee kirjoitusoikeudet data-hakemistoon
-      readWritePaths = [ config.services.paperless.dataDir ];
-      excludes = [ "${config.services.paperless.dataDir}/consume" ];
+        systemctl start paperless-consumer.service paperless-scheduler.service paperless-task-queue.service paperless-web.service
+      '';
     };
 
     # Palvelun valvonta

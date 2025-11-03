@@ -41,18 +41,13 @@ in
     };
 
     # Varmuuskopiointi
-    my.services.rsync.jobs.radicale = {
-      destinations = [
-        "nas-normal"
-        "nas-minimal"
-      ];
-      paths = [ "/var/lib/radicale/" ];
-      preHooks = [
-        "systemctl stop radicale.service"
-      ];
-      postHooks = [
-        "systemctl start radicale.service"
-      ];
+    #   Käynnistä: systemctl start restic-backups-radicale.service
+    #   Snapshotit: sudo restic-radicale snapshots
+    my.services.restic.backups.radicale = {
+      repository = "rclone:nas:/backups/restic/radicale";
+      paths = [ "/var/lib/radicale" ];
+      backupPrepareCommand = "systemctl stop radicale.service";
+      backupCleanupCommand = "systemctl start radicale.service";
     };
 
     # Palvelun valvonta

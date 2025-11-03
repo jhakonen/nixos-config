@@ -96,14 +96,16 @@ in
     networking.firewall.allowedTCPPorts = [ catalog.services.home-assistant.public.port ];
 
     # Varmuuskopiointi
-    my.services.rsync.jobs.home-assistant = {
-      destinations = [
-        "nas-normal"
-        "nas-minimal"
+    #   Käynnistä: systemctl start restic-backups-home-assistant.service
+    #   Snapshotit: sudo restic-home-assistant snapshots
+    my.services.restic.backups.home-assistant = {
+      repository = "rclone:nas:/backups/restic/home-assistant";
+      paths = [
+        config.services.home-assistant.configDir
+        "/var/lib/private/esphome"
       ];
-      paths = [ "${config.services.home-assistant.configDir}/" ];
-      preHooks = [ "systemctl stop home-assistant.service" ];
-      postHooks = [ "systemctl start home-assistant.service" ];
+      backupPrepareCommand = "systemctl stop home-assistant.service";
+      backupCleanupCommand = "systemctl start home-assistant.service";
     };
 
     # Palvelun valvonta

@@ -104,13 +104,12 @@
     networking.firewall.allowedTCPPorts = [ catalog.services.zigbee2mqtt.port ];
 
     # Varmuuskopiointi
-    my.services.rsync.jobs.zigbee2mqtt = {
-      destinations = [
-        "nas-normal"
-        "nas-minimal"
-      ];
-      paths = [ "${config.services.zigbee2mqtt.dataDir}/" ];
-      excludes = [ "${config.services.zigbee2mqtt.dataDir}/log" ];
+    #   Käynnistä: systemctl start restic-backups-zigbee2mqtt.service
+    #   Snapshotit: sudo restic-zigbee2mqtt snapshots
+    my.services.restic.backups.zigbee2mqtt = {
+      repository = "rclone:nas:/backups/restic/zigbee2mqtt";
+      paths = [ config.services.zigbee2mqtt.dataDir ];
+      exclude = [ "${config.services.zigbee2mqtt.dataDir}/log" ];
     };
 
     # Palvelun valvonta

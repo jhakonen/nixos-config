@@ -13,7 +13,6 @@ rec {
       ncurses
       nettools
       openssh
-      rsync
       systemd
     ];
   };

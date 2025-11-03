@@ -45,14 +45,13 @@ in
     networking.firewall.allowedTCPPorts = [ catalog.services.grafana.public.port ];
 
     # Varmuuskopiointi
-    my.services.rsync.jobs.grafana = {
-      destinations = [
-        "nas-normal"
-        "nas-minimal"
-      ];
-      paths = [ "${config.services.grafana.dataDir}/" ];
-      preHooks = [ "systemctl stop grafana.service" ];
-      postHooks = [ "systemctl start grafana.service" ];
+    #   Käynnistä: systemctl start restic-backups-grafana.service
+    #   Snapshotit: sudo restic-grafana snapshots
+    my.services.restic.backups.grafana = {
+      repository = "rclone:nas:/backups/restic/grafana";
+      paths = [ config.services.grafana.dataDir ];
+      backupPrepareCommand = "systemctl stop grafana.service";
+      backupCleanupCommand = "systemctl start grafana.service";
     };
 
     # Palvelun valvonta

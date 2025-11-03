@@ -9,6 +9,9 @@ in
         pkgs.git
         pkgs.openssh
       ];
+      # Kokeile ajaa komentoja root/syncthing käyttäjänä
+      # cd /var/lib/syncthing/Muistiinpanot
+      # sudo -u root -g syncthing bash -c "GIT_SSH_COMMAND=\"ssh -i '/run/agenix/kanto-gitea-ssh-key'\" git remote show origin"
       script = ''
         export GIT_SSH_COMMAND="ssh -i '${config.age.secrets.kanto-gitea-ssh-key.path}'"
         cd ${args.dir}
@@ -17,7 +20,9 @@ in
           git push origin main
         fi
       '';
-      startAt = "daily";
+      # Joka päivä, mutta ei samaan aikaan kun Gitea on alhaalla
+      # varmuuskopioinnin takia
+      startAt = "02:00:00";
       serviceConfig = {
         User = "root";
         Group = "syncthing";

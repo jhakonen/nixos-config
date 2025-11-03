@@ -52,20 +52,3 @@ commands:
     default: *koneet
     repeatable: true
     unique: true
-
-- name: varmistukset
-  help: Vamuuskopioiden hallinta
-  commands:
-  - name: listaa
-    help: Listaa varmuuskopiotaltiot kullekin koneelle ja palvelulle
-
-  - name: palauta
-    help: Palauta koneen KONE palvelun PALVELU tiedostot paikalliseen kansioon KOHDE
-    args:
-    - name: taltio
-      required: true
-      validate: on_taltio
-    - name: kohde
-      required: true
-    completions:
-    - $(koti varmistukset listaa)

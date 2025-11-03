@@ -43,6 +43,9 @@ in
       "d ${dataDir}/apps 0777 root root"
     ];
 
+    # Vamuuskopiointi
+    #   Käynnistä: systemctl start restic-backups-opencloud.service
+    #   Snapshotit: sudo restic-opencloud snapshots
     my.services.restic.backups.opencloud = {
       repository = "rclone:nas:/backups/restic/opencloud";
       paths = [ dataDir ];

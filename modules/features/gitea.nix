@@ -32,18 +32,13 @@ in
     };
 
     # Varmuuskopiointi
-    my.services.rsync.jobs.gitea = {
-      destinations = [
-        "nas-normal"
-        "nas-minimal"
-      ];
-      paths = [ "${config.services.gitea.stateDir}/" ];
-      preHooks = [
-        "systemctl stop gitea.service"
-      ];
-      postHooks = [
-        "systemctl start gitea.service"
-      ];
+    #   Käynnistä: systemctl start restic-backups-gitea.service
+    #   Snapshotit: sudo restic-gitea snapshots
+    my.services.restic.backups.gitea = {
+      repository = "rclone:nas:/backups/restic/gitea";
+      paths = [ config.services.gitea.stateDir ];
+      backupPrepareCommand = "systemctl stop gitea.service";
+      backupCleanupCommand = "systemctl start gitea.service";
     };
 
     # Palvelun valvonta

@@ -48,11 +48,10 @@ in
     ];
 
     # Varmuuskopiointi
-    my.services.rsync.jobs.tvheadend = {
-      destinations = [
-        "nas-normal"
-        "nas-minimal"
-      ];
+    #   Käynnistä: systemctl start restic-backups-tvheadend.service
+    #   Snapshotit: sudo restic-tvheadend snapshots
+    my.services.restic.backups.tvheadend = {
+      repository = "rclone:nas:/backups/restic/tvheadend";
       paths = [ "/var/lib/tvheadend/config" ];
     };
 

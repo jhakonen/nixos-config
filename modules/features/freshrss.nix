@@ -33,19 +33,16 @@ in
     };
 
     # Varmuuskopiointi
-    my.services.rsync.jobs.freshrss = {
-      destinations = [
-        "nas-normal"
-        "nas-minimal"
-      ];
-      paths = [ "${config.services.freshrss.dataDir}/" ];
-      preHooks = [
-        "systemctl stop freshrss-updater.timer"
-        "systemctl stop freshrss-updater.service"
-      ];
-      postHooks = [
-        "systemctl start freshrss-updater.timer"
-      ];
+    #   Käynnistä: systemctl start restic-backups-freshrss.service
+    #   Snapshotit: sudo restic-freshrss snapshots
+    my.services.restic.backups.freshrss = {
+      repository = "rclone:nas:/backups/restic/freshrss";
+      paths = [ config.services.freshrss.dataDir ];
+      backupPrepareCommand = ''
+        systemctl stop freshrss-updater.timer
+        systemctl stop freshrss-updater.service
+      '';
+      backupCleanupCommand = "systemctl start freshrss-updater.timer";
     };
 
     # Palvelun valvonta

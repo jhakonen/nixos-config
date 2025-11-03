@@ -35,14 +35,13 @@ in {
     };
 
     # Varmuuskopiointi
-    my.services.rsync.jobs.karakeep = {
-      destinations = [
-        "nas-normal"
-        "nas-minimal"
-      ];
-      preHooks = [ "systemctl stop karakeep-browser.service karakeep-init.service karakeep-web.service karakeep-workers.service" ];
+    #   Käynnistä: systemctl start restic-backups-karakeep.service
+    #   Snapshotit: sudo restic-karakeep snapshots
+    my.services.restic.backups.karakeep = {
+      repository = "rclone:nas:/backups/restic/karakeep";
       paths = [ "/var/lib/karakeep" ];
-      postHooks = [ "systemctl start karakeep-browser.service karakeep-init.service karakeep-web.service karakeep-workers.service" ];
+      backupPrepareCommand = "systemctl stop karakeep-browser.service karakeep-init.service karakeep-web.service karakeep-workers.service";
+      backupCleanupCommand = "systemctl start karakeep-browser.service karakeep-init.service karakeep-web.service karakeep-workers.service";
     };
 
     # Palvelun valvonta

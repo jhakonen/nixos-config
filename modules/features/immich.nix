@@ -41,11 +41,10 @@ in {
     };
 
     # Varmuuskopiointi
-    my.services.rsync.jobs.immich = {
-      destinations = [
-        "nas-normal"
-        "nas-minimal"
-      ];
+    #   Käynnistä: systemctl start restic-backups-immich.service
+    #   Snapshotit: sudo restic-immich snapshots
+    my.services.restic.backups.immich = {
+      repository = "rclone:nas:/backups/restic/immich";
       paths = [ config.services.immich.mediaLocation ];
     };
 

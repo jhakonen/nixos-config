@@ -60,26 +60,26 @@ in
     };
 
     # Varmuuskopiointi
-    my.services.rsync.jobs.seafile = {
-      destinations = [
-        "nas-normal"
-      ];
-      preHooks = [
-        "${config.services.mysql.package}/bin/mysqldump --user=root --opt ccnet_db > /tmp/ccnet_db.sql"
-        "${config.services.mysql.package}/bin/mysqldump --user=root --opt seafile_db > /tmp/seafile_db.sql"
-        "${config.services.mysql.package}/bin/mysqldump --user=root --opt seahub_db > /tmp/seahub_db.sql"
-      ];
-      paths = [
-        "/tmp/ccnet_db.sql"
-        "/tmp/seafile_db.sql"
-        "/tmp/seahub_db.sql"
-        "${config.services.seafile.dataDir}/"
-      ];
-      postHooks = [
-        "rm --force /tmp/ccnet_db.sql /tmp/seafile_db.sql /tmp/seahub_db.sql"
-      ];
-      readWritePaths = [ "/tmp" ];
-    };
+    # my.services.rsync.jobs.seafile = {
+    #   destinations = [
+    #     "nas-normal"
+    #   ];
+    #   preHooks = [
+    #     "${config.services.mysql.package}/bin/mysqldump --user=root --opt ccnet_db > /tmp/ccnet_db.sql"
+    #     "${config.services.mysql.package}/bin/mysqldump --user=root --opt seafile_db > /tmp/seafile_db.sql"
+    #     "${config.services.mysql.package}/bin/mysqldump --user=root --opt seahub_db > /tmp/seahub_db.sql"
+    #   ];
+    #   paths = [
+    #     "/tmp/ccnet_db.sql"
+    #     "/tmp/seafile_db.sql"
+    #     "/tmp/seahub_db.sql"
+    #     "${config.services.seafile.dataDir}/"
+    #   ];
+    #   postHooks = [
+    #     "rm --force /tmp/ccnet_db.sql /tmp/seafile_db.sql /tmp/seahub_db.sql"
+    #   ];
+    #   readWritePaths = [ "/tmp" ];
+    # };
 
     # Palvelun valvonta
     my.services.monitoring.checks = [
