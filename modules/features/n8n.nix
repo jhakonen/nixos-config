@@ -59,6 +59,8 @@ in
       ];
       backupPrepareCommand = "systemctl stop n8n.service";
       backupCleanupCommand = "systemctl start n8n.service";
+      checkOpts = [ "--read-data" ];
+      pruneOpts = [ "--keep-daily 7" "--keep-weekly 4" "--keep-monthly 12" ];
     };
 
     # Palvelun valvonta

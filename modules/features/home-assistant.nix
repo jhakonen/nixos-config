@@ -106,6 +106,8 @@ in
       ];
       backupPrepareCommand = "systemctl stop home-assistant.service";
       backupCleanupCommand = "systemctl start home-assistant.service";
+      checkOpts = [ "--read-data" ];
+      pruneOpts = [ "--keep-daily 7" "--keep-weekly 4" "--keep-monthly 12" ];
     };
 
     # Palvelun valvonta

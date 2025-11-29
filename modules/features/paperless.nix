@@ -87,6 +87,8 @@
         # Nosta palvelut takaisin ylös varmuuskopioinnin jälkeen
         systemctl start paperless-consumer.service paperless-scheduler.service paperless-task-queue.service paperless-web.service
       '';
+      checkOpts = [ "--read-data" ];
+      pruneOpts = [ "--keep-daily 7" "--keep-weekly 4" "--keep-monthly 12" ];
     };
 
     # Palvelun valvonta

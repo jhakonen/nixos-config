@@ -39,6 +39,8 @@ in
       paths = [ config.services.gitea.stateDir ];
       backupPrepareCommand = "systemctl stop gitea.service";
       backupCleanupCommand = "systemctl start gitea.service";
+      checkOpts = [ "--read-data" ];
+      pruneOpts = [ "--keep-daily 7" "--keep-weekly 4" "--keep-monthly 12" ];
     };
 
     # Palvelun valvonta

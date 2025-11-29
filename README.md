@@ -176,7 +176,7 @@ sudo restic-grafana snapshots
 ```bash
 sudo restic-<palvelu> restore <snapshot> --target <kohde>
 
-# Esimerkkiksi:
+# Esimerkiksi:
 sudo restic-grafana restore latest --target /tmp/restored
 ```
 
@@ -185,6 +185,14 @@ sudo restic-grafana restore latest --target /tmp/restored
 ```bash
 systemctl start restic-backups-<palvelu>.service
 
-# Esimerkkiksi:
+# Esimerkiksi:
 systemctl start restic-backups-grafana.service
 ```
+
+## Eheyden tarkistus
+
+```bash
+sudo restic-<palvelu> check --check-data
+```
+
+Eheyden tarkastus tapahtuu myös osana varmuuskopiointia kunhan palvelulle on `checkOpts` määriteltynä.

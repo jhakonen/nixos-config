@@ -42,6 +42,8 @@ in {
       paths = [ "/var/lib/karakeep" ];
       backupPrepareCommand = "systemctl stop karakeep-browser.service karakeep-init.service karakeep-web.service karakeep-workers.service";
       backupCleanupCommand = "systemctl start karakeep-browser.service karakeep-init.service karakeep-web.service karakeep-workers.service";
+      checkOpts = [ "--read-data" ];
+      pruneOpts = [ "--keep-daily 7" "--keep-weekly 4" "--keep-monthly 12" ];
     };
 
     # Palvelun valvonta

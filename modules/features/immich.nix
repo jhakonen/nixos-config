@@ -46,6 +46,8 @@ in {
     my.services.restic.backups.immich = {
       repository = "rclone:nas:/backups/restic/immich";
       paths = [ config.services.immich.mediaLocation ];
+      checkOpts = [ "--read-data" ];
+      pruneOpts = [ "--keep-daily 7" "--keep-weekly 4" "--keep-monthly 12" ];
     };
 
     # Palvelun valvonta

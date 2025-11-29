@@ -48,6 +48,8 @@ in
       paths = [ "/var/lib/radicale" ];
       backupPrepareCommand = "systemctl stop radicale.service";
       backupCleanupCommand = "systemctl start radicale.service";
+      checkOpts = [ "--read-data" ];
+      pruneOpts = [ "--keep-daily 7" "--keep-weekly 4" "--keep-monthly 12" ];
     };
 
     # Palvelun valvonta

@@ -28,6 +28,8 @@ in {
         systemctl stop influxdb.service
       '';
       backupCleanupCommand = "systemctl start influxdb.service";
+      checkOpts = [ "--read-data" ];
+      pruneOpts = [ "--keep-daily 7" "--keep-weekly 4" "--keep-monthly 12" ];
     };
 
     # Palvelun valvonta

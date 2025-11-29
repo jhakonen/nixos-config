@@ -51,6 +51,8 @@ in
       paths = [ dataDir ];
       backupPrepareCommand = "systemctl stop opencloud.service";
       backupCleanupCommand = "systemctl start opencloud.service";
+      checkOpts = [ "--read-data-subset" "10%" ];
+      pruneOpts = [ "--keep-daily 7" "--keep-weekly 4" "--keep-monthly 12" ];
     };
   };
 

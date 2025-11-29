@@ -171,6 +171,8 @@
       paths = [
         "/home/jhakonen"
       ];
+      checkOpts = [ "--read-data-subset" "10%" ];
+      pruneOpts = [ "--keep-daily 7" "--keep-weekly 4" "--keep-monthly 12" ];
     };
 
     services.openssh = {

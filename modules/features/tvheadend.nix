@@ -53,6 +53,8 @@ in
     my.services.restic.backups.tvheadend = {
       repository = "rclone:nas:/backups/restic/tvheadend";
       paths = [ "/var/lib/tvheadend/config" ];
+      checkOpts = [ "--read-data" ];
+      pruneOpts = [ "--keep-daily 7" "--keep-weekly 4" "--keep-monthly 12" ];
     };
 
     # Palvelun valvonta

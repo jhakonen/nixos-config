@@ -110,6 +110,8 @@
       repository = "rclone:nas:/backups/restic/zigbee2mqtt";
       paths = [ config.services.zigbee2mqtt.dataDir ];
       exclude = [ "${config.services.zigbee2mqtt.dataDir}/log" ];
+      checkOpts = [ "--read-data" ];
+      pruneOpts = [ "--keep-daily 7" "--keep-weekly 4" "--keep-monthly 12" ];
     };
 
     # Palvelun valvonta

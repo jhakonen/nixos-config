@@ -52,6 +52,8 @@ in
       paths = [ config.services.grafana.dataDir ];
       backupPrepareCommand = "systemctl stop grafana.service";
       backupCleanupCommand = "systemctl start grafana.service";
+      checkOpts = [ "--read-data" ];
+      pruneOpts = [ "--keep-daily 7" "--keep-weekly 4" "--keep-monthly 12" ];
     };
 
     # Palvelun valvonta

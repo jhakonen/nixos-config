@@ -43,6 +43,8 @@ in
         systemctl stop freshrss-updater.service
       '';
       backupCleanupCommand = "systemctl start freshrss-updater.timer";
+      checkOpts = [ "--read-data" ];
+      pruneOpts = [ "--keep-daily 7" "--keep-weekly 4" "--keep-monthly 12" ];
     };
 
     # Palvelun valvonta
