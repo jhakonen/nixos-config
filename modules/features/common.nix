@@ -75,7 +75,7 @@
     # Estä `inetutils` pakettia korvaamasta `nettools`
     # paketin ohjelmia `ifconfig`, `hostname` ja `dnsdomainname`
     nixpkgs.config.packageOverrides = pkgs: {
-      nettools = pkgs.hiPrio pkgs.nettools;
+      nettools = lib.hiPrio pkgs.nettools;
     };
 
     programs.nix-index.enable = true;

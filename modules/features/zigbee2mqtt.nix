@@ -1,4 +1,4 @@
-{ self, ... }:
+{ lib, self, ... }:
 {
   flake.modules.nixos.zigbee2mqtt = { config, ... }: let
     inherit (self) catalog;
@@ -6,7 +6,7 @@
     services.zigbee2mqtt = {
       enable = true;
       settings = {
-        homeassistant = true;
+        homeassistant = lib.mkForce true;
         permit_join = false;
         serial.port = "/dev/ttyUSB0";
         mqtt = {

@@ -165,7 +165,6 @@
         "Calibre"
         "Keepass"
         "OpenCloud"
-        "Seafile"
         "Syncthing"
       ];
       paths = [
@@ -231,7 +230,6 @@
       aspell
       aspellDicts.en
       aspellDicts.fi
-      bitwarden
       brave
       cachix
       calibre
@@ -281,7 +279,6 @@
       nixos-rebuild-ng
       obsidian
       renameutils  # qmv
-      seafile-client
       sublime4
       super-productivity-latest
       syncthingtray-minimal
@@ -292,7 +289,7 @@
 
       inputs.qjournalctl.packages.${pkgs.stdenv.system}.default
       inputs.zen-browser.packages.${pkgs.stdenv.system}.default
-      inputs.mypanel.packages.${pkgs.stdenv.system}.default
+      #inputs.mypanel.packages.${pkgs.stdenv.system}.default
     ];
 
     fonts.packages = with pkgs; [

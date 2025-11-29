@@ -13,10 +13,14 @@ in {
     config.programs = {
       git = {
         enable = true;
-        userName = "Janne Hakonen";
-        userEmail = catalog.githubEmail;
-        aliases.l = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit";
-        extraConfig.init.defaultBranch = "main";
+        settings = {
+          alias.l = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit";
+          init.defaultBranch = "main";
+          user = {
+            name = "Janne Hakonen";
+            email = catalog.githubEmail;
+          };
+        };
       };
       ssh = {
         enable = true;

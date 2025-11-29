@@ -15,7 +15,6 @@
       self.modules.nixos.nginx
       self.modules.nixos.opencloud-tunnel
       self.modules.nixos.pahakone-tunnel
-      self.modules.nixos.seafile-tunnel
       self.modules.nixos.tailscale
     ];
 

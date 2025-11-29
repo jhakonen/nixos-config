@@ -9,11 +9,11 @@ in {
       self.modules.homeManager.mqtt-client
       self.modules.homeManager.nemo
       inputs.agenix.homeManagerModules.age
-      inputs.jhhapanel.homeManagerModules.default
+      # inputs.jhhapanel.homeManagerModules.default
       inputs.nur.modules.homeManager.default
 
       # Hyprland modules
-      self.modules.homeManager.hyprland
+      # self.modules.homeManager.hyprland
     ];
 
     # Add stuff for your user as you see fit:
@@ -28,9 +28,9 @@ in {
     # Enable home-manager and git
     programs.home-manager.enable = true;
 
-    programs.jhhapanel = {
-      enable = true;
-    };
+    # programs.jhhapanel = {
+    #   enable = true;
+    # };
 
     programs.ssh = {
       enable = true;

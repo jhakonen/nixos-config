@@ -14,8 +14,10 @@ in
     services.n8n = {
       enable = true;
       openFirewall = true;
-      settings.port = port;
-      webhookUrl = "https://${webhookHost}/";
+      environment = {
+        N8N_PORT = port;
+        WEBHOOK_URL = "https://${webhookHost}/";
+      };
     };
 
     # Asenna community nodes lisäosia, koodi otettu reposta:
