@@ -77,5 +77,5 @@ in
   "restic-nas-smb-config.age".publicKeys = [ jhakonen kanto mervi toukka ];
   "rsyncbackup-password.age".publicKeys = [ jhakonen kanto mervi toukka ];
   "telegraf-environment.age".publicKeys = [ jhakonen kanto ];
-  "zigbee2mqtt-environment.age".publicKeys = [ jhakonen toukka ];
+  "zigbee2mqtt-environment.age".publicKeys = [ jhakonen kanto toukka ];
 }

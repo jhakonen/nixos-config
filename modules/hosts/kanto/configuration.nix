@@ -37,6 +37,7 @@ in {
       self.modules.nixos.tailscale
       self.modules.nixos.telegraf
       self.modules.nixos.tvheadend
+      self.modules.nixos.zigbee2mqtt
     ];
 
     nixpkgs.config.allowUnfree = true;

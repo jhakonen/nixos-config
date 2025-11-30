@@ -421,7 +421,7 @@
       };
     };
     zigbee2mqtt = {
-      host = nodes.toukka;
+      host = nodes.kanto;
       port = 8880;
       dashy = {
         section = "palvelut";
@@ -429,7 +429,7 @@
         icon = "hl-zigbee2mqtt";
       };
       public = {
-        domain = "zigbee2mqtt.toukka.lan.jhakonen.com";
+        domain = "zigbee2mqtt.kanto.lan.jhakonen.com";
         port = 443;
       };
     };

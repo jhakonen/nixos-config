@@ -89,7 +89,7 @@ in {
         };
         # Käytä Let's Encrypt sertifikaattia
         addSSL = true;
-        useACMEHost = "toukka.lan.jhakonen.com";
+        useACMEHost = "jhakonen.com";
       };
     };
 
