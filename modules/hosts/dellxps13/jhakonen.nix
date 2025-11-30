@@ -5,9 +5,9 @@ in {
     imports = [
       self.modules.homeManager.firefox
       self.modules.homeManager.git
-      self.modules.homeManager.kanshi
+      # self.modules.homeManager.kanshi
       self.modules.homeManager.mqtt-client
-      self.modules.homeManager.nemo
+      # self.modules.homeManager.nemo
       inputs.agenix.homeManagerModules.age
       # inputs.jhhapanel.homeManagerModules.default
       inputs.nur.modules.homeManager.default
@@ -78,7 +78,7 @@ in {
     systemd.user.startServices = "sd-switch";
 
     # https://nixos.wiki/wiki/Home_Manager#Usage_on_non-NixOS_Linux
-    targets.genericLinux.enable = true;
+    # targets.genericLinux.enable = true;
 
     roles.git.githubIdentityFile = config.age.secrets.github-id-rsa.path;
 
@@ -87,24 +87,24 @@ in {
     # https://wiki.nixos.org/wiki/Default_applications
     # Tiedostotyypin näkee komennolla "file -i <tiedoston polku>"
     # Tiedostopääte mimetyypiksi, katso: /run/current-system/sw/share/mime/globs
-    xdg.mimeApps = {
-      enable = true;
-      defaultApplications = {
-        "text/html" = "firefox.desktop";
-        "text/markdown" = "sublime_text.desktop";
-        "text/plain" = "org.gnome.TextEditor.desktop";
-        "x-scheme-handler/about" = "firefox.desktop";
-        "x-scheme-handler/element" = "Beeper.desktop";
-        "x-scheme-handler/http" = "firefox.desktop";
-        "x-scheme-handler/https" = "firefox.desktop";
-        "x-scheme-handler/mailto" = "thunderbird.desktop";
-        "x-scheme-handler/unknown" = "firefox.desktop";
-      };
-    };
+    # xdg.mimeApps = {
+    #   enable = true;
+    #   defaultApplications = {
+    #     "text/html" = "firefox.desktop";
+    #     "text/markdown" = "sublime_text.desktop";
+    #     "text/plain" = "org.gnome.TextEditor.desktop";
+    #     "x-scheme-handler/about" = "firefox.desktop";
+    #     "x-scheme-handler/element" = "Beeper.desktop";
+    #     "x-scheme-handler/http" = "firefox.desktop";
+    #     "x-scheme-handler/https" = "firefox.desktop";
+    #     "x-scheme-handler/mailto" = "thunderbird.desktop";
+    #     "x-scheme-handler/unknown" = "firefox.desktop";
+    #   };
+    # };
 
     # Ylikrjoita mime asetukset jos niitä tulee muokattua käsin, esim. Nemolla
     # muuttamalla tiedoston oletusohjelmaa
-    xdg.configFile."mimeapps.list".force = true;
+    # xdg.configFile."mimeapps.list".force = true;
 
     xdg.userDirs = {
       enable = true;
@@ -118,17 +118,17 @@ in {
       videos = "${config.home.homeDirectory}/Videot";
     };
 
-    gtk.theme = {
-      package = pkgs.flat-remix-gtk;
-      # Mahdolliset teemojen nimet löytää komennolla:
-      #   ll $(nix eval --raw nixpkgs#flat-remix-gtk.outPath)/share/themes/
-      name = "Flat-Remix-GTK-Yellow-Dark";
-    };
-    gtk.iconTheme = {
-      package = pkgs.yaru-remix-theme;
-      # Mahdolliset teemojen nimet löytää komennolla:
-      #   ll $(nix eval --raw nixpkgs#yaru-remix-theme.outPath)/share/icons/
-      name = "Yaru-remix-light";
-    };
+    # gtk.theme = {
+    #   package = pkgs.flat-remix-gtk;
+    #   # Mahdolliset teemojen nimet löytää komennolla:
+    #   #   ll $(nix eval --raw nixpkgs#flat-remix-gtk.outPath)/share/themes/
+    #   name = "Flat-Remix-GTK-Yellow-Dark";
+    # };
+    # gtk.iconTheme = {
+    #   package = pkgs.yaru-remix-theme;
+    #   # Mahdolliset teemojen nimet löytää komennolla:
+    #   #   ll $(nix eval --raw nixpkgs#yaru-remix-theme.outPath)/share/icons/
+    #   name = "Yaru-remix-light";
+    # };
   };
 }

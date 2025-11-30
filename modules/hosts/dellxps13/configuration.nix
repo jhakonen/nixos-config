@@ -47,7 +47,7 @@ in {
       self.modules.nixos.common
       self.modules.nixos.flatpak
       self.modules.nixos.koti
-      self.modules.nixos.nemo
+      # self.modules.nixos.nemo
       self.modules.nixos.nix-cleanup
       self.modules.nixos.opencloud-client
       self.modules.nixos.tailscale
