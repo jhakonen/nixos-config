@@ -5,7 +5,13 @@ in {
     services.zigbee2mqtt = {
       enable = true;
       settings = {
-        homeassistant = lib.mkForce true;
+        # https://www.zigbee2mqtt.io/guide/configuration/homeassistant.html#advanced-configuration
+        homeassistant = {
+          enabled = true;
+          # Philips Hue Tap dial switch ei toimi ellei tämä legacy-asetus ole päällä
+          #   https://community.home-assistant.io/t/missing-actions-in-mqtt-from-hue-dimmer-switch/822183/3
+          legacy_action_sensor = true;
+        };
         permit_join = false;
         serial.port = "/dev/ttyUSB0";
         mqtt = {
