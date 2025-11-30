@@ -23,11 +23,6 @@ for kone in "${koneet[@]}"; do
     komento+=("--" "--show-trace")
   fi
 
-  # HACK: https://github.com/nix-community/nh/issues/308#issuecomment-3170507744
-  if [ "$kone" == "toukka" ]; then
-    komento=("nixos-rebuild-ng" "$toiminto" "--flake" ".#$kone" "--no-reexec" "--build-host" "root@$kone" "--target-host" "root@$kone")
-  fi
-
   echo "${komento[@]}"
   apu_komento=("systemd-inhibit" "--who" "nixos-rebuild $kone" "--why" "Rakennetaan $kone konetta")
   apu_komento+=("${komento[@]}")

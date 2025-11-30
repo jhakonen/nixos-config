@@ -39,19 +39,6 @@ let
     + "RgyuiBdfnbNyJ83/6TJ27OZV33ZP8NkbT8avh9nCdelsPghndEux3sf1mINqGOFltdtuD"
     + "0UPFY3z6hq1tzpwkE3PSjEFX4/lzOw== root@mervi";
   # /etc/ssh/ssh_host_rsa_key.pub
-  toukka =
-    "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCZ0CXyDc1+ro40OnaWymLtPzGW2jWglRr"
-    + "MLsFzwTE9ufd4V14Yn3yAWzs8xqv/5kRJk/s8W4LqlMrf1Y8g6effuML12kY95vYDfBq6"
-    + "UFE58HhlTEkHxaNQo4RWdwwS4kRvkAZz47OYeb8oBjZAVeQQkuE1R19LdFfy1vqaEZYWv"
-    + "2/+PpzjHxtkr8FB5j+UR6jqo4G0dqRa4HobMwzG38bQZk63ULtbZwBZtbt1W+lh1Gdnmj"
-    + "rMd/mVbQe0ywC4WJjfRGRSn6tkvLpJbK9eDUQcspZhaYmfNBoy4rEDsTnF0XCekcEwDgX"
-    + "WHIpk2EdmM05j+zfFym8S0etXboyGJtCJTOMDdIgmPjFS7F008dzVn2pF80GJTKRT9tUu"
-    + "tpJ7fmDxisqajLlLnLQEjxmnnvNyKubcuJkTOpKe9QmmpE/Awl0YrNHb7FNASJ+Rizt7a"
-    + "1wX04UE10lMCdtrm1lnBLk5vOsm7mrzqAgTLWj/sQOn9bys/niAtKakT8M6c7qWmAmhhH"
-    + "EUyeKeazWk8GPMZM8uZGhwSqjn3r2S5MaoeugRhLw3JebK+VDBwmv35JvM+MC+zJpspya"
-    + "9eN+KRbDlOsdYaSuFnlL7L37Wtbix8zWypnzjcv2EqIlxYA0Za78JEVA1oFApKacHFtU8"
-    + "QHagpTS1GtFndNZ1Sw0V8CeleXm9uQ== root@toukka";
-  # /etc/ssh/ssh_host_rsa_key.pub
   tunneli =
     "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDWGXpckdtgJqLMMT4xals2MN+goueB5H6"
     + "lDEvQko55kEyrYoTdJnl4rkFx2Kwyt/cb+kddXtKVGv1BSAqDCYAdcKjH6tGFi1C31sev"
@@ -66,16 +53,16 @@ let
     + "VqASH9sE/KgIT+FNOpAu4KwYdfgAbQ== root@tunneli";
 in
 {
-  "acme-joker-credentials.age".publicKeys = [ jhakonen kanto mervi toukka tunneli ];
+  "acme-joker-credentials.age".publicKeys = [ jhakonen kanto mervi tunneli ];
   "freshrss-admin-password.age".publicKeys = [ jhakonen kanto ];
   "github-id-rsa.age".publicKeys = [ jhakonen ];
   "kanto-gitea-ssh-key.age".publicKeys = [ jhakonen kanto ];
   "karakeep-environment.age".publicKeys = [ jhakonen kanto ];
-  "mqtt-password.age".publicKeys = [ jhakonen kanto mervi toukka ];
+  "mqtt-password.age".publicKeys = [ jhakonen kanto mervi ];
   "mqtt-espuser-password.age".publicKeys = [ jhakonen kanto ];
-  "restic-password.age".publicKeys = [ jhakonen kanto mervi toukka ];
-  "restic-nas-smb-config.age".publicKeys = [ jhakonen kanto mervi toukka ];
-  "rsyncbackup-password.age".publicKeys = [ jhakonen kanto mervi toukka ];
+  "restic-password.age".publicKeys = [ jhakonen kanto mervi ];
+  "restic-nas-smb-config.age".publicKeys = [ jhakonen kanto mervi ];
+  "rsyncbackup-password.age".publicKeys = [ jhakonen kanto mervi ];
   "telegraf-environment.age".publicKeys = [ jhakonen kanto ];
-  "zigbee2mqtt-environment.age".publicKeys = [ jhakonen kanto toukka ];
+  "zigbee2mqtt-environment.age".publicKeys = [ jhakonen kanto ];
 }

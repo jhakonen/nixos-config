@@ -18,5 +18,5 @@ sudo ./koti rakenna -t test dellxps13
 ```
 
 ```bash
-./koti buuttaa toukka
+./koti buuttaa kanto
 ```

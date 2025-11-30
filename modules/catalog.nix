@@ -39,9 +39,6 @@
       useIp = true;
     };
     tinypilot = {};
-    toukka = {
-      ip.private = "10.0.0.102";
-    };
     tunneli = {
       ip.tailscale = "100.125.41.58";
     };
@@ -215,18 +212,6 @@
       };
       public = {
         domain = "monit.mervi.lan.jhakonen.com";
-        port = 443;
-      };
-    };
-    monit-toukka = {
-      host = nodes.toukka;
-      dashy = {
-        section = "valvonta";
-        description = "Monit - toukka";
-        icon = "hl-monit";
-      };
-      public = {
-        domain = "monit.toukka.lan.jhakonen.com";
         port = 443;
       };
     };

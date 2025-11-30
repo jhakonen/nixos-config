@@ -37,7 +37,6 @@ in
     kanto = linux "kanto";
     mervi = linux "mervi";
     nassuvm = linux "nassuvm";
-    toukka = linux-arm "toukka";
     tunneli = linux "tunneli";
   };
 
