@@ -298,6 +298,8 @@ in {
 
     services.flatpak.packages = [
       "app.grayjay.Grayjay"
+      "com.github.tchx84.Flatseal"
+      "io.github.mfat.sshpilot"
       "org.gnome.Papers"
       "org.gnome.Showtime"
     ];
