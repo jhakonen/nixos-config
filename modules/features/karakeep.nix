@@ -1,3 +1,8 @@
+# Tuhoa meilisearchin tiedostot jos se valittaa että tietokannan versio on liian vanha:
+#  - systemctl stop meilisearch.service
+#  - rm -r /var/lib/meilisearch /var/lib/private/meilisearch
+#  - systemctl start meilisearch.service
+#  - https://karakeep.kanto.lan.jhakonen.com/admin/background_jobs --> "Reindex All Bookmarks"
 { lib, self, ... }:
 let
   inherit (self) catalog;
@@ -15,9 +20,6 @@ in {
       # Sisältää muuttujat NEXTAUTH_SECRET ja OPENAI_API_KEY
       environmentFile = config.age.secrets.karakeep-environment.path;
     };
-
-    # Käytä uudempaa meilisearch versiota, tämän voi poistaa NixOS 25.11 versiossa.
-    services.meilisearch.package = pkgs.meilisearch;
 
     # Paljasta Karakeep karakeep.kanto.lan.jhakonen.com domainissa
     services.nginx = {
