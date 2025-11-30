@@ -63,15 +63,15 @@ in
           "NOT_RUN_YET"
         ];
       }
-      {
-        type = "http check";
-        description = "FreshRSS - web interface";
-        secure = true;
-        domain = catalog.services.freshrss.public.domain;
-        path = "/i/";
-        response.code = 200;
-      }
     ];
   };
 
+  flake.modules.nixos.gatus = {
+    # Palvelun valvonta
+    services.gatus.settings.endpoints = [{
+      name = "FreshRSS";
+      url = "https://${catalog.services.freshrss.public.domain}";
+      conditions = [ "[STATUS] == 200" ];
+    }];
+  };
 }

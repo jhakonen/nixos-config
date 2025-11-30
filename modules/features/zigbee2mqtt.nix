@@ -1,8 +1,7 @@
-{ lib, self, ... }:
-{
-  flake.modules.nixos.zigbee2mqtt = { config, ... }: let
-    inherit (self) catalog;
-  in {
+{ lib, self, ... }: let
+  inherit (self) catalog;
+in {
+  flake.modules.nixos.zigbee2mqtt = { config, ... }: {
     services.zigbee2mqtt = {
       enable = true;
       settings = {
@@ -115,20 +114,19 @@
     };
 
     # Palvelun valvonta
-    my.services.monitoring.checks = [
-      {
-        type = "systemd service";
-        description = "zigbee2mqtt - service";
-        name = config.systemd.services.zigbee2mqtt.name;
-      }
-      {
-        type = "http check";
-        description = "zigbee2mqtt - web interface";
-        domain = catalog.services.zigbee2mqtt.public.domain;
-        secure = true;
-        response.code = 200;
-        alertAfterSec = 15 * 60;
-      }
-    ];
+    my.services.monitoring.checks = [{
+      type = "systemd service";
+      description = "zigbee2mqtt - service";
+      name = config.systemd.services.zigbee2mqtt.name;
+    }];
+  };
+
+  flake.modules.nixos.gatus = {
+    # Palvelun valvonta
+    services.gatus.settings.endpoints = [{
+      name = "Zigbee2MQTT";
+      url = "https://${catalog.services.zigbee2mqtt.public.domain}";
+      conditions = [ "[STATUS] == 200" ];
+    }];
   };
 }

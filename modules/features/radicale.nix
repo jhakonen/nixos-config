@@ -51,18 +51,14 @@ in
       checkOpts = [ "--read-data" ];
       pruneOpts = [ "--keep-daily 7" "--keep-weekly 4" "--keep-monthly 12" ];
     };
-
-    # Palvelun valvonta
-    my.services.monitoring.checks = [
-      {
-        type = "http check";
-        description = "Radicale - web interface";
-        secure = true;
-        path = "/.web/";
-        domain = catalog.services.radicale.public.domain;
-        response.code = 200;
-      }
-    ];
   };
 
+  flake.modules.nixos.gatus = {
+    # Palvelun valvonta
+    services.gatus.settings.endpoints = [{
+      name = "Radicale";
+      url = "https://${catalog.services.radicale.public.domain}";
+      conditions = [ "[STATUS] == 200" ];
+    }];
+  };
 }

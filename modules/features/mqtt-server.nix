@@ -1,7 +1,7 @@
-{ self, ... }:
-{
+{ self, ... }: let
+  inherit (self) catalog;
+in {
   flake.modules.nixos.mqtt-server = { config, ... }: let
-    inherit (self) catalog;
     user = "koti";
     certDir = config.security.acme.certs."jhakonen.com".directory;
   in {
@@ -63,23 +63,23 @@
     users.groups.acme.members = [ "mosquitto" ];
 
     # Palvelun valvonta
-    my.services.monitoring.checks = [
-      {
-        type = "systemd service";
-        description = "Mosquitto - service";
-        name = config.systemd.services.mosquitto.name;
-      }
-      ({ notify, secsToCycles, ... }:
-      ''
-        check host "Mosquitto - MQTT connection" with address ${catalog.services.mosquitto.public.domain}
-          if failed
-            port ${toString catalog.services.mosquitto.port}
-            ssl
-            protocol mqtt username testi password testi
-            for ${secsToCycles (60 * 5)} cycles
-          then
-            exec "${notify} ${config.networking.hostName} - check Mosquitto - MQTT connection has failed"
-      '')
-    ];
+    my.services.monitoring.checks = [{
+      type = "systemd service";
+      description = "Mosquitto - service";
+      name = config.systemd.services.mosquitto.name;
+    }];
+  };
+
+  flake.modules.nixos.gatus = {
+    # Palvelun valvonta
+    services.gatus.settings.endpoints = [{
+      name = "Mosquitto (secure)";
+      url = "tcp://${catalog.services.mosquitto.public.domain}:${toString catalog.services.mosquitto.port}";
+      conditions = [ "[CONNECTED] == true" ];
+    } {
+      name = "Mosquitto (insecure)";
+      url = "tcp://${catalog.services.mosquitto.public.domain}:${toString catalog.services.mosquitto.insecure_port}";
+      conditions = [ "[CONNECTED] == true" ];
+    }];
   };
 }

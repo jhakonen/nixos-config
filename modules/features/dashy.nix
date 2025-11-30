@@ -83,16 +83,14 @@ in {
       forceSSL = true;
       useACMEHost = "jhakonen.com";
     };
+  };
 
+  flake.modules.nixos.gatus = {
     # Palvelun valvonta
-    my.services.monitoring.checks = [
-      {
-        type = "http check";
-        description = "Dashy - web interface";
-        secure = true;
-        domain = catalog.services.dashy.public.domain;
-        response.code = 200;
-      }
-    ];
+    services.gatus.settings.endpoints = [{
+      name = "Dashy";
+      url = "https://${catalog.services.dashy.public.domain}";
+      conditions = [ "[STATUS] == 200" ];
+    }];
   };
 }

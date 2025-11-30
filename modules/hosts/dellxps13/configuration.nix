@@ -1,10 +1,10 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
-{ inputs, self, ... }:
-{
+{ inputs, self, ... }: let
+  inherit (self) catalog;
+in {
   flake.modules.nixos.dellxps13 = { config, lib, pkgs, ... }: let
-    inherit (self) catalog;
     super-productivity-latest = pkgs.callPackage ../../../packages/super-productivity.nix {};
   in {
     nix.package = pkgs.lix;
@@ -455,6 +455,15 @@
     #   enable = true;
     #   enableExtensionPack = true;
     # };
+  };
+
+  flake.modules.nixos.gatus = {
+    # Palvelun valvonta
+    services.gatus.settings.endpoints = [{
+      name = "Syncthing (dellxps13)";
+      url = "http://${catalog.services.syncthing-dellxps13.host.hostName}:${toString catalog.services.syncthing-dellxps13.port}";
+      conditions = [ "[STATUS] == 200" ];
+    }];
   };
 
   flake.modules.homeManager.dellxps13 = {

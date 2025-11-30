@@ -100,4 +100,13 @@ in
       }))
     ];
   };
+
+  flake.modules.nixos.gatus = {
+    # Palvelun valvonta
+    services.gatus.settings.endpoints = [{
+      name = "Opencloud";
+      url = "https://${catalog.services.opencloud.public.domain}";
+      conditions = [ "[STATUS] == 200" ];
+    }];
+  };
 }

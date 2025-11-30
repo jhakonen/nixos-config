@@ -1,7 +1,7 @@
-{ self, lib, ... }:
-{
+{ self, lib, ... }: let
+  inherit (self) catalog;
+in {
   flake.modules.nixos.calibre = { config, pkgs, ... }: let
-    inherit (self) catalog;
     LOCAL_URL = "http://127.0.0.1:${toString config.services.calibre-web.listen.port}";
   in {
     services = {
@@ -68,14 +68,15 @@
           "NOT_RUN_YET"
         ];
       }
-      {
-        type = "http check";
-        description = "Calibre-Web - web interface";
-        secure = true;
-        domain = catalog.services.calibre-web.public.domain;
-        path = "/login";
-        response.code = 200;
-      }
     ];
+  };
+
+  flake.modules.nixos.gatus = {
+    # Palvelun valvonta
+    services.gatus.settings.endpoints = [{
+      name = "Calibre Web";
+      url = "https://${catalog.services.calibre-web.public.domain}";
+      conditions = [ "[STATUS] == 200" ];
+    }];
   };
 }

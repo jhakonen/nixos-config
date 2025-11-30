@@ -1,7 +1,7 @@
-{ inputs, self, ... }:
-{
-  flake.modules.nixos.kotisivu = { config, lib, pkgs, ... }: let
-    inherit (self) catalog;
+{ inputs, self, ... }: let
+  inherit (self) catalog;
+in {
+  flake.modules.nixos.kotisivu = let
     rootDir = "/var/lib/www";
   in {
     services.nginx = {
@@ -25,5 +25,14 @@
       openssh.authorizedKeys.keys = [ catalog.id-rsa-public-key ];
     };
     users.users.nginx.extraGroups = [ "www-data" ];
+  };
+
+  flake.modules.nixos.gatus = {
+    # Palvelun valvonta
+    services.gatus.settings.endpoints = [{
+      name = "Kotisivu";
+      url = "https://jhakonen.com";
+      conditions = [ "[STATUS] == 200" ];
+    }];
   };
 }

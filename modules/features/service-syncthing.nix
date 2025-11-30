@@ -48,13 +48,6 @@
           description = "Syncthing - service";
           name = config.systemd.services.syncthing.name;
         }
-        {
-          type = "http check";
-          description = "Syncthing - web interface";
-          domain = config.networking.hostName;
-          port = cfg.gui-port;
-          response.code = 200;
-        }
       ];
     };
   };

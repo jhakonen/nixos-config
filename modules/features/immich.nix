@@ -62,14 +62,15 @@ in {
         description = "immich - machine learning";
         name = "immich-machine-learning.service";
       }
-      {
-        type = "http check";
-        description = "immich - web interface";
-        domain = catalog.services.immich.public.domain;
-        secure = true;
-        response.code = 200;
-        alertAfterSec = 15 * 60;
-      }
     ];
+  };
+
+  flake.modules.nixos.gatus = {
+    # Palvelun valvonta
+    services.gatus.settings.endpoints = [{
+      name = "Immich";
+      url = "https://${catalog.services.immich.public.domain}";
+      conditions = [ "[STATUS] == 200" ];
+    }];
   };
 }

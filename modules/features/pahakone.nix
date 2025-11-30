@@ -1,8 +1,7 @@
-{ self, ... }:
-{
-  flake.modules.nixos.pahakone-tunnel = let
-    inherit (self) catalog;
-  in {
+{ self, ... }: let
+  inherit (self) catalog;
+in {
+  flake.modules.nixos.pahakone-tunnel = {
     services.nginx = {
       enable = true;
       virtualHosts.${catalog.services.kalenteri.public.domain} = {
@@ -16,5 +15,14 @@
         useACMEHost = "jhakonen.com";
       };
     };
+  };
+
+  flake.modules.nixos.gatus = {
+    # Palvelun valvonta
+    services.gatus.settings.endpoints = [{
+      name = "Kalenteri";
+      url = "https://${catalog.services.kalenteri.public.domain}";
+      conditions = [ "[STATUS] == 200" ];
+    }];
   };
 }

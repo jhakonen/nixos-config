@@ -57,19 +57,19 @@ in
     };
 
     # Palvelun valvonta
-    my.services.monitoring.checks = [
-      {
-        type = "systemd service";
-        description = "Grafana - service";
-        name = config.systemd.services.grafana.name;
-      }
-      {
-        type = "http check";
-        description = "Grafana - web interface";
-        secure = true;
-        domain = catalog.services.grafana.public.domain;
-        response.code = 200;
-      }
-    ];
+    my.services.monitoring.checks = [{
+      type = "systemd service";
+      description = "Grafana - service";
+      name = config.systemd.services.grafana.name;
+    }];
+  };
+
+  flake.modules.nixos.gatus = {
+    # Palvelun valvonta
+    services.gatus.settings.endpoints = [{
+      name = "Grafana";
+      url = "https://${catalog.services.grafana.public.domain}";
+      conditions = [ "[STATUS] == 200" ];
+    }];
   };
 }

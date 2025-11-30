@@ -33,20 +33,19 @@ in {
     };
 
     # Palvelun valvonta
-    my.services.monitoring.checks = [
-      {
-        type = "systemd service";
-        description = "InfluxDB - service";
-        name = config.systemd.services.influxdb.name;
-      }
-      {
-        type = "http check";
-        description = "InfluxDB - http port";
-        domain = catalog.services.influx-db.host.ip.private;
-        port = catalog.services.influx-db.port;
-        path = "/ping";
-        response.code = 204;
-      }
-    ];
+    my.services.monitoring.checks = [{
+      type = "systemd service";
+      description = "InfluxDB - service";
+      name = config.systemd.services.influxdb.name;
+    }];
+  };
+
+  flake.modules.nixos.gatus = {
+    # Palvelun valvonta
+    services.gatus.settings.endpoints = [{
+      name = "Influx DB";
+      url = "http://${catalog.services.influx-db.host.ip.private}:${toString catalog.services.influx-db.port}/ping";
+      conditions = [ "[STATUS] == 204" ];
+    }];
   };
 }

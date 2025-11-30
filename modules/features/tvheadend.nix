@@ -58,20 +58,23 @@ in
     };
 
     # Palvelun valvonta
-    my.services.monitoring.checks = [
-      {
-        type = "systemd service";
-        description = "Tvheadend - service";
-        name = "podman-tvheadend";
-      }
-      {
-        type = "http check";
-        description = "Tvheadend - web interface";
-        domain = config.networking.hostName;
-        port = catalog.services.tvheadend.port;
-        path = "/extjs.html";
-        response.code = 200;
-      }
-    ];
+    my.services.monitoring.checks = [{
+      type = "systemd service";
+      description = "Tvheadend - service";
+      name = "podman-tvheadend";
+    }];
+  };
+
+  flake.modules.nixos.gatus = {
+    # Palvelun valvonta
+    services.gatus.settings.endpoints = [{
+      name = "Tvheadend";
+      url = "http://${catalog.services.tvheadend.host.hostName}:${toString catalog.services.tvheadend.port}";
+      conditions = [ "[STATUS] == 200" ];
+    } {
+      name = "Tvheadend (HTSP)";
+      url = "tcp://${catalog.services.tvheadend.host.hostName}:${toString catalog.services.tvheadend.htsp_port}";
+      conditions = [ "[CONNECTED] == true" ];
+    }];
   };
 }

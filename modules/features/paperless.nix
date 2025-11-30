@@ -1,8 +1,7 @@
-{ self, ... }:
-{
+{ self, ... }: let
+  inherit (self) catalog;
+in {
   flake.modules.nixos.paperless = { config, pkgs, ... }: let
-    inherit (self) catalog;
-
     # Näiden tulee vastata vastaavaa käyttäjää NAS:lla sillä tällä käyttäjällä
     # on luku/kirjoitus oikeus skannerin syötekansioon
     username = "skanneri";
@@ -113,14 +112,6 @@
         description = "Paperless - web service";
         name = config.systemd.services.paperless-web.name;
       }
-      {
-        type = "http check";
-        description = "Paperless - web interface";
-        secure = true;
-        domain = catalog.services.paperless.public.domain;
-        path = "/accounts/login/";
-        response.code = 200;
-      }
     ];
 
     # Liitä dokumenttien syötekansio NFS:n yli NAS:lta. Tähän kansioon skanneri
@@ -147,5 +138,14 @@
         "x-systemd.mount-timeout=90"
       ];
     };
+  };
+
+  flake.modules.nixos.gatus = {
+    # Palvelun valvonta
+    services.gatus.settings.endpoints = [{
+      name = "Paperless";
+      url = "https://${catalog.services.paperless.public.domain}";
+      conditions = [ "[STATUS] == 200" ];
+    }];
   };
 }

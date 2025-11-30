@@ -64,4 +64,13 @@ in {
       }
     ];
   };
+
+  flake.modules.nixos.gatus = {
+    # Palvelun valvonta
+    services.gatus.settings.endpoints = [{
+      name = "Karakeep";
+      url = "https://${catalog.services.karakeep.public.domain}";
+      conditions = [ "[STATUS] == 200" ];
+    }];
+  };
 }

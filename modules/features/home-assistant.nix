@@ -111,19 +111,23 @@ in
     };
 
     # Palvelun valvonta
-    my.services.monitoring.checks = [
-      {
-        type = "systemd service";
-        description = "Home Assistant - service";
-        name = config.systemd.services.home-assistant.name;
-      }
-      {
-        type = "http check";
-        description = "Home Assistant - web interface";
-        secure = true;
-        domain = catalog.services.home-assistant.public.domain;
-        response.code = 200;
-      }
-    ];
+    my.services.monitoring.checks = [{
+      type = "systemd service";
+      description = "Home Assistant - service";
+      name = config.systemd.services.home-assistant.name;
+    }];
+  };
+
+  flake.modules.nixos.gatus = {
+    # Palvelun valvonta
+    services.gatus.settings.endpoints = [{
+      name = "Home Assistant";
+      url = "https://${catalog.services.home-assistant.public.domain}";
+      conditions = [ "[STATUS] == 200" ];
+    } {
+      name = "Home Assistant (ESPHome)";
+      url = "https://${catalog.services.esphome.public.domain}";
+      conditions = [ "[STATUS] == 200" ];
+    }];
   };
 }

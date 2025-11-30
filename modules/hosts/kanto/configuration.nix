@@ -1,8 +1,7 @@
-{ inputs, self, ... }:
-{
-  flake.modules.nixos.kanto = { config, pkgs, ... }: let
-    inherit (self) catalog;
-  in {
+{ inputs, self, ... }: let
+  inherit (self) catalog;
+in {
+  flake.modules.nixos.kanto = { config, pkgs, ... }: {
     # Ota flaket käyttöön
     nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
@@ -18,6 +17,7 @@
       self.modules.nixos.common
       self.modules.nixos.dashy
       self.modules.nixos.freshrss
+      self.modules.nixos.gatus
       self.modules.nixos.gitea
       self.modules.nixos.grafana
       self.modules.nixos.home-assistant
@@ -105,5 +105,14 @@
   flake.modules.homeManager.kanto = {
     # https://wiki.nixos.org/wiki/FAQ/When_do_I_update_stateVersion
     home.stateVersion = "24.05";
+  };
+
+  flake.modules.nixos.gatus = {
+    # Palvelun valvonta
+    services.gatus.settings.endpoints = [{
+      name = "Syncthing (kanto)";
+      url = "http://${catalog.services.syncthing-kanto.host.hostName}:${toString catalog.services.syncthing-kanto.port}";
+      conditions = [ "[STATUS] == 200" ];
+    }];
   };
 }

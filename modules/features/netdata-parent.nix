@@ -1,5 +1,6 @@
-{ inputs, ... }:
-{
+{ self, ... }: let
+  inherit (self) catalog;
+in {
   flake.modules.nixos.netdata-parent = { config, pkgs, ... }: {
     # - Perustuu blogiin https://dataswamp.org/~solene/2022-09-16-netdata-cloud-nixos.html
     # - Historiadata tallennetaan hakemistoon: /var/cache/netdata
@@ -18,7 +19,7 @@
               allow from = ${allowFrom}
           '';
         in pkgs.writeText "stream.conf" ''
-          ${mkChildNode "b2a07267-adf6-40ae-bfcd-ec24e3d1a68f" inputs.self.catalog.nodes.kanto.ip.private}
+          ${mkChildNode "b2a07267-adf6-40ae-bfcd-ec24e3d1a68f" catalog.services.netdata-nassuvm.host.ip.private}
         '';
 
       # https://learn.netdata.cloud/docs/netdata-agent/configuration/daemon-configuration
@@ -36,6 +37,15 @@
       };
     };
 
-    networking.firewall.allowedTCPPorts = [ 19999 ];
+    networking.firewall.allowedTCPPorts = [ catalog.services.netdata-nassuvm.port ];
+  };
+
+  flake.modules.nixos.gatus = {
+    # Palvelun valvonta
+    services.gatus.settings.endpoints = [{
+      name = "Netdata";
+      url = "http://${catalog.services.netdata-nassuvm.host.ip.private}:${toString catalog.services.netdata-nassuvm.port}";
+      conditions = [ "[STATUS] == 200" ];
+    }];
   };
 }

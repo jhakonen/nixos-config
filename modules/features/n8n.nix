@@ -64,17 +64,6 @@ in
       checkOpts = [ "--read-data" ];
       pruneOpts = [ "--keep-daily 7" "--keep-weekly 4" "--keep-monthly 12" ];
     };
-
-    # Palvelun valvonta
-    my.services.monitoring.checks = [
-      {
-        type = "http check";
-        description = "N8N - web interface";
-        secure = true;
-        domain = catalog.services.n8n.public.domain;
-        response.code = 200;
-      }
-    ];
   };
 
   # Tunneli webhookia varten
@@ -92,5 +81,14 @@ in
         useACMEHost = "jhakonen.com";
       };
     };
+  };
+
+  flake.modules.nixos.gatus = {
+    # Palvelun valvonta
+    services.gatus.settings.endpoints = [{
+      name = "N8N";
+      url = "https://${catalog.services.n8n.public.domain}";
+      conditions = [ "[STATUS] == 200" ];
+    }];
   };
 }

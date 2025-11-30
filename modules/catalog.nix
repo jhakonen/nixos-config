@@ -103,6 +103,19 @@
         port = 443;
       };
     };
+    gatus = {
+      host = nodes.kanto;
+      port = 5000;
+      dashy = {
+        section = "palvelut";
+        description = "Valvontapaneeli";
+        icon = "hl-gatus";
+      };
+      public = {
+        domain = "gatus.kanto.lan.jhakonen.com";
+        port = 443;
+      };
+    };
     grafana = {
       host = nodes.kanto;
       port = 3000;
