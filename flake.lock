@@ -327,11 +327,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1746915784,
-        "narHash": "sha256-JNZDS6/P5XFaKkfrDV98nflwVpz3blS9/4VvyYQ+CxQ=",
+        "lastModified": 1764513057,
+        "narHash": "sha256-p/sJ/7QL1VoOo/zGnRVwy9n+Mc7ug2usp2fZXTNBn/g=",
         "owner": "jhakonen",
         "repo": "qjournalctl",
-        "rev": "9e9a3d4bd51b7c7e4d9802ac45afcf4bca86017e",
+        "rev": "a43067b9d6717c8b4854b6c2301571fffa5133fb",
         "type": "github"
       },
       "original": {
