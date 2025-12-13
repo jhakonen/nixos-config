@@ -234,6 +234,7 @@ in {
       cachix
       calibre
       chromium
+      claude-code
       #nur.repos.shadowrz.klassy-qt6  # KDE6+ teema
       discord
       easyeffects
