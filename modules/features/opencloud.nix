@@ -1,13 +1,15 @@
-{ self, ... }:
+{ inputs, self, ... }:
 let
   inherit (self) catalog;
   dataDir = "/var/lib/opencloud";
-  version = "3.5.0";
 in
 {
-  flake.modules.nixos.opencloud = { config, ... }: {
+  flake.modules.nixos.opencloud = { config, pkgs, ... }: let
+    imageSource = inputs.opencloud-image { inherit pkgs; };
+    inherit (imageSource) image_name image_digest;
+  in {
     virtualisation.oci-containers.containers.opencloud = {
-      image = "opencloudeu/opencloud-rolling:${version}";
+      image = "${image_name}@${image_digest}";
       serviceName = "opencloud";
       environment = {
         # enable services that are not started automatically

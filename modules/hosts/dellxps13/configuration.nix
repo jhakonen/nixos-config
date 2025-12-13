@@ -49,6 +49,7 @@ in {
       self.modules.nixos.koti
       # self.modules.nixos.nemo
       self.modules.nixos.nix-cleanup
+      self.modules.nixos.npins
       self.modules.nixos.opencloud-client
       self.modules.nixos.tailscale
       self.modules.nixos.tailscale-receive
@@ -278,7 +279,6 @@ in {
       moonlight-qt
       mqttx
       nixos-rebuild-ng
-      npins
       obsidian
       renameutils  # qmv
       sublime4
