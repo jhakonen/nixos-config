@@ -19,7 +19,7 @@ in {
     # Add stuff for your user as you see fit:
     # programs.neovim.enable = true;
     home.packages = [
-      inputs.agenix.packages.${pkgs.stdenv.system}.default  # agenix komento
+      (pkgs.callPackage "${inputs.agenix}/pkgs/agenix.nix" {})
       #pkgs.calibre
       pkgs.nixos-rebuild  # rebuildaus etäkoneelle
       pkgs.nix-index  # Nixpkgs pakettien sisällön etsiminen

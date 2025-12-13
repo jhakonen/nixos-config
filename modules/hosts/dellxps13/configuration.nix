@@ -278,6 +278,7 @@ in {
       moonlight-qt
       mqttx
       nixos-rebuild-ng
+      npins
       obsidian
       renameutils  # qmv
       sublime4

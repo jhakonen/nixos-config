@@ -1,0 +1,191 @@
+{
+  "pins": {
+    "agenix": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "ryantm",
+        "repo": "agenix"
+      },
+      "branch": "main",
+      "submodules": false,
+      "revision": "fcdea223397448d35d9b31f798479227e80183f6",
+      "url": "https://github.com/ryantm/agenix/archive/fcdea223397448d35d9b31f798479227e80183f6.tar.gz",
+      "hash": "1d4m7hsq727q7ndjqmgyl8vkbkqjwps962ygmv2mcc5dbqzgn963"
+    },
+    "flake-parts": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "hercules-ci",
+        "repo": "flake-parts"
+      },
+      "branch": "main",
+      "submodules": false,
+      "revision": "5635c32d666a59ec9a55cab87e898889869f7b71",
+      "url": "https://github.com/hercules-ci/flake-parts/archive/5635c32d666a59ec9a55cab87e898889869f7b71.tar.gz",
+      "hash": "0lqy0mm4rap9c4zmbars93pv31lqa42c77hq5whfmvizdb13n41j"
+    },
+    "home-manager": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "nix-community",
+        "repo": "home-manager"
+      },
+      "branch": "release-25.11",
+      "submodules": false,
+      "revision": "90b62096f099b73043a747348c11dbfcfbdea949",
+      "url": "https://github.com/nix-community/home-manager/archive/90b62096f099b73043a747348c11dbfcfbdea949.tar.gz",
+      "hash": "02ly03p934ywps0rkwj251fszr6x00d9g7ikn9g7qx27xnrv3ka4"
+    },
+    "hyprpanel": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "Jas-SinghFSU",
+        "repo": "HyprPanel"
+      },
+      "branch": "master",
+      "submodules": false,
+      "revision": "f9a04192e8fb90a48e1756989f582dc0baec2351",
+      "url": "https://github.com/Jas-SinghFSU/HyprPanel/archive/f9a04192e8fb90a48e1756989f582dc0baec2351.tar.gz",
+      "hash": "0glvnb0h8wkg5xjnpg0pfr9yz0kk5jh97iwj91xjia4mla09ixsv"
+    },
+    "import-tree": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "vic",
+        "repo": "import-tree"
+      },
+      "branch": "main",
+      "submodules": false,
+      "revision": "3c23749d8013ec6daa1d7255057590e9ca726646",
+      "url": "https://github.com/vic/import-tree/archive/3c23749d8013ec6daa1d7255057590e9ca726646.tar.gz",
+      "hash": "0p9wqkk9280ay18b3cpzwbyaq9gwvglb22yki0q03p4vb1n0mxk6"
+    },
+    "nix-flatpak": {
+      "type": "GitRelease",
+      "repository": {
+        "type": "GitHub",
+        "owner": "gmodena",
+        "repo": "nix-flatpak"
+      },
+      "pre_releases": false,
+      "version_upper_bound": null,
+      "release_prefix": null,
+      "submodules": false,
+      "version": "v0.6.0",
+      "revision": "5e54c3ca05a7c7d968ae1ddeabe01d2a9bc1e177",
+      "url": "https://api.github.com/repos/gmodena/nix-flatpak/tarball/v0.6.0",
+      "hash": "0s3mpb28rcmma29vv884fi3as926bfszhn7v8n74bpnp5qg5a1c8"
+    },
+    "nixos-hardware": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "NixOS",
+        "repo": "nixos-hardware"
+      },
+      "branch": "master",
+      "submodules": false,
+      "revision": "9154f4569b6cdfd3c595851a6ba51bfaa472d9f3",
+      "url": "https://github.com/NixOS/nixos-hardware/archive/9154f4569b6cdfd3c595851a6ba51bfaa472d9f3.tar.gz",
+      "hash": "1vmlcda7864ya2byxivnpzkqf41cavj9ms5hjh6i0h8anls56lk6"
+    },
+    "nixpkgs": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "nixos",
+        "repo": "nixpkgs"
+      },
+      "branch": "nixos-25.11",
+      "submodules": false,
+      "revision": "09eb77e94fa25202af8f3e81ddc7353d9970ac1b",
+      "url": "https://github.com/nixos/nixpkgs/archive/09eb77e94fa25202af8f3e81ddc7353d9970ac1b.tar.gz",
+      "hash": "02hdh4r0cc5h78cmymndb8clfhkn6phbrkrv6s8kvyfspqwzj84r"
+    },
+    "nixpkgs-for-nm-1-48-10": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "nixos",
+        "repo": "nixpkgs"
+      },
+      "branch": "master",
+      "submodules": false,
+      "revision": "0bd7f95e4588643f2c2d403b38d8a2fe44b0fc73",
+      "url": "https://github.com/nixos/nixpkgs/archive/0bd7f95e4588643f2c2d403b38d8a2fe44b0fc73.tar.gz",
+      "hash": "0vx2pw69if88nkfh74bf1a8s5497n2nv7wydmvmqh5qh00fsahvq",
+      "frozen": true
+    },
+    "nixpkgs-lib": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "nixos",
+        "repo": "nixpkgs"
+      },
+      "branch": "nixos-unstable",
+      "submodules": false,
+      "revision": "2fbfb1d73d239d2402a8fe03963e37aab15abe8b",
+      "url": "https://github.com/nixos/nixpkgs/archive/2fbfb1d73d239d2402a8fe03963e37aab15abe8b.tar.gz",
+      "hash": "1bb0hgqd54v9p7y4r46w50iw6v18k32w3c6731gcjgn98gdw4nzm"
+    },
+    "nixpkgs-unstable": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "nixos",
+        "repo": "nixpkgs"
+      },
+      "branch": "nixos-unstable",
+      "submodules": false,
+      "revision": "2fbfb1d73d239d2402a8fe03963e37aab15abe8b",
+      "url": "https://github.com/nixos/nixpkgs/archive/2fbfb1d73d239d2402a8fe03963e37aab15abe8b.tar.gz",
+      "hash": "1bb0hgqd54v9p7y4r46w50iw6v18k32w3c6731gcjgn98gdw4nzm"
+    },
+    "nur": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "nix-community",
+        "repo": "NUR"
+      },
+      "branch": "main",
+      "submodules": false,
+      "revision": "fcee58015b21fc5c7f527101458826a51eb0a456",
+      "url": "https://github.com/nix-community/NUR/archive/fcee58015b21fc5c7f527101458826a51eb0a456.tar.gz",
+      "hash": "1hsb6fiqwv4v9pni4977jiarv9m9yqdm6zac356sfgfcg22504ng"
+    },
+    "qjournalctl": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "jhakonen",
+        "repo": "qjournalctl"
+      },
+      "branch": "master",
+      "submodules": false,
+      "revision": "a43067b9d6717c8b4854b6c2301571fffa5133fb",
+      "url": "https://github.com/jhakonen/qjournalctl/archive/a43067b9d6717c8b4854b6c2301571fffa5133fb.tar.gz",
+      "hash": "1y4z84rmvnb7lyn6p0zfrqqzxnfbf0arvipwlc75mm8bnkzhkyx7"
+    },
+    "zen-browser": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "0xc000022070",
+        "repo": "zen-browser-flake"
+      },
+      "branch": "main",
+      "submodules": false,
+      "revision": "c79311e5b4f299ab3713b23dfbc98c853bb5f070",
+      "url": "https://github.com/0xc000022070/zen-browser-flake/archive/c79311e5b4f299ab3713b23dfbc98c853bb5f070.tar.gz",
+      "hash": "0lyhfv8xqvzbvh0fash1sihnnzdqh9q6jvcn0ihrn1mv87fq9ilf"
+    }
+  },
+  "version": 5
+}
