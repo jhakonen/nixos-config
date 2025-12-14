@@ -193,6 +193,13 @@
       "url": "https://github.com/jhakonen/qjournalctl/archive/a43067b9d6717c8b4854b6c2301571fffa5133fb.tar.gz",
       "hash": "sha256-p/sJ/7QL1VoOo/zGnRVwy9n+Mc7ug2usp2fZXTNBn/g="
     },
+    "tvheadend-image": {
+      "type": "Container",
+      "image_name": "lscr.io/linuxserver/tvheadend",
+      "image_tag": "latest",
+      "image_digest": "sha256:70324a635cf2f2cdac681638459a6128c255b0981c165850d25b90dd001146db",
+      "hash": "sha256-DWF/eGPawICsVUsI/yj3WhFUIYrppqnC1HkWDqa46rc="
+    },
     "zen-browser": {
       "type": "Git",
       "repository": {

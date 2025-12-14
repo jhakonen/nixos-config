@@ -1,10 +1,13 @@
-{ self, ... }:
+{ inputs, self, ... }:
 let
   inherit (self) catalog;
   videoGroupId = 26;
 in
 {
-  flake.modules.nixos.tvheadend = { config, ... }: {
+  flake.modules.nixos.tvheadend = { config, pkgs, ... }: let
+    imageSource = inputs.tvheadend-image { inherit pkgs; };
+    inherit (imageSource) image_name image_digest;
+  in {
     users.users.tvheadend = {
       description = "Tvheadend Service user";
       home        = "/var/lib/tvheadend";
@@ -16,7 +19,7 @@ in
     users.groups.tvheadend = {};
 
     virtualisation.oci-containers.containers.tvheadend = {
-      image = "lscr.io/linuxserver/tvheadend:latest";
+      image = "${image_name}@${image_digest}";
       environment = {
         PUID = toString config.users.users.tvheadend.uid;
         PGID = toString videoGroupId;
