@@ -134,6 +134,20 @@
       "url": "https://github.com/nixos/nixpkgs/archive/2fbfb1d73d239d2402a8fe03963e37aab15abe8b.tar.gz",
       "hash": "sha256-9VvC20PJPsleGMewwcWYKGzDIyjckEz8uWmT0vCDYK0="
     },
+    "nixpkgs-mistral-vibe": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "nixos",
+        "repo": "nixpkgs"
+      },
+      "branch": "master",
+      "submodules": false,
+      "revision": "7c645dcbd80de5ca4f216ef8415846f5e68a398f",
+      "url": "https://github.com/nixos/nixpkgs/archive/7c645dcbd80de5ca4f216ef8415846f5e68a398f.tar.gz",
+      "hash": "sha256-feL6PWkICEj+o1g4VA8hmKX8gm2iy/NPqIvCzn4sjf4=",
+      "frozen": true
+    },
     "nixpkgs-unstable": {
       "type": "Git",
       "repository": {

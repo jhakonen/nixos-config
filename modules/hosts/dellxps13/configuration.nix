@@ -6,6 +6,9 @@
 in {
   flake.modules.nixos.dellxps13 = { config, lib, pkgs, ... }: let
     super-productivity-latest = pkgs.callPackage ../../../packages/super-productivity.nix {};
+
+    pkgs-mistral-vibe = import inputs.nixpkgs-mistral-vibe { inherit (pkgs.stdenv) system; };
+
   in {
     nix.package = pkgs.lix;
     # Ota flaket käyttöön
@@ -292,6 +295,8 @@ in {
       inputs.qjournalctl.packages.${pkgs.stdenv.system}.default
       inputs.zen-browser.packages.${pkgs.stdenv.system}.default
       #inputs.mypanel.packages.${pkgs.stdenv.system}.default
+
+      pkgs-mistral-vibe.mistral-vibe
     ];
 
     fonts.packages = with pkgs; [
