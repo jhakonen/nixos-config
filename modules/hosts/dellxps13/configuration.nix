@@ -46,6 +46,7 @@ in {
       self.modules.nixos.service-monitoring
       self.modules.nixos.service-syncthing
 
+      self.modules.nixos.android-dev
       self.modules.nixos.beeper
       self.modules.nixos.common
       self.modules.nixos.flatpak
@@ -221,7 +222,6 @@ in {
     };
 
     users.users.jhakonen.extraGroups = [
-      "adbusers"
       "dialout"  # Sarjaportin käyttöoikeus
       "vboxusers"
     ];
@@ -329,8 +329,6 @@ in {
     #   enable = true;
     #   enableSSHSupport = true;
     # };
-
-    programs.adb.enable = true;
 
     # Ota AppImage tuki käyttöön
     # programs.appimage = {
