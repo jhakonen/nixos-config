@@ -1,30 +1,22 @@
+# Skannerin FTP profiilin asetukset
+#   - Host Address: kanto.lan.jhakonen.com
+#   - Username: ftp
+#   - Password: 123 (ei väliä, voi olla mitä vain)
+#   - Store Directory: paperless-consume
+# Loput oletuksilla.
+#
 { self, ... }: let
   inherit (self) catalog;
 in {
   flake.modules.nixos.paperless = { config, pkgs, ... }: let
-    # Näiden tulee vastata vastaavaa käyttäjää NAS:lla sillä tällä käyttäjällä
-    # on luku/kirjoitus oikeus skannerin syötekansioon
-    username = "skanneri";
-    userId = 1029;
-    userGroup = "users";  # Oletan että tämä on aina gid 100
-
     # Varmuuskopiokansio joka sisältää tietokannan ja dokumenttien exportin
     exportDir = "${config.services.paperless.dataDir}/exports";
   in {
-    # Luo käyttäjä jota käytetään palvelun ajamiseen
-    users.users.${username} = {
-      group = userGroup;
-      uid = userId;
-      home = config.services.paperless.dataDir;
-      isSystemUser = true;
-    };
+    imports = [ self.modules.nixos.vsftpd ];
 
     services.paperless = {
       enable = true;
       settings = {
-        # Inotify ei toimi FTP jaon kanssa, pollaa sen sijaan
-        # TODO: Toimiiko NFS:n yli?
-        PAPERLESS_CONSUMER_POLLING = 60;  # sekunnin välein
         # Formaatin muutoksen jälkeen aja komento: paperless-manage document_renamer
         PAPERLESS_FILENAME_FORMAT = "{{ created_year }}-{{ created_month }}-{{ created_day }} {{ title }}";
         PAPERLESS_OCR_LANGUAGE = "fin";
@@ -36,7 +28,10 @@ in {
       };
       port = catalog.services.paperless.port;
       address = "0.0.0.0";  # Salli pääsy palveluun koneen ulkopuolelta (oletuksena 'localhost')
-      user = username;
+
+      # Syötekansio hakemistoon johon anonymous FTP käyttäjä pystyy kirjoittamaan
+      consumptionDir = "${config.services.vsftpd.anonymousUserHome}/paperless-consume";
+      consumptionDirIsPublic = true;
     };
 
     systemd.tmpfiles.settings.paperless = {
@@ -70,13 +65,10 @@ in {
       repository = "rclone:nas:/backups/restic/paperless";
       # Paperlessin tietokanta ja dokumentit
       paths = [ config.services.paperless.dataDir ];
-      exclude = [ "${config.services.paperless.dataDir}/consume" ];
       backupPrepareCommand = ''
         # Exporttaa varmuuskopio
-        # Herätä NFS mountti niin että se näyttää kirjoitettavalta, muuten document_exporter herjaa siittä
-        ls ${exportDir}
-        chown ${username}:${userGroup} ${exportDir}
-        ${pkgs.util-linux}/bin/runuser -u ${username} -- ${config.services.paperless.manage}/bin/paperless-manage document_exporter --delete --use-filename-format --use-folder-prefix ${exportDir}
+        chown paperless:paperless ${exportDir}
+        ${pkgs.util-linux}/bin/runuser -u paperless -- ${config.services.paperless.manage}/bin/paperless-manage document_exporter --delete --use-filename-format --use-folder-prefix ${exportDir}
 
         # Vedä alas paperlessin palvelut jotta tietokannan tiedostot voidaan
         # varmuuskopioida turvallisesti
@@ -113,31 +105,6 @@ in {
         name = config.systemd.services.paperless-web.name;
       }
     ];
-
-    # Liitä dokumenttien syötekansio NFS:n yli NAS:lta. Tähän kansioon skanneri
-    # syöttää skannatut paperit
-    fileSystems.${config.services.paperless.consumptionDir} = {
-      device = "${catalog.nodes.nas.ip.private}:/volume1/scans";
-      fsType = "nfs";
-      options = [
-        "noauto"
-        "x-systemd.automount"
-        "x-systemd.after=network-online.target"
-        "x-systemd.mount-timeout=90"
-      ];
-    };
-
-    # Liitä Paperlessin exporttikansio NFS:n yli NAS:lta
-    fileSystems.${exportDir} = {
-      device = "${catalog.nodes.nas.ip.private}:/volume1/paperless";
-      fsType = "nfs";
-      options = [
-        "noauto"
-        "x-systemd.automount"
-        "x-systemd.after=network-online.target"
-        "x-systemd.mount-timeout=90"
-      ];
-    };
   };
 
   flake.modules.nixos.gatus = {
