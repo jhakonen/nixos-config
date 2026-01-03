@@ -1,93 +1,109 @@
 { lib, ... }:
 {
-  flake.modules.homeManager.firefox = { config, pkgs, ... }: let
-    cfg = config.my.programs.firefox;
+  # Perustuu ohjeisiin:
+  #   https://discourse.nixos.org/t/nixos-firefox-configuration-with-policies-preferences-extensions-search-engines-and-cookie-exceptions/73747
+  flake.modules.nixos.firefox = { config, pkgs, ... }: let
+    # about:support#addons-tbody
+    extensions = [
+      "gdpr@cavi.au.dk"                  # Consent-O-Matic
+      "@testpilot-containers"            # Firefox Multi-Account Containers
+      "search@kagi.com"                  # Kagi Search for Firefox
+      "addon@karakeep.app"               # Karakeep
+      "keepassxc-browser@keepassxc.org"  # KeePassXC-Browser
+    ];
+    rootDir = "/var/lib/www";
   in {
-    options.my.programs.firefox = {
-      enable = lib.mkEnableOption "Firefox web browser";
-    };
-
-    config = lib.mkIf cfg.enable {
-      programs.firefox = {
-        enable = true;
-        profiles.hakonen = {
-          extensions.packages = with pkgs; [
-            nur.repos.rycee.firefox-addons.consent-o-matic
-            nur.repos.rycee.firefox-addons.floccus
-            nur.repos.rycee.firefox-addons.kagi-search
-            nur.repos.rycee.firefox-addons.keepassxc-browser
-            nur.repos.rycee.firefox-addons.multi-account-containers
-            nur.repos.rycee.firefox-addons.ublacklist
+    programs.firefox = {
+      enable = true;
+      languagePacks = [ "fi" "en-US" ];
+      # https://mozilla.github.io/policy-templates/
+      policies = {
+        DisableFirefoxStudies = true;
+        SearchEngines = {
+          Remove = [
+              "eBay"
+              "Google"
+              "Bing"
+              "Ecosia"
+              "Wikipedia"
+              "Perplexity"
           ];
-          search = {
-            force = true;
-            default = "Kagi";
-            engines = {
-              "Kagi" = {
-                urls = [{
-                  template = "https://kagi.com/search?q={searchTerms}";
-                }];
-                icon = "https://kagi.com/favicon.ico";
-                definedAliases = [ "@k" ];
-              };
-              "StartPage" = {
-                urls = [{
-                  template = "https://www.startpage.com/sp/search?query={searchTerms}";
-                }];
-                icon = "https://www.startpage.com/favicon.ico";
-                definedAliases = [ "@sp" ];
-              };
-              "Noogle" = {
-                urls = [{
-                  template = "https://noogle.dev?term={searchTerms}";
-                }];
-                icon = "file://${../../data/noogle.png}";
-                definedAliases = [ "@nog" ];
-              };
-              "Nix Packages" = {
-                urls = [{
-                  template = "https://search.nixos.org/packages?query={searchTerms}";
-                }];
-                icon = "file://${../../data/nix-packages.png}";
-                definedAliases = [ "@np" ];
-              };
-              "Nix Options" = {
-                urls = [{
-                  template = "https://search.nixos.org/options?query={searchTerms}";
-                }];
-                icon = "file://${../../data/nix-options.png}";
-                definedAliases = [ "@no" ];
-              };
-              "NixOS Wiki" = {
-                urls = [{
-                  template = "https://wiki.nixos.org/w/index.php?search={searchTerms}";
-                }];
-                icon = "file://${../../data/nix-wiki.png}";
-                definedAliases = [ "@nw" ];
-              };
-              "bing".metaData.hidden = true;
-              "amazon.nl".metaData.hidden = true;
-              "google".metaData.hidden = true;
-            };
-            order = [ "Kagi" "Noogle" "Nix Packages" "Nix Options" "NixOS Wiki" "StartPage" ];
-          };
-          settings = {
-            # How to figure out which setting to change:
-            # 1. Make a backup of prefs.js:  $ cp ~/.mozilla/firefox/hakonen/{prefs.js,prefs.js.bak}
-            # 2. Make a change through Firefox's settings page
-            # 3. Compare prefs.js and the backup:  $ meld ~/.mozilla/firefox/hakonen/{prefs.js.bak,prefs.js}
-            #
-            "browser.backspace_action" = 0;  # Use backspace as back button
-            "browser.ctrlTab.sortByRecentlyUsed" = true;  # Ctrl+Tab cycles tabs on previously used basis
-            "browser.startup.page" = 3;  # Open previously open windows and tabs on startup
-            "browser.tabs.closeWindowWithLastTab" = false; # Älä sulje selainta kun viimeinen välilehti suljetaan
-            "privacy.donottrackheader.enabled" = true;
-            "privacy.globalprivacycontrol.enabled" = true;
-            "privacy.globalprivacycontrol.was_ever_enabled" = true;
-            "signon.rememberSignons" = false;  # Do not save usernames and passwords, I have KeepassXC for that
-          };
+          Add = [
+            {
+              "Name" = "Kagi";
+              "URLTemplate" = "https://kagi.com/search?q={searchTerms}";
+              "IconURL" = "https://kagi.com/favicon.ico";
+              "Alias" = "k";
+            }
+            {
+              "Name" = "StartPage";
+              "URLTemplate" = "https://www.startpage.com/sp/search?query={searchTerms}";
+              "IconURL" = "https://www.startpage.com/favicon.ico";
+              "Alias" = "sp";
+            }
+            {
+              "Name" = "Noogle";
+              "URLTemplate" = "https://noogle.dev?term={searchTerms}";
+              "IconURL" = "http://localhost:8787/noogle.png";
+              "Alias" = "nog";
+            }
+            {
+              "Name" = "Nix Packages";
+              "URLTemplate" = "https://search.nixos.org/packages?query={searchTerms}";
+              "IconURL" = "http://localhost:8787/nix-packages.png";
+              "Alias" = "np";
+            }
+            {
+              "Name" = "Nix Options";
+              "URLTemplate" = "https://search.nixos.org/options?query={searchTerms}";
+              "IconURL" = "http://localhost:8787/nix-options.png";
+              "Alias" = "no";
+            }
+            {
+              "Name" = "NixOS Wiki";
+              "URLTemplate" = "https://wiki.nixos.org/w/index.php?search={searchTerms}";
+              "IconURL" = "http://localhost:8787/nix-wiki.png";
+              "Alias" = "nw";
+            }
+          ];
+          Default = "Kagi";
         };
+        ExtensionSettings = builtins.listToAttrs (builtins.map (id: {
+          name = id;
+          value = {
+            install_url = "https://addons.mozilla.org/firefox/downloads/latest/${id}/latest.xpi";
+            installation_mode = "force_installed";
+          };
+        }) extensions);
+      };
+
+      # Miten tiedän mitä asetuksia muuttaa:
+      # 1. Tee varmuuskopio prefs.js tiedostosta:  $ cp ~/.mozilla/firefox/hakonen/{prefs.js,prefs.js.bak}
+      # 2. Tee muutos Firefoxin asetuksiin selaimen käyttöliittymän kautta
+      # 3. Vertaa prefs.js tiedostoa ja sen varmuuskopioita:  $ meld ~/.mozilla/firefox/hakonen/{prefs.js.bak,prefs.js}
+      preferences = {
+        "browser.backspace_action" = 0;  # Use backspace as back button
+        "browser.ctrlTab.sortByRecentlyUsed" = true;  # Ctrl+Tab cycles tabs on previously used basis
+        "browser.startup.page" = 3;  # Open previously open windows and tabs on startup
+        "browser.tabs.closeWindowWithLastTab" = false; # Älä sulje selainta kun viimeinen välilehti suljetaan
+        "privacy.donottrackheader.enabled" = true;
+        "privacy.globalprivacycontrol.enabled" = true;
+        "privacy.globalprivacycontrol.was_ever_enabled" = true;
+        "signon.rememberSignons" = false;  # Do not save usernames and passwords, I have KeepassXC for that
       };
     };
+    # Firefox ei lataa hakukoneiden ikoneita file:-protokollalla joten tarjoile Nix-ikonit
+    # HTTP-palvelimen kautta. Palvelin on osoitteessa http://localhost:8787/.
+    services.static-web-server = {
+      enable = true;
+      root = rootDir;
+    };
+    systemd.tmpfiles.rules = [
+      "d ${rootDir} 0755"
+      "C ${rootDir}/noogle.png - - - - ${../../data/noogle.png}"
+      "C ${rootDir}/nix-packages.png - - - - ${../../data/nix-packages.png}"
+      "C ${rootDir}/nix-options.png - - - - ${../../data/nix-options.png}"
+      "C ${rootDir}/nix-wiki.png - - - - ${../../data/nix-wiki.png}"
+    ];
   };
 }

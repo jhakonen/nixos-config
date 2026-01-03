@@ -3,7 +3,6 @@
 in {
   flake.modules.homeManager.dellxps13-jhakonen = { config, pkgs, ... }: {
     imports = [
-      self.modules.homeManager.firefox
       self.modules.homeManager.git
       # self.modules.homeManager.kanshi
       self.modules.homeManager.mqtt-client
@@ -81,8 +80,6 @@ in {
     # targets.genericLinux.enable = true;
 
     roles.git.githubIdentityFile = config.age.secrets.github-id-rsa.path;
-
-    my.programs.firefox.enable = true;
 
     # https://wiki.nixos.org/wiki/Default_applications
     # Tiedostotyypin näkee komennolla "file -i <tiedoston polku>"

@@ -49,6 +49,7 @@ in {
       self.modules.nixos.android-dev
       self.modules.nixos.beeper
       self.modules.nixos.common
+      self.modules.nixos.firefox
       self.modules.nixos.flatpak
       self.modules.nixos.koti
       # self.modules.nixos.nemo
