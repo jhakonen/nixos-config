@@ -40,7 +40,6 @@ in {
       inputs.nixos-hardware.nixosModules.common-cpu-intel
       inputs.nixos-hardware.nixosModules.common-pc-laptop
       inputs.nixos-hardware.nixosModules.common-pc-ssd
-      inputs.nur.modules.nixos.default
 
       self.modules.nixos.service-restic
       self.modules.nixos.service-monitoring
@@ -240,7 +239,6 @@ in {
       calibre
       chromium
       claude-code
-      #nur.repos.shadowrz.klassy-qt6  # KDE6+ teema
       discord
       easyeffects
       errands

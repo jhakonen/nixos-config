@@ -9,7 +9,6 @@ in {
       # self.modules.homeManager.nemo
       inputs.agenix.homeManagerModules.age
       # inputs.jhhapanel.homeManagerModules.default
-      inputs.nur.modules.homeManager.default
 
       # Hyprland modules
       # self.modules.homeManager.hyprland

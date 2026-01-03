@@ -174,19 +174,6 @@
       "url": "https://github.com/andir/npins/archive/84a362d77fb3c487ad759c80547facb028f4d96f.tar.gz",
       "hash": "sha256-EWA14ovB/5UFiK9fmEYtofIMbGnVeJ/4yK0aJEJXtsI="
     },
-    "nur": {
-      "type": "Git",
-      "repository": {
-        "type": "GitHub",
-        "owner": "nix-community",
-        "repo": "NUR"
-      },
-      "branch": "main",
-      "submodules": false,
-      "revision": "fcee58015b21fc5c7f527101458826a51eb0a456",
-      "url": "https://github.com/nix-community/NUR/archive/fcee58015b21fc5c7f527101458826a51eb0a456.tar.gz",
-      "hash": "sha256-zxJQhHjMPadNGUx9Uxv2qaadVZTnJBLtTZtsjqMzS8M="
-    },
     "opencloud-image": {
       "type": "Container",
       "image_name": "opencloudeu/opencloud-rolling",
