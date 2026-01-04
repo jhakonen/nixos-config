@@ -56,6 +56,19 @@
   };
 
   services = addServiceNames {
+    beszel = {
+      host = nodes.nassuvm;
+      port = 10000;
+      dashy = {
+        section = "valvonta";
+        description = "Valvontapaneeli";
+        icon = "https://beszel.nassuvm.lan.jhakonen.com/static/icon.svg";
+      };
+      public = {
+        domain = "beszel.nassuvm.lan.jhakonen.com";
+        port = 443;
+      };
+    };
     calibre-web = {
       host = nodes.kanto;
       port = 17000;
@@ -104,7 +117,7 @@
       host = nodes.kanto;
       port = 5000;
       dashy = {
-        section = "palvelut";
+        section = "valvonta";
         description = "Valvontapaneeli";
         icon = "hl-gatus";
       };

@@ -21,12 +21,15 @@
       };
     };
 
-    services.nginx.virtualHosts.default = {
-      default = true;
-      # Vastaa määrittelemättömään domainiin tai porttiin 403 virheellä
-      locations."/".extraConfig = ''
-        deny all;
-      '';
+    services.nginx = {
+      enable = true;
+      virtualHosts.default = {
+        default = true;
+        # Vastaa määrittelemättömään domainiin tai porttiin 403 virheellä
+        locations."/".extraConfig = ''
+          deny all;
+        '';
+      };
     };
 
     # Anna nginxille pääsy let's encrypt serifikaattiin

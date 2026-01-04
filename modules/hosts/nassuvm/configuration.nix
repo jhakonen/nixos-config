@@ -8,11 +8,16 @@
     nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
     imports = [
+      inputs.agenix.nixosModules.default
       inputs.home-manager.nixosModules.home-manager
+
+      inputs.self.modules.nixos.service-restic
 
       inputs.self.modules.nixos.common
       inputs.self.modules.nixos.netdata-parent
+      inputs.self.modules.nixos.nginx
       inputs.self.modules.nixos.nix-cleanup
+      inputs.self.modules.nixos.tailscale
     ];
 
     boot.loader.grub.enable = true;
@@ -40,6 +45,11 @@
     environment.systemPackages = with pkgs; [
       firefox
       simplescreenrecorder
+    ];
+
+    # Ota Let's Encryptin sertifikaatti käyttöön
+    security.acme.certs."nassuvm.lan.jhakonen.com".extraDomainNames = [
+      "*.nassuvm.lan.jhakonen.com"
     ];
 
     system.stateVersion = "23.05";
