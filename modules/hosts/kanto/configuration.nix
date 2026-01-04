@@ -27,7 +27,6 @@ in {
       self.modules.nixos.koti
       self.modules.nixos.mqtt-server
       self.modules.nixos.n8n
-      self.modules.nixos.netdata-child
       self.modules.nixos.nginx
       self.modules.nixos.nix-cleanup
       self.modules.nixos.opencloud

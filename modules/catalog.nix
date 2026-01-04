@@ -261,15 +261,6 @@
         icon = "https://nas:5001/webman/favicon.ico";
       };
     };
-    netdata-nassuvm = {
-      host = nodes.nassuvm;
-      port = 19999;
-      dashy = {
-        section = "valvonta";
-        description = "Netdata - nassuvm";
-        icon = "hl-netdata";
-      };
-    };
     opencloud = {
       host = nodes.kanto;
       port = 21000;

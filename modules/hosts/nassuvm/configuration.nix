@@ -14,7 +14,6 @@
       inputs.self.modules.nixos.service-restic
 
       inputs.self.modules.nixos.common
-      inputs.self.modules.nixos.netdata-parent
       inputs.self.modules.nixos.nginx
       inputs.self.modules.nixos.nix-cleanup
       inputs.self.modules.nixos.tailscale
