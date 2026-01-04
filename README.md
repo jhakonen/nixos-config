@@ -103,6 +103,14 @@ nh clean all --keep 5 --keep-since 30d
 
 Minulla on myös automaattinen puhdistus otettu käyttöön kaikilla NixOS koneilla joten tätä ei tarvitse välttämättä tehdä.
 
+# Nix-konfiguraation debuggaus
+
+```bash
+nix repl
+nix-repl> :l .
+nix-repl> nixosConfigurations.dellxps13.config
+```
+
 # Salaisuudet
 
 Salaisuudet on jaettu kahteen eri kansioon:
