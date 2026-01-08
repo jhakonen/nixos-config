@@ -51,18 +51,30 @@ in
     };
 
     # Varmuuskopiointi
-    #   Käynnistä: systemctl start restic-backups-n8n.service
-    #   Snapshotit: sudo restic-n8n snapshots
-    my.services.restic.backups.n8n = {
-      repository = "rclone:nas:/backups/restic/n8n";
-      paths = [
-        "/var/lib/n8n"
-        "/var/lib/private/n8n"
-      ];
-      backupPrepareCommand = "systemctl stop n8n.service";
-      backupCleanupCommand = "systemctl start n8n.service";
-      checkOpts = [ "--read-data" ];
-      pruneOpts = [ "--keep-daily 7" "--keep-weekly 4" "--keep-monthly 12" ];
+    #   Käynnistä:
+    #     systemctl start restic-backups-n8n-oma.service
+    #     systemctl start restic-backups-n8n-veli.service
+    #   Snapshotit:
+    #     sudo restic-n8n-oma snapshots
+    #     sudo restic-n8n-veli snapshots
+    my.services.restic.backups = let
+      bConfig = {
+        paths = [
+          "/var/lib/n8n"
+          "/var/lib/private/n8n"
+        ];
+        backupPrepareCommand = "systemctl stop n8n.service";
+        backupCleanupCommand = "systemctl start n8n.service";
+      };
+    in {
+      n8n-oma = bConfig // {
+        repository = "rclone:nas-oma:/backups/restic/n8n";
+        timerConfig.OnCalendar = "01:00";
+      };
+      n8n-veli = bConfig // {
+        repository = "rclone:nas-veli:/homes/janne/restic/n8n";
+        timerConfig.OnCalendar = "02:00";
+      };
     };
   };
 

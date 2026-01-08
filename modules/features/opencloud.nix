@@ -46,15 +46,28 @@ in
     ];
 
     # Vamuuskopiointi
-    #   Käynnistä: systemctl start restic-backups-opencloud.service
-    #   Snapshotit: sudo restic-opencloud snapshots
-    my.services.restic.backups.opencloud = {
-      repository = "rclone:nas:/backups/restic/opencloud";
-      paths = [ dataDir ];
-      backupPrepareCommand = "systemctl stop opencloud.service";
-      backupCleanupCommand = "systemctl start opencloud.service";
-      checkOpts = [ "--read-data-subset" "10%" ];
-      pruneOpts = [ "--keep-daily 7" "--keep-weekly 4" "--keep-monthly 12" ];
+    #   Käynnistä:
+    #     systemctl start restic-backups-opencloud-oma.service
+    #     systemctl start restic-backups-opencloud-veli.service
+    #   Snapshotit:
+    #     sudo restic-opencloud-oma snapshots
+    #     sudo restic-opencloud-veli snapshots
+    my.services.restic.backups = let
+      bConfig = {
+        paths = [ dataDir ];
+        backupPrepareCommand = "systemctl stop opencloud.service";
+        backupCleanupCommand = "systemctl start opencloud.service";
+        checkOpts = [ "--read-data-subset" "10%" ];
+      };
+    in {
+      opencloud-oma = bConfig // {
+        repository = "rclone:nas-oma:/backups/restic/opencloud";
+        timerConfig.OnCalendar = "01:00";
+      };
+      opencloud-veli = bConfig // {
+        repository = "rclone:nas-veli:/homes/janne/restic/opencloud";
+        timerConfig.OnCalendar = "02:00";
+      };
     };
   };
 

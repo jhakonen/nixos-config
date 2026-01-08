@@ -157,26 +157,39 @@ in {
     hardware.flirc.enable = true;
 
     # Vamuuskopiointi
-    #   Käynnistä: systemctl start restic-backups-jhakonen.service
-    #   Snapshotit: sudo restic-jhakonen snapshots
-    my.services.restic.backups.jhakonen = {
-      repository = "rclone:nas:/backups/restic/dellxps13-jhakonen";
-      exclude = [
-        ".cache"
-        ".Trash*"
-        ".local/share/Trash"
-        ".local/share/baloo"
-        ".steam"
-        "Calibre"
-        "Keepass"
-        "OpenCloud"
-        "Syncthing"
-      ];
-      paths = [
-        "/home/jhakonen"
-      ];
-      checkOpts = [ "--read-data-subset" "10%" ];
-      pruneOpts = [ "--keep-daily 7" "--keep-weekly 4" "--keep-monthly 12" ];
+    #   Käynnistä:
+    #     systemctl start restic-backups-jhakonen-oma.service
+    #     systemctl start restic-backups-jhakonen-veli.service
+    #   Snapshotit:
+    #     sudo restic-jhakonen-oma snapshots
+    #     sudo restic-jhakonen-veli snapshots
+    my.services.restic.backups = let
+      bConfig = {
+        exclude = [
+          ".cache"
+          ".Trash*"
+          ".local/share/Trash"
+          ".local/share/baloo"
+          ".steam"
+          "Calibre"
+          "Keepass"
+          "OpenCloud"
+          "Syncthing"
+        ];
+        paths = [
+          "/home/jhakonen"
+        ];
+        checkOpts = [ "--read-data-subset" "10%" ];
+      };
+    in {
+      jhakonen-oma = bConfig // {
+        repository = "rclone:nas-oma:/backups/restic/dellxps13-jhakonen";
+        timerConfig.OnCalendar = "01:00";
+      };
+      jhakonen-veli = bConfig // {
+        repository = "rclone:nas-veli:/homes/janne/restic/dellxps13-jhakonen";
+        timerConfig.OnCalendar = "02:00";
+      };
     };
 
     services.openssh = {

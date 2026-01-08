@@ -41,13 +41,25 @@ in {
     };
 
     # Varmuuskopiointi
-    #   Käynnistä: systemctl start restic-backups-immich.service
-    #   Snapshotit: sudo restic-immich snapshots
-    my.services.restic.backups.immich = {
-      repository = "rclone:nas:/backups/restic/immich";
-      paths = [ config.services.immich.mediaLocation ];
-      checkOpts = [ "--read-data" ];
-      pruneOpts = [ "--keep-daily 7" "--keep-weekly 4" "--keep-monthly 12" ];
+    #   Käynnistä:
+    #     systemctl start restic-backups-immich-oma.service
+    #     systemctl start restic-backups-immich-veli.service
+    #   Snapshotit:
+    #     sudo restic-immich-oma snapshots
+    #     sudo restic-immich-veli snapshots
+    my.services.restic.backups = let
+      bConfig = {
+        paths = [ config.services.immich.mediaLocation ];
+      };
+    in {
+      immich-oma = bConfig // {
+        repository = "rclone:nas-oma:/backups/restic/immich";
+        timerConfig.OnCalendar = "01:00";
+      };
+      immich-veli = bConfig // {
+        repository = "rclone:nas-veli:/homes/janne/restic/immich";
+        timerConfig.OnCalendar = "02:00";
+      };
     };
 
     # Palvelun valvonta

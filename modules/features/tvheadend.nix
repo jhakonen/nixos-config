@@ -51,13 +51,25 @@ in
     ];
 
     # Varmuuskopiointi
-    #   Käynnistä: systemctl start restic-backups-tvheadend.service
-    #   Snapshotit: sudo restic-tvheadend snapshots
-    my.services.restic.backups.tvheadend = {
-      repository = "rclone:nas:/backups/restic/tvheadend";
-      paths = [ "/var/lib/tvheadend/config" ];
-      checkOpts = [ "--read-data" ];
-      pruneOpts = [ "--keep-daily 7" "--keep-weekly 4" "--keep-monthly 12" ];
+    #   Käynnistä:
+    #     systemctl start restic-backups-tvheadend-oma.service
+    #     systemctl start restic-backups-tvheadend-veli.service
+    #   Snapshotit:
+    #     sudo restic-tvheadend-oma snapshots
+    #     sudo restic-tvheadend-veli snapshots
+    my.services.restic.backups = let
+      bConfig = {
+        paths = [ "/var/lib/tvheadend/config" ];
+      };
+    in {
+      tvheadend-oma = bConfig // {
+        repository = "rclone:nas-oma:/backups/restic/tvheadend";
+        timerConfig.OnCalendar = "01:00";
+      };
+      tvheadend-veli = bConfig // {
+        repository = "rclone:nas-veli:/homes/janne/restic/tvheadend";
+        timerConfig.OnCalendar = "02:00";
+      };
     };
 
     # Palvelun valvonta

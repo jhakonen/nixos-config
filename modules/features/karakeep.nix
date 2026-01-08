@@ -37,15 +37,27 @@ in {
     };
 
     # Varmuuskopiointi
-    #   Käynnistä: systemctl start restic-backups-karakeep.service
-    #   Snapshotit: sudo restic-karakeep snapshots
-    my.services.restic.backups.karakeep = {
-      repository = "rclone:nas:/backups/restic/karakeep";
-      paths = [ "/var/lib/karakeep" ];
-      backupPrepareCommand = "systemctl stop karakeep-browser.service karakeep-init.service karakeep-web.service karakeep-workers.service";
-      backupCleanupCommand = "systemctl start karakeep-browser.service karakeep-init.service karakeep-web.service karakeep-workers.service";
-      checkOpts = [ "--read-data" ];
-      pruneOpts = [ "--keep-daily 7" "--keep-weekly 4" "--keep-monthly 12" ];
+    #   Käynnistä:
+    #     systemctl start restic-backups-karakeep-oma.service
+    #     systemctl start restic-backups-karakeep-veli.service
+    #   Snapshotit:
+    #     sudo restic-karakeep-oma snapshots
+    #     sudo restic-karakeep-veli snapshots
+    my.services.restic.backups = let
+      bConfig = {
+        paths = [ "/var/lib/karakeep" ];
+        backupPrepareCommand = "systemctl stop karakeep-browser.service karakeep-init.service karakeep-web.service karakeep-workers.service";
+        backupCleanupCommand = "systemctl start karakeep-browser.service karakeep-init.service karakeep-web.service karakeep-workers.service";
+      };
+    in {
+      karakeep-oma = bConfig // {
+        repository = "rclone:nas-oma:/backups/restic/karakeep";
+        timerConfig.OnCalendar = "01:00";
+      };
+      karakeep-veli = bConfig // {
+        repository = "rclone:nas-veli:/homes/janne/restic/karakeep";
+        timerConfig.OnCalendar = "02:00";
+      };
     };
 
     # Palvelun valvonta

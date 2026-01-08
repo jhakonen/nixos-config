@@ -109,14 +109,26 @@ in {
     networking.firewall.allowedTCPPorts = [ catalog.services.zigbee2mqtt.port ];
 
     # Varmuuskopiointi
-    #   Käynnistä: systemctl start restic-backups-zigbee2mqtt.service
-    #   Snapshotit: sudo restic-zigbee2mqtt snapshots
-    my.services.restic.backups.zigbee2mqtt = {
-      repository = "rclone:nas:/backups/restic/zigbee2mqtt";
-      paths = [ config.services.zigbee2mqtt.dataDir ];
-      exclude = [ "${config.services.zigbee2mqtt.dataDir}/log" ];
-      checkOpts = [ "--read-data" ];
-      pruneOpts = [ "--keep-daily 7" "--keep-weekly 4" "--keep-monthly 12" ];
+    #   Käynnistä:
+    #     systemctl start restic-backups-zigbee2mqtt-oma.service
+    #     systemctl start restic-backups-zigbee2mqtt-veli.service
+    #   Snapshotit:
+    #     sudo restic-zigbee2mqtt-oma snapshots
+    #     sudo restic-zigbee2mqtt-veli snapshots
+    my.services.restic.backups = let
+      bConfig = {
+        paths = [ config.services.zigbee2mqtt.dataDir ];
+        exclude = [ "${config.services.zigbee2mqtt.dataDir}/log" ];
+      };
+    in {
+      zigbee2mqtt-oma = bConfig // {
+        repository = "rclone:nas-oma:/backups/restic/zigbee2mqtt";
+        timerConfig.OnCalendar = "01:00";
+      };
+      zigbee2mqtt-veli = bConfig // {
+        repository = "rclone:nas-veli:/homes/janne/restic/zigbee2mqtt";
+        timerConfig.OnCalendar = "02:00";
+      };
     };
 
     # Palvelun valvonta

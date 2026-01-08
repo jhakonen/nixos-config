@@ -27,18 +27,30 @@ in {
     };
 
     # Varmuuskopiointi
-    #   Käynnistä: systemctl start restic-backups-beszel-hub.service
-    #   Snapshotit: sudo restic-beszel-hub snapshots
-    my.services.restic.backups.beszel-hub = {
-      repository = "rclone:nas:/backups/restic/beszel-hub";
-      paths = [
-        "/var/lib/beszel-hub"
-        "/var/lib/private/beszel-hub"
-      ];
-      backupPrepareCommand = "systemctl stop beszel-hub.service";
-      backupCleanupCommand = "systemctl start beszel-hub.service";
-      checkOpts = [ "--read-data" ];
-      pruneOpts = [ "--keep-daily 7" "--keep-weekly 4" "--keep-monthly 12" ];
+    #   Käynnistä:
+    #     systemctl start restic-backups-beszel-hub-oma.service
+    #     systemctl start restic-backups-beszel-hub-veli.service
+    #   Snapshotit:
+    #     sudo restic-beszel-hub-oma snapshots
+    #     sudo restic-beszel-hub-veli snapshots
+    my.services.restic.backups = let
+      bConfig = {
+        paths = [
+          "/var/lib/beszel-hub"
+          "/var/lib/private/beszel-hub"
+        ];
+        backupPrepareCommand = "systemctl stop beszel-hub.service";
+        backupCleanupCommand = "systemctl start beszel-hub.service";
+      };
+    in {
+      beszel-hub-oma = bConfig // {
+        repository = "rclone:nas-oma:/backups/restic/beszel-hub";
+        timerConfig.OnCalendar = "01:00";
+      };
+      beszel-hub-veli = bConfig // {
+        repository = "rclone:nas-veli:/homes/janne/restic/beszel-hub";
+        timerConfig.OnCalendar = "02:00";
+      };
     };
   };
 

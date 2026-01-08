@@ -96,18 +96,30 @@ in
     networking.firewall.allowedTCPPorts = [ catalog.services.home-assistant.public.port ];
 
     # Varmuuskopiointi
-    #   Käynnistä: systemctl start restic-backups-home-assistant.service
-    #   Snapshotit: sudo restic-home-assistant snapshots
-    my.services.restic.backups.home-assistant = {
-      repository = "rclone:nas:/backups/restic/home-assistant";
-      paths = [
-        config.services.home-assistant.configDir
-        "/var/lib/private/esphome"
-      ];
-      backupPrepareCommand = "systemctl stop home-assistant.service";
-      backupCleanupCommand = "systemctl start home-assistant.service";
-      checkOpts = [ "--read-data" ];
-      pruneOpts = [ "--keep-daily 7" "--keep-weekly 4" "--keep-monthly 12" ];
+    #   Käynnistä:
+    #     systemctl start restic-backups-home-assistant-oma.service
+    #     systemctl start restic-backups-home-assistant-veli.service
+    #   Snapshotit:
+    #     sudo restic-home-assistant-oma snapshots
+    #     sudo restic-home-assistant-veli snapshots
+    my.services.restic.backups = let
+      bConfig = {
+        paths = [
+          config.services.home-assistant.configDir
+          "/var/lib/private/esphome"
+        ];
+        backupPrepareCommand = "systemctl stop home-assistant.service";
+        backupCleanupCommand = "systemctl start home-assistant.service";
+      };
+    in {
+      home-assistant-oma = bConfig // {
+        repository = "rclone:nas-oma:/backups/restic/home-assistant";
+        timerConfig.OnCalendar = "01:00";
+      };
+      home-assistant-veli = bConfig // {
+        repository = "rclone:nas-veli:/homes/janne/restic/home-assistant";
+        timerConfig.OnCalendar = "02:00";
+      };
     };
 
     # Palvelun valvonta

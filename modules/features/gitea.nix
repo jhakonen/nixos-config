@@ -32,15 +32,27 @@ in
     };
 
     # Varmuuskopiointi
-    #   Käynnistä: systemctl start restic-backups-gitea.service
-    #   Snapshotit: sudo restic-gitea snapshots
-    my.services.restic.backups.gitea = {
-      repository = "rclone:nas:/backups/restic/gitea";
-      paths = [ config.services.gitea.stateDir ];
-      backupPrepareCommand = "systemctl stop gitea.service";
-      backupCleanupCommand = "systemctl start gitea.service";
-      checkOpts = [ "--read-data" ];
-      pruneOpts = [ "--keep-daily 7" "--keep-weekly 4" "--keep-monthly 12" ];
+    #   Käynnistä:
+    #     systemctl start restic-backups-gitea-oma.service
+    #     systemctl start restic-backups-gitea-veli.service
+    #   Snapshotit:
+    #     sudo restic-gitea-oma snapshots
+    #     sudo restic-gitea-veli snapshots
+    my.services.restic.backups = let
+      bConfig = {
+        paths = [ config.services.gitea.stateDir ];
+        backupPrepareCommand = "systemctl stop gitea.service";
+        backupCleanupCommand = "systemctl start gitea.service";
+      };
+    in {
+      gitea-oma = bConfig // {
+        repository = "rclone:nas-oma:/backups/restic/gitea";
+        timerConfig.OnCalendar = "01:00";
+      };
+      gitea-veli = bConfig // {
+        repository = "rclone:nas-veli:/homes/janne/restic/gitea";
+        timerConfig.OnCalendar = "02:00";
+      };
     };
 
     # Palvelun valvonta

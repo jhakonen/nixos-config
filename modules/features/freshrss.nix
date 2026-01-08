@@ -33,18 +33,30 @@ in
     };
 
     # Varmuuskopiointi
-    #   Käynnistä: systemctl start restic-backups-freshrss.service
-    #   Snapshotit: sudo restic-freshrss snapshots
-    my.services.restic.backups.freshrss = {
-      repository = "rclone:nas:/backups/restic/freshrss";
-      paths = [ config.services.freshrss.dataDir ];
-      backupPrepareCommand = ''
-        systemctl stop freshrss-updater.timer
-        systemctl stop freshrss-updater.service
-      '';
-      backupCleanupCommand = "systemctl start freshrss-updater.timer";
-      checkOpts = [ "--read-data" ];
-      pruneOpts = [ "--keep-daily 7" "--keep-weekly 4" "--keep-monthly 12" ];
+    #   Käynnistä:
+    #     systemctl start restic-backups-freshrss-oma.service
+    #     systemctl start restic-backups-freshrss-veli.service
+    #   Snapshotit:
+    #     sudo restic-freshrss-oma snapshots
+    #     sudo restic-freshrss-veli snapshots
+    my.services.restic.backups = let
+      bConfig = {
+        paths = [ config.services.freshrss.dataDir ];
+        backupPrepareCommand = ''
+          systemctl stop freshrss-updater.timer
+          systemctl stop freshrss-updater.service
+        '';
+        backupCleanupCommand = "systemctl start freshrss-updater.timer";
+      };
+    in {
+      freshrss-oma = bConfig // {
+        repository = "rclone:nas-oma:/backups/restic/freshrss";
+        timerConfig.OnCalendar = "01:00";
+      };
+      freshrss-veli = bConfig // {
+        repository = "rclone:nas-veli:/homes/janne/restic/freshrss";
+        timerConfig.OnCalendar = "02:00";
+      };
     };
 
     # Palvelun valvonta

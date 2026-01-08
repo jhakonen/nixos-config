@@ -22,19 +22,20 @@ in
         restic
       ];
 
-      services.restic.backups = builtins.mapAttrs (name: options: lib.mkMerge [
-        options
+      services.restic.backups = builtins.mapAttrs (name: options:
         {
           initialize = true;
           passwordFile = config.age.secrets.restic-password.path;
+          checkOpts = [ "--read-data" ];
           pruneOpts = [
-            "--keep-daily 14"
+            "--keep-daily 7"
             "--keep-weekly 4"
-            "--keep-monthly 2"
+            "--keep-monthly 12"
+            "--keep-yearly 3"
           ];
           rcloneConfigFile = config.age.secrets.restic-nas-smb-config.path;
-        }
-      ]) config.my.services.restic.backups;
+        } // options
+      ) config.my.services.restic.backups;
     };
   };
 }

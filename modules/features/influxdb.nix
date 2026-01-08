@@ -17,19 +17,31 @@ in {
 
 
     # Varmuuskopiointi
-    #   Käynnistä: systemctl start restic-backups-influxdb.service
-    #   Snapshotit: sudo restic-influxdb snapshots
-    my.services.restic.backups.influxdb = {
-      repository = "rclone:nas:/backups/restic/influxdb";
-      paths = [ backupDir ];
-      backupPrepareCommand = ''
-        rm -rf ${backupDir}
-        ${pkgs.influxdb}/bin/influxd backup -portable ${backupDir}
-        systemctl stop influxdb.service
-      '';
-      backupCleanupCommand = "systemctl start influxdb.service";
-      checkOpts = [ "--read-data" ];
-      pruneOpts = [ "--keep-daily 7" "--keep-weekly 4" "--keep-monthly 12" ];
+    #   Käynnistä:
+    #     systemctl start restic-backups-influxdb-oma.service
+    #     systemctl start restic-backups-influxdb-veli.service
+    #   Snapshotit:
+    #     sudo restic-influxdb-oma snapshots
+    #     sudo restic-influxdb-veli snapshots
+    my.services.restic.backups = let
+      bConfig = {
+        paths = [ backupDir ];
+        backupPrepareCommand = ''
+          rm -rf ${backupDir}
+          ${pkgs.influxdb}/bin/influxd backup -portable ${backupDir}
+          systemctl stop influxdb.service
+        '';
+        backupCleanupCommand = "systemctl start influxdb.service";
+      };
+    in {
+      influxdb-oma = bConfig // {
+        repository = "rclone:nas-oma:/backups/restic/influxdb";
+        timerConfig.OnCalendar = "01:00";
+      };
+      influxdb-veli = bConfig // {
+        repository = "rclone:nas-veli:/homes/janne/restic/influxdb";
+        timerConfig.OnCalendar = "02:00";
+      };
     };
 
     # Palvelun valvonta

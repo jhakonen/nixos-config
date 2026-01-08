@@ -41,15 +41,27 @@ in
     };
 
     # Varmuuskopiointi
-    #   Käynnistä: systemctl start restic-backups-radicale.service
-    #   Snapshotit: sudo restic-radicale snapshots
-    my.services.restic.backups.radicale = {
-      repository = "rclone:nas:/backups/restic/radicale";
-      paths = [ "/var/lib/radicale" ];
-      backupPrepareCommand = "systemctl stop radicale.service";
-      backupCleanupCommand = "systemctl start radicale.service";
-      checkOpts = [ "--read-data" ];
-      pruneOpts = [ "--keep-daily 7" "--keep-weekly 4" "--keep-monthly 12" ];
+    #   Käynnistä:
+    #     systemctl start restic-backups-radicale-oma.service
+    #     systemctl start restic-backups-radicale-veli.service
+    #   Snapshotit:
+    #     sudo restic-radicale-oma snapshots
+    #     sudo restic-radicale-veli snapshots
+    my.services.restic.backups = let
+      bConfig = {
+        paths = [ "/var/lib/radicale" ];
+        backupPrepareCommand = "systemctl stop radicale.service";
+        backupCleanupCommand = "systemctl start radicale.service";
+      };
+    in {
+      radicale-oma = bConfig // {
+        repository = "rclone:nas-oma:/backups/restic/radicale";
+        timerConfig.OnCalendar = "01:00";
+      };
+      radicale-veli = bConfig // {
+        repository = "rclone:nas-veli:/homes/janne/restic/radicale";
+        timerConfig.OnCalendar = "02:00";
+      };
     };
   };
 

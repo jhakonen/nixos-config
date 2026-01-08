@@ -45,15 +45,27 @@ in
     networking.firewall.allowedTCPPorts = [ catalog.services.grafana.public.port ];
 
     # Varmuuskopiointi
-    #   Käynnistä: systemctl start restic-backups-grafana.service
-    #   Snapshotit: sudo restic-grafana snapshots
-    my.services.restic.backups.grafana = {
-      repository = "rclone:nas:/backups/restic/grafana";
-      paths = [ config.services.grafana.dataDir ];
-      backupPrepareCommand = "systemctl stop grafana.service";
-      backupCleanupCommand = "systemctl start grafana.service";
-      checkOpts = [ "--read-data" ];
-      pruneOpts = [ "--keep-daily 7" "--keep-weekly 4" "--keep-monthly 12" ];
+    #   Käynnistä:
+    #     systemctl start restic-backups-grafana-oma.service
+    #     systemctl start restic-backups-grafana-veli.service
+    #   Snapshotit:
+    #     sudo restic-grafana-oma snapshots
+    #     sudo restic-grafana-veli snapshots
+    my.services.restic.backups = let
+      bConfig = {
+        paths = [ config.services.grafana.dataDir ];
+        backupPrepareCommand = "systemctl stop grafana.service";
+        backupCleanupCommand = "systemctl start grafana.service";
+      };
+    in {
+      grafana-oma = bConfig // {
+        repository = "rclone:nas-oma:/backups/restic/grafana";
+        timerConfig.OnCalendar = "01:00";
+      };
+      grafana-veli = bConfig // {
+        repository = "rclone:nas-veli:/homes/janne/restic/grafana";
+        timerConfig.OnCalendar = "02:00";
+      };
     };
 
     # Palvelun valvonta

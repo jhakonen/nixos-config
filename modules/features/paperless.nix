@@ -59,27 +59,39 @@ in {
     networking.firewall.allowedTCPPorts = [ catalog.services.paperless.public.port ];
 
     # Varmuuskopiointi
-    #   Käynnistä: systemctl start restic-backups-paperless.service
-    #   Snapshotit: sudo restic-paperless snapshots
-    my.services.restic.backups.paperless = {
-      repository = "rclone:nas:/backups/restic/paperless";
-      # Paperlessin tietokanta ja dokumentit
-      paths = [ config.services.paperless.dataDir ];
-      backupPrepareCommand = ''
-        # Exporttaa varmuuskopio
-        chown paperless:paperless ${exportDir}
-        ${pkgs.util-linux}/bin/runuser -u paperless -- ${config.services.paperless.manage}/bin/paperless-manage document_exporter --delete --use-filename-format --use-folder-prefix ${exportDir}
+    #   Käynnistä:
+    #     systemctl start restic-backups-paperless-oma.service
+    #     systemctl start restic-backups-paperless-veli.service
+    #   Snapshotit:
+    #     sudo restic-paperless-oma snapshots
+    #     sudo restic-paperless-veli snapshots
+    my.services.restic.backups = let
+      bConfig = {
+        # Paperlessin tietokanta ja dokumentit
+        paths = [ config.services.paperless.dataDir ];
+        backupPrepareCommand = ''
+          # Exporttaa varmuuskopio
+          chown paperless:paperless ${exportDir}
+          ${pkgs.util-linux}/bin/runuser -u paperless -- ${config.services.paperless.manage}/bin/paperless-manage document_exporter --delete --use-filename-format --use-folder-prefix ${exportDir}
 
-        # Vedä alas paperlessin palvelut jotta tietokannan tiedostot voidaan
-        # varmuuskopioida turvallisesti
-        systemctl stop paperless-consumer.service paperless-scheduler.service paperless-task-queue.service paperless-web.service
-      '';
-      backupCleanupCommand = ''
-        # Nosta palvelut takaisin ylös varmuuskopioinnin jälkeen
-        systemctl start paperless-consumer.service paperless-scheduler.service paperless-task-queue.service paperless-web.service
-      '';
-      checkOpts = [ "--read-data" ];
-      pruneOpts = [ "--keep-daily 7" "--keep-weekly 4" "--keep-monthly 12" ];
+          # Vedä alas paperlessin palvelut jotta tietokannan tiedostot voidaan
+          # varmuuskopioida turvallisesti
+          systemctl stop paperless-consumer.service paperless-scheduler.service paperless-task-queue.service paperless-web.service
+        '';
+        backupCleanupCommand = ''
+          # Nosta palvelut takaisin ylös varmuuskopioinnin jälkeen
+          systemctl start paperless-consumer.service paperless-scheduler.service paperless-task-queue.service paperless-web.service
+        '';
+      };
+    in {
+      paperless-oma = bConfig // {
+        repository = "rclone:nas-oma:/backups/restic/paperless";
+        timerConfig.OnCalendar = "01:00";
+      };
+      paperless-veli = bConfig // {
+        repository = "rclone:nas-veli:/homes/janne/restic/paperless";
+        timerConfig.OnCalendar = "02:00";
+      };
     };
 
     # Palvelun valvonta
