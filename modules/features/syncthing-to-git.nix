@@ -22,7 +22,7 @@ in
       '';
       # Joka päivä, mutta ei samaan aikaan kun Gitea on alhaalla
       # varmuuskopioinnin takia
-      startAt = "02:00:00";
+      startAt = "02:30:00";
       serviceConfig = {
         User = "root";
         Group = "syncthing";
