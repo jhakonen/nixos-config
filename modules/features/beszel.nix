@@ -49,7 +49,7 @@ in {
       };
       beszel-hub-veli = bConfig // {
         repository = "rclone:nas-veli:/home/restic/beszel-hub";
-        timerConfig.OnCalendar = "02:00";
+        timerConfig.OnCalendar = "Sat 02:00";
       };
     };
   };

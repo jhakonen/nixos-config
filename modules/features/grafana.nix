@@ -64,7 +64,7 @@ in
       };
       grafana-veli = bConfig // {
         repository = "rclone:nas-veli:/home/restic/grafana";
-        timerConfig.OnCalendar = "02:00";
+        timerConfig.OnCalendar = "Sat 02:00";
       };
     };
 

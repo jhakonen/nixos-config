@@ -90,7 +90,7 @@ in {
       };
       paperless-veli = bConfig // {
         repository = "rclone:nas-veli:/home/restic/paperless";
-        timerConfig.OnCalendar = "02:00";
+        timerConfig.OnCalendar = "Sat 02:00";
       };
     };
 

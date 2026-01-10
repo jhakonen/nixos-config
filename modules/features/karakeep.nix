@@ -56,7 +56,7 @@ in {
       };
       karakeep-veli = bConfig // {
         repository = "rclone:nas-veli:/home/restic/karakeep";
-        timerConfig.OnCalendar = "02:00";
+        timerConfig.OnCalendar = "Sat 02:00";
       };
     };
 

@@ -40,7 +40,7 @@ in {
       };
       influxdb-veli = bConfig // {
         repository = "rclone:nas-veli:/home/restic/influxdb";
-        timerConfig.OnCalendar = "02:00";
+        timerConfig.OnCalendar = "Sat 02:00";
       };
     };
 

@@ -55,7 +55,7 @@ in
       };
       freshrss-veli = bConfig // {
         repository = "rclone:nas-veli:/home/restic/freshrss";
-        timerConfig.OnCalendar = "02:00";
+        timerConfig.OnCalendar = "Sat 02:00";
       };
     };
 

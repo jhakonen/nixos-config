@@ -60,7 +60,7 @@ in
       };
       radicale-veli = bConfig // {
         repository = "rclone:nas-veli:/home/restic/radicale";
-        timerConfig.OnCalendar = "02:00";
+        timerConfig.OnCalendar = "Sat 02:00";
       };
     };
   };

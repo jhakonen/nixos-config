@@ -58,7 +58,7 @@ in {
       };
       immich-veli = bConfig // {
         repository = "rclone:nas-veli:/home/restic/immich";
-        timerConfig.OnCalendar = "02:00";
+        timerConfig.OnCalendar = "Sat 02:00";
       };
     };
 
