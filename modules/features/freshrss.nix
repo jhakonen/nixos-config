@@ -54,7 +54,7 @@ in
         timerConfig.OnCalendar = "01:00";
       };
       freshrss-veli = bConfig // {
-        repository = "rclone:nas-veli:/homes/janne/restic/freshrss";
+        repository = "rclone:nas-veli:/home/restic/freshrss";
         timerConfig.OnCalendar = "02:00";
       };
     };

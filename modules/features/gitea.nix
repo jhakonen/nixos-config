@@ -50,7 +50,7 @@ in
         timerConfig.OnCalendar = "01:00";
       };
       gitea-veli = bConfig // {
-        repository = "rclone:nas-veli:/homes/janne/restic/gitea";
+        repository = "rclone:nas-veli:/home/restic/gitea";
         timerConfig.OnCalendar = "02:00";
       };
     };

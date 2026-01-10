@@ -63,7 +63,7 @@ in
         timerConfig.OnCalendar = "01:00";
       };
       grafana-veli = bConfig // {
-        repository = "rclone:nas-veli:/homes/janne/restic/grafana";
+        repository = "rclone:nas-veli:/home/restic/grafana";
         timerConfig.OnCalendar = "02:00";
       };
     };

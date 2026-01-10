@@ -126,7 +126,7 @@ in {
         timerConfig.OnCalendar = "01:00";
       };
       zigbee2mqtt-veli = bConfig // {
-        repository = "rclone:nas-veli:/homes/janne/restic/zigbee2mqtt";
+        repository = "rclone:nas-veli:/home/restic/zigbee2mqtt";
         timerConfig.OnCalendar = "02:00";
       };
     };

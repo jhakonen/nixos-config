@@ -187,7 +187,7 @@ in {
         timerConfig.OnCalendar = "01:00";
       };
       jhakonen-veli = bConfig // {
-        repository = "rclone:nas-veli:/homes/janne/restic/dellxps13-jhakonen";
+        repository = "rclone:nas-veli:/home/restic/dellxps13-jhakonen";
         timerConfig.OnCalendar = "02:00";
       };
     };

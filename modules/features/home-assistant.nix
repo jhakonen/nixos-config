@@ -117,7 +117,7 @@ in
         timerConfig.OnCalendar = "01:00";
       };
       home-assistant-veli = bConfig // {
-        repository = "rclone:nas-veli:/homes/janne/restic/home-assistant";
+        repository = "rclone:nas-veli:/home/restic/home-assistant";
         timerConfig.OnCalendar = "02:00";
       };
     };

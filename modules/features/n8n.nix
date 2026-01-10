@@ -72,7 +72,7 @@ in
         timerConfig.OnCalendar = "01:00";
       };
       n8n-veli = bConfig // {
-        repository = "rclone:nas-veli:/homes/janne/restic/n8n";
+        repository = "rclone:nas-veli:/home/restic/n8n";
         timerConfig.OnCalendar = "02:00";
       };
     };

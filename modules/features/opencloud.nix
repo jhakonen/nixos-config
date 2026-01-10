@@ -65,7 +65,7 @@ in
         timerConfig.OnCalendar = "01:00";
       };
       opencloud-veli = bConfig // {
-        repository = "rclone:nas-veli:/homes/janne/restic/opencloud";
+        repository = "rclone:nas-veli:/home/restic/opencloud";
         timerConfig.OnCalendar = "02:00";
       };
     };

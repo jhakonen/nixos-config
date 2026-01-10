@@ -67,7 +67,7 @@ in
         timerConfig.OnCalendar = "01:00";
       };
       tvheadend-veli = bConfig // {
-        repository = "rclone:nas-veli:/homes/janne/restic/tvheadend";
+        repository = "rclone:nas-veli:/home/restic/tvheadend";
         timerConfig.OnCalendar = "02:00";
       };
     };
