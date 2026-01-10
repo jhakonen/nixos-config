@@ -76,5 +76,6 @@ in
   "restic-nas-smb-config.age".publicKeys = [ jhakonen kanto mervi nassuvm ];
   "rsyncbackup-password.age".publicKeys = [ jhakonen kanto mervi ];
   "telegraf-environment.age".publicKeys = [ jhakonen kanto ];
+  "telegram-token.age".publicKeys = [ jhakonen kanto mervi nassuvm tunneli ];
   "zigbee2mqtt-environment.age".publicKeys = [ jhakonen kanto ];
 }

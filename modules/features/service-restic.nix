@@ -16,12 +16,16 @@ in
       age.secrets.restic-nas-smb-config = {
         file = ../../agenix/restic-nas-smb-config.age;
       };
+      age.secrets.telegram-token = {
+        file = ../../agenix/telegram-token.age;
+      };
 
       environment.systemPackages = with pkgs; [
         rclone
         restic
       ];
 
+      # Aseta oletusasetukset kullekin varmuuskopiotehtävälle
       services.restic.backups = builtins.mapAttrs (name: options:
         {
           initialize = true;
@@ -36,6 +40,28 @@ in
           rcloneConfigFile = config.age.secrets.restic-nas-smb-config.path;
         } // options
       ) config.my.services.restic.backups;
+
+      systemd.services =
+        # Palvelu epäonnistuneesta ajosta ilmoittamiseen
+        {
+          "notify-failure@" = {
+            description = "Ilmoita palvelun %i epäonnistumisesta";
+            scriptArgs = "%i";
+            path = [ pkgs.shoutrrr ];
+            script = ''
+              TOKEN=$(cat ${config.age.secrets.telegram-token.path})
+              journalctl --unit="$1" --output=cat --invocation=0 --grep "failed|error" --lines=+1 | shoutrrr send \
+                --url telegram://$TOKEN@telegram?chats=${catalog.telegramChat} \
+                --title "Palvelu $1 epäonnistui" \
+                --message -
+            '';
+          };
+        }
+        //
+        # Lähetä ilmoitus jos varmuuskopiointi epäonnistuu
+        (lib.mapAttrs' (name: options: lib.nameValuePair "restic-backups-${name}" {
+          unitConfig.OnFailure = [ "notify-failure@restic-backups-${name}.service" ];
+        }) config.my.services.restic.backups);
     };
   };
 }
