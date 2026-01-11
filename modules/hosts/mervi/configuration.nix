@@ -56,11 +56,6 @@
       enable = true;
       acmeHost = "mervi.lan.jhakonen.com";
       virtualHost = catalog.services.monit-mervi.public.domain;
-      mqttAlert = {
-        address = catalog.services.mosquitto.public.domain;
-        port = catalog.services.mosquitto.port;
-        passwordFile = config.age.secrets.mosquitto-password.path;
-      };
     };
 
     my.services.syncthing = {
@@ -97,11 +92,6 @@
     security.acme.certs."mervi.lan.jhakonen.com".extraDomainNames = [
       "*.mervi.lan.jhakonen.com"
     ];
-
-    # Salaisuudet
-    age.secrets = {
-      mosquitto-password.file = ../../../agenix/mqtt-password.age;
-    };
 
     programs.gamemode.enable = true;
     programs.kdeconnect.enable = true;

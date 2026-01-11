@@ -4,9 +4,6 @@
     cfg = config.my.services.monitoring;
     MONIT_PORT = 2812;
     PERIOD = 60;
-    DEFAULT_ALERT_AFTER_SEC = 5 * 60;
-
-    secsToCycles = seconds: toString (seconds / PERIOD);
 
     buildConfig = check:
       if builtins.isString check then
@@ -16,18 +13,12 @@
           serviceCheck = "${checkSystemdService} ${check.name} ${builtins.concatStringsSep " " (if check ? extraStates then check.extraStates else [])}";
         in ''
           check program "${if check ? description then check.description else check.name}" with path "${serviceCheck}"
-            if status != 0
-              for ${secsToCycles DEFAULT_ALERT_AFTER_SEC} cycles
-            then
-              exec "${mqttAlertCmd} ${config.networking.hostName} - System service '${if check ? description then check.description else check.name}' has failed"
+            if status != 0 then alert
         ''
       else if check.type == "program" then
         ''
           check program "${check.description}" with path "${check.path}"
-            if status != 0
-              for ${secsToCycles DEFAULT_ALERT_AFTER_SEC} cycles
-            then
-              exec "${mqttAlertCmd} ${config.networking.hostName} - Check '${check.description}' has failed"
+            if status != 0 then alert
         ''
       else if check.type == "http check" then
         ''
@@ -45,9 +36,7 @@
               protocol ${if check ? secure && check.secure then "https" else "http"}
                 ${if check ? path then "request ${check.path}" else ""}
                 ${if check ? response.code then "status ${toString check.response.code}" else ""}
-              for ${secsToCycles (if check ? alertAfterSec then check.alertAfterSec else DEFAULT_ALERT_AFTER_SEC)} cycles
-            then
-              exec "${mqttAlertCmd} ${config.networking.hostName} - HTTP check '${check.description}' has failed"
+                then alert
         ''
       else abort "Unknown check type for monioring: ${check.type}";
 
@@ -83,16 +72,6 @@
       echo "$STATUS"
       exit $EXIT_CODE
     '';
-
-    mqttAlertCmd = pkgs.writeShellScript "mqtt-alert" ''
-      echo "$@" | ${pkgs.mosquitto}/bin/mosquitto_pub \
-        -h ${cfg.mqttAlert.address} \
-        -p ${toString cfg.mqttAlert.port} \
-        -u koti \
-        -P $(${pkgs.coreutils}/bin/cat ${cfg.mqttAlert.passwordFile}) \
-        -l \
-        -t 'n8n/telegram'
-    '';
   in {
     options.my.services.monitoring = {
       enable = lib.mkEnableOption "valvonta palvelu";
@@ -108,22 +87,6 @@
       };
       virtualHost = lib.mkOption {
         type = lib.types.str;
-      };
-      mqttAlert = lib.mkOption {
-        type = (lib.types.submodule {
-          options = {
-            enable = lib.mkEnableOption "enable mqtt alerts";
-            address = lib.mkOption {
-              type = lib.types.str;
-            };
-            port = lib.mkOption {
-              type = lib.types.int;
-            };
-            passwordFile = lib.mkOption {
-              type = lib.types.str;
-            };
-          };
-        });
       };
     };
 
@@ -142,8 +105,6 @@
             if builtins.isFunction check then
               check {
                 inherit checkSystemdService;
-                inherit secsToCycles;
-                notify = mqttAlertCmd;
               }
             else
               check

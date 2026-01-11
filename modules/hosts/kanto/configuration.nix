@@ -60,7 +60,6 @@ in {
 
     # Salaisuudet
     age.secrets = {
-      mosquitto-password.file = ../../../agenix/mqtt-password.age;
       mosquitto-esphome-password.file = ../../../agenix/mqtt-espuser-password.age;
     };
 
@@ -69,11 +68,6 @@ in {
       enable = true;
       acmeHost = "jhakonen.com";
       virtualHost = catalog.services.monit-kanto.public.domain;
-      mqttAlert = {
-        address = catalog.services.mosquitto.public.domain;
-        port = catalog.services.mosquitto.port;
-        passwordFile = config.age.secrets.mosquitto-password.path;
-      };
     };
 
     # Tiedostojen synkkaus
