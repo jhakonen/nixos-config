@@ -285,6 +285,7 @@ in {
       kdePackages.kdeconnect-kde
       kdePackages.kmahjongg
       kdePackages.kolourpaint
+      kdePackages.krecorder
       kdePackages.plasma-thunderbolt  # Asetusvälilehti thunderboltille (lisäksi services.hardware.bolt)
       kdePackages.qtwebsockets  # Tarvitaan Home Assistant plasmoidia varten
       kdePackages.kcalc
