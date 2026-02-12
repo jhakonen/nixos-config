@@ -24,6 +24,7 @@ in {
       };
       ssh = {
         enable = true;
+        enableDefaultConfig = false;
         matchBlocks = {
           "framagit.org" = {
             identityFile = "~/.ssh/framagit-ssh-key";
