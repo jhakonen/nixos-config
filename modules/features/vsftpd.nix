@@ -13,6 +13,9 @@ in {
         pasv_enable=Yes
         pasv_min_port=${toString pasv_min_port};
         pasv_max_port=${toString pasv_max_port};
+
+        # Salli tiedostojen poisto ja uudelleen nimeäminen
+        anon_other_write_enable=Yes
       '';
       writeEnable = true;
     };
