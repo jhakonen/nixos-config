@@ -25,6 +25,12 @@ in {
         PAPERLESS_URL = "${catalog.getServiceScheme catalog.services.paperless}://${catalog.getServiceAddress catalog.services.paperless}";
         # Sähköpostin skannaus-workeri meni jumiin ja söi 70% cputa, otetaan pois käytöstä
         PAPERLESS_EMAIL_TASK_CRON = "disable";
+
+        # Kiertää ongelman "OSError: image file is truncated (X bytes not processed)"
+        # kun Paperlessin tiedostoskannauksen tehtävä epäonnistuu.
+        # Lähde: https://github.com/paperless-ngx/paperless-ngx/discussions/11467
+        PAPERLESS_OCR_USER_ARGS = "{\"optimize\": 0}";
+        PILLOW_LOAD_TRUNCATED_IMAGES = "1";
       };
       port = catalog.services.paperless.port;
       address = "0.0.0.0";  # Salli pääsy palveluun koneen ulkopuolelta (oletuksena 'localhost')
