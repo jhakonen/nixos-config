@@ -250,6 +250,7 @@ in {
       brave
       cachix
       calibre
+      cherry-studio
       chromium
       claude-code
       discord
