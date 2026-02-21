@@ -13,6 +13,38 @@
       "url": "https://github.com/ryantm/agenix/archive/b027ee29d959fda4b60b57566d64c98a202e0feb.tar.gz",
       "hash": "sha256-9VnK6Oqai65puVJ4WYtCTvlJeXxMzAp/69HhQuTdl/I="
     },
+    "den": {
+      "type": "GitRelease",
+      "repository": {
+        "type": "GitHub",
+        "owner": "vic",
+        "repo": "den"
+      },
+      "pre_releases": false,
+      "version_upper_bound": null,
+      "release_prefix": null,
+      "submodules": false,
+      "version": "v0.9.0",
+      "revision": "1691a686a98ade8e4cb40d5e0fcc1e66bcebe450",
+      "url": "https://api.github.com/repos/vic/den/tarball/refs/tags/v0.9.0",
+      "hash": "sha256-W1Ek82us1uv6fKjL530vvrJrBvmQTPqBYdFEJAvXQZ8="
+    },
+    "flake-aspects": {
+      "type": "GitRelease",
+      "repository": {
+        "type": "GitHub",
+        "owner": "vic",
+        "repo": "flake-aspects"
+      },
+      "pre_releases": false,
+      "version_upper_bound": null,
+      "release_prefix": null,
+      "submodules": false,
+      "version": "v0.5.0",
+      "revision": "f338a5062628c9b9fda0796a141ca1a6eb4dcf75",
+      "url": "https://api.github.com/repos/vic/flake-aspects/tarball/refs/tags/v0.5.0",
+      "hash": "sha256-t1FKnPRvg/l376pM+hMS0hPMTmxu7S4eVS2s+A25SbU="
+    },
     "flake-parts": {
       "type": "Git",
       "repository": {
