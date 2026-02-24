@@ -1,10 +1,6 @@
 { lib, self, ... }:
 {
-  flake.modules.nixos.common = { config, pkgs, ... }: {
-    imports = [
-      self.modules.nixos.zsh
-    ];
-
+  den.ctx.host.nixos = { config, pkgs, ... }: {
     # Aika-alueen asetus
     time.timeZone = "Europe/Helsinki";
 
@@ -109,11 +105,7 @@
     '';
   };
 
-  flake.modules.homeManager.common = { pkgs, ... }: {
-    imports = [
-      self.modules.homeManager.zsh
-    ];
-
+  den.default.homeManager = { pkgs, ... }: {
     programs.autojump.enable = true;
     programs.tealdeer = {
       enable = true;

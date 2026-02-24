@@ -1,6 +1,6 @@
-{ self, ... }:
+{ self, config, ... }:
 let
-  inherit (self) catalog;
+  inherit (config) catalog;
   port = 5678;
   webhookHost = catalog.services.n8n.tunnel.domain;
   communityNodes = [
@@ -10,7 +10,7 @@ let
   ];
 in
 {
-  flake.modules.nixos.n8n = { config, lib, pkgs, ... }: {
+  den.aspects.kanto.nixos = { lib, pkgs, ... }: {
     services.n8n = {
       enable = true;
       openFirewall = true;
@@ -79,7 +79,7 @@ in
   };
 
   # Tunneli webhookia varten
-  flake.modules.nixos.n8n-tunnel = { config, ... }: {
+  den.aspects.tunneli.nixos = {
     services.nginx = {
       enable = true;
       virtualHosts.${webhookHost} = {
@@ -95,7 +95,7 @@ in
     };
   };
 
-  flake.modules.nixos.gatus = {
+  den.aspects.nassuvm.nixos = {
     # Palvelun valvonta
     services.gatus.settings.endpoints = [{
       name = "N8N";

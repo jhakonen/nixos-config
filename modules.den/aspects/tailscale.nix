@@ -4,7 +4,7 @@ let
   group = "users";
   downloadDir = "/home/${user}/Lataukset";
 in {
-  flake.modules.nixos.tailscale = { config, pkgs, ... }: {
+  den.aspects.tailscale.nixos = { config, pkgs, ... }: {
     services.tailscale = {
       enable = true;
       extraUpFlags = "--operator=jhakonen";
@@ -16,7 +16,7 @@ in {
     ];
   };
 
-  flake.modules.nixos.tailscale-receive = { config, ... }: {
+  den.aspects.dellxsp13.nixos = { config, ... }: {
     # https://davideger.github.io/blog/taildrop_on_linux
     systemd.services.tailreceive = {
       description = "File Receiver Service for Taildrop";

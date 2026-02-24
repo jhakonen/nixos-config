@@ -1,6 +1,6 @@
 { inputs, ... }:
 {
-  flake.modules.nixos.nixos = { config, pkgs, ... }: {
+  den.ctx.host.nixos = { pkgs, ... }: {
     nixpkgs.overlays = [
       (final: prev: {
         unstable = import inputs.nixpkgs-unstable {

@@ -1,7 +1,19 @@
-{ inputs, lib, self, ... }:
-{
-  flake.modules.homeManager.mqtt-client = { config, pkgs, ... }: let
-    inherit (self) catalog;
+{ lib, config, inputs, ... }: let
+  inherit (config) catalog;
+in {
+  den.ctx.host.nixos = { config, ... }: {
+    users.users.jhakonen = {
+      openssh.authorizedKeys.keys = [ catalog.id-rsa-public-key ];
+      isNormalUser = true;
+      extraGroups = [
+        "wheel"  # Salli sudon käyttö
+      ] ++ (lib.optionals config.networking.networkmanager.enable [
+        "networkmanager"  # https://wiki.nixos.org/wiki/NetworkManager
+      ]);
+    };
+  };
+
+  den.aspects.jhakonen.homeManager = { config, pkgs, ... }: let
     passwordFile = config.age.secrets.mosquitto-password.path;
   in {
     imports = [

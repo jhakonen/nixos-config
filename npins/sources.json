@@ -45,19 +45,6 @@
       "url": "https://api.github.com/repos/vic/flake-aspects/tarball/refs/tags/v0.5.0",
       "hash": "sha256-t1FKnPRvg/l376pM+hMS0hPMTmxu7S4eVS2s+A25SbU="
     },
-    "flake-parts": {
-      "type": "Git",
-      "repository": {
-        "type": "GitHub",
-        "owner": "hercules-ci",
-        "repo": "flake-parts"
-      },
-      "branch": "main",
-      "submodules": false,
-      "revision": "57928607ea566b5db3ad13af0e57e921e6b12381",
-      "url": "https://github.com/hercules-ci/flake-parts/archive/57928607ea566b5db3ad13af0e57e921e6b12381.tar.gz",
-      "hash": "sha256-AnYjnFWgS49RlqX7LrC4uA+sCCDBj0Ry/WOJ5XWAsa0="
-    },
     "home-manager": {
       "type": "Git",
       "repository": {

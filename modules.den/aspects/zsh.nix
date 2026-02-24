@@ -1,6 +1,6 @@
 { lib, ... }:
 {
-  flake.modules.nixos.zsh = { pkgs, ... }: {
+  den.ctx.host.nixos = { pkgs, ... }: {
     # Lisää ZSH valittavien komentotulkkien listaan
     environment.shells = [ pkgs.zsh ];
 
@@ -17,7 +17,7 @@
     # '';
   };
 
-  flake.modules.homeManager.zsh = { pkgs, ... }: {
+  den.default.homeManager = { pkgs, ... }: {
     programs.zsh = {
       enable = true;
       autosuggestion.enable = true;

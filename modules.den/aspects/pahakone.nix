@@ -1,7 +1,7 @@
-{ self, ... }: let
-  inherit (self) catalog;
+{ config, ... }: let
+  inherit (config) catalog;
 in {
-  flake.modules.nixos.pahakone-tunnel = {
+  den.aspects.tunneli.nixos = {
     services.nginx = {
       enable = true;
       virtualHosts.${catalog.services.kalenteri.public.domain} = {
@@ -17,7 +17,7 @@ in {
     };
   };
 
-  flake.modules.nixos.gatus = {
+  den.aspects.nassuvm.nixos = {
     # Palvelun valvonta
     services.gatus.settings.endpoints = [{
       name = "Kalenteri";

@@ -1,10 +1,10 @@
-{ inputs, self, ... }:
+{ inputs, config, ... }:
 let
-  inherit (self) catalog;
+  inherit (config) catalog;
   dataDir = "/var/lib/opencloud";
 in
 {
-  flake.modules.nixos.opencloud = { config, pkgs, ... }: let
+  den.aspects.kanto.nixos = { config, pkgs, ... }: let
     imageSource = inputs.opencloud-image { inherit pkgs; };
     inherit (imageSource) image_name image_digest;
   in {
@@ -71,7 +71,7 @@ in
     };
   };
 
-  flake.modules.nixos.opencloud-tunnel = { config, ... }: {
+  den.aspects.tunneli.nixos = { config, ... }: {
     services.nginx.virtualHosts.${catalog.services.opencloud.public.domain} = {
       locations."/" = {
         proxyPass = "http://kanto.tailscale.jhakonen.com:${toString catalog.services.opencloud.port}";
@@ -87,7 +87,7 @@ in
     };
   };
 
-  flake.modules.nixos.opencloud-client = { pkgs, ... }: let
+  den.aspects.dellxsp13.nixos = { pkgs, ... }: let
     # https://github.com/NixOS/nixpkgs/pull/456008 - voinee poistaa NixOS 25.11 versiossa
     ecm618 = pkgs.unstable.kdePackages.extra-cmake-modules.overrideAttrs (old: rec {
       version = "6.18.0";
@@ -116,7 +116,7 @@ in
     ];
   };
 
-  flake.modules.nixos.gatus = {
+  den.aspects.nassuvm.nixos = {
     # Palvelun valvonta
     services.gatus.settings.endpoints = [{
       name = "Opencloud";

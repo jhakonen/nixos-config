@@ -1,8 +1,7 @@
-{ self, ... }:
-{
-  flake.modules.nixos.nginx = { config, pkgs, ... }: let
-    inherit (self) catalog;
-  in {
+{ config, ... }: let
+  inherit (config) catalog;
+in {
+  den.aspects.nginx.nixos = { config, pkgs, ... }: {
     # Salaisuudet
     age.secrets = {
       acme-joker-credentials.file = ../../agenix/acme-joker-credentials.age;
