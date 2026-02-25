@@ -1,5 +1,5 @@
 {
-  flake.modules.nixos.nix-cleanup = {
+  den.default.nixos = {
     # Poista duplikaatteja storesta, säästäen tilaa
     nix.settings.auto-optimise-store = true;
 

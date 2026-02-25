@@ -1,7 +1,7 @@
 { lib, config, inputs, ... }: let
   inherit (config) catalog;
 in {
-  den.ctx.host.nixos = { config, ... }: {
+  den.default.nixos = { config, ... }: {
     users.users.jhakonen = {
       openssh.authorizedKeys.keys = [ catalog.id-rsa-public-key ];
       isNormalUser = true;

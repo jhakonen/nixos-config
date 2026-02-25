@@ -1,6 +1,6 @@
 { inputs, ... }:
 {
-  den.ctx.host.nixos = { pkgs, ... }: {
+  den.default.nixos = { pkgs, ... }: {
     nixpkgs.overlays = [
       (final: prev: {
         unstable = import inputs.nixpkgs-unstable {

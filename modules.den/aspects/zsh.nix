@@ -1,6 +1,6 @@
 { lib, ... }:
 {
-  den.ctx.host.nixos = { pkgs, ... }: {
+  den.default.nixos = { pkgs, ... }: {
     # Lisää ZSH valittavien komentotulkkien listaan
     environment.shells = [ pkgs.zsh ];
 

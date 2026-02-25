@@ -29,9 +29,9 @@ in {
     ################################################
   };
 
-  den.aspects.nassuvm = { pkgs, ... }: {
+  den.aspects.nassuvm = {
     includes = [ den.aspects.beszel-agent ];
-    nixos = {
+    nixos = { pkgs, ... }: {
       services.beszel.hub = {
         enable = true;
         package = pkgs.unstable.beszel;

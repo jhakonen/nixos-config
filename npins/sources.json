@@ -14,20 +14,17 @@
       "hash": "sha256-9VnK6Oqai65puVJ4WYtCTvlJeXxMzAp/69HhQuTdl/I="
     },
     "den": {
-      "type": "GitRelease",
+      "type": "Git",
       "repository": {
         "type": "GitHub",
         "owner": "vic",
         "repo": "den"
       },
-      "pre_releases": false,
-      "version_upper_bound": null,
-      "release_prefix": null,
+      "branch": "main",
       "submodules": false,
-      "version": "v0.9.0",
-      "revision": "1691a686a98ade8e4cb40d5e0fcc1e66bcebe450",
-      "url": "https://api.github.com/repos/vic/den/tarball/refs/tags/v0.9.0",
-      "hash": "sha256-W1Ek82us1uv6fKjL530vvrJrBvmQTPqBYdFEJAvXQZ8="
+      "revision": "7d57973e563f889eff8ca7d38638067617ec3a5a",
+      "url": "https://github.com/vic/den/archive/7d57973e563f889eff8ca7d38638067617ec3a5a.tar.gz",
+      "hash": "sha256-AtXdsCHK8yXR9y3hZRQpWRaIPaYONzETrVYyDYSUru0="
     },
     "flake-aspects": {
       "type": "GitRelease",

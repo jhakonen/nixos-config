@@ -1,6 +1,6 @@
 { lib, self, ... }:
 {
-  den.ctx.host.nixos = { config, pkgs, ... }: {
+  den.default.nixos = { config, pkgs, ... }: {
     # Aika-alueen asetus
     time.timeZone = "Europe/Helsinki";
 

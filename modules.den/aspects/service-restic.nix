@@ -1,9 +1,9 @@
-{ inputs, self, ... }:
+{ inputs, config, ... }:
 let
-  inherit (self) catalog;
+  inherit (config) catalog;
 in
 {
-  flake.modules.nixos.service-restic = { config, lib, pkgs, ... }: {
+  den.default.nixos = { config, lib, pkgs, ... }: {
     options.my.services.restic.backups = lib.mkOption {
       type = lib.types.attrsOf lib.types.anything;
       default = {};
