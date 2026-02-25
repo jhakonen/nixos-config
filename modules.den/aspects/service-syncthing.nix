@@ -1,6 +1,6 @@
 { lib, ... }:
 {
-  flake.modules.nixos.service-syncthing = { config, pkgs, ... }: let
+  den.default.nixos = { config, pkgs, ... }: let
     cfg = config.my.services.syncthing;
   in {
     options.my.services.syncthing = {

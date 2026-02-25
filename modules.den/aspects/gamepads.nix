@@ -1,5 +1,5 @@
 {
-  flake.modules.nixos.gamepads = {
+  den.aspects.mervi.nixos = {
     # Tarvitaan Sonyn Dualshock ohjainta varten
     hardware.steam-hardware.enable = true;
     # Ota bluetooth käyttöön, tarvitaan Sonyn Dualshock ohjainta varten

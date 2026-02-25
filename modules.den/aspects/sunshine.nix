@@ -1,6 +1,6 @@
 { config, lib, ... }:
 {
-  flake.modules.nixos.sunshine = { pkgs, ... }: let
+  den.aspects.mervi.nixos = { pkgs, ... }: let
     # Helper utility for launching Steam games from Sunshine. This works around
     # issue where Sunshine's security wrapper prevents Steam from launching.
     # Examples:

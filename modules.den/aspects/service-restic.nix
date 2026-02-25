@@ -9,7 +9,7 @@ in
       default = {};
     };
 
-    config = {
+    config = lib.mkIf (config.my.services.restic.backups != {}) {
       age.secrets.restic-password = {
         file = ../../agenix/restic-password.age;
       };

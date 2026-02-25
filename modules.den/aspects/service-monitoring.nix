@@ -1,6 +1,6 @@
 { lib, ... }:
 {
-  flake.modules.nixos.service-monitoring = { config, pkgs, ... }: let
+  den.default.nixos = { config, pkgs, ... }: let
     cfg = config.my.services.monitoring;
     MONIT_PORT = 2812;
     PERIOD = 60;
