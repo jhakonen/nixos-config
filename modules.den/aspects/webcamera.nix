@@ -1,5 +1,5 @@
 {
-  flake.modules.nixos.webcamera = { pkgs, ... }: {
+  den.aspects.dellxps13.nixos = { pkgs, ... }: {
     # Kamera toimii välillä ja välillä ei. Vaikuttaa siltä että minulla tulee
     # tämä bugi vastaan:
     #    https://github.com/intel/ipu6-drivers/issues/291

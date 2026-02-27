@@ -1,7 +1,7 @@
 # Perustuu ohjeisiin: https://wiki.nixos.org/wiki/Android
 { ... }:
 {
-  flake.modules.nixos.android-dev = { pkgs, ... }: {
+  den.aspects.dellxps13.nixos = { pkgs, ... }: {
     environment.systemPackages = [
       pkgs.android-studio-full
     ];
@@ -16,4 +16,3 @@
     ];
   };
 }
-

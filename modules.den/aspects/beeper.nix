@@ -1,6 +1,6 @@
-{ inputs, ... }:
+{ ... }:
 {
-  flake.modules.nixos.beeper = { pkgs, ... }: {
+  den.aspects.dellxps13.nixos = { pkgs, ... }: {
     environment.systemPackages = [
       pkgs.unstable.beeper
     ];

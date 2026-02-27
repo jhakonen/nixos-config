@@ -1,6 +1,6 @@
 { inputs, ... }:
 {
-  flake.modules.nixos.flatpak = { pkgs, ... }: {
+  den.aspects.dellxps13.nixos = { pkgs, ... }: {
     imports = [
       inputs.nix-flatpak.nixosModules.nix-flatpak
     ];

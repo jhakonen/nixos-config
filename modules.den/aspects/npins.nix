@@ -2,7 +2,7 @@
   npinsSources = import (inputs.npins + "/npins");
   npinsPkgs = import npinsSources.nixpkgs {};
 in {
-  flake.modules.nixos.npins = {
+  den.aspects.dellxps13.nixos = {
     environment.systemPackages = [
       (npinsPkgs.callPackage (inputs.npins + "/npins.nix") {})
     ];

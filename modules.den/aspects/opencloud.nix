@@ -87,7 +87,7 @@ in
     };
   };
 
-  den.aspects.dellxsp13.nixos = { pkgs, ... }: let
+  den.aspects.dellxps13.nixos = { pkgs, ... }: let
     # https://github.com/NixOS/nixpkgs/pull/456008 - voinee poistaa NixOS 25.11 versiossa
     ecm618 = pkgs.unstable.kdePackages.extra-cmake-modules.overrideAttrs (old: rec {
       version = "6.18.0";
