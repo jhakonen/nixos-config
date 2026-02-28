@@ -1,0 +1,85 @@
+{ config, ... }:
+let
+  inherit (config) catalog;
+in
+{
+  den.aspects.kanto.nixos = { config, ... }: {
+    services.grafana = {
+      enable = true;
+      settings = {
+        "auth.anonymous" = {
+          enabled = true;
+          org_name = "Main Org.";
+          org_role = "Viewer";
+          hide_version = true;
+        };
+        server.http_addr = "0.0.0.0";
+        server.http_port = catalog.services.grafana.port;
+      };
+      provision.datasources.settings = {
+        apiVersion = 1;
+        datasources = [{
+          name = "InfluxDB";
+          type = "influxdb";
+          url = "http://localhost:${toString catalog.services.influx-db.port}";
+          database = "telegraf";
+        }];
+      };
+    };
+
+    services.nginx = {
+      enable = true;
+      virtualHosts.${catalog.services.grafana.public.domain} = {
+        locations."/" = {
+          proxyPass = "http://127.0.0.1:${toString catalog.services.grafana.port}";
+          proxyWebsockets = true;
+          recommendedProxySettings = true;
+        };
+        # Käytä Let's Encrypt sertifikaattia
+        addSSL = true;
+        useACMEHost = "jhakonen.com";
+      };
+    };
+
+    # Puhkaise reikä palomuuriin
+    networking.firewall.allowedTCPPorts = [ catalog.services.grafana.public.port ];
+
+    # Varmuuskopiointi
+    #   Käynnistä:
+    #     systemctl start restic-backups-grafana-oma.service
+    #     systemctl start restic-backups-grafana-veli.service
+    #   Snapshotit:
+    #     sudo restic-grafana-oma snapshots
+    #     sudo restic-grafana-veli snapshots
+    my.services.restic.backups = let
+      bConfig = {
+        paths = [ config.services.grafana.dataDir ];
+        backupPrepareCommand = "systemctl stop grafana.service";
+        backupCleanupCommand = "systemctl start grafana.service";
+      };
+    in {
+      grafana-oma = bConfig // {
+        repository = "rclone:nas-oma:/backups/restic/grafana";
+        timerConfig.OnCalendar = "01:00";
+      };
+      grafana-veli = bConfig // {
+        repository = "rclone:nas-veli:/home/restic/grafana";
+        timerConfig.OnCalendar = "Sat 02:00";
+      };
+    };
+
+    # Palvelun valvonta
+    my.services.monitoring.checks = [{
+      type = "systemd service";
+      description = "Grafana - service";
+      name = config.systemd.services.grafana.name;
+    }];
+
+    # Palvelun valvonta
+    services.gatus.settings.endpoints = [{
+      name = "Grafana";
+      url = "https://${catalog.services.grafana.public.domain}";
+      conditions = [ "[STATUS] == 200" ];
+    }];
+  };
+}

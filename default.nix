@@ -1,6 +1,14 @@
 let
+
   outputs =
     inputs:
-    inputs.flake-parts.lib.mkFlake { inherit inputs; } (inputs.import-tree ./modules);
+    (inputs.nixpkgs.lib.evalModules {
+      modules = [ (inputs.import-tree ./modules) ];
+      specialArgs = {
+        inherit inputs;
+        inherit (inputs) self;
+      };
+    }).config;
+
 in
 import ./with-inputs.nix outputs

@@ -472,7 +472,7 @@
   pickSyncthingDevices = names:
     lib.filterAttrs (n: v: lib.elem n names) syncthing-devices;
 in {
-  options.flake.catalog = lib.mkOption {
+  options.catalog = lib.mkOption {
     type = lib.types.attrsOf lib.types.unspecified;
     default = lib.recursiveUpdate ({
       inherit getServiceName;

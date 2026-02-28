@@ -17,7 +17,7 @@ for kone in "${koneet[@]}"; do
     ssh-keyscan "$kone" 2>/dev/null >> ~/.ssh/known_hosts
   fi
 
-  komento+=("--file" "." "nixosConfigurations.$kone")
+  komento+=("--file" "." "flake.nixosConfigurations.$kone")
 
   if [ "$debug" ]; then
     komento+=("--" "--show-trace")
