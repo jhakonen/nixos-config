@@ -1,7 +1,7 @@
-{ lib, self, ... }: let
-  inherit (self) catalog;
+{ lib, config, ... }: let
+  inherit (config) catalog;
 in {
-  flake.modules.nixos.zigbee2mqtt = { config, ... }: {
+  den.aspects.kanto.nixos = { config, ... }: {
     services.zigbee2mqtt = {
       enable = true;
       settings = {
@@ -137,9 +137,7 @@ in {
       description = "zigbee2mqtt - service";
       name = config.systemd.services.zigbee2mqtt.name;
     }];
-  };
 
-  flake.modules.nixos.gatus = {
     # Palvelun valvonta
     services.gatus.settings.endpoints = [{
       name = "Zigbee2MQTT";

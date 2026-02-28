@@ -1,9 +1,9 @@
-{ self, ... }:
+{ config, ... }:
 let
-  inherit (self) catalog;
+  inherit (config) catalog;
 in
 {
-  flake.modules.nixos.syncthing-to-git = { config, pkgs, ... }: let
+  den.aspects.kanto.nixos = { config, pkgs, ... }: let
     mkPushToGitService = args: {
       path = [
         pkgs.git

@@ -1,9 +1,9 @@
-{ self, ... }:
+{ config, ... }:
 let
-  inherit (self) catalog;
+  inherit (config) catalog;
 in
 {
-  flake.modules.nixos.gatus = { config, ... }: {
+  den.aspects.kanto.nixos = { config, ... }: {
     services.gatus = {
       enable = true;
       settings = {

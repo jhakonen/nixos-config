@@ -79,13 +79,6 @@ in {
           timerConfig.OnCalendar = "Sat 02:00";
         };
       };
-
-      # Palvelun valvonta
-      services.gatus.settings.endpoints = [{
-        name = "Beszel";
-        url = "https://${catalog.services.beszel.public.domain}";
-        conditions = [ "[STATUS] == 200" ];
-      }];
     };
   };
 
@@ -102,6 +95,13 @@ in {
       networking.firewall.allowedTCPPorts = [ agent-port ];
       # Lisää tuki podman konteille
       virtualisation.podman.dockerSocket.enable = true;
+
+      # Palvelun valvonta
+      services.gatus.settings.endpoints = [{
+        name = "Beszel";
+        url = "https://${catalog.services.beszel.public.domain}";
+        conditions = [ "[STATUS] == 200" ];
+      }];
     };
   };
 

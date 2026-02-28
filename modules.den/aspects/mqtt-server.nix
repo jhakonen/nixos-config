@@ -1,7 +1,7 @@
-{ self, ... }: let
-  inherit (self) catalog;
+{ config, ... }: let
+  inherit (config) catalog;
 in {
-  flake.modules.nixos.mqtt-server = { config, ... }: let
+  den.aspects.kanto.nixos = { config, ... }: let
     user = "koti";
     certDir = config.security.acme.certs."jhakonen.com".directory;
   in {
@@ -68,9 +68,7 @@ in {
       description = "Mosquitto - service";
       name = config.systemd.services.mosquitto.name;
     }];
-  };
 
-  flake.modules.nixos.gatus = {
     # Palvelun valvonta
     services.gatus.settings.endpoints = [{
       name = "Mosquitto (secure)";

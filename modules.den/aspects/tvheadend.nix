@@ -1,10 +1,10 @@
-{ inputs, self, ... }:
+{ inputs, config, ... }:
 let
-  inherit (self) catalog;
+  inherit (config) catalog;
   videoGroupId = 26;
 in
 {
-  flake.modules.nixos.tvheadend = { config, pkgs, ... }: let
+  den.aspects.kanto.nixos = { config, pkgs, ... }: let
     imageSource = inputs.tvheadend-image { inherit pkgs; };
     inherit (imageSource) image_name image_digest;
   in {
@@ -78,9 +78,7 @@ in
       description = "Tvheadend - service";
       name = "podman-tvheadend";
     }];
-  };
 
-  flake.modules.nixos.gatus = {
     # Palvelun valvonta
     services.gatus.settings.endpoints = [{
       name = "Tvheadend";

@@ -2,7 +2,7 @@
   pasv_min_port = 10090;
   pasv_max_port = 10100;
 in {
-  flake.modules.nixos.vsftpd = { config, pkgs, ... }: {
+  den.aspects.kanto.nixos = { config, pkgs, ... }: {
     services.vsftpd = {
       enable = true;
       anonymousUser = true;

@@ -1,7 +1,7 @@
 # Lähde: https://github.com/jdheyburn/nixos-configs/blob/5175593745a27de7afc5249bc130a2f1c5edb64c/modules/dashy/default.nix
-{ lib, self, ... }:
+{ lib, config, ... }:
 let
-  inherit (self) catalog;
+  inherit (config) catalog;
 
   # Start to build the elements in sections, this is then used to discover in catalog.services
   sections = [
@@ -43,7 +43,7 @@ let
       }))
     ];
 in {
-  flake.modules.nixos.dashy = { config, ... }: {
+  den.aspects.kanto.nixos = { config, ... }: {
     services.dashy = {
       enable = true;
       virtualHost = {
@@ -83,9 +83,7 @@ in {
       forceSSL = true;
       useACMEHost = "jhakonen.com";
     };
-  };
 
-  flake.modules.nixos.gatus = {
     # Palvelun valvonta
     services.gatus.settings.endpoints = [{
       name = "Dashy";

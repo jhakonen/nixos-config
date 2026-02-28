@@ -5,15 +5,13 @@
 #   - Store Directory: paperless-consume
 # Loput oletuksilla.
 #
-{ self, ... }: let
-  inherit (self) catalog;
+{ config, ... }: let
+  inherit (config) catalog;
 in {
-  flake.modules.nixos.paperless = { config, pkgs, ... }: let
+  den.aspects.kanto.nixos = { config, pkgs, ... }: let
     # Varmuuskopiokansio joka sisältää tietokannan ja dokumenttien exportin
     exportDir = "${config.services.paperless.dataDir}/exports";
   in {
-    imports = [ self.modules.nixos.vsftpd ];
-
     services.paperless = {
       enable = true;
       settings = {
@@ -123,9 +121,7 @@ in {
         name = config.systemd.services.paperless-web.name;
       }
     ];
-  };
 
-  flake.modules.nixos.gatus = {
     # Palvelun valvonta
     services.gatus.settings.endpoints = [{
       name = "Paperless";

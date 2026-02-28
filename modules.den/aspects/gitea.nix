@@ -1,9 +1,9 @@
-{ self, ... }:
+{ config, ... }:
 let
-  inherit (self) catalog;
+  inherit (config) catalog;
 in
 {
-  flake.modules.nixos.gitea = { config, pkgs, ... }: {
+  den.aspects.kanto.nixos = { config, pkgs, ... }: {
     services.gitea = {
       enable = true;
       settings.server.ROOT_URL = "https://${catalog.services.gitea.public.domain}";
@@ -63,9 +63,7 @@ in
       domain = catalog.services.gitea.public.domain;
       response.code = 200;
     }];
-  };
 
-  flake.modules.nixos.gatus = {
     # Palvelun valvonta
     services.gatus.settings.endpoints = [{
       name = "Gitea";

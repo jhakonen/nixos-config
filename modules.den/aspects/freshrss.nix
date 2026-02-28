@@ -1,9 +1,9 @@
-{ self, ... }:
+{ config, ... }:
 let
-  inherit (self) catalog;
+  inherit (config) catalog;
 in
 {
-  flake.modules.nixos.freshrss = { config, pkgs, ... }: {
+  den.aspects.kanto.nixos = { config, pkgs, ... }: {
     age.secrets.freshrss-admin-password = {
       file = ../../agenix/freshrss-admin-password.age;
       owner = config.services.freshrss.user;
@@ -76,9 +76,7 @@ in
         ];
       }
     ];
-  };
 
-  flake.modules.nixos.gatus = {
     # Palvelun valvonta
     services.gatus.settings.endpoints = [{
       name = "FreshRSS";

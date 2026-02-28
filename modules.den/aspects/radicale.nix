@@ -1,12 +1,12 @@
 # Käyttäjä ja salasana on luotu komennolla:
 #   sudo htpasswd -5 -c /var/lib/radicale/users jhakonen
 
-{ self, ... }:
+{ config, ... }:
 let
-  inherit (self) catalog;
+  inherit (config) catalog;
 in
 {
-  flake.modules.nixos.radicale = { config, pkgs, ... }: {
+  den.aspects.kanto.nixos = { config, pkgs, ... }: {
     services.radicale = {
       enable = true;
       settings = {
@@ -63,9 +63,7 @@ in
         timerConfig.OnCalendar = "Sat 02:00";
       };
     };
-  };
 
-  flake.modules.nixos.gatus = {
     # Palvelun valvonta
     services.gatus.settings.endpoints = [{
       name = "Radicale";

@@ -76,6 +76,13 @@ in
         timerConfig.OnCalendar = "Sat 02:00";
       };
     };
+
+    # Palvelun valvonta
+    services.gatus.settings.endpoints = [{
+      name = "N8N";
+      url = "https://${catalog.services.n8n.public.domain}";
+      conditions = [ "[STATUS] == 200" ];
+    }];
   };
 
   # Tunneli webhookia varten
@@ -93,14 +100,5 @@ in
         useACMEHost = "jhakonen.com";
       };
     };
-  };
-
-  den.aspects.nassuvm.nixos = {
-    # Palvelun valvonta
-    services.gatus.settings.endpoints = [{
-      name = "N8N";
-      url = "https://${catalog.services.n8n.public.domain}";
-      conditions = [ "[STATUS] == 200" ];
-    }];
   };
 }

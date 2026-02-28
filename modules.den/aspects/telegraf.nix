@@ -1,9 +1,9 @@
-{ self, ... }:
+{ config, ... }:
 let
-  inherit (self) catalog;
+  inherit (config) catalog;
 in
 {
-  flake.modules.nixos.telegraf = { config, ... }: {
+  den.aspects.kanto.nixos = { config, ... }: {
     age.secrets.telegraf-environment.file = ../../agenix/telegraf-environment.age;
 
     services.telegraf = {

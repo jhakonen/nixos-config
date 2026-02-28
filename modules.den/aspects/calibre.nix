@@ -1,7 +1,7 @@
-{ self, lib, ... }: let
-  inherit (self) catalog;
+{ config, lib, ... }: let
+  inherit (config) catalog;
 in {
-  flake.modules.nixos.calibre = { config, pkgs, ... }: let
+  den.aspects.kanto.nixos = { config, pkgs, ... }: let
     LOCAL_URL = "http://127.0.0.1:${toString config.services.calibre-web.listen.port}";
   in {
     services = {
@@ -69,9 +69,7 @@ in {
         ];
       }
     ];
-  };
 
-  flake.modules.nixos.gatus = {
     # Palvelun valvonta
     services.gatus.settings.endpoints = [{
       name = "Calibre Web";

@@ -1,9 +1,9 @@
-{ self, ... }:
+{ config, ... }:
 let
-  inherit (self) catalog;
+  inherit (config) catalog;
   backupDir = "/var/backup/influxdb";
 in {
-  flake.modules.nixos.influxdb = { config, pkgs, ... }: {
+  den.aspects.kanto.nixos = { config, pkgs, ... }: {
     # Työkalut influxdb varmuuskopiointiin ja palatukseen
     environment.systemPackages = [ pkgs.influxdb ];
 
@@ -50,9 +50,7 @@ in {
       description = "InfluxDB - service";
       name = config.systemd.services.influxdb.name;
     }];
-  };
 
-  flake.modules.nixos.gatus = {
     # Palvelun valvonta
     services.gatus.settings.endpoints = [{
       name = "Influx DB";

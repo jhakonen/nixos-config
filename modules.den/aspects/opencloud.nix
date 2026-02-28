@@ -69,6 +69,13 @@ in
         timerConfig.OnCalendar = "Sat 02:00";
       };
     };
+
+    # Palvelun valvonta
+    services.gatus.settings.endpoints = [{
+      name = "Opencloud";
+      url = "https://${catalog.services.opencloud.public.domain}";
+      conditions = [ "[STATUS] == 200" ];
+    }];
   };
 
   den.aspects.tunneli.nixos = { config, ... }: {
@@ -114,14 +121,5 @@ in
         ];
       }))
     ];
-  };
-
-  den.aspects.nassuvm.nixos = {
-    # Palvelun valvonta
-    services.gatus.settings.endpoints = [{
-      name = "Opencloud";
-      url = "https://${catalog.services.opencloud.public.domain}";
-      conditions = [ "[STATUS] == 200" ];
-    }];
   };
 }

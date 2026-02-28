@@ -1,9 +1,9 @@
-{ lib, self, ... }:
+{ lib, config, ... }:
 let
-  inherit (self) catalog;
+  inherit (config) catalog;
 in
 {
-  flake.modules.nixos.home-assistant = { config, pkgs, ... }: {
+  den.aspects.kanto.nixos = { config, pkgs, ... }: {
     services.home-assistant = {
       enable = true;
       config = {
@@ -128,9 +128,7 @@ in
       description = "Home Assistant - service";
       name = config.systemd.services.home-assistant.name;
     }];
-  };
 
-  flake.modules.nixos.gatus = {
     # Palvelun valvonta
     services.gatus.settings.endpoints = [{
       name = "Home Assistant";

@@ -1,8 +1,8 @@
-{ self, ... }:
+{ config, ... }:
 let
-  inherit (self) catalog;
+  inherit (config) catalog;
 in {
-  flake.modules.nixos.immich = { config, pkgs, ... }: {
+  den.aspects.kanto.nixos = { config, pkgs, ... }: {
     environment.systemPackages = [ pkgs.immich-cli ];
 
     services.immich = {
@@ -75,9 +75,7 @@ in {
         name = "immich-machine-learning.service";
       }
     ];
-  };
 
-  flake.modules.nixos.gatus = {
     # Palvelun valvonta
     services.gatus.settings.endpoints = [{
       name = "Immich";

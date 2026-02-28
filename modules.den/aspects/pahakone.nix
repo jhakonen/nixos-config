@@ -17,7 +17,7 @@ in {
     };
   };
 
-  den.aspects.nassuvm.nixos = {
+  den.aspects.kanto.nixos = {
     # Palvelun valvonta
     services.gatus.settings.endpoints = [{
       name = "Kalenteri";

@@ -1,9 +1,9 @@
-{ self, ... }:
+{ config, ... }:
 let
-  inherit (self) catalog;
+  inherit (config) catalog;
 in
 {
-  flake.modules.nixos.grafana = { config, ... }: {
+  den.aspects.kanto.nixos = { config, ... }: {
     services.grafana = {
       enable = true;
       settings = {
@@ -74,9 +74,7 @@ in
       description = "Grafana - service";
       name = config.systemd.services.grafana.name;
     }];
-  };
 
-  flake.modules.nixos.gatus = {
     # Palvelun valvonta
     services.gatus.settings.endpoints = [{
       name = "Grafana";
