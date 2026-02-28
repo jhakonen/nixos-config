@@ -1,15 +1,9 @@
-{ self, ... }: let
-  inherit (self) catalog;
+{ config, ... }: let
+  inherit (config) catalog;
 in {
-  flake.modules.nixos.nixos = {
+  den.default.nixos = {
     users.users.root = {
       openssh.authorizedKeys.keys = [ catalog.id-rsa-public-key ];
     };
-  };
-
-  flake.modules.homeManager.root = {
-    imports = [
-      self.modules.homeManager.common
-    ];
   };
 }
