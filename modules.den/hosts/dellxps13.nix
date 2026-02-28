@@ -3,12 +3,13 @@
 in {
   imports = [ inputs.den.flakeModule ];
 
-  den.hosts.x86_64-linux.dellxps13.users.jhakonen = {};
+  den.hosts.x86_64-linux.dellxps13.users.jhakonen.aspect = "jhakonen@dellxps13";
+  den.aspects."jhakonen@dellxps13".includes = [ den.aspects.jhakonen ];
+
   den.hosts.x86_64-linux.dellxps13.users.root = {};
 
   den.aspects.dellxps13 = {
     includes = [
-      den.aspects.dellxps13-jhakonen
       den.aspects.koti
       den.aspects.tailscale
     ];
@@ -503,120 +504,116 @@ in {
     };
   };
 
-  den.aspects.dellxps13-jhakonen = den.lib.take.exactly ({ user, host }:
-    if user.userName == "jhakonen" then {
-      homeManager = { config, pkgs, ... }: {
-        imports = [
-          inputs.agenix.homeManagerModules.age
-          # inputs.jhhapanel.homeManagerModules.default
-        ];
+  den.aspects."jhakonen@dellxps13".homeManager = { config, pkgs, ... }: {
+    imports = [
+      inputs.agenix.homeManagerModules.age
+      # inputs.jhhapanel.homeManagerModules.default
+    ];
 
-        # Add stuff for your user as you see fit:
-        # programs.neovim.enable = true;
-        home.packages = [
-          (pkgs.callPackage "${inputs.agenix}/pkgs/agenix.nix" {})
-          #pkgs.calibre
-          pkgs.nixos-rebuild  # rebuildaus etäkoneelle
-          pkgs.nix-index  # Nixpkgs pakettien sisällön etsiminen
-        ];
+    # Add stuff for your user as you see fit:
+    # programs.neovim.enable = true;
+    home.packages = [
+      (pkgs.callPackage "${inputs.agenix}/pkgs/agenix.nix" {})
+      #pkgs.calibre
+      pkgs.nixos-rebuild  # rebuildaus etäkoneelle
+      pkgs.nix-index  # Nixpkgs pakettien sisällön etsiminen
+    ];
 
-        # Enable home-manager and git
-        programs.home-manager.enable = true;
+    # Enable home-manager and git
+    programs.home-manager.enable = true;
 
-        # programs.jhhapanel = {
-        #   enable = true;
-        # };
+    # programs.jhhapanel = {
+    #   enable = true;
+    # };
 
-        programs.ssh = {
-          enable = true;
-          matchBlocks = {
-            "kota" = {
-              user = "pi";
-            };
-            "nas" = {
-              user = "valvoja";
-              identityFile = [
-                "~/.ssh/id_rsa"
-              ];
-            };
-            "codeberg.org" = {
-              user = "git";
-            };
-          };
+    programs.ssh = {
+      enable = true;
+      matchBlocks = {
+        "kota" = {
+          user = "pi";
         };
-
-        accounts.email.accounts = catalog.emailAccounts;
-        programs.thunderbird = {
-          enable = true;
-          package = pkgs.thunderbird;  # Thunderbird 115 paremmalla käyttöliittymällä
-          profiles."${config.home.username}" = {
-            isDefault = true;
-            settings = {
-              # Järjestä mailit oletuksena kaikissa kansioissa laskevasti (uusin ensimmäisenä)
-              "mailnews.default_sort_order" = 2;
-            };
-          };
+        "nas" = {
+          user = "valvoja";
+          identityFile = [
+            "~/.ssh/id_rsa"
+          ];
         };
-
-        services.easyeffects = {
-          enable = true;
+        "codeberg.org" = {
+          user = "git";
         };
-
-        # Nicely reload system units when changing configs
-        systemd.user.startServices = "sd-switch";
-
-        # https://nixos.wiki/wiki/Home_Manager#Usage_on_non-NixOS_Linux
-        # targets.genericLinux.enable = true;
-
-        # https://wiki.nixos.org/wiki/Default_applications
-        # Tiedostotyypin näkee komennolla "file -i <tiedoston polku>"
-        # Tiedostopääte mimetyypiksi, katso: /run/current-system/sw/share/mime/globs
-        # xdg.mimeApps = {
-        #   enable = true;
-        #   defaultApplications = {
-        #     "text/html" = "firefox.desktop";
-        #     "text/markdown" = "sublime_text.desktop";
-        #     "text/plain" = "org.gnome.TextEditor.desktop";
-        #     "x-scheme-handler/about" = "firefox.desktop";
-        #     "x-scheme-handler/element" = "Beeper.desktop";
-        #     "x-scheme-handler/http" = "firefox.desktop";
-        #     "x-scheme-handler/https" = "firefox.desktop";
-        #     "x-scheme-handler/mailto" = "thunderbird.desktop";
-        #     "x-scheme-handler/unknown" = "firefox.desktop";
-        #   };
-        # };
-
-        # Ylikrjoita mime asetukset jos niitä tulee muokattua käsin, esim. Nemolla
-        # muuttamalla tiedoston oletusohjelmaa
-        # xdg.configFile."mimeapps.list".force = true;
-
-        xdg.userDirs = {
-          enable = true;
-          desktop = "${config.home.homeDirectory}/Työpöytä";
-          documents = "${config.home.homeDirectory}/Asiakirjat";
-          download = "${config.home.homeDirectory}/Lataukset";
-          music = "${config.home.homeDirectory}/Musiikki";
-          pictures = "${config.home.homeDirectory}/Kuvat";
-          publicShare = "${config.home.homeDirectory}/Julkinen";
-          templates = "${config.home.homeDirectory}/Mallit";
-          videos = "${config.home.homeDirectory}/Videot";
-        };
-
-        # gtk.theme = {
-        #   package = pkgs.flat-remix-gtk;
-        #   # Mahdolliset teemojen nimet löytää komennolla:
-        #   #   ll $(nix eval --raw nixpkgs#flat-remix-gtk.outPath)/share/themes/
-        #   name = "Flat-Remix-GTK-Yellow-Dark";
-        # };
-        # gtk.iconTheme = {
-        #   package = pkgs.yaru-remix-theme;
-        #   # Mahdolliset teemojen nimet löytää komennolla:
-        #   #   ll $(nix eval --raw nixpkgs#yaru-remix-theme.outPath)/share/icons/
-        #   name = "Yaru-remix-light";
-        # };
       };
-    } else {}
-  );
+    };
+
+    accounts.email.accounts = catalog.emailAccounts;
+    programs.thunderbird = {
+      enable = true;
+      package = pkgs.thunderbird;  # Thunderbird 115 paremmalla käyttöliittymällä
+      profiles."${config.home.username}" = {
+        isDefault = true;
+        settings = {
+          # Järjestä mailit oletuksena kaikissa kansioissa laskevasti (uusin ensimmäisenä)
+          "mailnews.default_sort_order" = 2;
+        };
+      };
+    };
+
+    services.easyeffects = {
+      enable = true;
+    };
+
+    # Nicely reload system units when changing configs
+    systemd.user.startServices = "sd-switch";
+
+    # https://nixos.wiki/wiki/Home_Manager#Usage_on_non-NixOS_Linux
+    # targets.genericLinux.enable = true;
+
+    # https://wiki.nixos.org/wiki/Default_applications
+    # Tiedostotyypin näkee komennolla "file -i <tiedoston polku>"
+    # Tiedostopääte mimetyypiksi, katso: /run/current-system/sw/share/mime/globs
+    # xdg.mimeApps = {
+    #   enable = true;
+    #   defaultApplications = {
+    #     "text/html" = "firefox.desktop";
+    #     "text/markdown" = "sublime_text.desktop";
+    #     "text/plain" = "org.gnome.TextEditor.desktop";
+    #     "x-scheme-handler/about" = "firefox.desktop";
+    #     "x-scheme-handler/element" = "Beeper.desktop";
+    #     "x-scheme-handler/http" = "firefox.desktop";
+    #     "x-scheme-handler/https" = "firefox.desktop";
+    #     "x-scheme-handler/mailto" = "thunderbird.desktop";
+    #     "x-scheme-handler/unknown" = "firefox.desktop";
+    #   };
+    # };
+
+    # Ylikrjoita mime asetukset jos niitä tulee muokattua käsin, esim. Nemolla
+    # muuttamalla tiedoston oletusohjelmaa
+    # xdg.configFile."mimeapps.list".force = true;
+
+    xdg.userDirs = {
+      enable = true;
+      desktop = "${config.home.homeDirectory}/Työpöytä";
+      documents = "${config.home.homeDirectory}/Asiakirjat";
+      download = "${config.home.homeDirectory}/Lataukset";
+      music = "${config.home.homeDirectory}/Musiikki";
+      pictures = "${config.home.homeDirectory}/Kuvat";
+      publicShare = "${config.home.homeDirectory}/Julkinen";
+      templates = "${config.home.homeDirectory}/Mallit";
+      videos = "${config.home.homeDirectory}/Videot";
+    };
+
+    # gtk.theme = {
+    #   package = pkgs.flat-remix-gtk;
+    #   # Mahdolliset teemojen nimet löytää komennolla:
+    #   #   ll $(nix eval --raw nixpkgs#flat-remix-gtk.outPath)/share/themes/
+    #   name = "Flat-Remix-GTK-Yellow-Dark";
+    # };
+    # gtk.iconTheme = {
+    #   package = pkgs.yaru-remix-theme;
+    #   # Mahdolliset teemojen nimet löytää komennolla:
+    #   #   ll $(nix eval --raw nixpkgs#yaru-remix-theme.outPath)/share/icons/
+    #   name = "Yaru-remix-light";
+    # };
+  };
 
   den.aspects.nassuvm.nixos = {
     # Palvelun valvonta
