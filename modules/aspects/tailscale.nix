@@ -16,7 +16,7 @@ in {
     ];
   };
 
-  den.aspects.dellxsp13.nixos = { config, ... }: {
+  den.aspects.dellxps13.nixos = { config, ... }: {
     # https://davideger.github.io/blog/taildrop_on_linux
     systemd.services.tailreceive = {
       description = "File Receiver Service for Taildrop";

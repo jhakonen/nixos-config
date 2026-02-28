@@ -23,32 +23,34 @@
       };
     };
 
-    config.services.syncthing = {
-      enable = cfg.enable;
-      user = cfg.user;
-      dataDir = cfg.data-dir;
-      overrideDevices = true;
-      overrideFolders = true;
-      openDefaultPorts = true;
-      guiAddress = "0.0.0.0:${toString cfg.gui-port}";
-      settings = cfg.settings;
-    };
+    config = lib.mkIf (cfg.settings != {}) {
+      services.syncthing = {
+        enable = cfg.enable;
+        user = cfg.user;
+        dataDir = cfg.data-dir;
+        overrideDevices = true;
+        overrideFolders = true;
+        openDefaultPorts = true;
+        guiAddress = "0.0.0.0:${toString cfg.gui-port}";
+        settings = cfg.settings;
+      };
 
-    config.environment.systemPackages = with pkgs; [
-      syncthing
-    ];
-
-    config.networking.firewall.allowedTCPPorts = lib.mkIf cfg.enable [ cfg.gui-port ];
-
-    # Palvelun valvonta
-    config.my.services = lib.mkIf cfg.enable {
-      monitoring.checks = [
-        {
-          type = "systemd service";
-          description = "Syncthing - service";
-          name = config.systemd.services.syncthing.name;
-        }
+      environment.systemPackages = with pkgs; [
+        syncthing
       ];
+
+      networking.firewall.allowedTCPPorts = lib.mkIf cfg.enable [ cfg.gui-port ];
+
+      # Palvelun valvonta
+      my.services = lib.mkIf cfg.enable {
+        monitoring.checks = [
+          {
+            type = "systemd service";
+            description = "Syncthing - service";
+            name = config.systemd.services.syncthing.name;
+          }
+        ];
+      };
     };
   };
 }
