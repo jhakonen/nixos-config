@@ -1,8 +1,7 @@
-{ ... }:
 {
   # Perustuu ohjeisiin:
   #   https://discourse.nixos.org/t/nixos-firefox-configuration-with-policies-preferences-extensions-search-engines-and-cookie-exceptions/73747
-  den.aspects.dellxps13.nixos = { config, pkgs, ... }: let
+  den.aspects.dellxps13.nixos = let
     # about:support#addons-tbody
     extensions = [
       "gdpr@cavi.au.dk"                  # Consent-O-Matic

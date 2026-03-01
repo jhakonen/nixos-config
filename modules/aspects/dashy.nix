@@ -43,7 +43,7 @@ let
       }))
     ];
 in {
-  den.aspects.kanto.nixos = { config, ... }: {
+  den.aspects.kanto.nixos = {
     services.dashy = {
       enable = true;
       virtualHost = {

@@ -1,5 +1,5 @@
 # Perustuu ideaan blogista: https://jdheyburn.co.uk/blog/automating-service-configurations-with-nixos/
-{ inputs, lib, ... }: let
+{ lib, ... }: let
   # Julkinen avain SSH:lla sisäänkirjautumista varten
   id-rsa-public-key =
       "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDMqorF45N0aG+QqJbRt7kRcmXXbsgvXw7"
@@ -446,7 +446,7 @@
     ;
 
   pickSyncthingDevices = names:
-    lib.filterAttrs (n: v: lib.elem n names) syncthing-devices;
+    lib.filterAttrs (n: _v: lib.elem n names) syncthing-devices;
 in {
   options.catalog = lib.mkOption {
     type = lib.types.attrsOf lib.types.unspecified;
@@ -463,6 +463,6 @@ in {
       inherit services;
       inherit syncthing-devices;
     })
-    (import ../encrypted/private-catalog.nix {});
+    (import ../encrypted/private-catalog.nix);
   };
 }

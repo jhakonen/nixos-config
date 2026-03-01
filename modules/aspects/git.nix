@@ -1,4 +1,4 @@
-{ den, inputs, lib, config, ... }: let
+{ config, ... }: let
   inherit (config) catalog;
 in {
   den.aspects."jhakonen@dellxps13".homeManager = { config, ... }: {

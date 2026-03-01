@@ -4,7 +4,7 @@ let
   dataDir = "/var/lib/opencloud";
 in
 {
-  den.aspects.kanto.nixos = { config, pkgs, ... }: let
+  den.aspects.kanto.nixos = { pkgs, ... }: let
     imageSource = inputs.opencloud-image { inherit pkgs; };
     inherit (imageSource) image_name image_digest;
   in {
@@ -78,7 +78,7 @@ in
     }];
   };
 
-  den.aspects.tunneli.nixos = { config, ... }: {
+  den.aspects.tunneli.nixos = {
     services.nginx.virtualHosts.${catalog.services.opencloud.public.domain} = {
       locations."/" = {
         proxyPass = "http://kanto.tailscale.jhakonen.com:${toString catalog.services.opencloud.port}";

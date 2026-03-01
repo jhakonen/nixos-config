@@ -3,7 +3,7 @@ let
   inherit (config) catalog;
 in
 {
-  den.aspects.kanto.nixos = { config, pkgs, ... }: {
+  den.aspects.kanto.nixos = { config, ... }: {
     age.secrets.freshrss-admin-password = {
       file = ../../agenix/freshrss-admin-password.age;
       owner = config.services.freshrss.user;

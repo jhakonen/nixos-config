@@ -12,7 +12,7 @@ let
     if notContainer && isFlake && builtins.pathExists flakePath then
       let
         flake = import (sourceInfo.outPath + "/flake.nix");
-        inputs = builtins.mapAttrs (name: value: selfInputs.${name}) (flake.inputs or { });
+        inputs = builtins.mapAttrs (name: _value: selfInputs.${name}) (flake.inputs or { });
         outputs = flake.outputs (inputs // { inherit self; });
         self =
           sourceInfo

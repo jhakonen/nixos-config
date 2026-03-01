@@ -3,7 +3,7 @@ let
   inherit (config) catalog;
   backupDir = "/var/backup/influxdb";
 in {
-  den.aspects.kanto.nixos = { config, pkgs, ... }: {
+  den.aspects.kanto.nixos = { pkgs, ... }: {
     # Työkalut influxdb varmuuskopiointiin ja palatukseen
     environment.systemPackages = [ pkgs.influxdb ];
 

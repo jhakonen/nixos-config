@@ -3,11 +3,11 @@
 #  - rm -r /var/lib/meilisearch /var/lib/private/meilisearch
 #  - systemctl start meilisearch.service
 #  - https://karakeep.kanto.lan.jhakonen.com/admin/background_jobs --> "Reindex All Bookmarks"
-{ lib, config, ... }:
+{ config, ... }:
 let
   inherit (config) catalog;
 in {
-  den.aspects.kanto.nixos = { config, pkgs, ... }: {
+  den.aspects.kanto.nixos = { config, ... }: {
     age.secrets.karakeep-environment.file = ../../agenix/karakeep-environment.age;
 
     services.karakeep = {

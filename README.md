@@ -89,6 +89,13 @@ koti buuttaa <kone>
 
 Toista kullekkin koneelle.
 
+# Koodin linttaus
+
+```bash
+nix run github:astro/deadnix .
+nix run github:nix-community/nixpkgs-lint .
+```
+
 # Sukupolvien listaus
 
 ```bash

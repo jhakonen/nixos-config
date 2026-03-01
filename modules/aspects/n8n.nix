@@ -1,4 +1,4 @@
-{ self, config, ... }:
+{ config, ... }:
 let
   inherit (config) catalog;
   port = 5678;

@@ -1,8 +1,8 @@
-{ self, ... }: let
-  pasv_min_port = 10090;
-  pasv_max_port = 10100;
-in {
-  den.aspects.kanto.nixos = { config, pkgs, ... }: {
+{
+  den.aspects.kanto.nixos = let
+    pasv_min_port = 10090;
+    pasv_max_port = 10100;
+  in {
     services.vsftpd = {
       enable = true;
       anonymousUser = true;

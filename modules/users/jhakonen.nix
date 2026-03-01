@@ -1,4 +1,4 @@
-{ lib, config, inputs, ... }: let
+{ lib, config, ... }: let
   inherit (config) catalog;
 in {
   den.default.nixos = { config, ... }: {

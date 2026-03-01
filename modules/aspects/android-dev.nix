@@ -1,5 +1,4 @@
 # Perustuu ohjeisiin: https://wiki.nixos.org/wiki/Android
-{ ... }:
 {
   den.aspects.dellxps13.nixos = { pkgs, ... }: {
     environment.systemPackages = [

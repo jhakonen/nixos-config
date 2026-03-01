@@ -1,4 +1,4 @@
-{ config, lib, inputs, den, ... }: let
+{ config, inputs, den, ... }: let
   inherit (config) catalog;
 in {
   imports = [ inputs.den.flakeModule ];
@@ -287,7 +287,7 @@ in {
         gnome-text-editor
         google-chrome  # Chromecastin tukea varten
         gnumake
-        (hakuneko.overrideAttrs(attrs: {  # Manga downloader
+        (hakuneko.overrideAttrs(_attrs: {  # Manga downloader
           version = "8.3.4";
           src = pkgs.fetchurl {
             url = "https://github.com/manga-download/hakuneko/releases/download/nightly-20200705.1/hakuneko-desktop_8.3.4_linux_amd64.deb";

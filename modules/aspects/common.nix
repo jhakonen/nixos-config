@@ -107,7 +107,7 @@
     '';
   };
 
-  den.default.homeManager = { pkgs, ... }: {
+  den.default.homeManager = {
     imports = [ inputs.agenix.homeManagerModules.age ];
     programs.autojump.enable = true;
     programs.tealdeer = {

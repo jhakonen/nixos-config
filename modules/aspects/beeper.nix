@@ -1,4 +1,3 @@
-{ ... }:
 {
   den.aspects.dellxps13.nixos = { pkgs, ... }: {
     environment.systemPackages = [

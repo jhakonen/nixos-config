@@ -3,7 +3,7 @@ let
   inherit (config) catalog;
 in
 {
-  den.aspects.kanto.nixos = { config, pkgs, ... }: {
+  den.aspects.kanto.nixos = { config, ... }: {
     services.gitea = {
       enable = true;
       settings.server.ROOT_URL = "https://${catalog.services.gitea.public.domain}";

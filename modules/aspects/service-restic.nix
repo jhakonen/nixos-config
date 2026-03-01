@@ -1,4 +1,4 @@
-{ inputs, config, ... }:
+{ config, ... }:
 let
   inherit (config) catalog;
 in
@@ -26,7 +26,7 @@ in
       ];
 
       # Aseta oletusasetukset kullekin varmuuskopiotehtävälle
-      services.restic.backups = builtins.mapAttrs (name: options:
+      services.restic.backups = builtins.mapAttrs (_name: options:
         {
           initialize = true;
           passwordFile = config.age.secrets.restic-password.path;
@@ -59,7 +59,7 @@ in
         }
         //
         # Lähetä ilmoitus jos varmuuskopiointi epäonnistuu
-        (lib.mapAttrs' (name: options: lib.nameValuePair "restic-backups-${name}" {
+        (lib.mapAttrs' (name: _options: lib.nameValuePair "restic-backups-${name}" {
           unitConfig.OnFailure = [ "notify-failure@restic-backups-${name}.service" ];
         }) config.my.services.restic.backups);
     };

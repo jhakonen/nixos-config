@@ -1,4 +1,4 @@
-{ lib, config, ... }: let
+{ config, ... }: let
   inherit (config) catalog;
 in {
   den.aspects.kanto.nixos = { config, ... }: {

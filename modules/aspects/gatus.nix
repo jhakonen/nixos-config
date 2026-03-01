@@ -3,7 +3,7 @@ let
   inherit (config) catalog;
 in
 {
-  den.aspects.kanto.nixos = { config, ... }: {
+  den.aspects.kanto.nixos = {
     services.gatus = {
       enable = true;
       settings = {

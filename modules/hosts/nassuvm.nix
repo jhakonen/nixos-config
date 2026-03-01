@@ -11,7 +11,7 @@
       den.aspects.tailscale
     ];
 
-    nixos = { lib, modulesPath, pkgs, ... }: {
+    nixos = { modulesPath, pkgs, ... }: {
       imports = [ (modulesPath + "/profiles/qemu-guest.nix") ];
 
       nix.settings.experimental-features = [ "nix-command" "flakes" ];

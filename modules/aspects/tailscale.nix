@@ -7,7 +7,7 @@ in {
   den.aspects.tailscale.nixos = { config, pkgs, ... }: {
     services.tailscale = {
       enable = true;
-      extraUpFlags = "--operator=jhakonen";
+      extraUpFlags = ["--operator=jhakonen"];
       openFirewall = true;
     };
 
