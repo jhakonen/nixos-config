@@ -53,24 +53,6 @@ in {
     };
 
     # Palvelun valvonta
-    my.services.monitoring.checks = [
-      {
-        type = "systemd service";
-        description = "Calibre-Web - service";
-        name = config.systemd.services.calibre-web.name;
-      }
-      {
-        type = "systemd service";
-        description = "Calibre-Web - db reconnect";
-        name = config.systemd.services.calibre-db-reconnect.name;
-        extraStates = [
-          "LAST_RUN_OK"
-          "NOT_RUN_YET"
-        ];
-      }
-    ];
-
-    # Palvelun valvonta
     services.gatus.settings.endpoints = [{
       name = "Calibre Web";
       url = "https://${catalog.services.calibre-web.public.domain}";

@@ -45,13 +45,6 @@ in {
     };
 
     # Palvelun valvonta
-    my.services.monitoring.checks = [{
-      type = "systemd service";
-      description = "InfluxDB - service";
-      name = config.systemd.services.influxdb.name;
-    }];
-
-    # Palvelun valvonta
     services.gatus.settings.endpoints = [{
       name = "Influx DB";
       url = "http://${catalog.services.influx-db.host.ip.private}:${toString catalog.services.influx-db.port}/ping";

@@ -99,30 +99,6 @@ in {
     };
 
     # Palvelun valvonta
-    my.services.monitoring.checks = [
-      {
-        type = "systemd service";
-        description = "Paperless - consumer";
-        name = config.systemd.services.paperless-consumer.name;
-      }
-      {
-        type = "systemd service";
-        description = "Paperless - scheduler";
-        name = config.systemd.services.paperless-scheduler.name;
-      }
-      {
-        type = "systemd service";
-        description = "Paperless - task-queue";
-        name = config.systemd.services.paperless-task-queue.name;
-      }
-      {
-        type = "systemd service";
-        description = "Paperless - web service";
-        name = config.systemd.services.paperless-web.name;
-      }
-    ];
-
-    # Palvelun valvonta
     services.gatus.settings.endpoints = [{
       name = "Paperless";
       url = "https://${catalog.services.paperless.public.domain}";

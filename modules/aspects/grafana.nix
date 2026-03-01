@@ -69,13 +69,6 @@ in
     };
 
     # Palvelun valvonta
-    my.services.monitoring.checks = [{
-      type = "systemd service";
-      description = "Grafana - service";
-      name = config.systemd.services.grafana.name;
-    }];
-
-    # Palvelun valvonta
     services.gatus.settings.endpoints = [{
       name = "Grafana";
       url = "https://${catalog.services.grafana.public.domain}";

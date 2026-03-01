@@ -63,20 +63,6 @@ in {
     };
 
     # Palvelun valvonta
-    my.services.monitoring.checks = [
-      {
-        type = "systemd service";
-        description = "immich - service";
-        name = "immich-server.service";
-      }
-      {
-        type = "systemd service";
-        description = "immich - machine learning";
-        name = "immich-machine-learning.service";
-      }
-    ];
-
-    # Palvelun valvonta
     services.gatus.settings.endpoints = [{
       name = "Immich";
       url = "https://${catalog.services.immich.public.domain}";

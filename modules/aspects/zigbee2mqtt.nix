@@ -132,13 +132,6 @@ in {
     };
 
     # Palvelun valvonta
-    my.services.monitoring.checks = [{
-      type = "systemd service";
-      description = "zigbee2mqtt - service";
-      name = config.systemd.services.zigbee2mqtt.name;
-    }];
-
-    # Palvelun valvonta
     services.gatus.settings.endpoints = [{
       name = "Zigbee2MQTT";
       url = "https://${catalog.services.zigbee2mqtt.public.domain}";

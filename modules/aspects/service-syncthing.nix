@@ -40,17 +40,6 @@
       ];
 
       networking.firewall.allowedTCPPorts = lib.mkIf cfg.enable [ cfg.gui-port ];
-
-      # Palvelun valvonta
-      my.services = lib.mkIf cfg.enable {
-        monitoring.checks = [
-          {
-            type = "systemd service";
-            description = "Syncthing - service";
-            name = config.systemd.services.syncthing.name;
-          }
-        ];
-      };
     };
   };
 }

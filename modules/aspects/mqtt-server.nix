@@ -61,13 +61,6 @@ in {
     users.groups.acme.members = [ "mosquitto" ];
 
     # Palvelun valvonta
-    my.services.monitoring.checks = [{
-      type = "systemd service";
-      description = "Mosquitto - service";
-      name = config.systemd.services.mosquitto.name;
-    }];
-
-    # Palvelun valvonta
     services.gatus.settings.endpoints = [{
       name = "Mosquitto (secure)";
       url = "tcp://${catalog.services.mosquitto.public.domain}:${toString catalog.services.mosquitto.port}";

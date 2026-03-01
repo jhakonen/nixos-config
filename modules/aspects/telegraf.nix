@@ -35,14 +35,5 @@ in
         };
       };
     };
-
-    # Palvelun valvonta
-    my.services.monitoring.checks = [
-      {
-        type = "systemd service";
-        description = "Telegraf - service";
-        name = config.systemd.services.telegraf.name;
-      }
-    ];
   };
 }

@@ -61,24 +61,6 @@ in {
     };
 
     # Palvelun valvonta
-    my.services.monitoring.checks = [
-      {
-        type = "systemd service";
-        description = "karakeep - service";
-        name = "karakeep-web.service";
-      }
-      {
-        type = "http check";
-        description = "karakeep - web interface";
-        domain = catalog.services.karakeep.public.domain;
-        path = "/signin";
-        secure = true;
-        response.code = 200;
-        alertAfterSec = 15 * 60;
-      }
-    ];
-
-    # Palvelun valvonta
     services.gatus.settings.endpoints = [{
       name = "Karakeep";
       url = "https://${catalog.services.karakeep.public.domain}";

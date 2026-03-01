@@ -64,13 +64,6 @@ in {
       mosquitto-esphome-password.file = ../../agenix/mqtt-espuser-password.age;
     };
 
-    # Valvonnan asetukset
-    my.services.monitoring = {
-      enable = true;
-      acmeHost = "jhakonen.com";
-      virtualHost = catalog.services.monit-kanto.public.domain;
-    };
-
     # Tiedostojen synkkaus
     my.services.syncthing = {
       enable = true;

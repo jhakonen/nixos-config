@@ -73,13 +73,6 @@ in
     };
 
     # Palvelun valvonta
-    my.services.monitoring.checks = [{
-      type = "systemd service";
-      description = "Tvheadend - service";
-      name = "podman-tvheadend";
-    }];
-
-    # Palvelun valvonta
     services.gatus.settings.endpoints = [{
       name = "Tvheadend";
       url = "http://${catalog.services.tvheadend.host.hostName}:${toString catalog.services.tvheadend.port}";

@@ -204,30 +204,6 @@
         icon = "hl-kodi";
       };
     };
-    monit-kanto = {
-      host = nodes.kanto;
-      dashy = {
-        section = "valvonta";
-        description = "Monit - kanto";
-        icon = "hl-monit";
-      };
-      public = {
-        domain = "monit.kanto.lan.jhakonen.com";
-        port = 443;
-      };
-    };
-    monit-mervi = {
-      host = nodes.mervi;
-      dashy = {
-        section = "valvonta";
-        description = "Monit - mervi";
-        icon = "hl-monit";
-      };
-      public = {
-        domain = "monit.mervi.lan.jhakonen.com";
-        port = 443;
-      };
-    };
     mosquitto = {
       host = nodes.kanto;
       port = 8883;

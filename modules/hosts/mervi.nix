@@ -67,12 +67,6 @@ in {
         pulse.enable = true;
       };
 
-      my.services.monitoring = {
-        enable = true;
-        acmeHost = "mervi.lan.jhakonen.com";
-        virtualHost = catalog.services.monit-mervi.public.domain;
-      };
-
       my.services.syncthing = {
         enable = true;
         gui-port = catalog.services.syncthing-mervi.port;

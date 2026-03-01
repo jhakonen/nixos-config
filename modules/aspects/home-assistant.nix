@@ -123,13 +123,6 @@ in
     };
 
     # Palvelun valvonta
-    my.services.monitoring.checks = [{
-      type = "systemd service";
-      description = "Home Assistant - service";
-      name = config.systemd.services.home-assistant.name;
-    }];
-
-    # Palvelun valvonta
     services.gatus.settings.endpoints = [{
       name = "Home Assistant";
       url = "https://${catalog.services.home-assistant.public.domain}";

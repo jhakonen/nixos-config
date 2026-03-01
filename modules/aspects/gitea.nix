@@ -56,15 +56,6 @@ in
     };
 
     # Palvelun valvonta
-    my.services.monitoring.checks = [{
-      type = "http check";
-      description = "Gitea - web interface";
-      secure = true;
-      domain = catalog.services.gitea.public.domain;
-      response.code = 200;
-    }];
-
-    # Palvelun valvonta
     services.gatus.settings.endpoints = [{
       name = "Gitea";
       url = "https://${catalog.services.gitea.public.domain}";

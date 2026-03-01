@@ -60,24 +60,6 @@ in
     };
 
     # Palvelun valvonta
-    my.services.monitoring.checks = [
-      {
-        type = "systemd service";
-        description = "FreshRSS - service";
-        name = config.systemd.services.phpfpm-freshrss.name;
-      }
-      {
-        type = "systemd service";
-        description = "FreshRSS - updater";
-        name = config.systemd.services.freshrss-updater.name;
-        extraStates = [
-          "LAST_RUN_OK"
-          "NOT_RUN_YET"
-        ];
-      }
-    ];
-
-    # Palvelun valvonta
     services.gatus.settings.endpoints = [{
       name = "FreshRSS";
       url = "https://${catalog.services.freshrss.public.domain}";
