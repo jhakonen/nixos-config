@@ -3,9 +3,7 @@
 in {
   den.aspects.nginx.nixos = { config, pkgs, ... }: {
     # Salaisuudet
-    age.secrets = {
-      acme-joker-credentials.file = ../../agenix/acme-joker-credentials.age;
-    };
+    age.secrets.acme-joker-credentials.file = ../../agenix/acme-joker-credentials.age;
 
     # Palomuurin asetukset
     networking.firewall.allowedTCPPorts = [ 80 443 ];  # nginx

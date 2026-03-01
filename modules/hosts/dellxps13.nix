@@ -44,7 +44,6 @@ in {
       imports = [
         (modulesPath + "/installer/scan/not-detected.nix")
 
-        inputs.agenix.nixosModules.default
         inputs.nixos-hardware.nixosModules.common-cpu-intel
         inputs.nixos-hardware.nixosModules.common-pc-laptop
         inputs.nixos-hardware.nixosModules.common-pc-ssd
@@ -506,7 +505,6 @@ in {
 
   den.aspects."jhakonen@dellxps13".homeManager = { config, pkgs, ... }: {
     imports = [
-      inputs.agenix.homeManagerModules.age
       # inputs.jhhapanel.homeManagerModules.default
     ];
 

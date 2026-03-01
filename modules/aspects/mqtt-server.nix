@@ -6,12 +6,10 @@ in {
     certDir = config.security.acme.certs."jhakonen.com".directory;
   in {
     # Salaisuudet
-    age.secrets = {
-      mosquitto-password = {
-        file = ../../agenix/mqtt-password.age;
-        owner = "mosquitto";
-        group = "mosquitto";
-      };
+    age.secrets.mosquitto-password = {
+      file = ../../agenix/mqtt-password.age;
+      owner = "mosquitto";
+      group = "mosquitto";
     };
 
     services.mosquitto = {

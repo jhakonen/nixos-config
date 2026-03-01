@@ -13,10 +13,7 @@ in {
     ];
 
     nixos = { config, lib, modulesPath, pkgs, ... }: {
-      imports = [
-        inputs.agenix.nixosModules.default
-        (modulesPath + "/installer/scan/not-detected.nix")
-      ];
+      imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
 
       # Ota flaket käyttöön
       nix.settings.experimental-features = [ "nix-command" "flakes" ];

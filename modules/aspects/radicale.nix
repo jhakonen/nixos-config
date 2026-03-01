@@ -6,7 +6,7 @@ let
   inherit (config) catalog;
 in
 {
-  den.aspects.kanto.nixos = { config, pkgs, ... }: {
+  den.aspects.kanto.nixos = { pkgs, ... }: {
     services.radicale = {
       enable = true;
       settings = {

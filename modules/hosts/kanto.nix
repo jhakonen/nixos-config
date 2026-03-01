@@ -16,10 +16,7 @@ in {
     # Ota flaket käyttöön
     nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
-    imports = [
-      (modulesPath + "/installer/scan/not-detected.nix")
-      inputs.agenix.nixosModules.default
-    ];
+    imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
 
     nixpkgs.config.allowUnfree = true;
 

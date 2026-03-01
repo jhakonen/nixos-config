@@ -1,6 +1,8 @@
-{ lib, self, ... }:
+{ inputs, lib, ... }:
 {
   den.default.nixos = { config, pkgs, ... }: {
+    imports = [ inputs.agenix.nixosModules.default ];
+
     # Aika-alueen asetus
     time.timeZone = "Europe/Helsinki";
 
@@ -106,6 +108,7 @@
   };
 
   den.default.homeManager = { pkgs, ... }: {
+    imports = [ inputs.agenix.homeManagerModules.age ];
     programs.autojump.enable = true;
     programs.tealdeer = {
       enable = true;

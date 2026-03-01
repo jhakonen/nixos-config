@@ -16,10 +16,6 @@ in {
   den.aspects.jhakonen.homeManager = { config, pkgs, ... }: let
     passwordFile = config.age.secrets.mosquitto-password.path;
   in {
-    imports = [
-      inputs.agenix.homeManagerModules.age
-    ];
-
     age.secrets.mosquitto-password = {
       file = ../../agenix/mqtt-password.age;
     };

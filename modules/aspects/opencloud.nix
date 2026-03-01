@@ -94,32 +94,9 @@ in
     };
   };
 
-  den.aspects.dellxps13.nixos = { pkgs, ... }: let
-    # https://github.com/NixOS/nixpkgs/pull/456008 - voinee poistaa NixOS 25.11 versiossa
-    ecm618 = pkgs.unstable.kdePackages.extra-cmake-modules.overrideAttrs (old: rec {
-      version = "6.18.0";
-      src = pkgs.unstable.fetchFromGitLab {
-        domain = "invent.kde.org";
-        owner = "frameworks";
-        repo = "extra-cmake-modules";
-        tag = "v${version}";
-        hash = "sha256-hpqczRaV32yyXXRWxR30tOBEUNWDkeSzVrv0SHMrz1Y=";
-      };
-      patches = [ ];
-    });
-  in {
+  den.aspects.dellxps13.nixos = { pkgs, ... }: {
     environment.systemPackages = [
-      (pkgs.unstable.opencloud-desktop.overrideAttrs(attrs: {
-        buildInputs = with pkgs.unstable; [
-          ecm618
-          qt6.qtbase
-          qt6.qtdeclarative
-          qt6.qttools
-          kdePackages.qtkeychain
-          libre-graph-api-cpp-qt-client
-          kdsingleapplication
-        ];
-      }))
+      pkgs.unstable.opencloud-desktop
     ];
   };
 }

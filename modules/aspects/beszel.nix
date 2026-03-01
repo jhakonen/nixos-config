@@ -16,6 +16,7 @@ in {
     ################################################
     # Korjaa Systemd palvelujen monitorointi
     # https://github.com/NixOS/nixpkgs/pull/461327
+    # HUOMAA: PR on mergetty, tämän voi poistaa NixOS 26.05:ssä.
     users.users.beszel-agent = {
       isSystemUser = true;
       group = "beszel-agent";
@@ -29,93 +30,82 @@ in {
     ################################################
   };
 
-  den.aspects.nassuvm = {
-    includes = [ den.aspects.beszel-agent ];
-    nixos = { pkgs, ... }: {
-      services.beszel.hub = {
-        enable = true;
-        package = pkgs.unstable.beszel;
-        port = catalog.services.beszel.port;
-        environment = {
-          # Aseta Hubin URL-osoite notifikaatioita varten
-          APP_URL = "https://${catalog.services.beszel.public.domain}";
-        };
+  den.aspects.nassuvm.nixos = { pkgs, ... }: {
+    services.beszel.hub = {
+      enable = true;
+      package = pkgs.unstable.beszel;
+      port = catalog.services.beszel.port;
+      environment = {
+        # Aseta Hubin URL-osoite notifikaatioita varten
+        APP_URL = "https://${catalog.services.beszel.public.domain}";
       };
+    };
 
-      services.nginx.virtualHosts.${catalog.services.beszel.public.domain} = {
-        locations."/" = {
-          proxyPass = "http://127.0.0.1:${toString catalog.services.beszel.port}";
-          proxyWebsockets = true;
-          recommendedProxySettings = true;
-        };
-        # Käytä Let's Encrypt sertifikaattia
-        addSSL = true;
-        useACMEHost = "nassuvm.lan.jhakonen.com";
+    services.nginx.virtualHosts.${catalog.services.beszel.public.domain} = {
+      locations."/" = {
+        proxyPass = "http://127.0.0.1:${toString catalog.services.beszel.port}";
+        proxyWebsockets = true;
+        recommendedProxySettings = true;
       };
+      # Käytä Let's Encrypt sertifikaattia
+      addSSL = true;
+      useACMEHost = "nassuvm.lan.jhakonen.com";
+    };
 
-      # Varmuuskopiointi
-      #   Käynnistä:
-      #     systemctl start restic-backups-beszel-hub-oma.service
-      #     systemctl start restic-backups-beszel-hub-veli.service
-      #   Snapshotit:
-      #     sudo restic-beszel-hub-oma snapshots
-      #     sudo restic-beszel-hub-veli snapshots
-      my.services.restic.backups = let
-        bConfig = {
-          paths = [
-            "/var/lib/beszel-hub"
-            "/var/lib/private/beszel-hub"
-          ];
-          backupPrepareCommand = "systemctl stop beszel-hub.service";
-          backupCleanupCommand = "systemctl start beszel-hub.service";
-        };
-      in {
-        beszel-hub-oma = bConfig // {
-          repository = "rclone:nas-oma:/backups/restic/beszel-hub";
-          timerConfig.OnCalendar = "01:00";
-        };
-        beszel-hub-veli = bConfig // {
-          repository = "rclone:nas-veli:/home/restic/beszel-hub";
-          timerConfig.OnCalendar = "Sat 02:00";
-        };
+    # Varmuuskopiointi
+    #   Käynnistä:
+    #     systemctl start restic-backups-beszel-hub-oma.service
+    #     systemctl start restic-backups-beszel-hub-veli.service
+    #   Snapshotit:
+    #     sudo restic-beszel-hub-oma snapshots
+    #     sudo restic-beszel-hub-veli snapshots
+    my.services.restic.backups = let
+      bConfig = {
+        paths = [
+          "/var/lib/beszel-hub"
+          "/var/lib/private/beszel-hub"
+        ];
+        backupPrepareCommand = "systemctl stop beszel-hub.service";
+        backupCleanupCommand = "systemctl start beszel-hub.service";
+      };
+    in {
+      beszel-hub-oma = bConfig // {
+        repository = "rclone:nas-oma:/backups/restic/beszel-hub";
+        timerConfig.OnCalendar = "01:00";
+      };
+      beszel-hub-veli = bConfig // {
+        repository = "rclone:nas-veli:/home/restic/beszel-hub";
+        timerConfig.OnCalendar = "Sat 02:00";
       };
     };
   };
 
-  den.aspects.dellxps13 = {
+  den.default = {
     includes = [ den.aspects.beszel-agent ];
-    nixos = {
-      networking.firewall.interfaces.tailscale0.allowedTCPPorts = [ agent-port ];
-    };
   };
 
-  den.aspects.kanto = {
-    includes = [ den.aspects.beszel-agent ];
-    nixos = {
-      networking.firewall.allowedTCPPorts = [ agent-port ];
-      # Lisää tuki podman konteille
-      virtualisation.podman.dockerSocket.enable = true;
-
-      # Palvelun valvonta
-      services.gatus.settings.endpoints = [{
-        name = "Beszel";
-        url = "https://${catalog.services.beszel.public.domain}";
-        conditions = [ "[STATUS] == 200" ];
-      }];
-    };
+  den.aspects.dellxps13.nixos = {
+    networking.firewall.interfaces.tailscale0.allowedTCPPorts = [ agent-port ];
   };
 
-  den.aspects.mervi = {
-    includes = [ den.aspects.beszel-agent ];
-    nixos = {
-      networking.firewall.allowedTCPPorts = [ agent-port ];
-    };
+  den.aspects.kanto.nixos = {
+    networking.firewall.allowedTCPPorts = [ agent-port ];
+    # Lisää tuki podman konteille
+    virtualisation.podman.dockerSocket.enable = true;
+
+    # Palvelun valvonta
+    services.gatus.settings.endpoints = [{
+      name = "Beszel";
+      url = "https://${catalog.services.beszel.public.domain}";
+      conditions = [ "[STATUS] == 200" ];
+    }];
   };
 
-  den.aspects.tunneli = {
-    includes = [ den.aspects.beszel-agent ];
-    nixos = {
-      networking.firewall.interfaces.tailscale0.allowedTCPPorts = [ agent-port ];
-    };
+  den.aspects.mervi.nixos = {
+    networking.firewall.allowedTCPPorts = [ agent-port ];
+  };
+
+  den.aspects.tunneli.nixos = {
+    networking.firewall.interfaces.tailscale0.allowedTCPPorts = [ agent-port ];
   };
 }

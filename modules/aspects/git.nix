@@ -2,13 +2,9 @@
   inherit (config) catalog;
 in {
   den.aspects."jhakonen@dellxps13".homeManager = { config, ... }: {
-    imports = [ inputs.agenix.homeManagerModules.age ];
-
-    age.secrets = {
-      github-id-rsa = {
-        file = ../../agenix/github-id-rsa.age;
-        path = "/home/jhakonen/.ssh/github-id-rsa";
-      };
+    age.secrets.github-id-rsa = {
+      file = ../../agenix/github-id-rsa.age;
+      path = "/home/jhakonen/.ssh/github-id-rsa";
     };
 
     programs = {
