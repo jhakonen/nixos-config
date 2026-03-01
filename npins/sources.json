@@ -55,19 +55,6 @@
       "url": "https://github.com/nix-community/home-manager/archive/0d782ee42c86b196acff08acfbf41bb7d13eed5b.tar.gz",
       "hash": "sha256-3iVX1+7YUIt23hBx1WZsUllhbmP2EnXrV8tCRbLxHc8="
     },
-    "hyprpanel": {
-      "type": "Git",
-      "repository": {
-        "type": "GitHub",
-        "owner": "Jas-SinghFSU",
-        "repo": "HyprPanel"
-      },
-      "branch": "master",
-      "submodules": false,
-      "revision": "0e73df1dfedf0f6fa21ed0ae5e031b0663c8f400",
-      "url": "https://github.com/Jas-SinghFSU/HyprPanel/archive/0e73df1dfedf0f6fa21ed0ae5e031b0663c8f400.tar.gz",
-      "hash": "sha256-yBejG3j6OLQYn87UozFAI3q9a1vH00u9xjIf2Q4V5j8="
-    },
     "import-tree": {
       "type": "Git",
       "repository": {
@@ -123,47 +110,6 @@
       "url": "https://github.com/nixos/nixpkgs/archive/6c5e707c6b5339359a9a9e215c5e66d6d802fd7a.tar.gz",
       "hash": "sha256-iKZMkr6Cm9JzWlRYW/VPoL0A9jVKtZYiU4zSrVeetIs="
     },
-    "nixpkgs-for-nm-1-48-10": {
-      "type": "Git",
-      "repository": {
-        "type": "GitHub",
-        "owner": "nixos",
-        "repo": "nixpkgs"
-      },
-      "branch": "master",
-      "submodules": false,
-      "revision": "0bd7f95e4588643f2c2d403b38d8a2fe44b0fc73",
-      "url": "https://github.com/nixos/nixpkgs/archive/0bd7f95e4588643f2c2d403b38d8a2fe44b0fc73.tar.gz",
-      "hash": "sha256-eEOlHQAQF4jrrs3zs62wJ5GikQpukQPdtAi5mAy/om8=",
-      "frozen": true
-    },
-    "nixpkgs-lib": {
-      "type": "Git",
-      "repository": {
-        "type": "GitHub",
-        "owner": "nixos",
-        "repo": "nixpkgs"
-      },
-      "branch": "nixos-unstable",
-      "submodules": false,
-      "revision": "d6c71932130818840fc8fe9509cf50be8c64634f",
-      "url": "https://github.com/nixos/nixpkgs/archive/d6c71932130818840fc8fe9509cf50be8c64634f.tar.gz",
-      "hash": "sha256-ub1gpAONMFsT/GU2hV6ZWJjur8rJ6kKxdm9IlCT0j84="
-    },
-    "nixpkgs-mistral-vibe": {
-      "type": "Git",
-      "repository": {
-        "type": "GitHub",
-        "owner": "nixos",
-        "repo": "nixpkgs"
-      },
-      "branch": "master",
-      "submodules": false,
-      "revision": "7c645dcbd80de5ca4f216ef8415846f5e68a398f",
-      "url": "https://github.com/nixos/nixpkgs/archive/7c645dcbd80de5ca4f216ef8415846f5e68a398f.tar.gz",
-      "hash": "sha256-feL6PWkICEj+o1g4VA8hmKX8gm2iy/NPqIvCzn4sjf4=",
-      "frozen": true
-    },
     "nixpkgs-unstable": {
       "type": "Git",
       "repository": {
@@ -173,22 +119,9 @@
       },
       "branch": "nixos-unstable",
       "submodules": false,
-      "revision": "d6c71932130818840fc8fe9509cf50be8c64634f",
-      "url": "https://github.com/nixos/nixpkgs/archive/d6c71932130818840fc8fe9509cf50be8c64634f.tar.gz",
-      "hash": "sha256-ub1gpAONMFsT/GU2hV6ZWJjur8rJ6kKxdm9IlCT0j84="
-    },
-    "npins": {
-      "type": "Git",
-      "repository": {
-        "type": "GitHub",
-        "owner": "andir",
-        "repo": "npins"
-      },
-      "branch": "master",
-      "submodules": false,
-      "revision": "74ad332bf9e1ce8e1d54a15a5108f2c552e25630",
-      "url": "https://github.com/andir/npins/archive/74ad332bf9e1ce8e1d54a15a5108f2c552e25630.tar.gz",
-      "hash": "sha256-3jSM1wBg1uiPf8RH59YaY3CZ2g/7Y//7hkKI/C+Qb68="
+      "revision": "dd9b079222d43e1943b6ebd802f04fd959dc8e61",
+      "url": "https://github.com/nixos/nixpkgs/archive/dd9b079222d43e1943b6ebd802f04fd959dc8e61.tar.gz",
+      "hash": "sha256-I45esRSssFtJ8p/gLHUZ1OUaaTaVLluNkABkk6arQwE="
     },
     "opencloud-image": {
       "type": "Container",
@@ -197,38 +130,12 @@
       "image_digest": "sha256:05db0550a9b6e9590ea52830b5b0003a0f15a2326b38b4aee52629c1a005f2d5",
       "hash": "sha256-AH1NPOMM1Q+/8n6+xnjSCQTzjNhaO91uYZq6yY+Nvh8="
     },
-    "qjournalctl": {
-      "type": "Git",
-      "repository": {
-        "type": "GitHub",
-        "owner": "jhakonen",
-        "repo": "qjournalctl"
-      },
-      "branch": "master",
-      "submodules": false,
-      "revision": "a43067b9d6717c8b4854b6c2301571fffa5133fb",
-      "url": "https://github.com/jhakonen/qjournalctl/archive/a43067b9d6717c8b4854b6c2301571fffa5133fb.tar.gz",
-      "hash": "sha256-p/sJ/7QL1VoOo/zGnRVwy9n+Mc7ug2usp2fZXTNBn/g="
-    },
     "tvheadend-image": {
       "type": "Container",
       "image_name": "lscr.io/linuxserver/tvheadend",
       "image_tag": "latest",
       "image_digest": "sha256:df72ab3d1d4295454a58d4dd709f4898fdca50c0246893b0e48d77d5b83e7d8f",
       "hash": "sha256-xlAoOhq44w0ckLbb3Uyuda7+e35GOYiMvDjLHYcGbos="
-    },
-    "zen-browser": {
-      "type": "Git",
-      "repository": {
-        "type": "GitHub",
-        "owner": "0xc000022070",
-        "repo": "zen-browser-flake"
-      },
-      "branch": "main",
-      "submodules": false,
-      "revision": "0078cf2d5e81eb56a9356d51f2738f7141194de1",
-      "url": "https://github.com/0xc000022070/zen-browser-flake/archive/0078cf2d5e81eb56a9356d51f2738f7141194de1.tar.gz",
-      "hash": "sha256-iJ9c0ZewfRRYUflaEOj43n5TWaB6Ezygn2UA/ZHGQJA="
     }
   },
   "version": 7
