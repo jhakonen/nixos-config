@@ -1,6 +1,5 @@
-{ config, inputs, den, ... }: let
-  inherit (config) catalog;
-in {
+{ inputs, den, ... }:
+{
   imports = [ inputs.den.flakeModule ];
 
   den.hosts.x86_64-linux.dellxps13.users.jhakonen.aspect = "jhakonen@dellxps13";
@@ -232,9 +231,9 @@ in {
 
       my.services.syncthing = {
         enable = true;
-        gui-port = catalog.services.syncthing-dellxps13.port;
+        gui-port = config.catalog.services.syncthing-dellxps13.port;
         settings = {
-          devices = catalog.pickSyncthingDevices ["mervi" "nas"];
+          devices = config.catalog.pickSyncthingDevices ["mervi" "nas"];
           folders = {
             "Calibre" = {
               path = "/home/jhakonen/Syncthing/Calibre";
@@ -542,7 +541,7 @@ in {
       };
     };
 
-    accounts.email.accounts = catalog.emailAccounts;
+    accounts.email.accounts = config.catalog.emailAccounts;
     programs.thunderbird = {
       enable = true;
       package = pkgs.thunderbird;  # Thunderbird 115 paremmalla käyttöliittymällä
@@ -613,11 +612,11 @@ in {
     # };
   };
 
-  den.aspects.kanto.nixos = {
+  den.aspects.kanto.nixos = { config, ... }: {
     # Palvelun valvonta
     services.gatus.settings.endpoints = [{
       name = "Syncthing (dellxps13)";
-      url = "http://${catalog.services.syncthing-dellxps13.host.hostName}:${toString catalog.services.syncthing-dellxps13.port}";
+      url = "http://${config.catalog.services.syncthing-dellxps13.host.hostName}:${toString config.catalog.services.syncthing-dellxps13.port}";
       conditions = [ "[STATUS] == 200" ];
     }];
   };

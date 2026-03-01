@@ -1,6 +1,4 @@
-{ config, ... }: let
-  inherit (config) catalog;
-in {
+{
   den.aspects.kanto.nixos = { config, ... }: {
     services.zigbee2mqtt = {
       enable = true;
@@ -16,7 +14,7 @@ in {
         serial.port = "/dev/ttyUSB0";
         mqtt = {
           base_topic = "zigbee2mqtt";
-          server = "mqtts://${catalog.services.mosquitto.public.domain}";
+          server = "mqtts://${config.catalog.services.mosquitto.public.domain}";
           user = "koti";
           reject_unauthorized = true;
         };
@@ -81,15 +79,15 @@ in {
           };
         };
         groups = {};
-        frontend.port = catalog.services.zigbee2mqtt.port;
+        frontend.port = config.catalog.services.zigbee2mqtt.port;
       };
     };
 
     services.nginx = {
       enable = true;
-      virtualHosts.${catalog.services.zigbee2mqtt.public.domain} = {
+      virtualHosts.${config.catalog.services.zigbee2mqtt.public.domain} = {
         locations."/" = {
-          proxyPass = "http://127.0.0.1:${toString catalog.services.zigbee2mqtt.port}";
+          proxyPass = "http://127.0.0.1:${toString config.catalog.services.zigbee2mqtt.port}";
           proxyWebsockets = true;
           recommendedProxySettings = true;
         };
@@ -106,7 +104,7 @@ in {
     ];
 
     # Avaa palomuuriin hallintapaneelille reikä
-    networking.firewall.allowedTCPPorts = [ catalog.services.zigbee2mqtt.port ];
+    networking.firewall.allowedTCPPorts = [ config.catalog.services.zigbee2mqtt.port ];
 
     # Varmuuskopiointi
     #   Käynnistä:
@@ -134,7 +132,7 @@ in {
     # Palvelun valvonta
     services.gatus.settings.endpoints = [{
       name = "Zigbee2MQTT";
-      url = "https://${catalog.services.zigbee2mqtt.public.domain}";
+      url = "https://${config.catalog.services.zigbee2mqtt.public.domain}";
       conditions = [ "[STATUS] == 200" ];
     }];
   };

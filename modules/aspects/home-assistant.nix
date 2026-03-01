@@ -1,15 +1,11 @@
-{ lib, config, ... }:
-let
-  inherit (config) catalog;
-in
 {
-  den.aspects.kanto.nixos = { config, pkgs, ... }: {
+  den.aspects.kanto.nixos = { config, lib, pkgs, ... }: {
     services.home-assistant = {
       enable = true;
       config = {
         automation = "!include automations.yaml";
         http = {
-          server_port = catalog.services.home-assistant.port;
+          server_port = config.catalog.services.home-assistant.port;
           use_x_forwarded_for = true;
           trusted_proxies = [
             "127.0.0.1"  # Luota nginx palveluun
@@ -18,7 +14,7 @@ in
         homeassistant = {
           country = "FI";
           language = "en-GB";
-          external_url = "https://${catalog.services.home-assistant.public.domain}";
+          external_url = "https://${config.catalog.services.home-assistant.public.domain}";
           auth_providers = [
             {
               type = "trusted_networks";
@@ -50,7 +46,7 @@ in
 
     services.esphome = {
       enable = true;
-      port = catalog.services.esphome.port;
+      port = config.catalog.services.esphome.port;
     };
     # https://github.com/NixOS/nixpkgs/issues/339557
     systemd.services.esphome = let
@@ -70,9 +66,9 @@ in
 
     services.nginx = {
       enable = true;
-      virtualHosts.${catalog.services.esphome.public.domain} = {
+      virtualHosts.${config.catalog.services.esphome.public.domain} = {
         locations."/" = {
-          proxyPass = "http://127.0.0.1:${toString catalog.services.esphome.port}";
+          proxyPass = "http://127.0.0.1:${toString config.catalog.services.esphome.port}";
           proxyWebsockets = true;
           recommendedProxySettings = true;
         };
@@ -80,9 +76,9 @@ in
         addSSL = true;
         useACMEHost = "jhakonen.com";
       };
-      virtualHosts.${catalog.services.home-assistant.public.domain} = {
+      virtualHosts.${config.catalog.services.home-assistant.public.domain} = {
         locations."/" = {
-          proxyPass = "http://127.0.0.1:${toString catalog.services.home-assistant.port}";
+          proxyPass = "http://127.0.0.1:${toString config.catalog.services.home-assistant.port}";
           proxyWebsockets = true;
           recommendedProxySettings = true;
         };
@@ -93,7 +89,7 @@ in
     };
 
     # Puhkaise reikä palomuuriin
-    networking.firewall.allowedTCPPorts = [ catalog.services.home-assistant.public.port ];
+    networking.firewall.allowedTCPPorts = [ config.catalog.services.home-assistant.public.port ];
 
     # Varmuuskopiointi
     #   Käynnistä:
@@ -125,11 +121,11 @@ in
     # Palvelun valvonta
     services.gatus.settings.endpoints = [{
       name = "Home Assistant";
-      url = "https://${catalog.services.home-assistant.public.domain}";
+      url = "https://${config.catalog.services.home-assistant.public.domain}";
       conditions = [ "[STATUS] == 200" ];
     } {
       name = "Home Assistant (ESPHome)";
-      url = "https://${catalog.services.esphome.public.domain}";
+      url = "https://${config.catalog.services.esphome.public.domain}";
       conditions = [ "[STATUS] == 200" ];
     }];
   };

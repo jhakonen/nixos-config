@@ -1,12 +1,10 @@
-{ config, ... }: let
-  inherit (config) catalog;
-in {
-  den.aspects.tunneli.nixos = {
+{
+  den.aspects.tunneli.nixos = { config, ... }: {
     services.nginx = {
       enable = true;
-      virtualHosts.${catalog.services.kalenteri.public.domain} = {
+      virtualHosts.${config.catalog.services.kalenteri.public.domain} = {
         locations."/" = {
-          proxyPass = "https://${catalog.nodes.veljen-nassi.ip.tailscale}:20003";
+          proxyPass = "https://${config.catalog.nodes.veljen-nassi.ip.tailscale}:20003";
           proxyWebsockets = true;
           recommendedProxySettings = true;
         };
@@ -17,11 +15,11 @@ in {
     };
   };
 
-  den.aspects.kanto.nixos = {
+  den.aspects.kanto.nixos = { config, ... }: {
     # Palvelun valvonta
     services.gatus.settings.endpoints = [{
       name = "Kalenteri";
-      url = "https://${catalog.services.kalenteri.public.domain}";
+      url = "https://${config.catalog.services.kalenteri.public.domain}";
       conditions = [ "[STATUS] == 200" ];
     }];
   };

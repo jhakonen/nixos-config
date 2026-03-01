@@ -1,6 +1,4 @@
-{ config, ... }: let
-  inherit (config) catalog;
-in {
+{
   den.aspects."jhakonen@dellxps13".homeManager = { config, ... }: {
     age.secrets.github-id-rsa = {
       file = ../../agenix/github-id-rsa.age;
@@ -15,7 +13,7 @@ in {
           init.defaultBranch = "main";
           user = {
             name = "Janne Hakonen";
-            email = catalog.githubEmail;
+            email = config.catalog.githubEmail;
           };
         };
       };

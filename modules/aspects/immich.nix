@@ -1,13 +1,10 @@
-{ config, ... }:
-let
-  inherit (config) catalog;
-in {
+{
   den.aspects.kanto.nixos = { config, pkgs, ... }: {
     environment.systemPackages = [ pkgs.immich-cli ];
 
     services.immich = {
       enable = true;
-      port = catalog.services.immich.port;
+      port = config.catalog.services.immich.port;
     };
 
     # Ota käyttöön videon laitteistopohjainen koodaustuki
@@ -22,9 +19,9 @@ in {
     # Paljasta Immich jhakonen.com domainissa
     services.nginx = {
       enable = true;
-      virtualHosts.${catalog.services.immich.public.domain} = {
+      virtualHosts.${config.catalog.services.immich.public.domain} = {
         locations."/" = {
-          proxyPass = "http://[::1]:${toString catalog.services.immich.port}";
+          proxyPass = "http://[::1]:${toString config.catalog.services.immich.port}";
           proxyWebsockets = true;
           recommendedProxySettings = true;
         };
@@ -65,7 +62,7 @@ in {
     # Palvelun valvonta
     services.gatus.settings.endpoints = [{
       name = "Immich";
-      url = "https://${catalog.services.immich.public.domain}";
+      url = "https://${config.catalog.services.immich.public.domain}";
       conditions = [ "[STATUS] == 200" ];
     }];
   };

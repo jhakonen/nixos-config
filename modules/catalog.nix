@@ -447,8 +447,8 @@
 
   pickSyncthingDevices = names:
     lib.filterAttrs (n: _v: lib.elem n names) syncthing-devices;
-in {
-  options.catalog = lib.mkOption {
+
+  catalogOption = lib.mkOption {
     type = lib.types.attrsOf lib.types.unspecified;
     default = lib.recursiveUpdate ({
       inherit getServiceName;
@@ -464,5 +464,13 @@ in {
       inherit syncthing-devices;
     })
     (import ../encrypted/private-catalog.nix);
+  };
+in {
+  den.default.nixos = {
+    options.catalog = catalogOption;
+  };
+
+  den.default.homeManager = {
+    options.catalog = catalogOption;
   };
 }

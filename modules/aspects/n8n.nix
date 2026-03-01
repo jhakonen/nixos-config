@@ -1,8 +1,5 @@
-{ config, ... }:
 let
-  inherit (config) catalog;
   port = 5678;
-  webhookHost = catalog.services.n8n.tunnel.domain;
   communityNodes = [
     # n8n-nodes-imap@2.13.0 ei toimi, joten palautin version käyttöön joka
     # minulla oli elokuussa kun loin sähköpostiflown. Se toimii.
@@ -10,13 +7,13 @@ let
   ];
 in
 {
-  den.aspects.kanto.nixos = { lib, pkgs, ... }: {
+  den.aspects.kanto.nixos = { config, lib, pkgs, ... }: {
     services.n8n = {
       enable = true;
       openFirewall = true;
       environment = {
         N8N_PORT = port;
-        WEBHOOK_URL = "https://${webhookHost}/";
+        WEBHOOK_URL = "https://${config.catalog.services.n8n.tunnel.domain}/";
       };
     };
 
@@ -38,7 +35,7 @@ in
 
     services.nginx = {
       enable = true;
-      virtualHosts.${catalog.services.n8n.public.domain} = {
+      virtualHosts.${config.catalog.services.n8n.public.domain} = {
         locations."/" = {
           proxyPass = "http://127.0.0.1:${toString port}";
           proxyWebsockets = true;
@@ -80,16 +77,16 @@ in
     # Palvelun valvonta
     services.gatus.settings.endpoints = [{
       name = "N8N";
-      url = "https://${catalog.services.n8n.public.domain}";
+      url = "https://${config.catalog.services.n8n.public.domain}";
       conditions = [ "[STATUS] == 200" ];
     }];
   };
 
   # Tunneli webhookia varten
-  den.aspects.tunneli.nixos = {
+  den.aspects.tunneli.nixos = { config, ... }: {
     services.nginx = {
       enable = true;
-      virtualHosts.${webhookHost} = {
+      virtualHosts.${config.catalog.services.n8n.tunnel.domain} = {
         locations."/" = {
           proxyPass = "http://kanto.tailscale.jhakonen.com:${toString port}";
           proxyWebsockets = true;

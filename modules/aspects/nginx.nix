@@ -1,6 +1,4 @@
-{ config, ... }: let
-  inherit (config) catalog;
-in {
+{
   den.aspects.nginx.nixos = { config, ... }: {
     # Salaisuudet
     age.secrets.acme-joker-credentials.file = ../../agenix/acme-joker-credentials.age;
@@ -12,7 +10,7 @@ in {
     security.acme = {
       acceptTerms = true;
       defaults = {
-        email = catalog.acmeEmail;
+        email = config.catalog.acmeEmail;
         dnsProvider = "joker";
         credentialsFile = config.age.secrets.acme-joker-credentials.path;
       };

@@ -1,5 +1,5 @@
-{ config, ... }: {
-  den.aspects.tunneli.nixos = let
+{
+  den.aspects.tunneli.nixos = { config, ... }: let
     rootDir = "/var/lib/www";
   in {
     services.nginx = {

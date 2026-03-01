@@ -1,6 +1,4 @@
-{ config, ... }: let
-  inherit (config) catalog;
-in {
+{
   den.aspects.kanto.nixos = { config, pkgs, ... }: let
     LOCAL_URL = "http://127.0.0.1:${toString config.services.calibre-web.listen.port}";
   in {
@@ -9,14 +7,14 @@ in {
         enable = true;
         listen = {
           ip = "127.0.0.1";
-          port = catalog.services.calibre-web.port;
+          port = config.catalog.services.calibre-web.port;
         };
         options = {
-          calibreLibrary = catalog.paths.syncthing.calibre;
+          calibreLibrary = config.catalog.paths.syncthing.calibre;
         };
       };
 
-      nginx.virtualHosts.${catalog.services.calibre-web.public.domain} = {
+      nginx.virtualHosts.${config.catalog.services.calibre-web.public.domain} = {
         locations."/" = {
           proxyPass = LOCAL_URL;
           recommendedProxySettings = true;
@@ -36,7 +34,7 @@ in {
       wantedBy = [ "multi-user.target" ];
       pathConfig = {
         Unit = "calibre-db-reconnect.service";
-        PathModified = "${catalog.paths.syncthing.calibre}/metadata.db";
+        PathModified = "${config.catalog.paths.syncthing.calibre}/metadata.db";
       };
     };
 
@@ -48,14 +46,14 @@ in {
     };
 
     my.services.syncthing.settings.folders."Calibre" = {
-      path = catalog.paths.syncthing.calibre;
+      path = config.catalog.paths.syncthing.calibre;
       devices = [ "nas" ];
     };
 
     # Palvelun valvonta
     services.gatus.settings.endpoints = [{
       name = "Calibre Web";
-      url = "https://${catalog.services.calibre-web.public.domain}";
+      url = "https://${config.catalog.services.calibre-web.public.domain}";
       conditions = [ "[STATUS] == 200" ];
     }];
   };

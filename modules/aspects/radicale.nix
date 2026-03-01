@@ -1,16 +1,11 @@
 # Käyttäjä ja salasana on luotu komennolla:
 #   sudo htpasswd -5 -c /var/lib/radicale/users jhakonen
-
-{ config, ... }:
-let
-  inherit (config) catalog;
-in
 {
-  den.aspects.kanto.nixos = { pkgs, ... }: {
+  den.aspects.kanto.nixos = { config, pkgs, ... }: {
     services.radicale = {
       enable = true;
       settings = {
-        server.hosts = [ "127.0.0.1:${toString catalog.services.radicale.port}" ];
+        server.hosts = [ "127.0.0.1:${toString config.catalog.services.radicale.port}" ];
         auth = {
           type = "htpasswd";
           htpasswd_filename = "/var/lib/radicale/users";
@@ -26,9 +21,9 @@ in
 
     services.nginx = {
       enable = true;
-      virtualHosts.${catalog.services.radicale.public.domain} = {
+      virtualHosts.${config.catalog.services.radicale.public.domain} = {
         locations."/" = {
-          proxyPass = "http://127.0.0.1:${toString catalog.services.radicale.port}";
+          proxyPass = "http://127.0.0.1:${toString config.catalog.services.radicale.port}";
           recommendedProxySettings = true;
         };
         extraConfig = ''
@@ -67,7 +62,7 @@ in
     # Palvelun valvonta
     services.gatus.settings.endpoints = [{
       name = "Radicale";
-      url = "https://${catalog.services.radicale.public.domain}";
+      url = "https://${config.catalog.services.radicale.public.domain}";
       conditions = [ "[STATUS] == 200" ];
     }];
   };

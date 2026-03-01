@@ -1,12 +1,9 @@
-{ inputs, config, ... }:
-let
-  inherit (config) catalog;
-  videoGroupId = 26;
-in
+{ inputs, ... }:
 {
   den.aspects.kanto.nixos = { config, pkgs, ... }: let
     imageSource = inputs.tvheadend-image { inherit pkgs; };
     inherit (imageSource) image_name image_digest;
+    videoGroupId = 26;
   in {
     users.users.tvheadend = {
       description = "Tvheadend Service user";
@@ -32,8 +29,8 @@ in
         "/dev/log:/dev/log:rw"  # laite syslogille
       ];
       ports = [
-        "${toString catalog.services.tvheadend.port}:9981"
-        "${toString catalog.services.tvheadend.htsp_port}:9982"
+        "${toString config.catalog.services.tvheadend.port}:9981"
+        "${toString config.catalog.services.tvheadend.htsp_port}:9982"
       ];
       extraOptions = [
         "--device" "/dev/dri:/dev/dri"
@@ -46,8 +43,8 @@ in
     };
 
     networking.firewall.allowedTCPPorts = [
-      catalog.services.tvheadend.port
-      catalog.services.tvheadend.htsp_port
+      config.catalog.services.tvheadend.port
+      config.catalog.services.tvheadend.htsp_port
     ];
 
     # Varmuuskopiointi
@@ -75,11 +72,11 @@ in
     # Palvelun valvonta
     services.gatus.settings.endpoints = [{
       name = "Tvheadend";
-      url = "http://${catalog.services.tvheadend.host.hostName}:${toString catalog.services.tvheadend.port}";
+      url = "http://${config.catalog.services.tvheadend.host.hostName}:${toString config.catalog.services.tvheadend.port}";
       conditions = [ "[STATUS] == 200" ];
     } {
       name = "Tvheadend (HTSP)";
-      url = "tcp://${catalog.services.tvheadend.host.hostName}:${toString catalog.services.tvheadend.htsp_port}";
+      url = "tcp://${config.catalog.services.tvheadend.host.hostName}:${toString config.catalog.services.tvheadend.htsp_port}";
       conditions = [ "[CONNECTED] == true" ];
     }];
   };

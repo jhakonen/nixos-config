@@ -1,7 +1,3 @@
-{ config, ... }:
-let
-  inherit (config) catalog;
-in
 {
   den.aspects.kanto.nixos = { config, pkgs, ... }: let
     mkPushToGitService = args: {
@@ -32,10 +28,10 @@ in
     age.secrets.kanto-gitea-ssh-key.file = ../../agenix/kanto-gitea-ssh-key.age;
 
     systemd.services."muistiinpanot-to-git" = mkPushToGitService {
-      dir = catalog.paths.syncthing.muistiinpanot;
+      dir = config.catalog.paths.syncthing.muistiinpanot;
     };
     systemd.services."paivakirja-to-git" = mkPushToGitService {
-      dir = catalog.paths.syncthing.paivakirja;
+      dir = config.catalog.paths.syncthing.paivakirja;
     };
   };
 }

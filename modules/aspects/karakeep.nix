@@ -3,10 +3,7 @@
 #  - rm -r /var/lib/meilisearch /var/lib/private/meilisearch
 #  - systemctl start meilisearch.service
 #  - https://karakeep.kanto.lan.jhakonen.com/admin/background_jobs --> "Reindex All Bookmarks"
-{ config, ... }:
-let
-  inherit (config) catalog;
-in {
+{
   den.aspects.kanto.nixos = { config, ... }: {
     age.secrets.karakeep-environment.file = ../../agenix/karakeep-environment.age;
 
@@ -15,7 +12,7 @@ in {
       extraEnvironment = {
         DISABLE_SIGNUPS = "true";
         OCR_LANGS = "fin,eng";
-        PORT = toString catalog.services.karakeep.port;
+        PORT = toString config.catalog.services.karakeep.port;
       };
       # Sisältää muuttujat NEXTAUTH_SECRET ja OPENAI_API_KEY
       environmentFile = config.age.secrets.karakeep-environment.path;
@@ -24,9 +21,9 @@ in {
     # Paljasta Karakeep karakeep.kanto.lan.jhakonen.com domainissa
     services.nginx = {
       enable = true;
-      virtualHosts.${catalog.services.karakeep.public.domain} = {
+      virtualHosts.${config.catalog.services.karakeep.public.domain} = {
         locations."/" = {
-          proxyPass = "http://127.0.0.1:${toString catalog.services.karakeep.port}";
+          proxyPass = "http://127.0.0.1:${toString config.catalog.services.karakeep.port}";
           proxyWebsockets = true;
           recommendedProxySettings = true;
         };
@@ -63,7 +60,7 @@ in {
     # Palvelun valvonta
     services.gatus.settings.endpoints = [{
       name = "Karakeep";
-      url = "https://${catalog.services.karakeep.public.domain}";
+      url = "https://${config.catalog.services.karakeep.public.domain}";
       conditions = [ "[STATUS] == 200" ];
     }];
   };

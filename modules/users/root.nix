@@ -1,9 +1,7 @@
-{ config, ... }: let
-  inherit (config) catalog;
-in {
-  den.default.nixos = {
+{
+  den.default.nixos = { config, ... }: {
     users.users.root = {
-      openssh.authorizedKeys.keys = [ catalog.id-rsa-public-key ];
+      openssh.authorizedKeys.keys = [ config.catalog.id-rsa-public-key ];
     };
   };
 }

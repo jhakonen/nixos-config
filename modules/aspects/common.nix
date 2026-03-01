@@ -1,6 +1,6 @@
-{ inputs, lib, ... }:
+{ inputs, ... }:
 {
-  den.default.nixos = { config, pkgs, ... }: {
+  den.default.nixos = { config, lib, pkgs, ... }: {
     imports = [ inputs.agenix.nixosModules.default ];
 
     # Aika-alueen asetus

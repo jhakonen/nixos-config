@@ -1,54 +1,51 @@
 # Lähde: https://github.com/jdheyburn/nixos-configs/blob/5175593745a27de7afc5249bc130a2f1c5edb64c/modules/dashy/default.nix
-{ lib, config, ... }:
-let
-  inherit (config) catalog;
-
-  # Start to build the elements in sections, this is then used to discover in catalog.services
-  sections = [
-    {
-      name = "Palvelut";
-      icon = "fas fa-cube";
-    }
-    {
-      name = "Syncthing";
-      icon = "";
-    }
-    {
-      name = "Valvonta";
-      icon = "fab fa-watchman-monitoring";
-    }
-    {
-      name = "Verkon hallinta";
-      icon = "fas fa-router";
-    }
-    {
-      name = "Viihde";
-      icon = "fas fa-video";
-    }
-  ];
-
-  getSectionItems = sectionName: services:
-    lib.pipe services [
-      lib.attrValues
-      (builtins.filter (service:
-        service ? dashy.section
-          && service.dashy.section == (lib.toLower sectionName)
-      ))
-      (map (service: {
-        title = if service ? dashy.title then service.dashy.title else catalog.getServiceName(service);
-        description = service.dashy.description;
-        url = "${catalog.getServiceScheme service}://${catalog.getServiceAddress service}:${toString (catalog.getServicePort service)}";
-        icon = service.dashy.icon;
-        target = "newtab";
-      }))
+{
+  den.aspects.kanto.nixos = { config, lib, ... }: let
+    # Start to build the elements in sections, this is then used to discover in catalog.services
+    sections = [
+      {
+        name = "Palvelut";
+        icon = "fas fa-cube";
+      }
+      {
+        name = "Syncthing";
+        icon = "";
+      }
+      {
+        name = "Valvonta";
+        icon = "fab fa-watchman-monitoring";
+      }
+      {
+        name = "Verkon hallinta";
+        icon = "fas fa-router";
+      }
+      {
+        name = "Viihde";
+        icon = "fas fa-video";
+      }
     ];
-in {
-  den.aspects.kanto.nixos = {
+
+    getSectionItems = sectionName: services:
+      lib.pipe services [
+        lib.attrValues
+        (builtins.filter (service:
+          service ? dashy.section
+            && service.dashy.section == (lib.toLower sectionName)
+        ))
+        (map (service: {
+          title = if service ? dashy.title then service.dashy.title else config.catalog.getServiceName(service);
+          description = service.dashy.description;
+          url = "${config.catalog.getServiceScheme service}://${config.catalog.getServiceAddress service}:${toString (config.catalog.getServicePort service)}";
+          icon = service.dashy.icon;
+          target = "newtab";
+        }))
+      ];
+  in {
     services.dashy = {
       enable = true;
       virtualHost = {
         enableNginx = true;
-        domain = catalog.services.dashy.public.domain;
+        domain = config.catalog.services.dashy.public.domain;
       };
       settings = {
         pageInfo = {
@@ -74,11 +71,11 @@ in {
           };
           workspaceLandingUrl = "home-assistant";
         };
-        sections = map (section: section // { items = getSectionItems section.name catalog.services; }) sections;
+        sections = map (section: section // { items = getSectionItems section.name config.catalog.services; }) sections;
       };
     };
 
-    services.nginx.virtualHosts.${catalog.services.dashy.public.domain} = {
+    services.nginx.virtualHosts.${config.catalog.services.dashy.public.domain} = {
       # Käytä Let's Encrypt sertifikaattia
       forceSSL = true;
       useACMEHost = "jhakonen.com";
@@ -87,7 +84,7 @@ in {
     # Palvelun valvonta
     services.gatus.settings.endpoints = [{
       name = "Dashy";
-      url = "https://${catalog.services.dashy.public.domain}";
+      url = "https://${config.catalog.services.dashy.public.domain}";
       conditions = [ "[STATUS] == 200" ];
     }];
   };

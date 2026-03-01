@@ -1,10 +1,7 @@
-{ inputs, config, ... }:
-let
-  inherit (config) catalog;
-  dataDir = "/var/lib/opencloud";
-in
+{ inputs, ... }:
 {
-  den.aspects.kanto.nixos = { pkgs, ... }: let
+  den.aspects.kanto.nixos = { config, pkgs, ... }: let
+    dataDir = "/var/lib/opencloud";
     imageSource = inputs.opencloud-image { inherit pkgs; };
     inherit (imageSource) image_name image_digest;
   in {
@@ -14,7 +11,7 @@ in
       environment = {
         # enable services that are not started automatically
         #OC_ADD_RUN_SERVICES = "${START_ADDITIONAL_SERVICES}";
-        OC_URL = "https://${catalog.services.opencloud.public.domain}";
+        OC_URL = "https://${config.catalog.services.opencloud.public.domain}";
         #OC_LOG_LEVEL = "${LOG_LEVEL:-info}";
         #OC_LOG_COLOR = "${LOG_PRETTY:-false}";
         #OC_LOG_PRETTY = "${LOG_PRETTY:-false}";
@@ -31,12 +28,12 @@ in
         "${dataDir}/apps:/var/lib/opencloud/web/assets/apps"
       ];
       ports = [
-        "${toString catalog.services.opencloud.port}:9200"
+        "${toString config.catalog.services.opencloud.port}:9200"
       ];
     };
 
     networking.firewall.allowedTCPPorts = [
-      catalog.services.opencloud.port
+      config.catalog.services.opencloud.port
     ];
 
     systemd.tmpfiles.rules = [
@@ -73,15 +70,15 @@ in
     # Palvelun valvonta
     services.gatus.settings.endpoints = [{
       name = "Opencloud";
-      url = "https://${catalog.services.opencloud.public.domain}";
+      url = "https://${config.catalog.services.opencloud.public.domain}";
       conditions = [ "[STATUS] == 200" ];
     }];
   };
 
-  den.aspects.tunneli.nixos = {
-    services.nginx.virtualHosts.${catalog.services.opencloud.public.domain} = {
+  den.aspects.tunneli.nixos = { config, ... }: {
+    services.nginx.virtualHosts.${config.catalog.services.opencloud.public.domain} = {
       locations."/" = {
-        proxyPass = "http://kanto.tailscale.jhakonen.com:${toString catalog.services.opencloud.port}";
+        proxyPass = "http://kanto.tailscale.jhakonen.com:${toString config.catalog.services.opencloud.port}";
         proxyWebsockets = true;
         extraConfig = ''
           proxy_request_buffering off;

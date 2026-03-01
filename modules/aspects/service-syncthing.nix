@@ -1,6 +1,5 @@
-{ lib, ... }:
 {
-  den.default.nixos = { config, pkgs, ... }: let
+  den.default.nixos = { config, lib, pkgs, ... }: let
     cfg = config.my.services.syncthing;
   in {
     options.my.services.syncthing = {

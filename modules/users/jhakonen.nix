@@ -1,9 +1,7 @@
-{ lib, config, ... }: let
-  inherit (config) catalog;
-in {
-  den.default.nixos = { config, ... }: {
+{
+  den.default.nixos = { config, lib, ... }: {
     users.users.jhakonen = {
-      openssh.authorizedKeys.keys = [ catalog.id-rsa-public-key ];
+      openssh.authorizedKeys.keys = [ config.catalog.id-rsa-public-key ];
       isNormalUser = true;
       extraGroups = [
         "wheel"  # Salli sudon käyttö
@@ -23,8 +21,8 @@ in {
     home.packages = [ pkgs.mosquitto ];
 
     home.shellAliases = {
-      mosquitto_sub = "mosquitto_sub -h ${catalog.services.mosquitto.public.domain} -p 8883 -u koti -P $(cat ${passwordFile})";
-      mosquitto_pub = "mosquitto_pub -h ${catalog.services.mosquitto.public.domain} -p 8883 -u koti -P $(cat ${passwordFile})";
+      mosquitto_sub = "mosquitto_sub -h ${config.catalog.services.mosquitto.public.domain} -p 8883 -u koti -P $(cat ${passwordFile})";
+      mosquitto_pub = "mosquitto_pub -h ${config.catalog.services.mosquitto.public.domain} -p 8883 -u koti -P $(cat ${passwordFile})";
     };
   };
 }

@@ -1,4 +1,3 @@
-{ lib, ... }:
 {
   den.default.nixos = { pkgs, ... }: {
     # Lisää ZSH valittavien komentotulkkien listaan
@@ -17,7 +16,7 @@
     # '';
   };
 
-  den.default.homeManager = { pkgs, ... }: {
+  den.default.homeManager = { lib, pkgs, ... }: {
     programs.zsh = {
       enable = true;
       autosuggestion.enable = true;

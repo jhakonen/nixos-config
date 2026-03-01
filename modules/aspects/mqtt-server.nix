@@ -1,6 +1,4 @@
-{ config, ... }: let
-  inherit (config) catalog;
-in {
+{
   den.aspects.kanto.nixos = { config, ... }: let
     user = "koti";
     certDir = config.security.acme.certs."jhakonen.com".directory;
@@ -16,7 +14,7 @@ in {
       enable = true;
       listeners = [
         {
-          port = catalog.services.mosquitto.insecure_port;
+          port = config.catalog.services.mosquitto.insecure_port;
           # Käyttäjä esp32 laitteille koska ne eivät tue kryptattua MQTT:tä
           users.esphomeuser = {
             acl = [ "#" ];
@@ -24,7 +22,7 @@ in {
           };
         }
         {
-          port = catalog.services.mosquitto.port;
+          port = config.catalog.services.mosquitto.port;
           settings = {
             keyfile = "${certDir}/key.pem";
             certfile = "${certDir}/cert.pem";
@@ -53,8 +51,8 @@ in {
     };
 
     networking.firewall.allowedTCPPorts = [
-      catalog.services.mosquitto.port
-      catalog.services.mosquitto.insecure_port
+      config.catalog.services.mosquitto.port
+      config.catalog.services.mosquitto.insecure_port
     ];
 
     # Anna mosquittolle pääsy let's encrypt sertifikaattiin
@@ -63,11 +61,11 @@ in {
     # Palvelun valvonta
     services.gatus.settings.endpoints = [{
       name = "Mosquitto (secure)";
-      url = "tcp://${catalog.services.mosquitto.public.domain}:${toString catalog.services.mosquitto.port}";
+      url = "tcp://${config.catalog.services.mosquitto.public.domain}:${toString config.catalog.services.mosquitto.port}";
       conditions = [ "[CONNECTED] == true" ];
     } {
       name = "Mosquitto (insecure)";
-      url = "tcp://${catalog.services.mosquitto.public.domain}:${toString catalog.services.mosquitto.insecure_port}";
+      url = "tcp://${config.catalog.services.mosquitto.public.domain}:${toString config.catalog.services.mosquitto.insecure_port}";
       conditions = [ "[CONNECTED] == true" ];
     }];
   };

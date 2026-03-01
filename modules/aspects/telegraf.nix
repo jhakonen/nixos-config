@@ -1,7 +1,3 @@
-{ config, ... }:
-let
-  inherit (config) catalog;
-in
 {
   den.aspects.kanto.nixos = { config, ... }: {
     age.secrets.telegraf-environment.file = ../../agenix/telegraf-environment.age;
@@ -12,7 +8,7 @@ in
       extraConfig = {
         # Kerää ruuvitagien mittausdataa MQTT:stä
         inputs.mqtt_consumer = {
-          servers = [ "ssl://${catalog.services.mosquitto.public.domain}:${toString catalog.services.mosquitto.port}" ];
+          servers = [ "ssl://${config.catalog.services.mosquitto.public.domain}:${toString config.catalog.services.mosquitto.port}" ];
           topics = [
             "bt-mqtt-gateway/ruuvitag/+/battery"
             "bt-mqtt-gateway/ruuvitag/+/humidity"
@@ -30,7 +26,7 @@ in
 
         # Tallenna kerätty data influxdb kantaan
         outputs.influxdb = {
-          urls = [ "http://localhost:${toString catalog.services.influx-db.port}" ];
+          urls = [ "http://localhost:${toString config.catalog.services.influx-db.port}" ];
           database = "telegraf";
         };
       };

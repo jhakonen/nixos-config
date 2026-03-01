@@ -1,7 +1,3 @@
-{ config, ... }:
-let
-  inherit (config) catalog;
-in
 {
   den.aspects.kanto.nixos = { config, ... }: {
     age.secrets.freshrss-admin-password = {
@@ -11,8 +7,8 @@ in
 
     services.freshrss = {
       enable = true;
-      baseUrl = "https://${catalog.services.freshrss.public.domain}";
-      virtualHost = catalog.services.freshrss.public.domain;
+      baseUrl = "https://${config.catalog.services.freshrss.public.domain}";
+      virtualHost = config.catalog.services.freshrss.public.domain;
       # Jos salasanaa vaihtaa niin tulee ajaa freshrss-config.service uudelleen
       passwordFile = config.age.secrets.freshrss-admin-password.path;
     };
@@ -25,7 +21,7 @@ in
 
     services.nginx = {
       enable = true;
-      virtualHosts.${catalog.services.freshrss.public.domain} = {
+      virtualHosts.${config.catalog.services.freshrss.public.domain} = {
         # Käytä Let's Encrypt sertifikaattia
         addSSL = true;
         useACMEHost = "jhakonen.com";
@@ -62,7 +58,7 @@ in
     # Palvelun valvonta
     services.gatus.settings.endpoints = [{
       name = "FreshRSS";
-      url = "https://${catalog.services.freshrss.public.domain}";
+      url = "https://${config.catalog.services.freshrss.public.domain}";
       conditions = [ "[STATUS] == 200" ];
     }];
   };

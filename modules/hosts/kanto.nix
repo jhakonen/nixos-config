@@ -1,6 +1,5 @@
-{ config, den, inputs, lib, ... }: let
-  inherit (config) catalog;
-in {
+{ den, inputs, ... }:
+{
   imports = [ inputs.den.flakeModule ];
 
   den.hosts.x86_64-linux.kanto.users.jhakonen = {};
@@ -10,7 +9,7 @@ in {
     den.aspects.nginx
     den.aspects.tailscale
   ];
-  den.aspects.kanto.nixos = { config, modulesPath, pkgs, ... }: {
+  den.aspects.kanto.nixos = { config, lib, modulesPath, pkgs, ... }: {
     nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 
     # Ota flaket käyttöön
@@ -67,18 +66,18 @@ in {
     # Tiedostojen synkkaus
     my.services.syncthing = {
       enable = true;
-      gui-port = catalog.services.syncthing-kanto.port;
+      gui-port = config.catalog.services.syncthing-kanto.port;
       user = "root";
       data-dir = "/root";
       settings = {
-        devices = catalog.pickSyncthingDevices ["nas"];
+        devices = config.catalog.pickSyncthingDevices ["nas"];
         folders = {
           "Muistiinpanot" = {
-            path = catalog.paths.syncthing.muistiinpanot;
+            path = config.catalog.paths.syncthing.muistiinpanot;
             devices = [ "nas" ];
           };
           "Päiväkirja" = {
-            path = catalog.paths.syncthing.paivakirja;
+            path = config.catalog.paths.syncthing.paivakirja;
             devices = [ "nas" ];
           };
         };
@@ -88,7 +87,7 @@ in {
     # Palvelun valvonta
     services.gatus.settings.endpoints = [{
       name = "Syncthing (kanto)";
-      url = "http://${catalog.services.syncthing-kanto.host.hostName}:${toString catalog.services.syncthing-kanto.port}";
+      url = "http://${config.catalog.services.syncthing-kanto.host.hostName}:${toString config.catalog.services.syncthing-kanto.port}";
       conditions = [ "[STATUS] == 200" ];
     }];
 

@@ -1,10 +1,9 @@
-{ lib, ... }:
 let
   user = "jhakonen";
   group = "users";
   downloadDir = "/home/${user}/Lataukset";
 in {
-  den.aspects.tailscale.nixos = { config, pkgs, ... }: {
+  den.aspects.tailscale.nixos = { config, lib, pkgs, ... }: {
     services.tailscale = {
       enable = true;
       extraUpFlags = ["--operator=jhakonen"];
@@ -16,7 +15,7 @@ in {
     ];
   };
 
-  den.aspects.dellxps13.nixos = { config, ... }: {
+  den.aspects.dellxps13.nixos = { config, lib, ... }: {
     # https://davideger.github.io/blog/taildrop_on_linux
     systemd.services.tailreceive = {
       description = "File Receiver Service for Taildrop";

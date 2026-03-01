@@ -1,15 +1,13 @@
-{ config, ... }:
-let
-  inherit (config) catalog;
-  backupDir = "/var/backup/influxdb";
-in {
-  den.aspects.kanto.nixos = { pkgs, ... }: {
+{
+  den.aspects.kanto.nixos = { config, pkgs, ... }: let
+    backupDir = "/var/backup/influxdb";
+  in {
     # Työkalut influxdb varmuuskopiointiin ja palatukseen
     environment.systemPackages = [ pkgs.influxdb ];
 
     services.influxdb = {
       enable = true;
-      extraConfig.http.bind-address = ":${toString catalog.services.influx-db.port}";
+      extraConfig.http.bind-address = ":${toString config.catalog.services.influx-db.port}";
     };
 
     # Influxdb:n käynnistys saattaa kestää, anna lisää aikaa
@@ -47,7 +45,7 @@ in {
     # Palvelun valvonta
     services.gatus.settings.endpoints = [{
       name = "Influx DB";
-      url = "http://${catalog.services.influx-db.host.ip.private}:${toString catalog.services.influx-db.port}/ping";
+      url = "http://${config.catalog.services.influx-db.host.ip.private}:${toString config.catalog.services.influx-db.port}/ping";
       conditions = [ "[STATUS] == 204" ];
     }];
   };

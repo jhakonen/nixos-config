@@ -5,9 +5,7 @@
 #   - Store Directory: paperless-consume
 # Loput oletuksilla.
 #
-{ config, ... }: let
-  inherit (config) catalog;
-in {
+{
   den.aspects.kanto.nixos = { config, pkgs, ... }: let
     # Varmuuskopiokansio joka sisältää tietokannan ja dokumenttien exportin
     exportDir = "${config.services.paperless.dataDir}/exports";
@@ -20,7 +18,7 @@ in {
         PAPERLESS_OCR_LANGUAGE = "fin";
         PAPERLESS_OCR_LANGUAGES = "fin";
         # Tämä tarvitaan jotta Paperless ei estä pääsyä CSRF tarkistuksen takia
-        PAPERLESS_URL = "${catalog.getServiceScheme catalog.services.paperless}://${catalog.getServiceAddress catalog.services.paperless}";
+        PAPERLESS_URL = "${config.catalog.getServiceScheme config.catalog.services.paperless}://${config.catalog.getServiceAddress config.catalog.services.paperless}";
         # Sähköpostin skannaus-workeri meni jumiin ja söi 70% cputa, otetaan pois käytöstä
         PAPERLESS_EMAIL_TASK_CRON = "disable";
 
@@ -30,7 +28,7 @@ in {
         PAPERLESS_OCR_USER_ARGS = "{\"optimize\": 0}";
         PILLOW_LOAD_TRUNCATED_IMAGES = "1";
       };
-      port = catalog.services.paperless.port;
+      port = config.catalog.services.paperless.port;
       address = "0.0.0.0";  # Salli pääsy palveluun koneen ulkopuolelta (oletuksena 'localhost')
 
       # Syötekansio hakemistoon johon anonymous FTP käyttäjä pystyy kirjoittamaan
@@ -47,9 +45,9 @@ in {
 
     services.nginx = {
       enable = true;
-      virtualHosts.${catalog.services.paperless.public.domain} = {
+      virtualHosts.${config.catalog.services.paperless.public.domain} = {
         locations."/" = {
-          proxyPass = "http://127.0.0.1:${toString catalog.services.paperless.port}";
+          proxyPass = "http://127.0.0.1:${toString config.catalog.services.paperless.port}";
           proxyWebsockets = true;
           recommendedProxySettings = true;
         };
@@ -60,7 +58,7 @@ in {
     };
 
     # Avaa palomuuriin palvelulle reikä
-    networking.firewall.allowedTCPPorts = [ catalog.services.paperless.public.port ];
+    networking.firewall.allowedTCPPorts = [ config.catalog.services.paperless.public.port ];
 
     # Varmuuskopiointi
     #   Käynnistä:
@@ -101,7 +99,7 @@ in {
     # Palvelun valvonta
     services.gatus.settings.endpoints = [{
       name = "Paperless";
-      url = "https://${catalog.services.paperless.public.domain}";
+      url = "https://${config.catalog.services.paperless.public.domain}";
       conditions = [ "[STATUS] == 200" ];
     }];
   };

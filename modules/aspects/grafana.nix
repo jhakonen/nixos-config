@@ -1,7 +1,3 @@
-{ config, ... }:
-let
-  inherit (config) catalog;
-in
 {
   den.aspects.kanto.nixos = { config, ... }: {
     services.grafana = {
@@ -14,14 +10,14 @@ in
           hide_version = true;
         };
         server.http_addr = "0.0.0.0";
-        server.http_port = catalog.services.grafana.port;
+        server.http_port = config.catalog.services.grafana.port;
       };
       provision.datasources.settings = {
         apiVersion = 1;
         datasources = [{
           name = "InfluxDB";
           type = "influxdb";
-          url = "http://localhost:${toString catalog.services.influx-db.port}";
+          url = "http://localhost:${toString config.catalog.services.influx-db.port}";
           database = "telegraf";
         }];
       };
@@ -29,9 +25,9 @@ in
 
     services.nginx = {
       enable = true;
-      virtualHosts.${catalog.services.grafana.public.domain} = {
+      virtualHosts.${config.catalog.services.grafana.public.domain} = {
         locations."/" = {
-          proxyPass = "http://127.0.0.1:${toString catalog.services.grafana.port}";
+          proxyPass = "http://127.0.0.1:${toString config.catalog.services.grafana.port}";
           proxyWebsockets = true;
           recommendedProxySettings = true;
         };
@@ -42,7 +38,7 @@ in
     };
 
     # Puhkaise reikä palomuuriin
-    networking.firewall.allowedTCPPorts = [ catalog.services.grafana.public.port ];
+    networking.firewall.allowedTCPPorts = [ config.catalog.services.grafana.public.port ];
 
     # Varmuuskopiointi
     #   Käynnistä:
@@ -71,7 +67,7 @@ in
     # Palvelun valvonta
     services.gatus.settings.endpoints = [{
       name = "Grafana";
-      url = "https://${catalog.services.grafana.public.domain}";
+      url = "https://${config.catalog.services.grafana.public.domain}";
       conditions = [ "[STATUS] == 200" ];
     }];
   };

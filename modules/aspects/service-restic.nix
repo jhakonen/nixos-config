@@ -1,7 +1,3 @@
-{ config, ... }:
-let
-  inherit (config) catalog;
-in
 {
   den.default.nixos = { config, lib, pkgs, ... }: {
     options.my.services.restic.backups = lib.mkOption {
@@ -51,7 +47,7 @@ in
             script = ''
               TOKEN=$(cat ${config.age.secrets.telegram-token.path})
               journalctl --unit="$1" --output=cat --invocation=0 --grep "failed|error" --lines=+1 | shoutrrr send \
-                --url telegram://$TOKEN@telegram?chats=${catalog.telegramChat} \
+                --url telegram://$TOKEN@telegram?chats=${config.catalog.telegramChat} \
                 --title "Palvelu $1 epäonnistui" \
                 --message -
             '';

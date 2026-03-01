@@ -1,5 +1,4 @@
-{ config, den, ... }: let
-  inherit (config) catalog;
+{ den, ... }: let
   agent-port = 45876;
 in {
   den.aspects.beszel-agent.nixos = { lib, pkgs, ... }: {
@@ -30,20 +29,20 @@ in {
     ################################################
   };
 
-  den.aspects.nassuvm.nixos = { pkgs, ... }: {
+  den.aspects.nassuvm.nixos = { config, pkgs, ... }: {
     services.beszel.hub = {
       enable = true;
       package = pkgs.unstable.beszel;
-      port = catalog.services.beszel.port;
+      port = config.catalog.services.beszel.port;
       environment = {
         # Aseta Hubin URL-osoite notifikaatioita varten
-        APP_URL = "https://${catalog.services.beszel.public.domain}";
+        APP_URL = "https://${config.catalog.services.beszel.public.domain}";
       };
     };
 
-    services.nginx.virtualHosts.${catalog.services.beszel.public.domain} = {
+    services.nginx.virtualHosts.${config.catalog.services.beszel.public.domain} = {
       locations."/" = {
-        proxyPass = "http://127.0.0.1:${toString catalog.services.beszel.port}";
+        proxyPass = "http://127.0.0.1:${toString config.catalog.services.beszel.port}";
         proxyWebsockets = true;
         recommendedProxySettings = true;
       };
@@ -88,7 +87,7 @@ in {
     networking.firewall.interfaces.tailscale0.allowedTCPPorts = [ agent-port ];
   };
 
-  den.aspects.kanto.nixos = {
+  den.aspects.kanto.nixos = { config, ... }: {
     networking.firewall.allowedTCPPorts = [ agent-port ];
     # Lisää tuki podman konteille
     virtualisation.podman.dockerSocket.enable = true;
@@ -96,7 +95,7 @@ in {
     # Palvelun valvonta
     services.gatus.settings.endpoints = [{
       name = "Beszel";
-      url = "https://${catalog.services.beszel.public.domain}";
+      url = "https://${config.catalog.services.beszel.public.domain}";
       conditions = [ "[STATUS] == 200" ];
     }];
   };

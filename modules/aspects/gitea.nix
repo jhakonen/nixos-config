@@ -1,13 +1,9 @@
-{ config, ... }:
-let
-  inherit (config) catalog;
-in
 {
   den.aspects.kanto.nixos = { config, ... }: {
     services.gitea = {
       enable = true;
-      settings.server.ROOT_URL = "https://${catalog.services.gitea.public.domain}";
-      settings.server.HTTP_PORT = catalog.services.gitea.port;
+      settings.server.ROOT_URL = "https://${config.catalog.services.gitea.public.domain}";
+      settings.server.HTTP_PORT = config.catalog.services.gitea.port;
       settings.service.DISABLE_REGISTRATION = true;
       settings.server.SSH_PORT = 2222;
       settings.server.START_SSH_SERVER = true;
@@ -17,7 +13,7 @@ in
 
     services.nginx = {
       enable = true;
-      virtualHosts.${catalog.services.gitea.public.domain} = {
+      virtualHosts.${config.catalog.services.gitea.public.domain} = {
         locations."/" = {
           proxyPass = "http://127.0.0.1:${toString config.services.gitea.settings.server.HTTP_PORT}";
           recommendedProxySettings = true;
@@ -58,7 +54,7 @@ in
     # Palvelun valvonta
     services.gatus.settings.endpoints = [{
       name = "Gitea";
-      url = "https://${catalog.services.gitea.public.domain}";
+      url = "https://${config.catalog.services.gitea.public.domain}";
       conditions = [ "[STATUS] == 200" ];
     }];
   };

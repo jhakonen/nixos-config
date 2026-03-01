@@ -1,6 +1,5 @@
-{ config, inputs, den, ... }: let
-  inherit (config) catalog;
-in {
+{ inputs, den, ... }:
+{
   imports = [ inputs.den.flakeModule ];
 
   den.hosts.x86_64-linux.mervi.users.jhakonen = {};
@@ -69,9 +68,9 @@ in {
 
       my.services.syncthing = {
         enable = true;
-        gui-port = catalog.services.syncthing-mervi.port;
+        gui-port = config.catalog.services.syncthing-mervi.port;
         settings = {
-          devices = catalog.pickSyncthingDevices ["dellxps13" "nas"];
+          devices = config.catalog.pickSyncthingDevices ["dellxps13" "nas"];
           folders = {
             "Keepass" = {
               path = "/home/jhakonen/Keepass";
