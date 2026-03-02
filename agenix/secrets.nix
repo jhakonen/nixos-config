@@ -70,6 +70,7 @@ in
   "github-id-rsa.age".publicKeys = [ jhakonen ];
   "kanto-gitea-ssh-key.age".publicKeys = [ jhakonen kanto ];
   "karakeep-environment.age".publicKeys = [ jhakonen kanto ];
+  "kavita-token-key.age".publicKeys = [ jhakonen kanto ];
   "mqtt-password.age".publicKeys = [ jhakonen kanto mervi ];
   "mqtt-espuser-password.age".publicKeys = [ jhakonen kanto ];
   "restic-password.age".publicKeys = [ jhakonen kanto mervi nassuvm ];

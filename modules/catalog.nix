@@ -195,6 +195,19 @@
         port = 443;
       };
     };
+    kavita = {
+      host = nodes.kanto;
+      port = 6000;
+      dashy = {
+        section = "viihde";
+        description = "E-kirjat";
+        icon = "hl-kavita";
+      };
+      public = {
+        domain = "kavita.kanto.lan.jhakonen.com";
+        port = 443;
+      };
+    };
     kodi = {
       host = nodes.mervi;
       port = 8080;
