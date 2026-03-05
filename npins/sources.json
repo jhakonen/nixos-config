@@ -68,6 +68,13 @@
       "url": "https://github.com/vic/import-tree/archive/10fda59eee7d7970ec443b925f32a1bc7526648c.tar.gz",
       "hash": "sha256-OQQ1MhB9t1J71b2wxRRTdH/Qd8UGG0p+dGspfCf5U1c="
     },
+    "kavita-image": {
+      "type": "Container",
+      "image_name": "docker.io/linuxserver/kavita",
+      "image_tag": "latest",
+      "image_digest": "sha256:52b11e05b430ce6c6e711c29ee0fc867f46c6bad64ed8d1c1c9e64322e7c362b",
+      "hash": "sha256-La+aTOGLSNxeJMglg3VWXraPMfRPNSETWtXel6piEs8="
+    },
     "nix-flatpak": {
       "type": "GitRelease",
       "repository": {
