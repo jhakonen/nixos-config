@@ -197,11 +197,17 @@
             "Keepass"
             "OpenCloud"
             "Syncthing"
+            "tmp"
           ];
           paths = [
             "/home/jhakonen"
           ];
+          # TODO: Ota lukon avaaminen käyttöön jos tulee vielä sen kanssa ongelmia
+          #       vaikka inhibitsSleep on päällä.
+          # backupPrepareCommand = "${lib.getExe pkgs.restic} unlock";
           checkOpts = [ "--read-data-subset" "10%" ];
+          inhibitsSleep = true;
+          timerConfig.Persistent = true;
         };
       in {
         jhakonen-oma = bConfig // {
