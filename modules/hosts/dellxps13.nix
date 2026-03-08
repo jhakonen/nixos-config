@@ -277,7 +277,6 @@
         aspellDicts.fi
         brave
         cachix
-        calibre
         cherry-studio
         chromium
         claude-code
@@ -336,6 +335,7 @@
 
         #inputs.mypanel.packages.${pkgs.stdenv.system}.default
 
+        unstable.calibre
         unstable.mistral-vibe
         unstable.npins  # 0.4.0 oci container tukea varten
         nix-prefetch-docker  # npins riippuvuus
