@@ -93,7 +93,7 @@
         # itch  # itch.io
         keepassxc
         ngrep  # verkkopakettien greppaus, hyödyllinen WoLin testaukseen
-        unigine-superposition
+        # unigine-superposition
       ];
 
       # Ota Let's Encryptin sertifikaatti käyttöön

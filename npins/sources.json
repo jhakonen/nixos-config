@@ -51,9 +51,9 @@
       },
       "branch": "release-25.11",
       "submodules": false,
-      "revision": "9b9142b5fe214c2adabe86257c33e022372b7c96",
-      "url": "https://github.com/nix-community/home-manager/archive/9b9142b5fe214c2adabe86257c33e022372b7c96.tar.gz",
-      "hash": "sha256-TL3+ckbOTILXrR0qSK3dJj2BJ0S5yz/YSsUF1oEgd9g="
+      "revision": "a91b3ea73a765614d90360580b689c48102d1d33",
+      "url": "https://github.com/nix-community/home-manager/archive/a91b3ea73a765614d90360580b689c48102d1d33.tar.gz",
+      "hash": "sha256-WzBOBfSay3GYilUfKaUa1Mbf8/jtuAiJIedx7fWuIX4="
     },
     "import-tree": {
       "type": "Git",
@@ -64,9 +64,9 @@
       },
       "branch": "main",
       "submodules": false,
-      "revision": "10fda59eee7d7970ec443b925f32a1bc7526648c",
-      "url": "https://github.com/vic/import-tree/archive/10fda59eee7d7970ec443b925f32a1bc7526648c.tar.gz",
-      "hash": "sha256-OQQ1MhB9t1J71b2wxRRTdH/Qd8UGG0p+dGspfCf5U1c="
+      "revision": "c41e7d58045f9057880b0d85e1152d6a4430dbf1",
+      "url": "https://github.com/vic/import-tree/archive/c41e7d58045f9057880b0d85e1152d6a4430dbf1.tar.gz",
+      "hash": "sha256-BtZ2dtkBdSUnFPPFc+n0kcMbgaTxzFNPv2iaO326Ffg="
     },
     "kavita-image": {
       "type": "Container",
@@ -100,9 +100,9 @@
       },
       "branch": "master",
       "submodules": false,
-      "revision": "41c6b421bdc301b2624486e11905c9af7b8ec68e",
-      "url": "https://github.com/NixOS/nixos-hardware/archive/41c6b421bdc301b2624486e11905c9af7b8ec68e.tar.gz",
-      "hash": "sha256-qwcDBtrRvJbrrnv1lf/pREQi8t2hWZxVAyeMo7/E9sw="
+      "revision": "f8e82243fd601afb9f59ad230958bd073795cbfe",
+      "url": "https://github.com/NixOS/nixos-hardware/archive/f8e82243fd601afb9f59ad230958bd073795cbfe.tar.gz",
+      "hash": "sha256-qonGfS2lzCgCl59Zl63jF6dIRRpvW3AJooBGMaXjHiY="
     },
     "nixpkgs": {
       "type": "Git",
@@ -113,9 +113,9 @@
       },
       "branch": "nixos-25.11",
       "submodules": false,
-      "revision": "1267bb4920d0fc06ea916734c11b0bf004bbe17e",
-      "url": "https://github.com/nixos/nixpkgs/archive/1267bb4920d0fc06ea916734c11b0bf004bbe17e.tar.gz",
-      "hash": "sha256-7DaQVv4R97cii/Qdfy4tmDZMB2xxtyIvNGSwXBBhSmo="
+      "revision": "fea3b367d61c1a6592bc47c72f40a9f3e6a53e96",
+      "url": "https://github.com/nixos/nixpkgs/archive/fea3b367d61c1a6592bc47c72f40a9f3e6a53e96.tar.gz",
+      "hash": "sha256-GNU+ooRmrHLfjlMsKdn0prEKVa0faVanm0jrgu1J/gY="
     },
     "nixpkgs-unstable": {
       "type": "Git",
@@ -126,23 +126,23 @@
       },
       "branch": "nixos-unstable",
       "submodules": false,
-      "revision": "aca4d95fce4914b3892661bcb80b8087293536c6",
-      "url": "https://github.com/nixos/nixpkgs/archive/aca4d95fce4914b3892661bcb80b8087293536c6.tar.gz",
-      "hash": "sha256-E1bxHxNKfDoQUuvriG71+f+s/NT0qWkImXsYZNFFfCs="
+      "revision": "b40629efe5d6ec48dd1efba650c797ddbd39ace0",
+      "url": "https://github.com/nixos/nixpkgs/archive/b40629efe5d6ec48dd1efba650c797ddbd39ace0.tar.gz",
+      "hash": "sha256-TJ3lSQtW0E2JrznGVm8hOQGVpXjJyXY2guAxku2O9A4="
     },
     "opencloud-image": {
       "type": "Container",
       "image_name": "opencloudeu/opencloud-rolling",
       "image_tag": "latest",
-      "image_digest": "sha256:6229e937e32e5e114ddac81af7e851fb9346a818c58a36b784529d5503530f93",
-      "hash": "sha256-J/zIICPjzjN35mVV8GGyXNU6wigTrH6iyeDs6MCcYCo="
+      "image_digest": "sha256:c840de29b7287da070ffc9d5eb52a1b291a046877402bf70f387ccf56c820aee",
+      "hash": "sha256-Bq2zRaIW1ZLBrBDdDu9X7vEmYLuUGR1xdN5G0nl2Q/4="
     },
     "tvheadend-image": {
       "type": "Container",
       "image_name": "lscr.io/linuxserver/tvheadend",
       "image_tag": "latest",
-      "image_digest": "sha256:0a8f99223fb87bc1298d8be8d67f2945ee6ec4b2f5e91d20bea18f6ee3ff4668",
-      "hash": "sha256-Wu2ormzvI9i6dmy3ed3jy1oVp0gFHsO9w+6fJcS12TM="
+      "image_digest": "sha256:3c1bec8fb8324096757b0e4f689fe43a9c10287dea6e3f60915aa06142937904",
+      "hash": "sha256-FGMX2cY/bW0FADgMlccxhTi804Ound2DbWr9S5Gy10U="
     }
   },
   "version": 7
