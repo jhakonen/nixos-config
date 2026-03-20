@@ -10,7 +10,7 @@ for kone in "${koneet[@]}"; do
   komento=("nh" "os" "$toiminto")
 
   if [ "$kone" != "$(hostname)" ]; then
-    komento+=("--hostname" "$kone" "--build-host" "root@$kone" "--target-host" "root@$kone")
+    komento+=("--hostname" "$kone" "--build-host" "root@$kone" "--target-host" "root@$kone" "--elevation-strategy" "none")
 
     # Varmista että SSH-komento ei kysy että luotetaanko koneeseen
     ssh-keygen -R "$kone" >/dev/null
