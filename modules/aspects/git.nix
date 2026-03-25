@@ -1,5 +1,5 @@
 {
-  den.aspects."jhakonen@dellxps13".homeManager = { config, ... }: {
+  den.aspects.dellxps13.provides.jhakonen.homeManager = { config, ... }: {
     age.secrets.github-id-rsa = {
       file = ../../agenix/github-id-rsa.age;
       path = "/home/jhakonen/.ssh/github-id-rsa";

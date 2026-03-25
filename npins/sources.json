@@ -14,17 +14,20 @@
       "hash": "sha256-9VnK6Oqai65puVJ4WYtCTvlJeXxMzAp/69HhQuTdl/I="
     },
     "den": {
-      "type": "Git",
+      "type": "GitRelease",
       "repository": {
         "type": "GitHub",
         "owner": "vic",
         "repo": "den"
       },
-      "branch": "main",
+      "pre_releases": false,
+      "version_upper_bound": null,
+      "release_prefix": null,
       "submodules": false,
-      "revision": "fb189d3e83f76c56ee0d7b30752c9017fe4b5462",
-      "url": "https://github.com/vic/den/archive/fb189d3e83f76c56ee0d7b30752c9017fe4b5462.tar.gz",
-      "hash": "sha256-WIZ/CrEidpEbTgbTsLQFmqf5jjU9dta8gEg8X9LD5+k="
+      "version": "v0.13.0",
+      "revision": "4c190d73cf3bb05ffc303f7d6c7aa2308c816462",
+      "url": "https://api.github.com/repos/vic/den/tarball/refs/tags/v0.13.0",
+      "hash": "sha256-I5oLzwJ8LOTA6OBiIYGRsL16q16Yn3DN72+0FeNR2oA="
     },
     "flake-aspects": {
       "type": "GitRelease",
@@ -37,10 +40,10 @@
       "version_upper_bound": null,
       "release_prefix": null,
       "submodules": false,
-      "version": "v0.5.0",
-      "revision": "f338a5062628c9b9fda0796a141ca1a6eb4dcf75",
-      "url": "https://api.github.com/repos/vic/flake-aspects/tarball/refs/tags/v0.5.0",
-      "hash": "sha256-t1FKnPRvg/l376pM+hMS0hPMTmxu7S4eVS2s+A25SbU="
+      "version": "v0.7.0",
+      "revision": "b51a00bc0140e7708e421a64f20170a2e8ccae93",
+      "url": "https://api.github.com/repos/vic/flake-aspects/tarball/refs/tags/v0.7.0",
+      "hash": "sha256-sPPriYJpLmukixc6/KBzeOhw83OSodco5YbeayHzAgo="
     },
     "home-manager": {
       "type": "Git",

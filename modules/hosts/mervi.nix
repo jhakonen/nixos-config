@@ -1,7 +1,5 @@
 { inputs, den, ... }:
 {
-  imports = [ inputs.den.flakeModule ];
-
   den.hosts.x86_64-linux.mervi.users.jhakonen = {};
   den.hosts.x86_64-linux.mervi.users.root = {};
 
@@ -120,7 +118,7 @@
       system.stateVersion = "23.05";
     };
 
-    homeManager = {
+    provides.to-users.homeManager = {
       # https://wiki.nixos.org/wiki/FAQ/When_do_I_update_stateVersion
       home.stateVersion = "23.05";
     };

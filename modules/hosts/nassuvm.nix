@@ -1,7 +1,5 @@
 { inputs, den, ... }:
 {
-  imports = [ inputs.den.flakeModule ];
-
   den.hosts.x86_64-linux.nassuvm.users.jhakonen = {};
   den.hosts.x86_64-linux.nassuvm.users.root = {};
 
@@ -65,7 +63,7 @@
       virtualisation.hypervGuest.enable = true;
     };
 
-    homeManager = {
+    provides.to-users.homeManager = {
       # https://wiki.nixos.org/wiki/FAQ/When_do_I_update_stateVersion
       home.stateVersion = "24.05";
     };

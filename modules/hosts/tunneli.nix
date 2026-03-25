@@ -1,7 +1,5 @@
 { inputs, den, ... }:
 {
-  imports = [ inputs.den.flakeModule ];
-
   den.hosts.x86_64-linux.tunneli.users.jhakonen = {};
   den.hosts.x86_64-linux.tunneli.users.root = {};
 
@@ -70,7 +68,7 @@
 
     };
 
-    homeManager = {
+    provides.to-users.homeManager = {
       home.stateVersion = "25.05";
     };
   };
