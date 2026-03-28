@@ -301,6 +301,7 @@
         keepassxc
         libreoffice
         livecaptions
+        lmstudio
         logseq
         kdePackages.ark  # Pakkausohjelma (zip, tar.gz, jne...)
         kdePackages.isoimagewriter
