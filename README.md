@@ -68,8 +68,12 @@ nix-copy-closure --to root@kanto /nix/store/bgxpkjnfx9dp3yyjvkcrmcpmga0qiy1w-gra
 # Järjestelmän päivitys uudempaan Nixos julkaisuun
 
 ```bash
+npins update [<inputin nimi>]
+
+# Inputtien lisääminen
 npins add github nixos nixpkgs --branch nixos-25.11
 npins add github nix-community home-manager --branch release-25.11
+npins add container ghcr.io/lemonade-sdk/lemonade-server latest --name lemonade-server
 ```
 
 Estä läppärin meneminen valmiustilaan jotta verkkoyhteys ei katkea kesken kaiken.
