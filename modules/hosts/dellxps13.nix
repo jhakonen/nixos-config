@@ -28,8 +28,8 @@
         config = {
           allowUnfree = true;
           permittedInsecurePackages = [
-            "electron-25.9.0"
-            "openssl-1.1.1w"
+            "electron-37.10.3" # cherry-studio
+            "openssl-1.1.1w" # sublime4
           ];
         };
         hostPlatform = "x86_64-linux";
@@ -273,7 +273,6 @@
         aspellDicts.fi
         brave
         cachix
-        cherry-studio
         chromium
         claude-code
         discord
@@ -301,7 +300,6 @@
         keepassxc
         libreoffice
         livecaptions
-        lmstudio
         logseq
         kdePackages.ark  # Pakkausohjelma (zip, tar.gz, jne...)
         kdePackages.isoimagewriter
@@ -333,7 +331,6 @@
         #inputs.mypanel.packages.${pkgs.stdenv.system}.default
 
         unstable.calibre
-        unstable.mistral-vibe
         unstable.npins  # 0.4.0 oci container tukea varten
         nix-prefetch-docker  # npins riippuvuus
       ];
