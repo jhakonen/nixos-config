@@ -115,7 +115,7 @@ Minulla on myös automaattinen puhdistus otettu käyttöön kaikilla NixOS konei
 ```bash
 nix repl
 nix-repl> :l .
-nix-repl> nixosConfigurations.dellxps13.config
+nix-repl> flake.nixosConfigurations.dellxps13.config
 ```
 
 # Salaisuudet
