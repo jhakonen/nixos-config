@@ -266,7 +266,7 @@
       dashy = {
         section = "palvelut";
         description = "Verkkolevy";
-        icon = "hl-opencloud";
+        icon = "https://opencloud.jhakonen.com/signin/v1/static/favicon.svg";
       };
       public = {
         domain = "opencloud.jhakonen.com";
@@ -306,6 +306,19 @@
         section = "verkon hallinta";
         description = "Reititimen hallintapaneeli";
         icon = "hl-asus-router";
+      };
+    };
+    rmfakecloud = {
+      host = nodes.kanto;
+      port = 11000;
+      dashy = {
+        section = "palvelut";
+        description = "ReMarkablen palvelu";
+        icon = "https://rmfakecloud.kanto.lan.jhakonen.com/favicon.ico";
+      };
+      public = {
+        domain = "rmfakecloud.kanto.lan.jhakonen.com";
+        port = 443;
       };
     };
     skanneri-ads-1700w = {
