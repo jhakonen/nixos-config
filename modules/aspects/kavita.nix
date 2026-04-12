@@ -67,6 +67,9 @@
       kavita-veli = bConfig // {
         repository = "rclone:nas-veli:/home/restic/kavita";
         timerConfig.OnCalendar = "Sat 02:00";
+        # Rajaa tarkistetun datan määrää koska backupissa menee 3+ tuntia
+        # täydellä tarkistuksella, ja aiheuttaa yhteyden katkeamisen
+        checkOpts = [ "--read-data-subset" "10%" ];
       };
     };
 
