@@ -227,6 +227,19 @@
         icon = "https://lemonade-server.ai/favicon.ico";
       };
     };
+    llama-swap = {
+      host = nodes.mervi;
+      port = 14000;
+      dashy = {
+        section = "palvelut";
+        description = "LLama Swap";
+        icon = "https://raw.githubusercontent.com/mostlygeek/llama-swap/master/ui-svelte/public/favicon.svg";
+      };
+      public = {
+        domain = "llama-swap.kanto.lan.jhakonen.com";
+        port = 80;
+      };
+    };
     mosquitto = {
       host = nodes.kanto;
       port = 8883;
