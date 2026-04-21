@@ -237,7 +237,7 @@
       };
       public = {
         domain = "llama-swap.kanto.lan.jhakonen.com";
-        port = 80;
+        port = 443;
       };
     };
     mosquitto = {

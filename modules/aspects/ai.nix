@@ -40,7 +40,10 @@
     # Varmista että llama-swap pystyy lukemaan ladatut tekoälymallit
     systemd.tmpfiles.rules = [
       "d ${models-dir} 0777 root root"
-      "Z ${models-dir} 0777 root root"
+      "A ${models-dir} - - - - user:root:rwx"
+      "A ${models-dir} - - - - group:root:rwx"
+      "A ${models-dir} - - - - other::rwx"
+      "A ${models-dir} - - - - mask::rwx"
     ];
 
     virtualisation.oci-containers.containers.lemonade-server =  let
@@ -92,14 +95,19 @@
             top-p = 0.95;
             top-k = 20;
             min-p = 0.00;
+            presence-penalty = 0.0;
+            repeat-penalty = 1.0;
             ctx-size = 32768;
           };
           "qwen3.6-general" = defineModel {
-            hf-repo = "unsloth/Qwen3.6-35B-A3B-GGUF:UD-IQ4_XS";
+            # Tämä mahtunee kokonaan näytönohjaimen muistiin
+            hf-repo = "unsloth/Qwen3.6-35B-A3B-GGUF:UD-IQ3_S";
             temp = 0.7;
             top-p = 0.8;
             top-k = 20;
             min-p = 0.00;
+            presence-penalty = 1.5;
+            repeat-penalty = 1.0;
             reasoning = "off";
             ctx-size = 32768;
           };
@@ -160,16 +168,21 @@
     };
 
     # Paljasta llama-swap ja tekoälymallien API osoitteessa:
-    #   http://llama-swap.kanto.lan.jhakonen.com/
-    services.nginx.virtualHosts.${config.catalog.services.llama-swap.public.domain}.locations."/" = {
-      proxyPass = "http://127.0.0.1:${toString config.catalog.services.llama-swap.port}";
-      recommendedProxySettings = true;
+    #   https://llama-swap.kanto.lan.jhakonen.com/
+    services.nginx.virtualHosts.${config.catalog.services.llama-swap.public.domain} = {
+      locations."/" = {
+        proxyPass = "http://127.0.0.1:${toString config.catalog.services.llama-swap.port}";
+        recommendedProxySettings = true;
+      };
       # Anna Merville aikaa käynnistyä (WOL) ja mallille aikaa latautua
       extraConfig = ''
         proxy_connect_timeout   120s;
         proxy_send_timeout      120s;
         proxy_read_timeout      120s;
       '';
+      # Käytä Let's Encrypt sertifikaattia
+      addSSL = true;
+      useACMEHost = "jhakonen.com";
     };
   };
 }
