@@ -24,6 +24,7 @@
       ip.private = "10.0.0.107";
       useIp = true;
     };
+    jetkvm = {};
     kanto = {
       ip.private = "10.0.0.100";
     };
@@ -181,6 +182,16 @@
     influx-db = {
       host = nodes.kanto;
       port = 8086;
+    };
+    jetkvm = {
+      host = nodes.jetkvm;
+      port = 80;
+      dashy = {
+        section = "verkon hallinta";
+        title = "JetKVM";
+        description = "JetKVM etähallinta";
+        icon = "hl-jetkvm";
+      };
     };
     karakeep = {
       host = nodes.kanto;
