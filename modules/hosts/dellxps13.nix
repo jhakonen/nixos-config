@@ -28,7 +28,7 @@
         config = {
           allowUnfree = true;
           permittedInsecurePackages = [
-            "electron-37.10.3" # cherry-studio
+            "electron-38.8.4" # cherry-studio
             "openssl-1.1.1w" # sublime4
           ];
         };
