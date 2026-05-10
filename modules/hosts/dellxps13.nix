@@ -191,7 +191,6 @@
             ".steam"
             "Calibre"
             "Keepass"
-            "OpenCloud"
             "Syncthing"
             "tmp"
           ];

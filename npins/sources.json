@@ -140,13 +140,6 @@
       "url": "https://github.com/nixos/nixpkgs/archive/0726a0ecb6d4e08f6adced58726b95db924cef57.tar.gz",
       "hash": "sha256-EHq1/OX139R1RvBzOJ0aMRT3xnWyqtHBRUBuO1gFzjI="
     },
-    "opencloud-image": {
-      "type": "Container",
-      "image_name": "opencloudeu/opencloud-rolling",
-      "image_tag": "latest",
-      "image_digest": "sha256:235b5d988729aa821bd068bbdc60175270b05bd5fefa77b6d0e2ec5aeadccd0b",
-      "hash": "sha256-qYh3D6SGyOHqgKce0dzRjv40qdshWHhbWiVTsomRIXM="
-    },
     "tvheadend-image": {
       "type": "Container",
       "image_name": "lscr.io/linuxserver/tvheadend",

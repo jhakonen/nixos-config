@@ -284,19 +284,6 @@
         icon = "https://nas:5001/webman/favicon.ico";
       };
     };
-    opencloud = {
-      host = nodes.kanto;
-      port = 21000;
-      dashy = {
-        section = "palvelut";
-        description = "Verkkolevy";
-        icon = "https://opencloud.jhakonen.com/signin/v1/static/favicon.svg";
-      };
-      public = {
-        domain = "opencloud.jhakonen.com";
-        port = 443;
-      };
-    };
     paperless = {
       host = nodes.kanto;
       port = 12000;
