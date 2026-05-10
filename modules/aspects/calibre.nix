@@ -5,6 +5,8 @@
     services = {
       calibre-web = {
         enable = true;
+        # Asenna v0.6.26 unstablesta joka korjaa ongelman: no such column: books.isbn
+        package = pkgs.unstable.calibre-web;
         listen = {
           ip = "127.0.0.1";
           port = config.catalog.services.calibre-web.port;

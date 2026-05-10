@@ -54,9 +54,9 @@
       },
       "branch": "release-25.11",
       "submodules": false,
-      "revision": "0d02ec1d0a05f88ef9e74b516842900c41f0f2fe",
-      "url": "https://github.com/nix-community/home-manager/archive/0d02ec1d0a05f88ef9e74b516842900c41f0f2fe.tar.gz",
-      "hash": "sha256-KY6HsebJHEe5nHOWP7ur09mb0drGxYSzE3rQxy62rJo="
+      "revision": "d1686dc7d36cbd1234cb226ad6ef97e882716acb",
+      "url": "https://github.com/nix-community/home-manager/archive/d1686dc7d36cbd1234cb226ad6ef97e882716acb.tar.gz",
+      "hash": "sha256-ox/5IHc8uwy6UTw6N7Shp6uCHIgu/S2PsWeuXsOHSo8="
     },
     "import-tree": {
       "type": "Git",
@@ -67,23 +67,23 @@
       },
       "branch": "main",
       "submodules": false,
-      "revision": "c41e7d58045f9057880b0d85e1152d6a4430dbf1",
-      "url": "https://github.com/vic/import-tree/archive/c41e7d58045f9057880b0d85e1152d6a4430dbf1.tar.gz",
-      "hash": "sha256-BtZ2dtkBdSUnFPPFc+n0kcMbgaTxzFNPv2iaO326Ffg="
+      "revision": "d321337efd0f23a9eb14a42adb7b2c29313ab274",
+      "url": "https://github.com/vic/import-tree/archive/d321337efd0f23a9eb14a42adb7b2c29313ab274.tar.gz",
+      "hash": "sha256-Jjuz5CmSkur8KvLDoGa+vylEp+RkQtv4mt/qcMznpH0="
     },
     "kavita-image": {
       "type": "Container",
       "image_name": "docker.io/linuxserver/kavita",
       "image_tag": "latest",
-      "image_digest": "sha256:e0fad4eb103a0f5b2512308ba71d2ac842d75338649dd9800ec1d32e4f24d1af",
-      "hash": "sha256-nrjkzwXH8OYVqSVIjO3NJPf2vV8a5+SzEf/gSvtRq7A="
+      "image_digest": "sha256:cb69cd31113ffbbc876abe97edf617e684c015ca7d9e78dc1191cb045a60dba1",
+      "hash": "sha256-IaZ1Vi/8CpHIcObD8ZUUDKuNOnrrsKRCohx1PU/P2y8="
     },
     "lemonade-server": {
       "type": "Container",
       "image_name": "ghcr.io/lemonade-sdk/lemonade-server",
       "image_tag": "latest",
-      "image_digest": "sha256:08edbf1128a7fd82b39f1de72c2f70c013f2ecfefac6a99c52bcf58eba532a3a",
-      "hash": "sha256-djPdhnaqIphJD1Zt+vZpprK7maO/heTyNLnFtFYepfw="
+      "image_digest": "sha256:65d38023285a1558a09bfb81331968798422219e22f6753c5600e0dc1c781601",
+      "hash": "sha256-NpRozLB+HgOTex00BA7Vh9LDRCgZPX2voJRB8uPGzOI="
     },
     "nix-flatpak": {
       "type": "GitRelease",
@@ -110,9 +110,9 @@
       },
       "branch": "master",
       "submodules": false,
-      "revision": "2096f3f411ce46e88a79ae4eafcfc9df8ed41c61",
-      "url": "https://github.com/NixOS/nixos-hardware/archive/2096f3f411ce46e88a79ae4eafcfc9df8ed41c61.tar.gz",
-      "hash": "sha256-ZOQyNqSvJ8UdrrqU1p7vaFcdL53idK+LOM8oRWEWh6o="
+      "revision": "379c1f274f0fa354d012f0600806de54e79f29b5",
+      "url": "https://github.com/NixOS/nixos-hardware/archive/379c1f274f0fa354d012f0600806de54e79f29b5.tar.gz",
+      "hash": "sha256-Aipz0UiBhE2a1FYJrNc2y+5vKWo5QVkhmaIJk3/ls+g="
     },
     "nixpkgs": {
       "type": "Git",
@@ -123,9 +123,9 @@
       },
       "branch": "nixos-25.11",
       "submodules": false,
-      "revision": "10e7ad5bbcb421fe07e3a4ad53a634b0cd57ffac",
-      "url": "https://github.com/nixos/nixpkgs/archive/10e7ad5bbcb421fe07e3a4ad53a634b0cd57ffac.tar.gz",
-      "hash": "sha256-vl3dkhlE5gzsItuHoEMVe+DlonsK+0836LIRDnm6MXQ="
+      "revision": "d7a713c0b7e47c908258e71cba7a2d77cc8d71d5",
+      "url": "https://github.com/nixos/nixpkgs/archive/d7a713c0b7e47c908258e71cba7a2d77cc8d71d5.tar.gz",
+      "hash": "sha256-6xWoytx8jFW4PF1GjRm/i/53trbpKGfz6zjzQGBr4cI="
     },
     "nixpkgs-unstable": {
       "type": "Git",
@@ -136,16 +136,16 @@
       },
       "branch": "nixos-unstable",
       "submodules": false,
-      "revision": "0726a0ecb6d4e08f6adced58726b95db924cef57",
-      "url": "https://github.com/nixos/nixpkgs/archive/0726a0ecb6d4e08f6adced58726b95db924cef57.tar.gz",
-      "hash": "sha256-EHq1/OX139R1RvBzOJ0aMRT3xnWyqtHBRUBuO1gFzjI="
+      "revision": "d233902339c02a9c334e7e593de68855ad26c4cb",
+      "url": "https://github.com/nixos/nixpkgs/archive/d233902339c02a9c334e7e593de68855ad26c4cb.tar.gz",
+      "hash": "sha256-30sZNZoA1cqF5JNO9fVX+wgiQYjB7HJqqJ4ztCDeBZE="
     },
     "tvheadend-image": {
       "type": "Container",
       "image_name": "lscr.io/linuxserver/tvheadend",
       "image_tag": "latest",
-      "image_digest": "sha256:f0c8cd3cbb3c731612ac3e8e559796fbef089a576fcaa0680a790ec00997ce06",
-      "hash": "sha256-Ex4FvADLJWXgZlXqUFj5q2fMjalEzbtc95kHtwWHhW4="
+      "image_digest": "sha256:708222e2a9374b3812cd533878dac30920dc8feb3b7ed3714a449588f4dbef9f",
+      "hash": "sha256-EBvsV5ZnlyPm7mLlMNlNQm7+Zxz9d1GtXV97/Y7ZPiU="
     }
   },
   "version": 7
