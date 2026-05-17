@@ -273,11 +273,8 @@
         brave
         cachix
         chromium
-        claude-code
         discord
         easyeffects
-        errands
-        eww
         git-crypt
         gnome-text-editor
         google-chrome  # Chromecastin tukea varten
@@ -299,19 +296,11 @@
         keepassxc
         libreoffice
         livecaptions
-        logseq
-        kdePackages.ark  # Pakkausohjelma (zip, tar.gz, jne...)
-        kdePackages.isoimagewriter
-        kdePackages.kaccounts-integration  # Lisää KDE asetuksiin Verkkotilit osion
-        kdePackages.kaccounts-providers  # Lisää Verkkotilit osioon mahdollisuudeksi asentaa NextCloud tilin
         kdePackages.kdeconnect-kde
         kdePackages.kmahjongg
         kdePackages.kolourpaint
         kdePackages.krecorder
-        kdePackages.plasma-thunderbolt  # Asetusvälilehti thunderboltille (lisäksi services.hardware.bolt)
-        kdePackages.qtwebsockets  # Tarvitaan Home Assistant plasmoidia varten
         kdePackages.kcalc
-        kdePackages.signond  # Tarvitaan Nextcloud tilin lisäämiseen
         mcomix
         meld
         moonlight-qt
@@ -322,8 +311,6 @@
         sublime4
         super-productivity-latest
         syncthingtray-minimal
-        teams-for-linux
-        tidal-hifi
         trayscale
         zoom-us
 

@@ -47,8 +47,6 @@
 
     environment.systemPackages = with pkgs; [
       btop
-      comma
-      fastfetch
       file
       git
       inetutils  # telnet
@@ -56,7 +54,6 @@
       isd
       jq
       killall
-      kitty
       lazygit
       nh
       usbutils   # lsusb
@@ -77,7 +74,6 @@
     };
 
     programs.nix-index.enable = true;
-    programs.command-not-found.enable = false;
 
     # Listaa kaikki asennetut paketit polussa /etc/current-system-packages
     # Lähde: https://www.reddit.com/r/NixOS/comments/fsummx/comment/fm45htj/
