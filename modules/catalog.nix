@@ -228,16 +228,6 @@
         icon = "hl-kodi";
       };
     };
-    lemonade = {
-      host = nodes.mervi;
-      port = 13000;
-      dashy = {
-        section = "palvelut";
-        title = "Lemonade";
-        description = "LLM hallintapaneeli";
-        icon = "https://lemonade-server.ai/favicon.ico";
-      };
-    };
     llama-swap = {
       host = nodes.mervi;
       port = 14000;

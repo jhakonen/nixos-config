@@ -78,13 +78,6 @@
       "image_digest": "sha256:cb69cd31113ffbbc876abe97edf617e684c015ca7d9e78dc1191cb045a60dba1",
       "hash": "sha256-IaZ1Vi/8CpHIcObD8ZUUDKuNOnrrsKRCohx1PU/P2y8="
     },
-    "lemonade-server": {
-      "type": "Container",
-      "image_name": "ghcr.io/lemonade-sdk/lemonade-server",
-      "image_tag": "latest",
-      "image_digest": "sha256:65d38023285a1558a09bfb81331968798422219e22f6753c5600e0dc1c781601",
-      "hash": "sha256-NpRozLB+HgOTex00BA7Vh9LDRCgZPX2voJRB8uPGzOI="
-    },
     "nix-flatpak": {
       "type": "GitRelease",
       "repository": {
