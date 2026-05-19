@@ -39,6 +39,9 @@
       ip.private = "10.0.0.1";
       useIp = true;
     };
+    sonos-playbar = {
+      ip.private = "10.0.0.226";
+    };
     tinypilot = {};
     tunneli = {
       ip.tailscale = "100.125.41.58";
