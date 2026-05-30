@@ -275,6 +275,7 @@
         chromium
         discord
         easyeffects
+        exfatprogs  # kdePackages.partitionmanager tarvitsee exfat tukea varten
         git-crypt
         gnome-text-editor
         google-chrome  # Chromecastin tukea varten
@@ -301,6 +302,7 @@
         kdePackages.kolourpaint
         kdePackages.krecorder
         kdePackages.kcalc
+        kdePackages.partitionmanager
         mcomix
         meld
         moonlight-qt
