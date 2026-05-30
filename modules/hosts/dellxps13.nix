@@ -271,6 +271,7 @@
         brave
         cachix
         chromium
+        devenv
         discord
         easyeffects
         exfatprogs  # kdePackages.partitionmanager tarvitsee exfat tukea varten
