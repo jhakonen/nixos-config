@@ -7,7 +7,7 @@
 
     services.influxdb = {
       enable = true;
-      extraConfig.http.bind-address = ":${toString config.catalog.services.influx-db.port}";
+      settings.http.bind-address = ":${toString config.catalog.services.influx-db.port}";
     };
 
     # Influxdb:n käynnistys saattaa kestää, anna lisää aikaa

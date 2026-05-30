@@ -9,9 +9,7 @@
       den.aspects.tailscale
     ];
 
-    nixos = { config, lib, modulesPath, pkgs, ... }: let
-      super-productivity-latest = pkgs.callPackage ../../packages/super-productivity.nix {};
-    in {
+    nixos = { config, lib, modulesPath, pkgs, ... }: {
       nix.package = pkgs.lix;
       # Ota flaket käyttöön
       nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -311,7 +309,7 @@
         obsidian
         renameutils  # qmv
         sublime4
-        super-productivity-latest
+        super-productivity
         syncthingtray-minimal
         trayscale
         zoom-us
@@ -418,8 +416,6 @@
       # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
       system.stateVersion = "25.05"; # Did you read the comment?
 
-      system.rebuild.enableNg = true;
-
       services.fwupd.enable = true;
 
       services.pipewire.wireplumber.extraConfig.main = {
@@ -509,18 +505,15 @@
 
       programs.ssh = {
         enable = true;
-        matchBlocks = {
-          "kota" = {
-            user = "pi";
-          };
+        settings = {
           "nas" = {
-            user = "valvoja";
-            identityFile = [
+            User = "valvoja";
+            IdentityFile = [
               "~/.ssh/id_rsa"
             ];
           };
           "codeberg.org" = {
-            user = "git";
+            User = "git";
           };
         };
       };
@@ -580,6 +573,7 @@
         publicShare = "${config.home.homeDirectory}/Julkinen";
         templates = "${config.home.homeDirectory}/Mallit";
         videos = "${config.home.homeDirectory}/Videot";
+        setSessionVariables = true;
       };
 
       # gtk.theme = {

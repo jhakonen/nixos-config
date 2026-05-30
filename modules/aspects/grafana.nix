@@ -11,6 +11,7 @@
         };
         server.http_addr = "0.0.0.0";
         server.http_port = config.catalog.services.grafana.port;
+        security.secret_key = "SW2YcwTIb9zpOOhoPsMm";
       };
       provision.datasources.settings = {
         apiVersion = 1;

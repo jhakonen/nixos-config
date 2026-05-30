@@ -12,7 +12,7 @@
       defaults = {
         email = config.catalog.acmeEmail;
         dnsProvider = "joker";
-        credentialsFile = config.age.secrets.acme-joker-credentials.path;
+        environmentFile = config.age.secrets.acme-joker-credentials.path;
       };
     };
 

@@ -24,6 +24,7 @@
       extraSettings = {
         RM_HTTPS_COOKIE = "1";
         RM_TRUST_PROXY = "1";
+        MQTT_PORT = toString (config.catalog.services.rmfakecloud.port + 1);
       };
     };
 

@@ -48,17 +48,6 @@
       enable = true;
       port = config.catalog.services.esphome.port;
     };
-    # https://github.com/NixOS/nixpkgs/issues/339557
-    systemd.services.esphome = let
-      cfg = config.services.esphome;
-      stateDir = "/var/lib/private/esphome";
-    in {
-      environment.PLATFORMIO_CORE_DIR = lib.mkForce "/var/lib/private/esphome/.platformio";
-      serviceConfig = {
-        ExecStart = lib.mkForce "${cfg.package}/bin/esphome dashboard --address ${cfg.address} --port ${toString cfg.port} ${stateDir}";
-        WorkingDirectory = lib.mkForce stateDir;
-      };
-    };
 
     environment.systemPackages = with pkgs; [
       esphome

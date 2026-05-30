@@ -20,14 +20,14 @@
       ssh = {
         enable = true;
         enableDefaultConfig = false;
-        matchBlocks = {
+        settings = {
           "framagit.org" = {
-            identityFile = "~/.ssh/framagit-ssh-key";
-            user = "git";
+            IdentityFile = "~/.ssh/framagit-ssh-key";
+            User = "git";
           };
           "github.com" = {
-            identityFile = config.age.secrets.github-id-rsa.path;
-            user = "git";
+            IdentityFile = config.age.secrets.github-id-rsa.path;
+            User = "git";
           };
         };
       };

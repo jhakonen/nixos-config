@@ -52,11 +52,11 @@
         "owner": "nix-community",
         "repo": "home-manager"
       },
-      "branch": "release-25.11",
+      "branch": "release-26.05",
       "submodules": false,
-      "revision": "d1686dc7d36cbd1234cb226ad6ef97e882716acb",
-      "url": "https://github.com/nix-community/home-manager/archive/d1686dc7d36cbd1234cb226ad6ef97e882716acb.tar.gz",
-      "hash": "sha256-ox/5IHc8uwy6UTw6N7Shp6uCHIgu/S2PsWeuXsOHSo8="
+      "revision": "b179bde238977f7d4454fc770b1a727eaf55111c",
+      "url": "https://github.com/nix-community/home-manager/archive/b179bde238977f7d4454fc770b1a727eaf55111c.tar.gz",
+      "hash": "sha256-RUkMrREjKDQrA+dA9+xZviGAxM5W1aVdyOr/bSYpHrE="
     },
     "import-tree": {
       "type": "Git",
@@ -114,11 +114,11 @@
         "owner": "nixos",
         "repo": "nixpkgs"
       },
-      "branch": "nixos-25.11",
+      "branch": "nixos-26.05",
       "submodules": false,
-      "revision": "d7a713c0b7e47c908258e71cba7a2d77cc8d71d5",
-      "url": "https://github.com/nixos/nixpkgs/archive/d7a713c0b7e47c908258e71cba7a2d77cc8d71d5.tar.gz",
-      "hash": "sha256-6xWoytx8jFW4PF1GjRm/i/53trbpKGfz6zjzQGBr4cI="
+      "revision": "ec942ba042dad5ef097e2ef3a3effc034241f011",
+      "url": "https://github.com/nixos/nixpkgs/archive/ec942ba042dad5ef097e2ef3a3effc034241f011.tar.gz",
+      "hash": "sha256-R5nauXyqyfRUFiZycFFZdkF7wl6eaUpPLst35+2nJQY="
     },
     "nixpkgs-unstable": {
       "type": "Git",
