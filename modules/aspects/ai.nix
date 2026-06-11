@@ -6,6 +6,7 @@
       pkgs.unstable.mistral-vibe
       pkgs.unstable.opencode
       pkgs.unstable.opencode-desktop
+      pkgs.unstable.whichllm
     ];
   };
 
@@ -21,6 +22,7 @@
     environment.systemPackages = [
       pkgs.unstable.llama-cpp-vulkan
       pkgs.unstable.lmstudio
+      pkgs.unstable.whichllm
     ];
 
     networking.firewall.allowedTCPPorts = [
