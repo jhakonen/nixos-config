@@ -53,6 +53,7 @@
       };
     in {
       enable = true;
+      listenAddress = "0.0.0.0";
       package = pkgs.unstable.llama-swap;
       port = config.catalog.services.llama-swap.port;
       openFirewall = true;
@@ -108,6 +109,11 @@
       # https://github.com/NixOS/nixpkgs/issues/441531#issuecomment-3283517940
       environment.XDG_CACHE_HOME = "/var/cache/llama-swap";
       serviceConfig.CacheDirectory = "llama-swap";
+
+      # Tämän voi poistaa kun tämä on mergetty https://github.com/NixOS/nixpkgs/pull/525209
+      # ProcSubset=pid aiheuttaa virheen:
+      #   [ERROR] failed to read sys stats: couldn't read /proc/meminfo: open /proc/meminfo: no such file or directory
+      serviceConfig.ProcSubset = lib.mkForce "all";
     };
 
     # Anna llama-swap käyttäjälle oikeus ajaa "systemd-inhibit --what sleep ..." komento
