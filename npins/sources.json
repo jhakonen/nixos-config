@@ -54,9 +54,9 @@
       },
       "branch": "release-26.05",
       "submodules": false,
-      "revision": "ea6d221d7aa85652d014b6f719dddf036037515b",
-      "url": "https://github.com/nix-community/home-manager/archive/ea6d221d7aa85652d014b6f719dddf036037515b.tar.gz",
-      "hash": "sha256-cZRlW47U6A2nWvAmnZeeO6Xvq23gxYbVLel4KxqOrcQ="
+      "revision": "8355f0a16b2dbb06a97959a918af5b239bbe05ae",
+      "url": "https://github.com/nix-community/home-manager/archive/8355f0a16b2dbb06a97959a918af5b239bbe05ae.tar.gz",
+      "hash": "sha256-ZGuxexEMo4Xv28KJ0dX/m/PHN4oZIOnxHZpNTyrvx4M="
     },
     "import-tree": {
       "type": "Git",
@@ -122,9 +122,9 @@
       },
       "branch": "nixos-unstable",
       "submodules": false,
-      "revision": "a799d3e3886da994fa307f817a6bc705ae538eeb",
-      "url": "https://github.com/nixos/nixpkgs/archive/a799d3e3886da994fa307f817a6bc705ae538eeb.tar.gz",
-      "hash": "sha256-3av0pIjlOWQ6rDbNOmpUSvbNnJkGORQKKjb4LtCZsIY="
+      "revision": "9ae611a455b90cf061d8f332b977e387bda8e1ca",
+      "url": "https://github.com/nixos/nixpkgs/archive/9ae611a455b90cf061d8f332b977e387bda8e1ca.tar.gz",
+      "hash": "sha256-md8WlXOlfnIeHeOScMTTHFyf2d6iaTwPl2apR5EQ3P4="
     },
     "tvheadend-image": {
       "type": "Container",
