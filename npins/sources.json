@@ -71,13 +71,6 @@
       "url": "https://github.com/vic/import-tree/archive/d321337efd0f23a9eb14a42adb7b2c29313ab274.tar.gz",
       "hash": "sha256-Jjuz5CmSkur8KvLDoGa+vylEp+RkQtv4mt/qcMznpH0="
     },
-    "kavita-image": {
-      "type": "Container",
-      "image_name": "docker.io/linuxserver/kavita",
-      "image_tag": "latest",
-      "image_digest": "sha256:74fd3b20f2b90d0fc79dec2618a654e84deec9a3068d2ea81f858a4b2fe1453b",
-      "hash": "sha256-BM0qUiSy+uofjYfs/B0FV7XSvUfIAEAhjO7xCrpj8nE="
-    },
     "nix-flatpak": {
       "type": "GitRelease",
       "repository": {
@@ -116,9 +109,9 @@
       },
       "branch": "nixos-26.05",
       "submodules": false,
-      "revision": "bd0ff2d3eac24699c3664d5966b9ef36f388e2ca",
-      "url": "https://github.com/nixos/nixpkgs/archive/bd0ff2d3eac24699c3664d5966b9ef36f388e2ca.tar.gz",
-      "hash": "sha256-q8yYEC5f1mFlQO9RGna4LTc9QrcvWunX6FYp83munkQ="
+      "revision": "a0374025a863d007d98e3297f6aa46cc3141c2f0",
+      "url": "https://github.com/nixos/nixpkgs/archive/a0374025a863d007d98e3297f6aa46cc3141c2f0.tar.gz",
+      "hash": "sha256-9mUW6gNwoN2SWc/l0fW4svPNOulXLl8ijqKyeSOGgJE="
     },
     "nixpkgs-unstable": {
       "type": "Git",
@@ -141,5 +134,5 @@
       "hash": "sha256-EBvsV5ZnlyPm7mLlMNlNQm7+Zxz9d1GtXV97/Y7ZPiU="
     }
   },
-  "version": 7
+  "version": 8
 }

@@ -1,35 +1,16 @@
 { inputs, ... }:
 {
-  den.aspects.kanto.nixos = { config, pkgs, ... }: let
-    imageSource = inputs.kavita-image { inherit pkgs; };
-    inherit (imageSource) image_name image_digest;
-    dataDirRoot = "/var/lib/kavita";
-  in {
-    # Palvelukäyttäjä
-    users.users.kavita = {
-      description = "kavita service user";
-      isSystemUser = true;
-      group = "kavita";
-      uid = 974;
-    };
-    users.groups.kavita.gid = 967;
+  den.aspects.kanto.nixos = { config, ... }: {
 
-    # Docker-kontin määritys
-    virtualisation.oci-containers.containers.kavita = {
-      image = "${image_name}@${image_digest}";
-      environment = {
-        PUID = toString config.users.users.kavita.uid;
-        PGID = toString config.users.groups.kavita.gid;
-        TZ = "Europe/Helsinki";
-      };
-      volumes = [
-        "${dataDirRoot}/config:/config"
-        "${dataDirRoot}/data:/data"
-      ];
-      ports = [
-        "${toString config.catalog.services.kavita.port}:5000"
-      ];
+    # Kavitan asetukset
+    services.kavita = {
+      enable = true;
+      settings.Port = config.catalog.services.kavita.port;
+      tokenKeyFile = config.age.secrets.kavita-tokenkey.path;
     };
+
+    # Salaisuudet
+    age.secrets.kavita-tokenkey.file = ../../agenix/kavita-tokenkey.age;
 
     # Reverse proxyn asetukset
     services.nginx = {
@@ -55,7 +36,7 @@
     #     sudo restic-kavita-veli snapshots
     my.services.restic.backups = let
       bConfig = {
-        paths = [ dataDirRoot ];
+        paths = [ config.services.kavita.dataDir ];
         backupPrepareCommand = "systemctl stop podman-kavita.service";
         backupCleanupCommand = "systemctl start podman-kavita.service";
       };
