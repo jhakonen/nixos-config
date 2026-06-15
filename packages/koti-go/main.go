@@ -4,19 +4,20 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"github.com/jhakonen/koti-go/koti"
 )
 
-type kone_speksi struct {
-	nimi    string
-	buuttaa bool
+type machineSpec struct {
+	name string
+	boot bool
 }
 
-var kaikki_kone_speksit = []kone_speksi{
-	kone_speksi{nimi: "dellxps13", buuttaa: false},
-	kone_speksi{nimi: "kanto", buuttaa: true},
-	kone_speksi{nimi: "mervi", buuttaa: true},
-	kone_speksi{nimi: "nassuvm", buuttaa: true},
-	kone_speksi{nimi: "tunneli", buuttaa: true},
+var allMachineSpecs = []machineSpec{
+	machineSpec{name: "dellxps13", boot: false},
+	machineSpec{name: "kanto", boot: true},
+	machineSpec{name: "mervi", boot: true},
+	machineSpec{name: "nassuvm", boot: true},
+	machineSpec{name: "tunneli", boot: true},
 }
 
 func main() {
@@ -28,79 +29,61 @@ func main() {
 
 	switch os.Args[1] {
 	case "buuttaa":
-		buuttaa(os.Args[2:])
+		bootMachines(os.Args[2:])
 	case "muokkaa":
-		muokkaa()
+		modifyConfig()
 	case "rakenna":
-		rakenna(os.Args[2:])
+		buildMachines(os.Args[2:])
 	default:
 		fmt.Fprintf(os.Stderr, "Tuntematon komento: %v\n", os.Args[1])
 		os.Exit(1)
 	}
 }
 
-func buuttaa(argumentit []string) {
-	koneet := suodataKoneet(selvitäBuutattavatKoneet(argumentit))
+func bootMachines(arguments []string) {
+	koneet := filterReachable(filterBootable(arguments))
 	fmt.Printf("TODO: Ei toteutettu, koneet: %v\n", koneet)
 }
 
-func muokkaa() {
+func modifyConfig() {
 	fmt.Println("TODO: Ei toteutettu")
 }
 
-func rakenna(argumentit []string) {
+func buildMachines(arguments []string) {
 	fmt.Println("TODO: Ei toteutettu")
 }
 
-func selvitäBuutattavatKoneet(koneNimet []string) []string {
-	kone_speksit := suodata(kaikki_kone_speksit, func(kone kone_speksi) bool {
-		return kone.buuttaa
+func filterBootable(machineNames []string) []string {
+	specs := koti.Filter(allMachineSpecs, func(machine machineSpec) bool {
+		return machine.boot
 	})
-	if len(koneNimet) != 0 {
-		kone_speksit = suodata(kone_speksit, func(kone kone_speksi) bool {
-			for _, koneNimi := range koneNimet {
-				if kone.nimi == koneNimi {
+	if len(machineNames) != 0 {
+		specs = koti.Filter(specs, func(machine machineSpec) bool {
+			for _, machineName := range machineNames {
+				if machine.name == machineName {
 					return true
 				}
 			}
 			return false
 		})
 	}
-	return muunna(kone_speksit, haeKoneenNimi)
+	return koti.Map(specs, getMachineName)
 }
 
-func suodataKoneet(koneNimet []string) []string {
-	tulokset := []string{}
-	for _, koneNimi := range koneNimet {
-		cmd := exec.Command("ping", "-W1", "-c1", koneNimi)
+func filterReachable(machineNames []string) []string {
+	result := []string{}
+	for _, machineName := range machineNames {
+		cmd := exec.Command("ping", "-W1", "-c1", machineName)
 		err := cmd.Run()
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "Kone '%v' ei vastaa\n", koneNimi)
+			fmt.Fprintf(os.Stderr, "Kone '%v' ei vastaa\n", machineName)
 			continue
 		}
-		tulokset = append(tulokset, koneNimi)
+		result = append(result, machineName)
 	}
-	return tulokset
+	return result
 }
 
-func suodata[T any](lista []T, fn func(T) bool) []T {
-	arvot := []T{}
-	for _, arvo := range lista {
-		if fn(arvo) {
-			arvot = append(arvot, arvo)
-		}
-	}
-	return arvot
-}
-
-func muunna[T any, E any](lista []T, fn func(T) E) []E {
-	arvot := []E{}
-	for _, arvo := range lista {
-		arvot = append(arvot, fn(arvo))
-	}
-	return arvot
-}
-
-func haeKoneenNimi(kone kone_speksi) string {
-	return kone.nimi
+func getMachineName(machine machineSpec) string {
+	return machine.name
 }
