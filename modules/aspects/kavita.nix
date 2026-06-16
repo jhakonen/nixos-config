@@ -37,8 +37,8 @@
     my.services.restic.backups = let
       bConfig = {
         paths = [ config.services.kavita.dataDir ];
-        backupPrepareCommand = "systemctl stop podman-kavita.service";
-        backupCleanupCommand = "systemctl start podman-kavita.service";
+        backupPrepareCommand = "systemctl stop kavita.service";
+        backupCleanupCommand = "systemctl start kavita.service";
       };
     in {
       kavita-oma = bConfig // {
