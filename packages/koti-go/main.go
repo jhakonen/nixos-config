@@ -42,7 +42,14 @@ func main() {
 
 func bootMachines(arguments []string) {
 	koneet := filterReachable(filterBootable(arguments))
-	fmt.Printf("TODO: Ei toteutettu, koneet: %v\n", koneet)
+	for _, kone := range koneet {
+		fmt.Printf("Käynnistä kone '%v' uudelleen\n", kone)
+		cmd := exec.Command("ssh", fmt.Sprintf("root@%v", kone), "reboot")
+		err := cmd.Run()
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Koneen '%v' uudelleenkäynnistys epäonnistui: %v\n", kone, err)
+		}
+	}
 }
 
 func modifyConfig() {
