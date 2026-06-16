@@ -29,18 +29,19 @@ func main() {
 
 	switch os.Args[1] {
 	case "buuttaa":
-		bootMachines(os.Args[2:])
+		os.Exit(bootMachines(os.Args[2:]))
 	case "muokkaa":
-		modifyConfig()
+		os.Exit(modifyConfig())
 	case "rakenna":
-		buildMachines(os.Args[2:])
+		os.Exit(buildMachines(os.Args[2:]))
 	default:
 		fmt.Fprintf(os.Stderr, "Tuntematon komento: %v\n", os.Args[1])
 		os.Exit(1)
 	}
 }
 
-func bootMachines(arguments []string) {
+func bootMachines(arguments []string) int {
+	result := 0
 	koneet := filterReachable(filterBootable(arguments))
 	for _, kone := range koneet {
 		fmt.Printf("Käynnistä kone '%v' uudelleen\n", kone)
@@ -48,16 +49,25 @@ func bootMachines(arguments []string) {
 		err := cmd.Run()
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Koneen '%v' uudelleenkäynnistys epäonnistui: %v\n", kone, err)
+			result = 1
 		}
 	}
+	return result
 }
 
-func modifyConfig() {
-	fmt.Println("TODO: Ei toteutettu")
+func modifyConfig() int {
+	cmd := exec.Command("subl", "--project", "~/nixos-config/nixos-config.sublime-project")
+	err := cmd.Run()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Tekstieditorin käynnistys epäonnistui: %v\n", err)
+		return 1
+	}
+	return 0
 }
 
-func buildMachines(arguments []string) {
+func buildMachines(arguments []string) int {
 	fmt.Println("TODO: Ei toteutettu")
+	return 1
 }
 
 func filterBootable(machineNames []string) []string {
