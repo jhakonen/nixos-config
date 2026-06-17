@@ -42,13 +42,13 @@ func main() {
 
 func bootMachines(arguments []string) int {
 	result := 0
-	koneet := filterReachable(filterBootable(arguments))
-	for _, kone := range koneet {
-		fmt.Printf("Käynnistä kone '%v' uudelleen\n", kone)
-		cmd := exec.Command("ssh", fmt.Sprintf("root@%v", kone), "reboot")
+	machineNames := filterReachable(filterBootable(arguments))
+	for _, machineName := range machineNames {
+		fmt.Printf("Käynnistä kone '%v' uudelleen\n", machineName)
+		cmd := exec.Command("ssh", fmt.Sprintf("root@%v", machineName), "reboot")
 		err := cmd.Run()
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "Koneen '%v' uudelleenkäynnistys epäonnistui: %v\n", kone, err)
+			fmt.Fprintf(os.Stderr, "Koneen '%v' uudelleenkäynnistys epäonnistui: %v\n", machineName, err)
 			result = 1
 		}
 	}
@@ -66,8 +66,27 @@ func modifyConfig() int {
 }
 
 func buildMachines(arguments []string) int {
+	result := 0
+
+	machineNames := filterReachable(arguments)
+	for _, machineName := range machineNames {
+		// Ensure that machine's key is at ~/.ssh/known_hosts so that SSH will not
+		// prompt to accept connection attempt
+		err := removeMachineFromKnownHosts(machineName)
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			result = 1
+			continue
+		}
+		err = addMachineToKnownHosts(machineName)
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			result = 1
+			continue
+		}
+	}
 	fmt.Println("TODO: Ei toteutettu")
-	return 1
+	return result
 }
 
 func filterBootable(machineNames []string) []string {
@@ -103,4 +122,35 @@ func filterReachable(machineNames []string) []string {
 
 func getMachineName(machine machineSpec) string {
 	return machine.name
+}
+
+func removeMachineFromKnownHosts(machineName string) error {
+	cmd := exec.Command("ssh-keygen", "-R", machineName)
+	err := cmd.Run()
+	if err != nil {
+		return fmt.Errorf("Koneen '%v' poistaminen known_hosts tiedostosta epäonnistui: %v\n", machineName, err)
+	}
+	return nil
+}
+
+func addMachineToKnownHosts(machineName string) error {
+	homeDir, err := os.UserHomeDir()
+	if err != nil {
+		return fmt.Errorf("Kotikansion haku epäonnistui: %v\n", err)
+	}
+
+	file, err := os.OpenFile(homeDir + "/.ssh/known_hosts", os.O_APPEND|os.O_WRONLY, 0600)
+	if err != nil {
+		return fmt.Errorf("Tiedoston known_hosts avaaminen epäonnistui: %v\n", err)
+	}
+	defer file.Close()
+
+	cmd := exec.Command("ssh-keyscan", "-q", machineName)
+	cmd.Stdout = file
+	err = cmd.Run()
+	if err != nil {
+		return fmt.Errorf("Koneen '%v' lisääminen known_hosts tiedostoon epäonnistui: %v\n", machineName, err)
+	}
+
+	return nil
 }
