@@ -1,7 +1,17 @@
 {
   den.aspects.nginx.nixos = { config, ... }: {
     # Salaisuudet
-    age.secrets.acme-joker-credentials.file = ../../agenix/acme-joker-credentials.age;
+    age.secrets = {
+      acme-joker-credentials.file = ../../agenix/acme-joker-credentials.age;
+      dummy-ssl-certificate-file = {
+        file = ../../agenix/dummy-ssl-certificate-file.age;
+        owner = "nginx";
+      };
+      dummy-ssl-certificate-key = {
+        file = ../../agenix/dummy-ssl-certificate-key.age;
+        owner = "nginx";
+      };
+    };
 
     # Palomuurin asetukset
     networking.firewall.allowedTCPPorts = [ 80 443 ];  # nginx
@@ -19,11 +29,11 @@
     services.nginx = {
       enable = true;
       virtualHosts.default = {
+        addSSL = true;
         default = true;
-        # Vastaa määrittelemättömään domainiin tai porttiin 403 virheellä
-        locations."/".extraConfig = ''
-          deny all;
-        '';
+        sslCertificate = config.age.secrets.dummy-ssl-certificate-file.path;
+        sslCertificateKey = config.age.secrets.dummy-ssl-certificate-key.path;
+        locations."/".return = "404";
       };
     };
 

@@ -66,6 +66,8 @@ let
 in
 {
   "acme-joker-credentials.age".publicKeys = [ jhakonen kanto mervi nassuvm tunneli ];
+  "dummy-ssl-certificate-file.age".publicKeys = [ jhakonen kanto mervi nassuvm tunneli ];
+  "dummy-ssl-certificate-key.age".publicKeys = [ jhakonen kanto mervi nassuvm tunneli ];
   "freshrss-admin-password.age".publicKeys = [ jhakonen kanto ];
   "github-id-rsa.age".publicKeys = [ jhakonen ];
   "kanto-gitea-ssh-key.age".publicKeys = [ jhakonen kanto ];
