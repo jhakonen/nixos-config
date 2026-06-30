@@ -114,6 +114,20 @@ nh clean all --keep 5 --keep-since 30d
 
 Minulla on myös automaattinen puhdistus otettu käyttöön kaikilla NixOS koneilla joten tätä ei tarvitse välttämättä tehdä.
 
+# Jos /boot -osio tulee täyteen
+
+```bash
+df -h /boot
+Tiedostojärjestelmä  Koko  Käyt Vapaa Käy% Liitospiste
+/dev/nvme0n1p1       511M  511M     0 100% /boot
+```
+
+Aja koneella:
+```bash
+sudo nix-collect-garbage --delete-older-than 5d
+sudo /run/current-system/bin/switch-to-configuration switch
+```
+
 # Nix-konfiguraation debuggaus
 
 ```bash
