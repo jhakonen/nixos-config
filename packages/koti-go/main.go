@@ -75,9 +75,19 @@ func modifyConfig() int {
 
 func buildMachines(arguments []string) int {
 	result := 0
+	hostname, err := os.Hostname()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Hostnamen pyyntö epäonnistui: %v\n", err)
+		return 1
+	}
 
 	machineNames := filterReachable(arguments)
 	for _, machineName := range machineNames {
+		isRemote := machineName != hostname
+		if isRemote {
+			continue
+		}
+
 		// Ensure that machine's key is at ~/.ssh/known_hosts so that SSH will not
 		// prompt to accept connection attempt
 		err := removeMachineFromKnownHosts(machineName)
@@ -94,7 +104,8 @@ func buildMachines(arguments []string) int {
 		}
 	}
 	for _, machineName := range machineNames {
-		err := buildMachine(machineName)
+		isRemote := machineName != hostname
+		err := buildMachine(machineName, isRemote)
 		if err != nil {
 			return 1
 		}
@@ -172,13 +183,26 @@ func addMachineToKnownHosts(machineName string) error {
 	return nil
 }
 
-func buildMachine(machineName string) error {
-	fmt.Println("TODO: Ei toteutettu")
-	cmd := exec.Command(
+func buildMachine(machineName string, isRemote bool) error {
+	args := []string{
 		"systemd-inhibit",
 		"--who", fmt.Sprintf("nixos-rebuild %s", machineName),
 		"--why", fmt.Sprintf("Rakennetaan %s konetta", machineName),
-		"sleep", "10s",
-	)
+		"nh", "os", "switch",
+		"--file", "/home/jhakonen/nixos-config",
+		fmt.Sprintf("flake.nixosConfigurations.%s", machineName),
+	}
+	if isRemote {
+		args = append(
+			args,
+			"--hostname", machineName,
+			"--target-host", fmt.Sprintf("root@%s", machineName),
+			"--elevation-strategy", "none",
+		)
+	}
+
+	cmd := exec.Command("systemd-inhibit", args...)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
 	return cmd.Run()
 }
