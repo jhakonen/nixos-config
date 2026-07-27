@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
+	"github.com/jhakonen/koti-go/koti"
 	"os"
 	"os/exec"
-	"github.com/jhakonen/koti-go/koti"
 )
 
 type machineSpec struct {
@@ -19,6 +19,10 @@ var allMachineSpecs = []machineSpec{
 	machineSpec{name: "nassuvm", boot: true},
 	machineSpec{name: "tunneli", boot: true},
 }
+
+// ============================================================================
+//      Main
+// ============================================================================
 
 func main() {
 	if len(os.Args) < 2 {
@@ -39,6 +43,10 @@ func main() {
 		os.Exit(1)
 	}
 }
+
+// ============================================================================
+//      Subcommand handlers
+// ============================================================================
 
 func bootMachines(arguments []string) int {
 	result := 0
@@ -85,9 +93,18 @@ func buildMachines(arguments []string) int {
 			continue
 		}
 	}
-	fmt.Println("TODO: Ei toteutettu")
+	for _, machineName := range machineNames {
+		err := buildMachine(machineName)
+		if err != nil {
+			return 1
+		}
+	}
 	return result
 }
+
+// ============================================================================
+//      Util functions
+// ============================================================================
 
 func filterBootable(machineNames []string) []string {
 	specs := koti.Filter(allMachineSpecs, func(machine machineSpec) bool {
@@ -139,7 +156,7 @@ func addMachineToKnownHosts(machineName string) error {
 		return fmt.Errorf("Kotikansion haku epäonnistui: %v\n", err)
 	}
 
-	file, err := os.OpenFile(homeDir + "/.ssh/known_hosts", os.O_APPEND|os.O_WRONLY, 0600)
+	file, err := os.OpenFile(homeDir+"/.ssh/known_hosts", os.O_APPEND|os.O_WRONLY, 0600)
 	if err != nil {
 		return fmt.Errorf("Tiedoston known_hosts avaaminen epäonnistui: %v\n", err)
 	}
@@ -153,4 +170,15 @@ func addMachineToKnownHosts(machineName string) error {
 	}
 
 	return nil
+}
+
+func buildMachine(machineName string) error {
+	fmt.Println("TODO: Ei toteutettu")
+	cmd := exec.Command(
+		"systemd-inhibit",
+		"--who", fmt.Sprintf("nixos-rebuild %s", machineName),
+		"--why", fmt.Sprintf("Rakennetaan %s konetta", machineName),
+		"sleep", "10s",
+	)
+	return cmd.Run()
 }
