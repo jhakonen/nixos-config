@@ -7,6 +7,10 @@
   den.aspects.kanto.nixos = { config, ... }: {
     age.secrets.karakeep-environment.file = ../../agenix/karakeep-environment.age;
 
+    nixpkgs.config.permittedInsecurePackages = [
+      "pnpm-9.15.9" # 8.8.2026: Karakeep riippuu turvattomasta paketista
+    ];
+
     services.karakeep = {
       enable = true;
       extraEnvironment = {

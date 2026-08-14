@@ -3,7 +3,7 @@
 {
   den.aspects.dellxps13.nixos = { pkgs, ... }: {
     environment.systemPackages = [
-      pkgs.unstable.mistral-vibe
+      pkgs.mistral-vibe
       pkgs.unstable.opencode
       pkgs.unstable.opencode-desktop
       pkgs.unstable.whichllm
