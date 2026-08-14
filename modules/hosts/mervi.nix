@@ -110,6 +110,11 @@
       # List services that you want to enable:
 
       services.flatpak.enable = true;
+      services.lact = {
+        enable = true;
+        package = pkgs.unstable.lact;
+      };
+      hardware.amdgpu.overdrive.enable = true; # lact:a varten
 
       networking.firewall.allowedUDPPorts = [
         40000  # WoL portti, ei pakollinen mutta tarpeellinen WoLin testaukseen ngrepillä
