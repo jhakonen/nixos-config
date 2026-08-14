@@ -198,6 +198,7 @@ func buildMachine(machineName string, isRemote bool) error {
 			"--hostname", machineName,
 			"--target-host", fmt.Sprintf("root@%s", machineName),
 			"--elevation-strategy", "none",
+			"--ask",
 		)
 	}
 
