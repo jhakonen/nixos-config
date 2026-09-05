@@ -6,6 +6,8 @@
       pkgs.mistral-vibe
       pkgs.unstable.opencode
       pkgs.unstable.opencode-desktop
+      # https://github.com/nix-community/home-manager/blob/master/modules/programs/pi-coding-agent.nix
+      pkgs.unstable.pi-coding-agent
       pkgs.unstable.whichllm
     ];
   };
