@@ -31,6 +31,23 @@
           ];
         };
         hostPlatform = "x86_64-linux";
+
+        # Kiertää KDE Frameworkin ki18n/ktrancript -kaatumisen (bug 520512,
+        # QTBUG-147479) kun systemsettingsin sulkee. Tämä on korjattu
+        # unstablessa, ja voinee poistaa NixOS 26.11 versiossa
+        overlays = [
+          (final: prev: {
+            kdePackages = prev.kdePackages.overrideScope (kfinal: kprev: {
+              ki18n = kprev.ki18n.overrideAttrs (old: {
+                postInstall = (old.postInstall or "") + ''
+                  rm -f "$out/lib/qt-6/plugins/kf6/ktranscript.so"
+                  # Poista myös locale-skriptidata (ei tarvetta ilman .so:ta)
+                  rm -rf "$out"/share/locale/*/LC_SCRIPTS/ki18n6 2>/dev/null || true
+                '';
+              });
+            });
+          })
+        ];
       };
 
       imports = [
