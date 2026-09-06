@@ -1,13 +1,28 @@
 # Dokumentaatio: obsidian://open?vault=Muistiinpanot&file=Yksityinen%2F0.%20Inbox%2FLocal%20AI
 { inputs, ... }:
 {
-  den.aspects.dellxps13.nixos = { pkgs, ... }: {
+  den.aspects.dellxps13.nixos = { lib, pkgs, ... }: let
+    # Kopioitu tiedostosta:
+    #   https://github.com/nix-community/home-manager/blob/master/modules/programs/pi-coding-agent.nix
+    # Tämän voi korvata NixOS 26.11:ssä home-managerin pi-conding-agent moduulilla
+    original-pi = pkgs.unstable.pi-coding-agent;
+    new-pi = pkgs.symlinkJoin {
+      meta = original-pi.meta;
+      name = "${lib.getName original-pi}-wrapped-${lib.getVersion original-pi}";
+      paths = [ original-pi ];
+      preferLocalBuild = true;
+      nativeBuildInputs = [ pkgs.makeWrapper ];
+      postBuild = ''
+        wrapProgram $out/bin/pi \
+          --suffix PATH : ${lib.makeBinPath [ pkgs.unstable.nodejs ]}
+      '';
+    };
+  in {
     environment.systemPackages = [
+      new-pi
       pkgs.mistral-vibe
       pkgs.unstable.opencode
       pkgs.unstable.opencode-desktop
-      # https://github.com/nix-community/home-manager/blob/master/modules/programs/pi-coding-agent.nix
-      pkgs.unstable.pi-coding-agent
       pkgs.unstable.whichllm
     ];
   };
