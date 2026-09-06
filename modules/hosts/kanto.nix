@@ -11,6 +11,11 @@
     nixos = { config, lib, modulesPath, pkgs, ... }: {
       nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 
+      nixpkgs.config.permittedInsecurePackages = [
+        "immich-2.7.5"
+        "pnpm-9.15.9" # 8.8.2026: Karakeep riippuu turvattomasta paketista
+      ];
+
       # Ota flaket käyttöön
       nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
