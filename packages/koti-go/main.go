@@ -1,10 +1,12 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"github.com/jhakonen/koti-go/koti"
 	"os"
 	"os/exec"
+	"slices"
 	"strings"
 )
 
@@ -38,7 +40,19 @@ func main() {
 	case "muokkaa":
 		os.Exit(modifyConfig())
 	case "rakenna":
-		os.Exit(buildMachines(os.Args[2:]))
+		subcommands := []string{"switch", "boot", "test", "build", "repl", "info", "rollback"}
+		var subcommand string
+		// Komentorivikäsittely
+		fs := flag.NewFlagSet("rakenna", flag.ExitOnError)
+		fs.StringVar(&subcommand, "t", "switch", fmt.Sprintf("Rebuild komennot: %s", strings.Join(subcommands, ", ")))
+		fs.Parse(os.Args[2:])
+		// Varmista että alikomento on oikein
+		if !slices.Contains(subcommands, subcommand) {
+			fmt.Printf("Tuntematon alikomento: %s\n", subcommand)
+			os.Exit(1)
+		}
+		// Rakenna
+		os.Exit(buildMachines(subcommand, fs.Args()))
 	default:
 		fmt.Fprintf(os.Stderr, "Tuntematon komento: %v\n", os.Args[1])
 		os.Exit(1)
@@ -74,7 +88,7 @@ func modifyConfig() int {
 	return 0
 }
 
-func buildMachines(arguments []string) int {
+func buildMachines(command string, arguments []string) int {
 	result := 0
 	hostname, err := os.Hostname()
 	if err != nil {
@@ -114,7 +128,7 @@ func buildMachines(arguments []string) int {
 	}
 	for _, machineName := range machineNames {
 		isRemote := machineName != hostname
-		err := buildMachine(machineName, isRemote)
+		err := buildMachine(command, machineName, isRemote)
 		if err != nil {
 			return 1
 		}
@@ -192,12 +206,12 @@ func addMachineToKnownHosts(machineName string) error {
 	return nil
 }
 
-func buildMachine(machineName string, isRemote bool) error {
+func buildMachine(command string, machineName string, isRemote bool) error {
 	args := []string{
 		"systemd-inhibit",
 		"--who", fmt.Sprintf("nixos-rebuild %s", machineName),
 		"--why", fmt.Sprintf("Rakennetaan %s konetta", machineName),
-		"nh", "os", "switch",
+		"nh", "os", command,
 		"--file", "/home/jhakonen/nixos-config",
 		fmt.Sprintf("flake.nixosConfigurations.%s", machineName),
 	}
