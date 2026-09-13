@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/jhakonen/koti-go/koti"
+	"github.com/jhakonen/koti/utils"
 	"os"
 	"os/exec"
 	"slices"
@@ -63,7 +63,7 @@ func bootMachines(arguments []string) int {
 		return 1
 	}
 
-	knownMachineNames, err := koti.ReadKnownMachineNames(configDir)
+	knownMachineNames, err := utils.ReadKnownMachineNames(configDir)
 	if err != nil {
 		fmt.Printf("Koneiden määrittelyn lukeminen epäonnistui: %s\n", err)
 		return 1
@@ -85,7 +85,7 @@ func bootMachines(arguments []string) int {
 	}
 
 	// All but current host is bootable
-	machineNames = koti.Filter(machineNames, func(name string) bool {
+	machineNames = utils.Filter(machineNames, func(name string) bool {
 		return name != hostname
 	})
 
@@ -120,7 +120,7 @@ func buildMachines(command string, arguments []string, debug bool) int {
 		return 1
 	}
 
-	knownMachineNames, err := koti.ReadKnownMachineNames(configDir)
+	knownMachineNames, err := utils.ReadKnownMachineNames(configDir)
 	if err != nil {
 		fmt.Printf("Koneiden määrittelyn lukeminen epäonnistui: %s\n", err)
 		return 1
@@ -248,7 +248,7 @@ func buildMachine(command string, machineName string, isRemote bool, debug bool)
 
 	// Print out the command that's going to be executed so that we can run it
 	// manually if necessary
-	fmt.Printf("%v\n", strings.Join(koti.Map(args, func(arg string) string {
+	fmt.Printf("%v\n", strings.Join(utils.Map(args, func(arg string) string {
 		if strings.Contains(arg, " ") {
 			return fmt.Sprintf("\"%s\"", arg)
 		}

@@ -1,19 +1,3 @@
-{ pkgs ? import (fetchTarball "https://github.com/NixOS/nixpkgs/tarball/nixos-24.05") {}, ... }:
-rec {
-  package = pkgs.callPackage ./koti.nix { };
-  shell = pkgs.mkShellNoCC {
-    packages = with pkgs; [
-      bashly
-      coreutils
-      findutils
-      gawk
-      gnugrep
-      gnused
-      iputils
-      ncurses
-      nettools
-      openssh
-      systemd
-    ];
-  };
+{ pkgs ? import <nixpkgs> {}, ... }: {
+  package = pkgs.callPackage ./koti.nix {};
 }

@@ -1,4 +1,4 @@
-package koti
+package utils
 
 import (
 	"encoding/json"
