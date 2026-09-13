@@ -41,10 +41,12 @@ func main() {
 		os.Exit(modifyConfig())
 	case "rakenna":
 		subcommands := []string{"switch", "boot", "test", "build", "repl", "info", "rollback"}
+		var debug bool
 		var subcommand string
 		// Komentorivikäsittely
 		fs := flag.NewFlagSet("rakenna", flag.ExitOnError)
 		fs.StringVar(&subcommand, "t", "switch", fmt.Sprintf("Rebuild komennot: %s", strings.Join(subcommands, ", ")))
+		fs.BoolVar(&debug, "debug", false, "Lisää --show-trace komentoon")
 		fs.Parse(os.Args[2:])
 		// Varmista että alikomento on oikein
 		if !slices.Contains(subcommands, subcommand) {
@@ -52,7 +54,7 @@ func main() {
 			os.Exit(1)
 		}
 		// Rakenna
-		os.Exit(buildMachines(subcommand, fs.Args()))
+		os.Exit(buildMachines(subcommand, fs.Args(), debug))
 	default:
 		fmt.Fprintf(os.Stderr, "Tuntematon komento: %v\n", os.Args[1])
 		os.Exit(1)
@@ -88,7 +90,7 @@ func modifyConfig() int {
 	return 0
 }
 
-func buildMachines(command string, arguments []string) int {
+func buildMachines(command string, arguments []string, debug bool) int {
 	result := 0
 	hostname, err := os.Hostname()
 	if err != nil {
@@ -128,7 +130,7 @@ func buildMachines(command string, arguments []string) int {
 	}
 	for _, machineName := range machineNames {
 		isRemote := machineName != hostname
-		err := buildMachine(command, machineName, isRemote)
+		err := buildMachine(command, machineName, isRemote, debug)
 		if err != nil {
 			return 1
 		}
@@ -206,7 +208,7 @@ func addMachineToKnownHosts(machineName string) error {
 	return nil
 }
 
-func buildMachine(command string, machineName string, isRemote bool) error {
+func buildMachine(command string, machineName string, isRemote bool, debug bool) error {
 	args := []string{
 		"systemd-inhibit",
 		"--who", fmt.Sprintf("nixos-rebuild %s", machineName),
@@ -223,6 +225,10 @@ func buildMachine(command string, machineName string, isRemote bool) error {
 			"--elevation-strategy", "none",
 			"--ask",
 		)
+	}
+
+	if debug {
+		args = append(args, "--", "--show-trace")
 	}
 
 	// Print out the command that's going to be executed so that we can run it
