@@ -12,15 +12,14 @@ import (
 
 type machineSpec struct {
 	name string
-	boot bool
 }
 
 var allMachineSpecs = []machineSpec{
-	machineSpec{name: "dellxps13", boot: false},
-	machineSpec{name: "kanto", boot: true},
-	machineSpec{name: "mervi", boot: true},
-	machineSpec{name: "nassuvm", boot: true},
-	machineSpec{name: "tunneli", boot: true},
+	machineSpec{name: "dellxps13"},
+	machineSpec{name: "kanto"},
+	machineSpec{name: "mervi"},
+	machineSpec{name: "nassuvm"},
+	machineSpec{name: "tunneli"},
 }
 
 // ============================================================================
@@ -67,7 +66,34 @@ func main() {
 
 func bootMachines(arguments []string) int {
 	result := 0
-	machineNames := filterReachable(filterBootable(arguments))
+
+	hostname, err := os.Hostname()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Hostnamen pyyntö epäonnistui: %v\n", err)
+		return 1
+	}
+
+	// Ensure that all provided machine names are known hosts
+	for _, name := range arguments {
+		if !isKnownMachineName(name) {
+			fmt.Printf("Tuntematon kone: %s\n", name)
+			return 1
+		}
+	}
+
+	machineNames := arguments
+
+	// Boot all machines by default if no machine names were given
+	if len(machineNames) == 0 {
+		machineNames = koti.Map(allMachineSpecs, getMachineName)
+	}
+
+	// All but current host is bootable
+	machineNames = koti.Filter(machineNames, func(name string) bool {
+		return name != hostname
+	})
+
+	machineNames = filterReachable(machineNames)
 	for _, machineName := range machineNames {
 		fmt.Printf("Käynnistä kone '%v' uudelleen\n", machineName)
 		cmd := exec.Command("ssh", fmt.Sprintf("root@%v", machineName), "reboot")
@@ -96,6 +122,14 @@ func buildMachines(command string, arguments []string, debug bool) int {
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Hostnamen pyyntö epäonnistui: %v\n", err)
 		return 1
+	}
+
+	// Ensure that all provided machine names are known hosts
+	for _, name := range arguments {
+		if !isKnownMachineName(name) {
+			fmt.Printf("Tuntematon kone: %s\n", name)
+			return 1
+		}
 	}
 
 	machineNames := arguments
@@ -142,21 +176,13 @@ func buildMachines(command string, arguments []string, debug bool) int {
 //      Util functions
 // ============================================================================
 
-func filterBootable(machineNames []string) []string {
-	specs := koti.Filter(allMachineSpecs, func(machine machineSpec) bool {
-		return machine.boot
-	})
-	if len(machineNames) != 0 {
-		specs = koti.Filter(specs, func(machine machineSpec) bool {
-			for _, machineName := range machineNames {
-				if machine.name == machineName {
-					return true
-				}
-			}
-			return false
-		})
+func isKnownMachineName(machineName string) bool {
+	for _, spec := range allMachineSpecs {
+		if spec.name == machineName {
+			return true
+		}
 	}
-	return koti.Map(specs, getMachineName)
+	return false
 }
 
 func filterReachable(machineNames []string) []string {
