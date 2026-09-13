@@ -10,17 +10,7 @@ import (
 	"strings"
 )
 
-type machineSpec struct {
-	name string
-}
-
-var allMachineSpecs = []machineSpec{
-	machineSpec{name: "dellxps13"},
-	machineSpec{name: "kanto"},
-	machineSpec{name: "mervi"},
-	machineSpec{name: "nassuvm"},
-	machineSpec{name: "tunneli"},
-}
+var configDir = "/home/jhakonen/nixos-config"
 
 // ============================================================================
 //      Main
@@ -73,9 +63,15 @@ func bootMachines(arguments []string) int {
 		return 1
 	}
 
+	knownMachineNames, err := koti.ReadKnownMachineNames(configDir)
+	if err != nil {
+		fmt.Printf("Koneiden määrittelyn lukeminen epäonnistui: %s\n", err)
+		return 1
+	}
+
 	// Ensure that all provided machine names are known hosts
 	for _, name := range arguments {
-		if !isKnownMachineName(name) {
+		if !slices.Contains(knownMachineNames, name) {
 			fmt.Printf("Tuntematon kone: %s\n", name)
 			return 1
 		}
@@ -85,7 +81,7 @@ func bootMachines(arguments []string) int {
 
 	// Boot all machines by default if no machine names were given
 	if len(machineNames) == 0 {
-		machineNames = koti.Map(allMachineSpecs, getMachineName)
+		machineNames = knownMachineNames
 	}
 
 	// All but current host is bootable
@@ -107,7 +103,7 @@ func bootMachines(arguments []string) int {
 }
 
 func modifyConfig() int {
-	cmd := exec.Command("subl", "--project", "~/nixos-config/nixos-config.sublime-project")
+	cmd := exec.Command("subl", "--project", fmt.Sprintf("%s/nixos-config.sublime-project", configDir))
 	err := cmd.Run()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Tekstieditorin käynnistys epäonnistui: %v\n", err)
@@ -124,9 +120,15 @@ func buildMachines(command string, arguments []string, debug bool) int {
 		return 1
 	}
 
+	knownMachineNames, err := koti.ReadKnownMachineNames(configDir)
+	if err != nil {
+		fmt.Printf("Koneiden määrittelyn lukeminen epäonnistui: %s\n", err)
+		return 1
+	}
+
 	// Ensure that all provided machine names are known hosts
 	for _, name := range arguments {
-		if !isKnownMachineName(name) {
+		if !slices.Contains(knownMachineNames, name) {
 			fmt.Printf("Tuntematon kone: %s\n", name)
 			return 1
 		}
@@ -136,7 +138,7 @@ func buildMachines(command string, arguments []string, debug bool) int {
 
 	// Build all machines by default if no hostnames were given
 	if len(machineNames) == 0 {
-		machineNames = koti.Map(allMachineSpecs, getMachineName)
+		machineNames = knownMachineNames
 	}
 
 	machineNames = filterReachable(machineNames)
@@ -176,15 +178,6 @@ func buildMachines(command string, arguments []string, debug bool) int {
 //      Util functions
 // ============================================================================
 
-func isKnownMachineName(machineName string) bool {
-	for _, spec := range allMachineSpecs {
-		if spec.name == machineName {
-			return true
-		}
-	}
-	return false
-}
-
 func filterReachable(machineNames []string) []string {
 	result := []string{}
 	for _, machineName := range machineNames {
@@ -197,10 +190,6 @@ func filterReachable(machineNames []string) []string {
 		result = append(result, machineName)
 	}
 	return result
-}
-
-func getMachineName(machine machineSpec) string {
-	return machine.name
 }
 
 func removeMachineFromKnownHosts(machineName string) error {
@@ -240,7 +229,7 @@ func buildMachine(command string, machineName string, isRemote bool, debug bool)
 		"--who", fmt.Sprintf("nixos-rebuild %s", machineName),
 		"--why", fmt.Sprintf("Rakennetaan %s konetta", machineName),
 		"nh", "os", command,
-		"--file", "/home/jhakonen/nixos-config",
+		"--file", configDir,
 		fmt.Sprintf("flake.nixosConfigurations.%s", machineName),
 	}
 	if isRemote {
