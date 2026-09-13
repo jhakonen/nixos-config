@@ -5,6 +5,7 @@ import (
 	"github.com/jhakonen/koti-go/koti"
 	"os"
 	"os/exec"
+	"strings"
 )
 
 type machineSpec struct {
@@ -210,7 +211,17 @@ func buildMachine(machineName string, isRemote bool) error {
 		)
 	}
 
-	cmd := exec.Command("systemd-inhibit", args...)
+	// Print out the command that's going to be executed so that we can run it
+	// manually if necessary
+	fmt.Printf("%v\n", strings.Join(koti.Map(args, func(arg string) string {
+		if strings.Contains(arg, " ") {
+			return fmt.Sprintf("\"%s\"", arg)
+		}
+		return arg
+	}), " "))
+
+	// Execute the rebuild command
+	cmd := exec.Command(args[0], args[1:]...)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	return cmd.Run()
