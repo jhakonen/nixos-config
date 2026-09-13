@@ -81,7 +81,15 @@ func buildMachines(arguments []string) int {
 		return 1
 	}
 
-	machineNames := filterReachable(arguments)
+	machineNames := arguments
+
+	// Build all machines by default if no hostnames were given
+	if len(machineNames) == 0 {
+		machineNames = koti.Map(allMachineSpecs, getMachineName)
+	}
+
+	machineNames = filterReachable(machineNames)
+
 	for _, machineName := range machineNames {
 		isRemote := machineName != hostname
 		if isRemote {
