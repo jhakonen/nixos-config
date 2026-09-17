@@ -87,6 +87,10 @@ in {
     networking.firewall.interfaces.tailscale0.allowedTCPPorts = [ agent-port ];
   };
 
+  den.aspects.raami.nixos = {
+    networking.firewall.interfaces.tailscale0.allowedTCPPorts = [ agent-port ];
+  };
+
   den.aspects.kanto.nixos = { config, ... }: {
     networking.firewall.allowedTCPPorts = [ agent-port ];
     # Lisää tuki podman konteille

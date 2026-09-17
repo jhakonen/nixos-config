@@ -85,11 +85,11 @@
         enable = true;
         gui-port = config.catalog.services.syncthing-mervi.port;
         settings = {
-          devices = config.catalog.pickSyncthingDevices ["dellxps13" "nas"];
+          devices = config.catalog.pickSyncthingDevices ["dellxps13" "nas" "raami"];
           folders = {
             "Keepass" = {
               path = "/home/jhakonen/Keepass";
-              devices = [ "dellxps13" "nas" ];
+              devices = [ "dellxps13" "nas" "raami" ];
             };
           };
         };

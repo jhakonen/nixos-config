@@ -1,5 +1,5 @@
 {
-  den.aspects.dellxps13.nixos = { config, pkgs, ... }: {
+  den.aspects.sonos.nixos = { config, pkgs, ... }: {
     environment.systemPackages = [ pkgs.noson ];
 
     # https://github.com/janbar/noson-app?tab=readme-ov-file#ssdp-discovery-fails

@@ -1,9 +1,9 @@
 { inputs, den, ... }:
 {
-  den.hosts.x86_64-linux.dellxps13.users.jhakonen = {};
-  den.hosts.x86_64-linux.dellxps13.users.root = {};
+  den.hosts.x86_64-linux.raami.users.jhakonen = {};
+  den.hosts.x86_64-linux.raami.users.root = {};
 
-  den.aspects.dellxps13 = {
+  den.aspects.raami = {
     includes = [
       den.aspects.ai-tools
       den.aspects.beeper
@@ -19,17 +19,9 @@
       nix.package = pkgs.lix;
       # Ota flaket käyttöön
       nix.settings.experimental-features = [ "nix-command" "flakes" ];
-      # nix.settings.substituters = [
-      #   # devenv.sh tarvitsee tämän
-      #   "https://devenv.cachix.org"
-      #   "https://cache.nixos.org/"
-      # ];
-      # nix.settings.trusted-public-keys = [
-      #   "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw="
-      # ];
 
-      nix.settings.cores = 4;
-      nix.settings.max-jobs = 4;
+      nix.settings.cores = 8;
+      nix.settings.max-jobs = 8;
 
       nixpkgs = {
         config = {
@@ -61,51 +53,36 @@
 
       imports = [
         (modulesPath + "/installer/scan/not-detected.nix")
-
-        inputs.nixos-hardware.nixosModules.common-cpu-intel
-        inputs.nixos-hardware.nixosModules.common-pc-laptop
-        inputs.nixos-hardware.nixosModules.common-pc-ssd
+        inputs.nixos-hardware.nixosModules.framework-intel-core-ultra-series3
       ];
 
       # Bootloader.
       boot.extraModulePackages = [ ];
-      boot.initrd.availableKernelModules = [ "xhci_pci" "thunderbolt" "vmd" "nvme" "usb_storage" "sd_mod" ];
+      boot.kernelPackages = pkgs.linuxPackages_latest;
+
+      boot.initrd.availableKernelModules = [ "xhci_pci" "thunderbolt" "nvme" "usb_storage" "sd_mod" ];
       boot.initrd.kernelModules = [ ];
       boot.loader.systemd-boot.enable = true;
       boot.loader.efi.canTouchEfiVariables = true;
       boot.kernelModules = [ "kvm-intel" ];
 
+      boot.initrd.luks.devices."luks-e74395fd-4716-4b8b-ab65-70255933ece8".device = "/dev/disk/by-uuid/e74395fd-4716-4b8b-ab65-70255933ece8";
+      boot.initrd.luks.devices."luks-38136262-80c8-4d71-989e-9f3312352aaf".device = "/dev/disk/by-uuid/38136262-80c8-4d71-989e-9f3312352aaf";
+
       fileSystems."/" = {
-        device = "/dev/disk/by-uuid/e2fb0104-bdd5-4cd6-887e-74879a463cb3";
+        device = "/dev/mapper/luks-38136262-80c8-4d71-989e-9f3312352aaf";
         fsType = "ext4";
       };
 
       fileSystems."/boot" = {
-        device = "/dev/disk/by-uuid/87BC-31D4";
+        device = "/dev/disk/by-uuid/98A8-FBB6";
         fsType = "vfat";
         options = [ "fmask=0077" "dmask=0077" ];
       };
 
       swapDevices = [
-        { device = "/dev/disk/by-uuid/771ae4c9-c71d-43e0-9016-557281c7556d"; }
-        {
-          # Lisää swappiä jotta nix-index komennolle riittää muistia
-          device = "/var/lib/swapfile";
-          size = 16 * 1024;  # koko megatavuissa
-        }
+        { device = "/dev/mapper/luks-e74395fd-4716-4b8b-ab65-70255933ece8"; }
       ];
-
-      # boot.kernelPatches = [
-      #   # Korjaa toimimattomat äänilaitteet
-      #   #   https://discourse.nixos.org/t/no-sound-after-upgrade-dell-xps/52085/2
-      #   {
-      #     name = "fuck-your-soundwire";
-      #     patch = pkgs.fetchurl {
-      #       url = "https://github.com/torvalds/linux/commit/233a95fd574fde1c375c486540a90304a2d2d49f.diff";
-      #       hash = "sha256-E7K1gLmjwvk93m/dom19gXkBj3/o+5TLZGamv9Oesv0=";
-      #     };
-      #   }
-      # ];
 
       networking.networkmanager = {
         # Hallitse verkkoyhteyttä NetworkManagerilla
@@ -157,7 +134,7 @@
         }];
       };
       networking.useDHCP = lib.mkDefault true;
-      networking.hostName = "dellxps13";
+      networking.hostName = "raami";
 
       # Määrittele avain jolla voidaan purkaa salaus (normaalisti voisi käyttää
       # openssh palvelun host avainta, mutta se vaatisi openssh palvelun käyttöönoton)
@@ -177,6 +154,7 @@
       services.printing.enable = true;
 
       hardware.bluetooth.enable = true;
+      hardware.cpu.intel.npu.enable = true;
       hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 
       # Enable sound with pipewire.
@@ -189,14 +167,9 @@
         pulse.enable = true;
         # If you want to use JACK applications, uncomment this
         #jack.enable = true;
-
-        # use the example session manager (no others are packaged yet so this is enabled by default,
-        # no need to redefine it in your config for now)
-        #media-session.enable = true;
+        # Use the WirePlumber session manager
+        #wireplumber.enable = true;
       };
-
-      # Ota Flirc USB-mokkulan ohjelmointityökalut käyttöön
-      hardware.flirc.enable = true;
 
       # Vamuuskopiointi
       #   Käynnistä:
@@ -205,39 +178,39 @@
       #   Snapshotit:
       #     sudo restic-jhakonen-oma snapshots
       #     sudo restic-jhakonen-veli snapshots
-      my.services.restic.backups = let
-        bConfig = {
-          exclude = [
-            ".cache"
-            ".Trash*"
-            ".local/share/Trash"
-            ".local/share/baloo"
-            ".steam"
-            "Calibre"
-            "Keepass"
-            "Syncthing"
-            "tmp"
-          ];
-          paths = [
-            "/home/jhakonen"
-          ];
-          # TODO: Ota lukon avaaminen käyttöön jos tulee vielä sen kanssa ongelmia
-          #       vaikka inhibitsSleep on päällä.
-          # backupPrepareCommand = "${lib.getExe pkgs.restic} unlock";
-          checkOpts = [ "--read-data-subset" "10%" ];
-          inhibitsSleep = true;
-          timerConfig.Persistent = true;
-        };
-      in {
-        jhakonen-oma = bConfig // {
-          repository = "rclone:nas-oma:/backups/restic/dellxps13-jhakonen";
-          timerConfig.OnCalendar = "01:00";
-        };
-        jhakonen-veli = bConfig // {
-          repository = "rclone:nas-veli:/home/restic/dellxps13-jhakonen";
-          timerConfig.OnCalendar = "Sat 02:00";
-        };
-      };
+      # my.services.restic.backups = let
+      #   bConfig = {
+      #     exclude = [
+      #       ".cache"
+      #       ".Trash*"
+      #       ".local/share/Trash"
+      #       ".local/share/baloo"
+      #       ".steam"
+      #       "Calibre"
+      #       "Keepass"
+      #       "Syncthing"
+      #       "tmp"
+      #     ];
+      #     paths = [
+      #       "/home/jhakonen"
+      #     ];
+      #     # TODO: Ota lukon avaaminen käyttöön jos tulee vielä sen kanssa ongelmia
+      #     #       vaikka inhibitsSleep on päällä.
+      #     # backupPrepareCommand = "${lib.getExe pkgs.restic} unlock";
+      #     checkOpts = [ "--read-data-subset" "10%" ];
+      #     inhibitsSleep = true;
+      #     timerConfig.Persistent = true;
+      #   };
+      # in {
+      #   jhakonen-oma = bConfig // {
+      #     repository = "rclone:nas-oma:/backups/restic/raami-jhakonen";
+      #     timerConfig.OnCalendar = "01:00";
+      #   };
+      #   jhakonen-veli = bConfig // {
+      #     repository = "rclone:nas-veli:/home/restic/raami-jhakonen";
+      #     timerConfig.OnCalendar = "Sat 02:00";
+      #   };
+      # };
 
       services.openssh = {
         enable = true;
@@ -253,7 +226,7 @@
 
       my.services.syncthing = {
         enable = true;
-        gui-port = config.catalog.services.syncthing-dellxps13.port;
+        gui-port = config.catalog.services.syncthing-raami.port;
         settings = {
           devices = config.catalog.pickSyncthingDevices ["mervi" "nas"];
           folders = {
@@ -281,30 +254,20 @@
         };
       };
 
-      users.users.jhakonen.extraGroups = [
-        "dialout"  # Sarjaportin käyttöoikeus
-        "vboxusers"
-      ];
-
       home-manager.backupFileExtension = "hm-backup";
 
-      # List packages installed in system profile. To search, run:
-      # $ nix search wget
       environment.systemPackages = with pkgs; [
+        agenix-cli
         aspell
         aspellDicts.en
         aspellDicts.fi
         brave
         cachix
-        chromium
         devenv
         discord
         easyeffects
         exfatprogs  # kdePackages.partitionmanager tarvitsee exfat tukea varten
         git-crypt
-        gnome-text-editor
-        google-chrome  # Chromecastin tukea varten
-        gnumake
         (hakuneko.overrideAttrs(_attrs: {  # Manga downloader
           version = "8.3.4";
           src = pkgs.fetchurl {
@@ -318,7 +281,6 @@
           '';
         }))
         immich-cli
-        # itch  # itch.io - Riippuu rikkinäisestä butler kirjastosta
         keepassxc
         libreoffice
         livecaptions
@@ -328,20 +290,16 @@
         kdePackages.krecorder
         kdePackages.kcalc
         kdePackages.partitionmanager
-        mcomix
         meld
         moonlight-qt
         mqttx
+        nix-index  # Nixpkgs pakettien sisällön etsiminen
         nixos-rebuild-ng
         obsidian
         renameutils  # qmv
         sublime4
-        super-productivity
         syncthingtray-minimal
         trayscale
-        zoom-us
-
-        #inputs.mypanel.packages.${pkgs.stdenv.system}.default
 
         unstable.calibre
         unstable.npins  # 0.4.0 oci container tukea varten
@@ -358,31 +316,6 @@
         "org.gnome.Papers"
         "org.gnome.Showtime"
       ];
-
-      # Esimerkki miten ohjelman paketin voi overridata käyttäen overlaytä
-      # nixpkgs.overlays = [
-      #   (final: prev: {
-      #     ohjelma = prev.ohjelma.overrideAttrs (o: {
-      #       patches = (o.patches or [ ]) ++ [
-      #         ./polku/patch/tiedostoon.diff
-      #       ];
-      #     });
-      #   })
-      # ];
-
-      # Some programs need SUID wrappers, can be configured further or are
-      # started in user sessions.
-      # programs.mtr.enable = true;
-      # programs.gnupg.agent = {
-      #   enable = true;
-      #   enableSSHSupport = true;
-      # };
-
-      # Ota AppImage tuki käyttöön
-      # programs.appimage = {
-      #   enable = true;
-      #   binfmt = true;
-      # };
 
       programs.steam = {
         enable = true;
@@ -404,11 +337,6 @@
         silent = true;
       };
 
-      programs.kde-pim = {
-        enable = true;
-        kontact = true;
-      };
-
       environment.shellAliases = {
         qmv = "qmv --editor='subl --launch-or-new-window --wait' --format=destination-only --verbose";
       };
@@ -419,9 +347,7 @@
       # services.openssh.enable = true;
 
       # Open ports in the firewall.
-      networking.firewall.allowedTCPPorts = [
-        12315  # Grayjay Sync
-      ];
+      # networking.firewall.allowedTCPPorts = [];
       # networking.firewall.allowedUDPPorts = [ ... ];
 
       networking.firewall.allowedTCPPortRanges = [
@@ -434,15 +360,13 @@
       # Or disable the firewall altogether.
       # networking.firewall.enable = false;
 
-      # This value determines the NixOS release from which the default
-      # settings for stateful data, like file locations and database versions
-      # on your system were taken. It‘s perfectly fine and recommended to leave
-      # this value at the release version of the first install of this system.
-      # Before changing this value read the documentation for this option
-      # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-      system.stateVersion = "25.05"; # Did you read the comment?
+      system.stateVersion = "26.05";
 
-      services.fwupd.enable = true;
+      services.fwupd = {
+        enable = true;
+        extraRemotes = [ "lvfs-testing" ];
+        uefiCapsuleSettings.DisableCapsuleUpdateOnDisk = true;
+      };
 
       services.pipewire.wireplumber.extraConfig.main = {
         "monitor.alsa.rules" = [
@@ -495,39 +419,16 @@
 
       # https://github.com/NixOS/nixpkgs/issues/180175#issuecomment-1473408913
       systemd.services.NetworkManager-wait-online.enable = lib.mkForce false;
-
-      # Ota Oracle Virtualbox tuki käyttöön
-      # TODO: systemd-modules-load.service palvelun ajossa kestää 10s kun insertoi vboxnetflt moduulia, miksi?
-      # virtualisation.virtualbox.host = {
-      #   enable = true;
-      #   enableExtensionPack = true;
-      # };
     };
 
     provides.to-users.homeManager = {
-      home.stateVersion = "23.05";
+      home.stateVersion = "26.05";
     };
 
     provides.jhakonen.homeManager = { config, pkgs, ... }: {
-      imports = [
-        # inputs.jhhapanel.homeManagerModules.default
-      ];
-
-      # Add stuff for your user as you see fit:
-      # programs.neovim.enable = true;
-      home.packages = [
-        (pkgs.callPackage "${inputs.agenix}/pkgs/agenix.nix" {})
-        #pkgs.calibre
-        pkgs.nixos-rebuild  # rebuildaus etäkoneelle
-        pkgs.nix-index  # Nixpkgs pakettien sisällön etsiminen
-      ];
-
+      # imports = [];
       # Enable home-manager and git
       programs.home-manager.enable = true;
-
-      # programs.jhhapanel = {
-      #   enable = true;
-      # };
 
       programs.ssh = {
         enable = true;
@@ -564,31 +465,6 @@
       # Nicely reload system units when changing configs
       systemd.user.startServices = "sd-switch";
 
-      # https://nixos.wiki/wiki/Home_Manager#Usage_on_non-NixOS_Linux
-      # targets.genericLinux.enable = true;
-
-      # https://wiki.nixos.org/wiki/Default_applications
-      # Tiedostotyypin näkee komennolla "file -i <tiedoston polku>"
-      # Tiedostopääte mimetyypiksi, katso: /run/current-system/sw/share/mime/globs
-      # xdg.mimeApps = {
-      #   enable = true;
-      #   defaultApplications = {
-      #     "text/html" = "firefox.desktop";
-      #     "text/markdown" = "sublime_text.desktop";
-      #     "text/plain" = "org.gnome.TextEditor.desktop";
-      #     "x-scheme-handler/about" = "firefox.desktop";
-      #     "x-scheme-handler/element" = "Beeper.desktop";
-      #     "x-scheme-handler/http" = "firefox.desktop";
-      #     "x-scheme-handler/https" = "firefox.desktop";
-      #     "x-scheme-handler/mailto" = "thunderbird.desktop";
-      #     "x-scheme-handler/unknown" = "firefox.desktop";
-      #   };
-      # };
-
-      # Ylikrjoita mime asetukset jos niitä tulee muokattua käsin, esim. Nemolla
-      # muuttamalla tiedoston oletusohjelmaa
-      # xdg.configFile."mimeapps.list".force = true;
-
       xdg.userDirs = {
         enable = true;
         desktop = "${config.home.homeDirectory}/Työpöytä";
@@ -601,28 +477,15 @@
         videos = "${config.home.homeDirectory}/Videot";
         setSessionVariables = true;
       };
-
-      # gtk.theme = {
-      #   package = pkgs.flat-remix-gtk;
-      #   # Mahdolliset teemojen nimet löytää komennolla:
-      #   #   ll $(nix eval --raw nixpkgs#flat-remix-gtk.outPath)/share/themes/
-      #   name = "Flat-Remix-GTK-Yellow-Dark";
-      # };
-      # gtk.iconTheme = {
-      #   package = pkgs.yaru-remix-theme;
-      #   # Mahdolliset teemojen nimet löytää komennolla:
-      #   #   ll $(nix eval --raw nixpkgs#yaru-remix-theme.outPath)/share/icons/
-      #   name = "Yaru-remix-light";
-      # };
     };
   };
 
-  den.aspects.kanto.nixos = { config, ... }: {
-    # Palvelun valvonta
-    services.gatus.settings.endpoints = [{
-      name = "Syncthing (dellxps13)";
-      url = "http://${config.catalog.services.syncthing-dellxps13.host.hostName}:${toString config.catalog.services.syncthing-dellxps13.port}";
-      conditions = [ "[STATUS] == 200" ];
-    }];
-  };
+#   den.aspects.kanto.nixos = { config, ... }: {
+#     # Palvelun valvonta
+#     services.gatus.settings.endpoints = [{
+#       name = "Syncthing (dellxps13)";
+#       url = "http://${config.catalog.services.syncthing-dellxps13.host.hostName}:${toString config.catalog.services.syncthing-dellxps13.port}";
+#       conditions = [ "[STATUS] == 200" ];
+#     }];
+#   };
 }

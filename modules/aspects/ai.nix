@@ -1,7 +1,7 @@
 # Dokumentaatio: obsidian://open?vault=Muistiinpanot&file=Yksityinen%2F0.%20Inbox%2FLocal%20AI
 { inputs, ... }:
 {
-  den.aspects.dellxps13.nixos = { lib, pkgs, ... }: let
+  den.aspects.ai-tools.nixos = { lib, pkgs, ... }: let
     # Kopioitu tiedostosta:
     #   https://github.com/nix-community/home-manager/blob/master/modules/programs/pi-coding-agent.nix
     # Tämän voi korvata NixOS 26.11:ssä home-managerin pi-conding-agent moduulilla

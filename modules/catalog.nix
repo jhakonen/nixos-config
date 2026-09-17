@@ -35,6 +35,7 @@
     nassuvm = {
       ip.private = "10.0.0.103";
     };
+    raami = {};
     reititin = {
       ip.private = "10.0.0.1";
       useIp = true;
@@ -380,6 +381,15 @@
       dashy = {
         section = "syncthing";
         description = "Syncthing - NAS";
+        icon = "hl-syncthing";
+      };
+    };
+    syncthing-raami = {
+      host = nodes.raami;
+      port = 8384;
+      dashy = {
+        section = "syncthing";
+        description = "Syncthing - Framework 13 Pro";
         icon = "hl-syncthing";
       };
     };

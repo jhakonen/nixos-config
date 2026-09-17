@@ -1,5 +1,5 @@
 {
-  den.aspects.dellxps13.nixos = { pkgs, ... }: {
+  den.aspects.beeper.nixos = { pkgs, ... }: {
     environment.systemPackages = [
       pkgs.unstable.beeper
     ];
