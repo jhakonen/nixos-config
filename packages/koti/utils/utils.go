@@ -24,15 +24,20 @@ func Map[T any, E any](list []T, fn func(T) E) []E {
 	return values
 }
 
-func ReadKnownMachineNames(configDir string) ([]string, error) {
+type Machine struct {
+	Name string
+	Entry string
+}
+
+func ReadKnownMachines(configDir string) ([]Machine, error) {
 	contents, err := os.ReadFile(fmt.Sprintf("%s/hosts.json", configDir))
 	if err != nil {
 		return nil, err
 	}
-	var hosts []string
-	err = json.Unmarshal(contents, &hosts)
+	var machines []Machine
+	err = json.Unmarshal(contents, &machines)
 	if err != nil {
 		return nil, err
 	}
-	return hosts, nil
+	return machines, nil
 }

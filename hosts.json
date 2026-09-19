@@ -1,8 +1,8 @@
 [
-  "dellxps13",
-  "raami",
-  "kanto",
-  "mervi",
-  "nassuvm",
-  "tunneli"
+  { "name": "dellxps13", "entry": "default" },
+  { "name": "raami", "entry": "unstable" },
+  { "name": "kanto", "entry": "default" },
+  { "name": "mervi", "entry": "default" },
+  { "name": "nassuvm", "entry": "default" },
+  { "name": "tunneli", "entry": "default" }
 ]

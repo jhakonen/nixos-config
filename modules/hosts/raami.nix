@@ -28,27 +28,12 @@
           allowUnfree = true;
           permittedInsecurePackages = [
             "electron-38.8.4" # cherry-studio
-            "openssl-1.1.1w" # sublime4
           ];
+          problems.handlers = {
+            sublimetext4.broken = "ignore";
+          };
         };
         hostPlatform = "x86_64-linux";
-
-        # Kiertää KDE Frameworkin ki18n/ktrancript -kaatumisen (bug 520512,
-        # QTBUG-147479) kun systemsettingsin sulkee. Tämä on korjattu
-        # unstablessa, ja voinee poistaa NixOS 26.11 versiossa
-        overlays = [
-          (final: prev: {
-            kdePackages = prev.kdePackages.overrideScope (kfinal: kprev: {
-              ki18n = kprev.ki18n.overrideAttrs (old: {
-                postInstall = (old.postInstall or "") + ''
-                  rm -f "$out/lib/qt-6/plugins/kf6/ktranscript.so"
-                  # Poista myös locale-skriptidata (ei tarvetta ilman .so:ta)
-                  rm -rf "$out"/share/locale/*/LC_SCRIPTS/ki18n6 2>/dev/null || true
-                '';
-              });
-            });
-          })
-        ];
       };
 
       imports = [
@@ -268,18 +253,6 @@
         easyeffects
         exfatprogs  # kdePackages.partitionmanager tarvitsee exfat tukea varten
         git-crypt
-        (hakuneko.overrideAttrs(_attrs: {  # Manga downloader
-          version = "8.3.4";
-          src = pkgs.fetchurl {
-            url = "https://github.com/manga-download/hakuneko/releases/download/nightly-20200705.1/hakuneko-desktop_8.3.4_linux_amd64.deb";
-            sha256 = "sha256-SOmncBVpX+aTkKyZtUGEz3k/McNFLRdPz0EFLMsq4hE=";
-          };
-          postFixup = ''
-            makeWrapper ${steam-run}/bin/steam-run $out/bin/hakuneko \
-              --add-flags $out/lib/hakuneko-desktop/hakuneko \
-              "''${gappsWrapperArgs[@]}"
-          '';
-        }))
         immich-cli
         keepassxc
         libreoffice
@@ -297,7 +270,7 @@
         nixos-rebuild-ng
         obsidian
         renameutils  # qmv
-        sublime4
+        sublime4-dev # sublime4 -paketissa plugin host 3.8 kaatuu 20.9.2026
         syncthingtray-minimal
         trayscale
 

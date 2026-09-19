@@ -63,11 +63,15 @@ func bootMachines(arguments []string) int {
 		return 1
 	}
 
-	knownMachineNames, err := utils.ReadKnownMachineNames(configDir)
+	knownMachines, err := utils.ReadKnownMachines(configDir)
 	if err != nil {
 		fmt.Printf("Koneiden määrittelyn lukeminen epäonnistui: %s\n", err)
 		return 1
 	}
+
+	knownMachineNames := utils.Map(knownMachines, func (machine utils.Machine) string {
+		return machine.Name
+	})
 
 	// Ensure that all provided machine names are known hosts
 	for _, name := range arguments {
@@ -120,11 +124,15 @@ func buildMachines(command string, arguments []string, debug bool) int {
 		return 1
 	}
 
-	knownMachineNames, err := utils.ReadKnownMachineNames(configDir)
+	knownMachines, err := utils.ReadKnownMachines(configDir)
 	if err != nil {
 		fmt.Printf("Koneiden määrittelyn lukeminen epäonnistui: %s\n", err)
 		return 1
 	}
+
+	knownMachineNames := utils.Map(knownMachines, func (machine utils.Machine) string {
+		return machine.Name
+	})
 
 	// Ensure that all provided machine names are known hosts
 	for _, name := range arguments {
@@ -165,8 +173,12 @@ func buildMachines(command string, arguments []string, debug bool) int {
 		}
 	}
 	for _, machineName := range machineNames {
+		index := slices.IndexFunc(knownMachines, func (machine utils.Machine) bool {
+			return machine.Name == machineName
+		})
+		entrypoint := knownMachines[index].Entry
 		isRemote := machineName != hostname
-		err := buildMachine(command, machineName, isRemote, debug)
+		err := buildMachine(command, machineName, entrypoint, isRemote, debug)
 		if err != nil {
 			return 1
 		}
@@ -223,13 +235,17 @@ func addMachineToKnownHosts(machineName string) error {
 	return nil
 }
 
-func buildMachine(command string, machineName string, isRemote bool, debug bool) error {
+func buildMachine(command string, machineName string, entrypoint string, isRemote bool, debug bool) error {
+	configFile := configDir
+	if entrypoint != "default" {
+		configFile = fmt.Sprintf("%s/%s.nix", configDir, entrypoint)
+	}
 	args := []string{
 		"systemd-inhibit",
 		"--who", fmt.Sprintf("nixos-rebuild %s", machineName),
 		"--why", fmt.Sprintf("Rakennetaan %s konetta", machineName),
 		"nh", "os", command,
-		"--file", configDir,
+		"--file", configFile,
 		fmt.Sprintf("flake.nixosConfigurations.%s", machineName),
 	}
 	if isRemote {

@@ -59,7 +59,6 @@
       usbutils   # lsusb
       binutils   # strings
       python3
-      silver-searcher
       tailspin   # https://github.com/bensadeh/tailspin
       eza        # https://github.com/eza-community/eza
       doggo      # https://doggo.mrkaran.dev/docs/
