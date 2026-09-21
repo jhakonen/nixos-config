@@ -1,0 +1,433 @@
+diff --git a/components/2.0/Background.qml b/components/2.0/Background.qml
+index 952894c..269a45a 100644
+--- a/components/2.0/Background.qml
++++ b/components/2.0/Background.qml
+@@ -31,6 +31,12 @@ FocusScope {
+     property alias fillMode: image.fillMode
+     property alias status: image.status
+ 
++    Rectangle {
++        id: fallback
++        anchors.fill: parent
++        color: "#2b2b2b"
++        visible: image.status === Image.Error
++    }
+ 
+     Image {
+         id: image
+diff --git a/data/man/sddm.conf.rst.in b/data/man/sddm.conf.rst.in
+index 0d00919..37e58ae 100644
+--- a/data/man/sddm.conf.rst.in
++++ b/data/man/sddm.conf.rst.in
+@@ -246,6 +246,17 @@ The `UserAuthFile=` option was removed, the file is always created as
+ 	only the first time.
+ 	Default value is false.
+ 
++[Fingerprintlogin] section:
++
++`User=`
++	Username to start fingerprint authentication for when the greeter loads.
++	If empty, fingerprint authentication is not started automatically.
++	Default value is empty.
++
++`Session=`
++	Session to use for fingerprint login. If empty, the last used session is used.
++	Default value is empty.
++
+ SEE ALSO
+ ========
+ 
+diff --git a/services/CMakeLists.txt b/services/CMakeLists.txt
+index f542c55..a473f69 100644
+--- a/services/CMakeLists.txt
++++ b/services/CMakeLists.txt
+@@ -11,3 +11,7 @@ if(DEFINED SYSTEMD_TMPFILES_DIR)
+     configure_file(sddm-tmpfiles.conf.in sddm-tmpfiles.conf)
+     install(FILES "${CMAKE_CURRENT_BINARY_DIR}/sddm-tmpfiles.conf" DESTINATION "${SYSTEMD_TMPFILES_DIR}" RENAME sddm.conf)
+ endif()
++
++if(INSTALL_PAM_CONFIGURATION)
++    install(FILES sddm-fingerprint.pam DESTINATION ${CMAKE_INSTALL_FULL_SYSCONFDIR}/pam.d RENAME sddm-fingerprint)
++endif()
+diff --git a/services/sddm-fingerprint.pam b/services/sddm-fingerprint.pam
+new file mode 100755
+index 0000000..1ba9b25
+--- /dev/null
++++ b/services/sddm-fingerprint.pam
+@@ -0,0 +1,12 @@
++#%PAM-1.0
++
++auth        required  pam_env.so
++auth        required  pam_faillock.so preauth
++auth        required  pam_shells.so
++auth        required  pam_nologin.so
++auth        required  pam_fprintd.so
++auth        optional  pam_permit.so
++
++account     include   system-local-login
++password    include   system-local-login
++session     include   system-local-login
+diff --git a/src/auth/Auth.cpp b/src/auth/Auth.cpp
+index 6c9b5c6..8aab0ba 100644
+--- a/src/auth/Auth.cpp
++++ b/src/auth/Auth.cpp
+@@ -67,6 +67,8 @@ namespace SDDM {
+         QString user { };
+         QByteArray cookie { };
+         bool autologin { false };
++        bool fingerprintlogin { false };
++        bool stoppedIntentionally { false };
+         bool greeter { false };
+         QProcessEnvironment environment { };
+         qint64 id { 0 };
+@@ -218,19 +220,21 @@ namespace SDDM {
+     }
+ 
+     void Auth::Private::childExited(int exitCode, QProcess::ExitStatus exitStatus) {
+-        if (exitStatus != QProcess::NormalExit) {
++        if (exitStatus != QProcess::NormalExit && !stoppedIntentionally) {
+             qWarning("Auth: sddm-helper (%s) crashed (exit code %d)",
+                      qPrintable(child->arguments().join(QLatin1Char(' '))),
+                      HelperExitStatus(exitStatus));
+             Q_EMIT qobject_cast<Auth*>(parent())->error(child->errorString(), ERROR_INTERNAL);
+         }
++        stoppedIntentionally = false;
+ 
+-        if (exitCode == HELPER_SUCCESS)
++        if (exitCode == HELPER_SUCCESS) {
+             qDebug() << "Auth: sddm-helper exited successfully";
++            emit qobject_cast<Auth*>(parent())->finished(static_cast<Auth::HelperExitStatus>(exitCode));
++        }
++
+         else
+             qWarning("Auth: sddm-helper exited with %d", exitCode);
+-
+-        Q_EMIT qobject_cast<Auth*>(parent())->finished((Auth::HelperExitStatus)exitCode);
+     }
+ 
+     void Auth::Private::childError(QProcess::ProcessError error) {
+@@ -276,6 +280,10 @@ namespace SDDM {
+         return d->autologin;
+     }
+ 
++    bool Auth::fingerprintlogin() const {
++        return d->fingerprintlogin;
++    }
++
+     bool Auth::isGreeter() const
+     {
+         return d->greeter;
+@@ -334,6 +342,12 @@ namespace SDDM {
+         }
+     }
+ 
++    void Auth::setFingerprintlogin(bool on){
++        if(on != d->fingerprintlogin){
++            d->fingerprintlogin = on;
++        }
++    }
++
+     void Auth::setGreeter(bool on)
+     {
+         if (on != d->greeter) {
+@@ -377,10 +391,17 @@ namespace SDDM {
+             args << QStringLiteral("--user") << d->user;
+         if (d->autologin)
+             args << QStringLiteral("--autologin");
++        if (d->fingerprintlogin)
++            args << QStringLiteral("--fingerprintlogin");
+         if (!d->displayServerCmd.isEmpty())
+             args << QStringLiteral("--display-server") << d->displayServerCmd;
+         if (d->greeter)
+             args << QStringLiteral("--greeter");
++        if(d->child->state() != QProcess::NotRunning){
++            d->child->terminate();
++            d->child->waitForFinished();
++        }
++        qDebug() << "starting sddm-helper with" << args;
+         d->child->start(QStringLiteral("%1/sddm-helper").arg(QStringLiteral(LIBEXEC_INSTALL_DIR)), args);
+     }
+ 
+@@ -389,10 +410,11 @@ namespace SDDM {
+             return;
+         }
+ 
++        d->stoppedIntentionally = true;
+         d->child->terminate();
+ 
+         // wait for finished
+-        if (!d->child->waitForFinished(5000))
++        if (!d->child->waitForFinished(300))
+             d->child->kill();
+     }
+ }
+diff --git a/src/auth/Auth.h b/src/auth/Auth.h
+index c78da55..148853a 100644
+--- a/src/auth/Auth.h
++++ b/src/auth/Auth.h
+@@ -52,6 +52,7 @@ namespace SDDM {
+         Q_OBJECT
+         // not setting NOTIFY for the properties - they should be set only once before calling start
+         Q_PROPERTY(bool autologin READ autologin WRITE setAutologin NOTIFY autologinChanged)
++        Q_PROPERTY(bool fingerprintlogin READ fingerprintlogin WRITE setFingerprintlogin NOTIFY fingerprintloginChanged)
+         Q_PROPERTY(bool greeter READ isGreeter WRITE setGreeter NOTIFY greeterChanged)
+         Q_PROPERTY(bool verbose READ verbose WRITE setVerbose NOTIFY verboseChanged)
+         Q_PROPERTY(QByteArray cookie READ cookie WRITE setCookie NOTIFY cookieChanged)
+@@ -93,6 +94,7 @@ namespace SDDM {
+         static void registerTypes();
+ 
+         bool autologin() const;
++        bool fingerprintlogin() const;
+         bool isGreeter() const;
+         bool verbose() const;
+         const QByteArray &cookie() const;
+@@ -126,6 +128,13 @@ namespace SDDM {
+         */
+         void setAutologin(bool on = true);
+ 
++        /**
++        * Set mode to fingerprint login.
++        * Ignored if session is not started
++        * @param on true if should use fingerprint login
++        */
++        void setFingerprintlogin(bool on = true);
++
+         /**
+          * Set mode to greeter
+          * This will bypass authentication checks
+@@ -175,6 +184,7 @@ namespace SDDM {
+ 
+     Q_SIGNALS:
+         void autologinChanged();
++        void fingerprintloginChanged();
+         void greeterChanged();
+         void verboseChanged();
+         void cookieChanged();
+diff --git a/src/common/Configuration.h b/src/common/Configuration.h
+index 4c3572d..7ead16d 100644
+--- a/src/common/Configuration.h
++++ b/src/common/Configuration.h
+@@ -102,7 +102,7 @@ namespace SDDM {
+         Section(Autologin,
+             Entry(User,                QString,     QString(),                                  _S("Username for autologin session"));
+             Entry(Session,             QString,     QString(),                                  _S("Name of session file for autologin session (if empty try last logged in)"));
+-            Entry(Relogin,             bool,        false,                                      _S("Whether sddm should automatically log back into sessions when they exit"));
++Entry(Relogin,             bool,        false,                                      _S("Whether sddm should automatically log back into sessions when they exit"));
+         );
+     );
+ 
+diff --git a/src/daemon/Display.cpp b/src/daemon/Display.cpp
+index a36b89d..26c5b7d 100644
+--- a/src/daemon/Display.cpp
++++ b/src/daemon/Display.cpp
+@@ -43,6 +43,7 @@
+ #include <sys/ioctl.h>
+ #include <fcntl.h>
+ 
++#include <QLocalSocket>
+ #include <QDBusConnection>
+ #include <QDBusMessage>
+ #include <QDBusReply>
+@@ -154,6 +155,7 @@ namespace SDDM {
+ 
+         // connect login signal
+         connect(m_socketServer, &SocketServer::login, this, &Display::login);
++        connect(m_socketServer, &SocketServer::greeterConnected, this, &Display::onGreeterConnected);
+ 
+         // connect login result signals
+         connect(this, &Display::loginFailed, m_socketServer, &SocketServer::loginFailed);
+@@ -332,6 +334,7 @@ namespace SDDM {
+                         const QString &user, const QString &password,
+                         const Session &session) {
+         m_socket = socket;
++        if (!user.isEmpty()) m_lastAttemptedUser = user;
+ 
+         //the SDDM user has special privileges that skip password checking so that we can load the greeter
+         //block ever trying to log in as the SDDM user
+@@ -340,10 +343,43 @@ namespace SDDM {
+             return;
+         }
+ 
++        if(password.isEmpty() && !m_auth->fingerprintlogin()){
++            qDebug() << "use fingerprint because password is empty";
++            m_auth->setFingerprintlogin(true);
++        }
++
+         // authenticate
+         startAuth(user, password, session);
+     }
+ 
++    void Display::onGreeterConnected() {
++        QString lastUser = m_lastAttemptedUser.isEmpty() ? stateConfig.Last.User.get() : m_lastAttemptedUser;
++        if (lastUser.isEmpty() || lastUser == QLatin1String("sddm"))
++            return;
++
++        if (m_auth->isActive())
++            return;
++
++        QString lastSession = stateConfig.Last.Session.get();
++        Session::Type sessionType = Session::X11Session;
++
++        if (findSessionEntry(mainConfig.Wayland.SessionDir.get(), lastSession))
++            sessionType = Session::WaylandSession;
++        else if (findSessionEntry(mainConfig.X11.SessionDir.get(), lastSession))
++            sessionType = Session::X11Session;
++        else
++            return;
++
++        Session session;
++        session.setTo(sessionType, lastSession);
++
++        qDebug() << "Starting fingerprint auth for last user:" << lastUser;
++        m_auth->setFingerprintlogin(true);
++        m_fingerprintAuthActive = true;
++        startAuth(lastUser, QString(), session);
++        m_auth->setFingerprintlogin(false);
++    }
++
+     QString Display::findGreeterTheme() const {
+         QString themeName = mainConfig.Theme.Current.get();
+ 
+@@ -388,8 +424,14 @@ namespace SDDM {
+     bool Display::startAuth(const QString &user, const QString &password, const Session &session) {
+ 
+         if (m_auth->isActive()) {
+-            qWarning() << "Existing authentication ongoing, aborting";
+-            return false;
++            if (m_fingerprintAuthActive) {
++                qDebug() << "Stopping fingerprint auth to allow password auth";
++                m_auth->stop();
++                m_fingerprintAuthActive = false;
++            } else {
++                qWarning() << "Existing authentication ongoing, aborting";
++                return false;
++            }
+         }
+ 
+         m_passPhrase = password;
+@@ -481,6 +523,9 @@ namespace SDDM {
+     }
+ 
+     void Display::slotAuthenticationFinished(const QString &user, bool success) {
++        m_fingerprintAuthActive = false;
++        if (!success && !m_auth->autologin() && !m_auth->fingerprintlogin()) { QTimer::singleShot(300, this, &Display::onGreeterConnected); }
++
+         if (m_auth->autologin() && !success) {
+             handleAutologinFailure();
+             return;
+diff --git a/src/daemon/Display.h b/src/daemon/Display.h
+index c2741ea..6f00fcf 100644
+--- a/src/daemon/Display.h
++++ b/src/daemon/Display.h
+@@ -87,6 +87,7 @@ namespace SDDM {
+ 
+         bool startAuth(const QString &user, const QString &password,
+                        const Session &session);
++        void onGreeterConnected();
+ 
+         void startSocketServerAndGreeter();
+         bool handleAutologinFailure();
+@@ -94,6 +95,8 @@ namespace SDDM {
+         DisplayServerType m_displayServerType = X11DisplayServerType;
+ 
+         bool m_started { false };
++        bool m_fingerprintAuthActive { false };
++        QString m_lastAttemptedUser;
+ 
+         int m_terminalId = -1;
+         int m_sessionTerminalId = 0;
+diff --git a/src/daemon/SocketServer.cpp b/src/daemon/SocketServer.cpp
+index 488f9a5..7113af9 100644
+--- a/src/daemon/SocketServer.cpp
++++ b/src/daemon/SocketServer.cpp
+@@ -128,7 +128,7 @@ namespace SDDM {
+                     SocketWriter(socket) << quint32(DaemonMessages::HostName) << daemonApp->hostName();
+ 
+                     // emit signal
+-                    emit connected();
++                    emit greeterConnected();
+                 }
+                 break;
+                 case GreeterMessages::Login: {
+diff --git a/src/daemon/SocketServer.h b/src/daemon/SocketServer.h
+index 0552e01..1300934 100644
+--- a/src/daemon/SocketServer.h
++++ b/src/daemon/SocketServer.h
+@@ -54,7 +54,7 @@ namespace SDDM {
+         void login(QLocalSocket *socket,
+                    const QString &user, const QString &password,
+                    const Session &session);
+-        void connected();
++        void greeterConnected();
+ 
+     private:
+         QLocalServer *m_server { nullptr };
+diff --git a/src/helper/Backend.cpp b/src/helper/Backend.cpp
+index 5a1dd60..a12e7cb 100644
+--- a/src/helper/Backend.cpp
++++ b/src/helper/Backend.cpp
+@@ -54,6 +54,11 @@ namespace SDDM {
+         m_displayServer = on;
+     }
+ 
++    void Backend::setFingerPrintLogin(bool on)
++    {
++        m_fingerprintlogin = on;
++    }
++
+     void Backend::setGreeter(bool on) {
+         m_greeter = on;
+     }
+diff --git a/src/helper/Backend.h b/src/helper/Backend.h
+index 915d09c..9b187fa 100644
+--- a/src/helper/Backend.h
++++ b/src/helper/Backend.h
+@@ -36,7 +36,11 @@ namespace SDDM {
+         static Backend *get(HelperApp *parent);
+ 
+         void setAutologin(bool on = true);
++
+         void setDisplayServer(bool on = true);
++
++        void setFingerPrintLogin(bool on = true);
++
+         void setGreeter(bool on = true);
+ 
+     public slots:
+@@ -53,6 +57,7 @@ namespace SDDM {
+         bool m_autologin { false };
+         bool m_displayServer = false;
+         bool m_greeter { false };
++        bool m_fingerprintlogin { false };
+     };
+ }
+ 
+diff --git a/src/helper/HelperApp.cpp b/src/helper/HelperApp.cpp
+index 32da42d..f73339a 100644
+--- a/src/helper/HelperApp.cpp
++++ b/src/helper/HelperApp.cpp
+@@ -115,6 +115,10 @@ namespace SDDM {
+             m_backend->setAutologin(true);
+         }
+ 
++        if((pos = args.indexOf(QStringLiteral("--fingerprintlogin"))) >= 0) {
++            m_backend->setFingerPrintLogin(true);
++        }
++
+         if ((pos = args.indexOf(QStringLiteral("--greeter"))) >= 0) {
+             m_backend->setGreeter(true);
+         }
+diff --git a/src/helper/backend/PamBackend.cpp b/src/helper/backend/PamBackend.cpp
+index f371c33..4641812 100644
+--- a/src/helper/backend/PamBackend.cpp
++++ b/src/helper/backend/PamBackend.cpp
+@@ -223,6 +223,9 @@ namespace SDDM {
+             service = QStringLiteral("sddm-greeter");
+         else if (m_autologin)
+             service = QStringLiteral("sddm-autologin");
++        else if (m_fingerprintlogin)
++            service = QStringLiteral("sddm-fingerprint");
++        qDebug() << "[PAM] using service name" << service;
+         result = m_pam->start(service, user);
+ 
+         if (!result)
