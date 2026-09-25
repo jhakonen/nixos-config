@@ -13,6 +13,7 @@
       den.aspects.koti
       den.aspects.sonos
       den.aspects.tailscale
+      den.aspects.virtualization
     ];
 
     nixos = { config, lib, modulesPath, pkgs, ... }: {
