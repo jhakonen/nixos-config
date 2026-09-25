@@ -186,13 +186,6 @@
         # };
       };
 
-      boot.extraModprobeConfig = ''
-        options snd-hda-intel patch=hda-jack-retask.fw,hda-jack-retask.fw,hda-jack-retask.fw,hda-jack-retask.fw
-      '';
-      hardware.firmware = [
-        (pkgs.writeTextDir "/lib/firmware/hda-jack-retask.fw" (builtins.readFile ../../data/hda-jack-retask.fw))
-      ];
-
       # Vamuuskopiointi
       #   Käynnistä:
       #     systemctl start restic-backups-jhakonen-oma.service
@@ -378,8 +371,52 @@
         uefiCapsuleSettings.DisableCapsuleUpdateOnDisk = true;
       };
 
+      # Näytön kaiuttimet tulevat DisplayPort-audiona Intelin HDMI-koodekille
+      # (HDA-kortti "PCH", codec#2) ja läppärin omat kaiuttimet ovat ALC285-
+      # koodekin analogisessa profiilissa. ACP/ WirePlumber pitää vain yhtä
+      # profiilia päällä kerrallaan, ja oletusprioriteetilla analoginen
+      # profiili (läppärin kaiuttimet) voittaa HDMI-profiilin.
+      #
+      # Profiilin oletusvalinta määritellään deklaratiivisesti alla: kun näyttö
+      # on kytkettynä valitaan HDMI-profiili (näytön kaiuttimet), muuten läppärin
+      # kaiuttimet (analog-stereo). "device.restore-profile" = false estää
+      # muistista palauttamisen, jotta säännöt ovat aina voimassa myös kuuman
+      # kytkennän jälkeen (profiilivalintoja ei siis tallenneta).
       services.pipewire.wireplumber.extraConfig.main = {
+        "wireplumber.settings" = {
+          "device.restore-profile" = false;
+        };
+        "device.profile.priority.rules" = [
+          ({
+            matches = [({
+              "device.name" = "alsa_card.pci-0000_00_1f.3";
+            })];
+            actions.update-props.priorities = [
+              "output:hdmi-stereo+input:analog-stereo"
+              "output:analog-stereo+input:analog-stereo"
+            ];
+          })
+        ];
+
         "monitor.alsa.rules" = [
+          # Tämä sääntö antaa ACP:lle luvan päivittää profiilien käytettävyyttä
+          # kun HDMI/DP-liitäntä kytketään tai irrotetaan käynnistyksen jälkeen
+          # (profiilivalinta hoituu yllä olevilla priority-säännöillä).
+          ({
+            matches = [({
+              "device.name" = "alsa_card.pci-0000_00_1f.3";
+            })];
+            actions.update-props = {
+              "api.acp.auto-profile" = true;
+              "api.acp.auto-port" = true;
+            };
+          })
+          ({
+            matches = [({
+              "node.name" = "alsa_output.pci-0000_00_1f.3.hdmi-stereo";
+            })];
+            actions.update-props."node.description" = "Näyttö - Kaiuttimet (HDMI/DP)";
+          })
           ({
             matches = [({
               "node.name" = "alsa_output.pci-0000_00_1f.3.analog-stereo";
