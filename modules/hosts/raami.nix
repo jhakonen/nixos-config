@@ -155,7 +155,43 @@
         #jack.enable = true;
         # Use the WirePlumber session manager
         #wireplumber.enable = true;
+
+        # Näytön kaiuttimet tulevat DisplayPort-audiona (eikä USB:na), mutta
+        # WirePlumber ei generoi HDMI/DP-profiiilia Frameworkin (Panther Lake)
+        # HDA-kortille (00:1f.3). Pakota siksi sinkki suoraan ALSA PCM:ään, joka
+        # kantaa LV:n LG-näytön aktiivista ELD:ää: card 0, device 7 ("HDMI 1").
+        # Tarkista/aina: cat /proc/asound/card0/pcm7p/sub0/info  ja
+        #   ls /proc/asound/card0/eld*  (jossa monitor_present = 1).
+        # extraConfig.pipewire."70-dp-sink.conf" = {
+        #   "context.objects" = [
+        #     {
+        #       factory = "adapter";
+        #       args = {
+        #         "factory.name" = "api.alsa.pcm.sink";
+        #         "node.name" = "alsa_output.dp-lg-377";
+        #         "node.description" = "LG 37G800A (HDMI/DP)";
+        #         "media.class" = "Audio/Sink";
+        #         "api.alsa.path" = "hw:0,7";
+        #         "api.alsa.period-size" = 1024;
+        #         "api.alsa.headroom" = 0;
+        #         "api.alsa.disable-mmap" = false;
+        #         "api.alsa.disable-batch" = false;
+        #         "audio.format" = "S16LE";
+        #         "audio.rate" = 48000;
+        #         "audio.channels" = 2;
+        #         "audio.position" = [ "FL" "FR" ];
+        #       };
+        #     }
+        #   ];
+        # };
       };
+
+      boot.extraModprobeConfig = ''
+        options snd-hda-intel patch=hda-jack-retask.fw,hda-jack-retask.fw,hda-jack-retask.fw,hda-jack-retask.fw
+      '';
+      hardware.firmware = [
+        (pkgs.writeTextDir "/lib/firmware/hda-jack-retask.fw" (builtins.readFile ../../data/hda-jack-retask.fw))
+      ];
 
       # Vamuuskopiointi
       #   Käynnistä:
