@@ -346,27 +346,13 @@
         "monitor.alsa.rules" = [
           ({
             matches = [({
-              "node.name" = "alsa_output.pci-0000_00_1f.3-platform-sof_sdw.HiFi__HDMI1__sink";
-            })];
-            actions.update-props."node.description" = "Läppäri - HDMI/DP";
-          })
-          ({
-            matches = [({
-              "node.name" = "alsa_output.pci-0000_00_1f.3-platform-sof_sdw.HiFi__HDMI2__sink";
-            }) ({
-              "node.name" = "alsa_output.pci-0000_00_1f.3-platform-sof_sdw.HiFi__HDMI3__sink";
-            })];
-            actions.update-props."node.disabled" = true;
-          })
-          ({
-            matches = [({
-              "node.name" = "alsa_output.pci-0000_00_1f.3-platform-sof_sdw.HiFi__Speaker__sink";
+              "node.name" = "alsa_output.pci-0000_00_1f.3.analog-stereo";
             })];
             actions.update-props."node.description" = "Läppäri - Kaiuttimet";
           })
           ({
             matches = [({
-              "node.name" = "alsa_input.pci-0000_00_1f.3-platform-sof_sdw.HiFi__Mic__source";
+              "node.name" = "alsa_input.pci-0000_00_1f.3.analog-stereo";
             })];
             actions.update-props."node.description" = "Läppäri - Mikki";
           })
