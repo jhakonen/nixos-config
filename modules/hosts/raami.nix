@@ -392,8 +392,8 @@
               "device.name" = "alsa_card.pci-0000_00_1f.3";
             })];
             actions.update-props.priorities = [
-              "output:hdmi-stereo+input:analog-stereo"
-              "output:analog-stereo+input:analog-stereo"
+              "output:hdmi-stereo+input:analog-stereo"    # Näytön kaiuttimet
+              "output:analog-stereo+input:analog-stereo"  # Läppärin kaiuttimet
             ];
           })
         ];
@@ -448,6 +448,101 @@
             actions.update-props."node.description" = "Webbikamera - Mikki";
           })
         ];
+      };
+
+      # Yllä olevat prioriteettisäännöt pakottavat HDMI-profiilin, kun näyttö
+      # on kytkettynä. Jos tuolloin kuulokkeet kytketään läppärin 3,5 mm-
+      # liittimeen, HDMI-profiilissa ei ole lainkaan analogista *ulostuloa*,
+      # joten analoginen ulostulosolmu jää "orvoksi" (ei aktiivista reittiä eikä
+      # oikein konfiguroitua äänenvoimakkuuspolkua) ja kuulokkeista kuuluu vain
+      # hiljaista ääntä. Tämä palvelu seuraa ALSAn jack-tapahtumia ja vaihtaa
+      # profiilin analogiseksi aina, kun kuulokeliitin on käytössä. Kun
+      # kuulokkeet irrotetaan, palataan prioriteettisääntöjen mukaiseen
+      # valintaan (HDMI-profiili, jos näyttö on kytkettynä).
+      # systemd.user.services: palvelun pitää nähdä käyttäjän PipeWire-istunto
+      # (pw-dump tarvitsee XDG_RUNTIME_DIR:n), joten se ajetaan käyttäjänä
+      # eikä root-järjestelmäpalveluna.
+      systemd.user.services.audio-jack-profile = {
+        description = "Äänikortin profiilin vaihto kuulokeliittimen mukaan";
+        after = [ "wireplumber.service" ];
+        wants = [ "wireplumber.service" ];
+        wantedBy = [ "default.target" ];
+        serviceConfig = {
+          ExecStart = pkgs.writeShellScript "audio-jack-profile" ''
+            card=0
+            dev="alsa_card.pci-0000_00_1f.3"
+
+            # Selvittää pw-dumpista kortin objekti-id:n, halutun profiilin
+            # indeksin ja nykyisen profiilin nimen.
+            query() {
+              pw-dump 2>/dev/null | python3 -c '
+            import json, sys
+            dev, want = sys.argv[1], sys.argv[2]
+            for o in json.load(sys.stdin):
+                if o.get("type") != "PipeWire:Interface:Device":
+                    continue
+                p = o.get("info", {}).get("props", {})
+                if p.get("device.name") != dev:
+                    continue
+                ps = o["info"].get("params", {})
+                cur = ps.get("Profile", [{}])[0].get("name")
+                for pr in ps.get("EnumProfile", []):
+                    if pr.get("name") == want:
+                        print(o["id"], pr["index"], cur)
+                raise SystemExit
+            ' "$dev" "$1"
+            }
+
+            # Palauttaa 0, jos jokin annetun nimen mukainen jack-liitin on
+            # kytkettynä. Huom. prosessisubstituutio (<(amixer ...)), jotta
+            # silmukan sisältä voidaan palauttaa funktiosta (putkistossa "exit"
+            # vaikuttaisi vain alikuoren).
+            jack_on() {
+              local ctl
+              while read -r ctl; do
+                [[ "$ctl" =~ $1 ]] || continue
+                amixer -c "$card" cget "$ctl" 2>/dev/null | grep -q "values=on" && return 0
+              done < <(amixer -c "$card" controls)
+              return 1
+            }
+
+            apply() {
+              local want id idx cur
+              if jack_on "^numid=[0-9]+,iface=CARD,name='Headphone Jack'$"; then
+                want="output:analog-stereo+input:analog-stereo"
+              elif jack_on "^numid=[0-9]+,iface=CARD,name='HDMI/DP,pcm=[0-9]+ Jack'$"; then
+                want="output:hdmi-stereo+input:analog-stereo"
+              else
+                want="output:analog-stereo+input:analog-stereo"
+              fi
+              read -r id idx cur < <(query "$want")
+              if [[ -n "''${id:-}" && -n "''${idx:-}" && "''${cur:-}" != "$want" ]]; then
+                wpctl set-profile "$id" "$idx"
+              fi
+            }
+
+            export PATH="${
+              lib.makeBinPath (with pkgs; [ alsa-utils wireplumber pipewire python3 ])
+            }:$PATH"
+
+            # Odota, että WirePlumber näkee äänikortin.
+            until out=$(query "output:analog-stereo+input:analog-stereo") && [[ -n "$out" ]]; do
+              sleep 2
+            done
+            apply
+
+            # Seuraa jack-tapahtumia. Viive antaa WirePlumberille aikaa
+            # käsitellä tapahtuma ensin, jotta tämän sovellus voittaa lopullisen
+            # profiilivalinnan.
+            amixer -c "$card" events | while read -r _sep _ev rest; do
+              [[ "''${rest:-}" =~ Jack ]] || continue
+              sleep 1
+              apply
+            done
+          '';
+          Restart = "on-failure";
+          RestartSec = "2s";
+        };
       };
 
       # https://github.com/NixOS/nixpkgs/issues/180175#issuecomment-1473408913
