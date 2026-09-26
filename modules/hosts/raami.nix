@@ -468,81 +468,106 @@
         wants = [ "wireplumber.service" ];
         wantedBy = [ "default.target" ];
         serviceConfig = {
-          ExecStart = pkgs.writeShellScript "audio-jack-profile" ''
-            card=0
-            dev="alsa_card.pci-0000_00_1f.3"
+          ExecStart = pkgs.writers.writePython3 "audio-jack-profile" { } ''
+            import json
+            import re
+            import subprocess
+            import time
 
-            # Selvittää pw-dumpista kortin objekti-id:n, halutun profiilin
-            # indeksin ja nykyisen profiilin nimen.
-            query() {
-              pw-dump 2>/dev/null | python3 -c '
-            import json, sys
-            dev, want = sys.argv[1], sys.argv[2]
-            for o in json.load(sys.stdin):
-                if o.get("type") != "PipeWire:Interface:Device":
-                    continue
-                p = o.get("info", {}).get("props", {})
-                if p.get("device.name") != dev:
-                    continue
-                ps = o["info"].get("params", {})
-                cur = ps.get("Profile", [{}])[0].get("name")
-                for pr in ps.get("EnumProfile", []):
-                    if pr.get("name") == want:
-                        print(o["id"], pr["index"], cur)
-                raise SystemExit
-            ' "$dev" "$1"
-            }
+            CARD = "0"
+            DEVICE = "alsa_card.pci-0000_00_1f.3"
+            ANALOG = "output:analog-stereo+input:analog-stereo"
+            HDMI = "output:hdmi-stereo+input:analog-stereo"
 
-            # Palauttaa 0, jos jokin annetun nimen mukainen jack-liitin on
-            # kytkettynä. Huom. prosessisubstituutio (<(amixer ...)), jotta
-            # silmukan sisältä voidaan palauttaa funktiosta (putkistossa "exit"
-            # vaikuttaisi vain alikuoren).
-            jack_on() {
-              local ctl
-              while read -r ctl; do
-                [[ "$ctl" =~ $1 ]] || continue
-                amixer -c "$card" cget "$ctl" 2>/dev/null | grep -q "values=on" && return 0
-              done < <(amixer -c "$card" controls)
-              return 1
-            }
 
-            apply() {
-              local want id idx cur
-              if jack_on "^numid=[0-9]+,iface=CARD,name='Headphone Jack'$"; then
-                want="output:analog-stereo+input:analog-stereo"
-              elif jack_on "^numid=[0-9]+,iface=CARD,name='HDMI/DP,pcm=[0-9]+ Jack'$"; then
-                want="output:hdmi-stereo+input:analog-stereo"
-              else
-                want="output:analog-stereo+input:analog-stereo"
-              fi
-              read -r id idx cur < <(query "$want")
-              if [[ -n "''${id:-}" && -n "''${idx:-}" && "''${cur:-}" != "$want" ]]; then
-                wpctl set-profile "$id" "$idx"
-              fi
-            }
+            def run(*args):
+                return subprocess.run(args, capture_output=True, text=True,
+                                      errors="replace").stdout
 
-            export PATH="${
-              lib.makeBinPath (with pkgs; [ alsa-utils wireplumber pipewire python3 ])
-            }:$PATH"
 
-            # Odota, että WirePlumber näkee äänikortin.
-            until out=$(query "output:analog-stereo+input:analog-stereo") && [[ -n "$out" ]]; do
-              sleep 2
-            done
-            apply
+            def card_state():
+                """WirePlumberin tilanne: (id, {profiili: indeksi}, nykyinen).
 
-            # Seuraa jack-tapahtumia. Viive antaa WirePlumberille aikaa
-            # käsitellä tapahtuma ensin, jotta tämän sovellus voittaa lopullisen
-            # profiilivalinnan.
-            amixer -c "$card" events | while read -r _sep _ev rest; do
-              [[ "''${rest:-}" =~ Jack ]] || continue
-              sleep 1
-              apply
-            done
+                Palauttaa None, jos korttia ei näy (esim. WirePlumber ei ole
+                vielä valmistunut).
+                """
+                try:
+                    objs = json.loads(run("pw-dump"))
+                except (json.JSONDecodeError, ValueError):
+                    return None
+                for o in objs:
+                    if o.get("type") != "PipeWire:Interface:Device":
+                        continue
+                    props = o.get("info", {}).get("props", {})
+                    if props.get("device.name") != DEVICE:
+                        continue
+                    params = o["info"].get("params", {})
+                    profiles = {p["name"]: p["index"]
+                                for p in params.get("EnumProfile", [])}
+                    cur = params.get("Profile", [{}])[0].get("name")
+                    return o["id"], profiles, cur
+                return None
+
+
+            def jack_plugged(pattern):
+                """Onko jokin säännöllä vastaava jack-liitin kytkettynä?"""
+                for line in run("amixer", "-c", CARD, "controls").splitlines():
+                    if not re.search(pattern, line):
+                        continue
+                    if "values=on" in run("amixer", "-c", CARD, "cget", line):
+                        return True
+                return False
+
+
+            def apply():
+                """Vaihda profiili liittimien tilan mukaiseksi, jos se on
+                väärä."""
+                if jack_plugged(r"name='Headphone Jack'$"):
+                    want = ANALOG
+                elif jack_plugged(r"name='HDMI/DP,pcm=\d+ Jack'$"):
+                    want = HDMI
+                else:
+                    want = ANALOG
+                state = card_state()
+                if state is None:
+                    return
+                obj_id, profiles, cur = state
+                if want in profiles and cur != want:
+                    subprocess.run(["wpctl", "set-profile", str(obj_id),
+                                    str(profiles[want])])
+
+
+            def main():
+                # Odota, että WirePlumber näkee äänikortin.
+                while card_state() is None:
+                    time.sleep(2)
+                apply()
+
+                # Seuraa jack-tapahtumia. Viive antaa WirePlumberille aikaa
+                # käsitellä tapahtuma ensin, joten lopullinen profiilivalinta
+                # on tämän skriptin.
+                events = subprocess.Popen(
+                    ["amixer", "-c", CARD, "events"],
+                    stdout=subprocess.PIPE,
+                    text=True
+                )
+                for line in events.stdout:
+                    if "Jack" in line:
+                        time.sleep(1)
+                        apply()
+
+
+            main()
           '';
           Restart = "on-failure";
           RestartSec = "2s";
         };
+        # Skriptin tarvitsemat ulkoiset työkalut: amixer, pw-dump, wpctl.
+        path = with pkgs; [
+          alsa-utils
+          wireplumber
+          pipewire
+        ];
       };
 
       # https://github.com/NixOS/nixpkgs/issues/180175#issuecomment-1473408913
