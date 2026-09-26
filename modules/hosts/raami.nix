@@ -399,18 +399,6 @@
         ];
 
         "monitor.alsa.rules" = [
-          # Tämä sääntö antaa ACP:lle luvan päivittää profiilien käytettävyyttä
-          # kun HDMI/DP-liitäntä kytketään tai irrotetaan käynnistyksen jälkeen
-          # (profiilivalinta hoituu yllä olevilla priority-säännöillä).
-          ({
-            matches = [({
-              "device.name" = "alsa_card.pci-0000_00_1f.3";
-            })];
-            actions.update-props = {
-              "api.acp.auto-profile" = true;
-              "api.acp.auto-port" = true;
-            };
-          })
           ({
             matches = [({
               "node.name" = "alsa_output.pci-0000_00_1f.3.hdmi-stereo";
