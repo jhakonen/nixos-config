@@ -443,10 +443,11 @@
       # liittimeen, HDMI-profiilissa ei ole lainkaan analogista *ulostuloa*,
       # joten analoginen ulostulosolmu jää "orvoksi" (ei aktiivista reittiä eikä
       # oikein konfiguroitua äänenvoimakkuuspolkua) ja kuulokkeista kuuluu vain
-      # hiljaista ääntä. Tämä palvelu seuraa ALSAn jack-tapahtumia ja vaihtaa
-      # profiilin analogiseksi aina, kun kuulokeliitin on käytössä. Kun
-      # kuulokkeet irrotetaan, palataan prioriteettisääntöjen mukaiseen
-      # valintaan (HDMI-profiili, jos näyttö on kytkettynä).
+      # hiljaista ääntä. Tämä palvelu kysyy 2 sekunnin välein PipeWireltä
+      # (pw-dump) reittien jack-tilat ja vaihtaa profiilin analogiseksi aina,
+      # kun kuulokeliitin on käytössä. Kun kuulokkeet irrotetaan, palataan
+      # prioriteettisääntöjen mukaiseen valintaan (HDMI-profiili, jos näyttö
+      # on kytkettynä).
       # systemd.user.services: palvelun pitää nähdä käyttäjän PipeWire-istunto
       # (pw-dump tarvitsee XDG_RUNTIME_DIR:n), joten se ajetaan käyttäjänä
       # eikä root-järjestelmäpalveluna.
@@ -456,16 +457,17 @@
         wants = [ "wireplumber.service" ];
         wantedBy = [ "default.target" ];
         serviceConfig = {
-          ExecStart = pkgs.writers.writePython3 "audio-jack-profile" { } ''
+          ExecStart = pkgs.writers.writePython3 "audio-jack-profile" {
+            flakeIgnore = ["E501"];
+          } ''
             import json
-            import re
             import subprocess
             import time
 
-            CARD = "0"
             DEVICE = "alsa_card.pci-0000_00_1f.3"
             ANALOG = "output:analog-stereo+input:analog-stereo"
             HDMI = "output:hdmi-stereo+input:analog-stereo"
+            POLL = 2
 
 
             def run(*args):
@@ -474,10 +476,17 @@
 
 
             def card_state():
-                """WirePlumberin tilanne: (id, {profiili: indeksi}, nykyinen).
+                """Kortin tila pw-dumpista.
 
-                Palauttaa None, jos korttia ei näy (esim. WirePlumber ei ole
-                vielä valmistunut).
+                Palauttaa (objektin id, {profiili: indeksi}, nykyinen profiili,
+                kuulokeliitin kytketty, HDMI/DP kytketty) tai None, jos
+                korttia ei näy (esim. WirePlumber ei ole vielä valmistunut).
+
+                Liittimien tila luetaan reittien (Route/EnumRoute)
+                "available"-kentästä: "yes" tarkoittaa, että liitin on
+                kytkettynä. "Route" sisältää vain aktiivisen profiilin
+                reitit, joten kuulokeliittimen tilaa haetaan myös
+                "EnumRoute":sta (listaa kaikkien profiilien reitit).
                 """
                 try:
                     objs = json.loads(run("pw-dump"))
@@ -493,33 +502,34 @@
                     profiles = {p["name"]: p["index"]
                                 for p in params.get("EnumProfile", [])}
                     cur = params.get("Profile", [{}])[0].get("name")
-                    return o["id"], profiles, cur
+                    plugged = {}
+                    for key in ("Route", "EnumRoute"):
+                        for route in params.get(key, []):
+                            name = route.get("name", "")
+                            available = route.get("available")
+                            if available == "unknown" and name == "analog-output-headphones":
+                                plugged["headphone"] = True
+                            elif available == "yes" and name.startswith("hdmi-output"):
+                                plugged["hdmi"] = True
+                    return (o["id"], profiles, cur,
+                            plugged.get("headphone", False),
+                            plugged.get("hdmi", False))
                 return None
-
-
-            def jack_plugged(pattern):
-                """Onko jokin säännöllä vastaava jack-liitin kytkettynä?"""
-                for line in run("amixer", "-c", CARD, "controls").splitlines():
-                    if not re.search(pattern, line):
-                        continue
-                    if "values=on" in run("amixer", "-c", CARD, "cget", line):
-                        return True
-                return False
 
 
             def apply():
                 """Vaihda profiili liittimien tilan mukaiseksi, jos se on
                 väärä."""
-                if jack_plugged(r"name='Headphone Jack'$"):
-                    want = ANALOG
-                elif jack_plugged(r"name='HDMI/DP,pcm=\d+ Jack'$"):
-                    want = HDMI
-                else:
-                    want = ANALOG
                 state = card_state()
                 if state is None:
                     return
-                obj_id, profiles, cur = state
+                obj_id, profiles, cur, headphone, hdmi = state
+                if headphone:
+                    want = ANALOG
+                elif hdmi:
+                    want = HDMI
+                else:
+                    want = ANALOG
                 if want in profiles and cur != want:
                     subprocess.run(["wpctl", "set-profile", str(obj_id),
                                     str(profiles[want])])
@@ -528,21 +538,15 @@
             def main():
                 # Odota, että WirePlumber näkee äänikortin.
                 while card_state() is None:
-                    time.sleep(2)
-                apply()
+                    time.sleep(POLL)
 
-                # Seuraa jack-tapahtumia. Viive antaa WirePlumberille aikaa
+                # Kysy liittimien tilaa säännöllisesti pw-dumpista. Pieni
+                # viive ennen profiilin vaihtoa antaa WirePlumberille aikaa
                 # käsitellä tapahtuma ensin, joten lopullinen profiilivalinta
                 # on tämän skriptin.
-                events = subprocess.Popen(
-                    ["amixer", "-c", CARD, "events"],
-                    stdout=subprocess.PIPE,
-                    text=True
-                )
-                for line in events.stdout:
-                    if "Jack" in line:
-                        time.sleep(1)
-                        apply()
+                while True:
+                    time.sleep(POLL)
+                    apply()
 
 
             main()
@@ -550,9 +554,8 @@
           Restart = "on-failure";
           RestartSec = "2s";
         };
-        # Skriptin tarvitsemat ulkoiset työkalut: amixer, pw-dump, wpctl.
+        # Skriptin tarvitsemat ulkoiset työkalut: pw-dump, wpctl.
         path = with pkgs; [
-          alsa-utils
           wireplumber
           pipewire
         ];
