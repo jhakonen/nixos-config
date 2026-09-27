@@ -9,143 +9,32 @@
         alsa.support32Bit = true;
         pulse.enable = true;
 
-        wireplumber.extraConfig."log-level"."context.properties"."log.level" = "I";
-
-        # wireplumber = {
-        #   extraConfig."99-fw13pro-audio" = {
-        #     "wireplumber.components" = [
-        #       # {
-        #       #   name = "fw13pro-audio/disable-default-profile.lua";
-        #       #   type = "script/lua";
-        #       #   provides = "fw13pro-audio.disable-default-profile";
-        #       # }
-        #       {
-        #         name = "fw13pro-audio/profile-select.lua";
-        #         type = "script/lua";
-        #         provides = "fw13pro-audio.profile-select";
-        #       }
-        #     ];
-        #     # "wireplumber.profiles".main."fw13pro-audio.disable-default-profile" = "required";
-        #     "wireplumber.profiles".main."fw13pro-audio.profile-select" = "required";
-        #   };
-        #   # extraScripts."fw13pro-audio/disable-default-profile.lua" = ''
-
-        #   # '';
-        #   extraScripts."fw13pro-audio/profile-select.lua" = ''
-        #     cutils = require ("common-utils")
-
-        #     DEVICE = "alsa_card.pci-0000_00_1f.3"
-        #     PROFILE_ANALOG = "output:analog-stereo+input:analog-stereo"
-        #     PROFILE_DISPLAY = "output:hdmi-stereo+input:analog-stereo"
-
-        #     function get_device_profile (device)
-        #       for p in device:iterate_params("Profile") do
-        #         return cutils.parseParam (p, "Profile")
-        #       end
-        #     end
-
-        #     SimpleEventHook {
-        #       name = "fw13pro-audio/block-default-profile",
-        #       before = { "device/apply-profile" },
-        #       interests = {
-        #         EventInterest {
-        #           Constraint { "event.type", "=", "select-profile" },
-        #           Constraint { "device.name", "=", DEVICE },
-        #         },
-        #       },
-        #       execute = function (event)
-        #         local device = event:get_subject ()
-        #         local profile = get_device_profile (device)
-
-        #         print("####################### BLOCKER profile", profile.name)
-
-        #         if profile.name ~= "off" then
-        #           print("####################### BLOCKER Blocking processing")
-        #           event:stop_processing ()
-        #         end
-        #       end
-        #     }:register ()
-
-        #     AsyncEventHook {
-        #       name = "fw13pro-audio/profile-select",
-        #       interests = {
-        #         EventInterest {
-        #           Constraint { "event.type", "=", "device-params-changed" },
-        #           Constraint { "device.name", "=", DEVICE },
-        #         },
-        #       },
-        #       steps = {
-        #         start = {
-        #           next = "none",
-        #           execute = function (event, transition)
-        #             local device = event:get_subject ()
-        #             local active_profile_name = get_device_profile(device).name
-        #             local plugged_hdmi = false
-        #             local plugged_headphones = false
-        #             local device_name = device.properties["device.name"]
-        #             local wants_profile_index = nil
-        #             local wants_profile_name = nil
-
-        #             for p in device:iterate_params("EnumRoute") do
-        #               local route = cutils.parseParam (p, "EnumRoute")
-        #               if route.name == "analog-output-headphones" and route.available ~= "no" then
-        #                 plugged_headphones = true
-        #               end
-        #               if string.find(route.name, "hdmi-output", 1, true) and route.available == "yes" then
-        #                 plugged_hdmi = true
-        #               end
-        #             end
-
-        #             print("plugged_headphones=", plugged_headphones, ", plugged_hdmi=", plugged_hdmi)
-
-        #             if plugged_headphones then
-        #               wants_profile_name = PROFILE_ANALOG
-        #             elseif plugged_hdmi then
-        #               wants_profile_name = PROFILE_DISPLAY
-        #             else
-        #               wants_profile_name = PROFILE_ANALOG
-        #             end
-
-        #             if active_profile_name ~= wants_profile_name then
-        #               for p in device:iterate_params("EnumProfile") do
-        #                 local profile = cutils.parseParam (p, "EnumProfile")
-        #                 if profile.name == wants_profile_name then
-        #                   wants_profile_index = tonumber(profile.index)
-        #                   break
-        #                 end
-        #               end
-        #             end
-
-        #             -- print("active_profile_name=", active_profile_name)
-        #             -- print("wants_profile_name=", wants_profile_name)
-        #             -- print("wants_profile_index=", wants_profile_index)
-
-        #             if wants_profile_index == nil then
-        #               transition:advance ()
-        #             else
-        #               print("Switching profile of", device_name, "::", active_profile_name, "-->", wants_profile_name)
-        #               local param = Pod.Object {
-        #                 "Spa:Pod:Object:Param:Profile",
-        #                 "Profile",
-        #                 index = wants_profile_index,
-        #               }
-        #               device:set_param ("Profile", param)
-
-        #               Core.sync (function ()
-        #                 transition:advance ()
-        #               end)
-        #             end
-        #           end -- execute
-        #         },
-        #       },
-        #     }:register ()
-        #   '';
-        # };
+        # Debug-tulostus
+        # wireplumber.extraConfig."log-level"."context.properties"."log.level" = "I";
       };
 
+      # FW13 Pron analoginen ääni ja näytön HDMI/DP-ääni kuuluvat samaan ALSA-
+      # korttiin. Kortin vakioprofiilit sallivat vain toisen ulostulon
+      # kerrallaan. WirePlumber valitsi automaattisesti
+      # output:analog-stereo+input:analog-stereo profiilin joka ei
+      # mahdollistanut ulkoisen näytön ulostulon valintaa. Jotta sekä läppärin
+      # omat kaiuttimet että ulkoisen näytön kaiuttimet sai molemmat
+      # valittaviksi piti tehdä oma yhdistelmäprofiili.
+      # Tarkempi selvitys ja kokeillut vaihtoehdot:
+      #   docs/fw13pro-audio-investigations.md.
+      #
+      # PipeWiren ACP:n default.conf määrittelee valmiit analogiset ja HDMI-
+      # määritykset ja sisältää lopussa .include 9999-custom.conf -viittauksen.
+      # Tuodaan se /etc-hakemistoon, jotta viittaus löytää alla olevan oman
+      # profiilin; Nix-storen default.conf sisältäisi sen sijaan paketin oman
+      # 9999-custom.conf-tiedoston. ACP etsii /etc-hakemistosta ilman erillisiä
+      # ACP_PROFILES_DIR- tai ACP_PATHS_DIR-ympäristömuuttujia.
       environment.etc."alsa-card-profile/mixer/profile-sets/default.conf".source =
         "${pkgs.pipewire}/share/alsa-card-profile/mixer/profile-sets/default.conf";
 
+      # Yhdistelmäprofiili luo erilliset analogisen ja HDMI-ulostulon: läppärin
+      # kaiuttimet/kuulokkeet sekä näytön kaiuttimet voidaan valita ilman
+      # profiilin vaihtoa. Analoginen mikrofonikin jää käyttöön.
       environment.etc."alsa-card-profile/mixer/profile-sets/9999-custom.conf".text = ''
         [Profile output:analog-stereo+output:hdmi-stereo+input:analog-stereo]
         description = Laptop + Display speakers
@@ -153,12 +42,27 @@
         input-mappings = analog-stereo
       '';
 
+      # Pelkkä yhdistelmäprofiili ei riitä: kuulokkeen kytkeminen tai irrotus
+      # läppärin 3,5mm liittimestä mykisti ulkoisen näytön kaiuttimien äänen
+      # toiston kesken kaiken, vaikka näytön kaiuttimet pysyivät valittuna.
+      # Kuuloke- ja kaiutinpolut tuodaan /etc-hakemistoon, jotta niiden
+      # suhteellinen .include löytää alla muokatun analog-output.conf.common-
+      # tiedoston samasta hakemistosta. Ilman tätä ne käyttäisivät Nix-storen
+      # oletustiedostoa ja mykistäisivät ulkoisen näytön tarvitseman
+      # IEC958-kytkimen.
       environment.etc."alsa-card-profile/mixer/paths/analog-output-headphones.conf".source =
         "${pkgs.pipewire}/share/alsa-card-profile/mixer/paths/analog-output-headphones.conf";
 
       environment.etc."alsa-card-profile/mixer/paths/analog-output-speaker.conf".source =
         "${pkgs.pipewire}/share/alsa-card-profile/mixer/paths/analog-output-speaker.conf";
 
+      # Oletuspolun [Element IEC958] sisältää "switch = off". Portin vaihtuessa
+      # se mykistää IEC958,0:n, jolloin näytön ääni lakkaa, kunnes HDMI-laite
+      # avataan uudelleen; "amixer -c PCH sset IEC958 unmute" palautti äänen.
+      # Vaihdetaan vain tämä asetus muotoon "switch = ignore", jolloin analoginen
+      # portinvalinta ja kuulokkeiden/kaiuttimien erilliset äänenvoimakkuudet
+      # säilyvät mutta kuulokkeiden irrotius/kytkeminen ei mykistä ulkoisen
+      # näytön kaiuttimia.
       environment.etc."alsa-card-profile/mixer/paths/analog-output.conf.common".source =
         pkgs.runCommand "analog-output.conf.common-no-iec958" {} ''
           sed \
@@ -168,17 +72,17 @@
         '';
 
       services.pipewire.wireplumber.extraConfig.main = {
-        # "wireplumber.settings" = {
-        #   "device.restore-profile" = false;
-        # };
         "monitor.alsa.rules" = [
           ({
             matches = [({
               "device.name" = "alsa_card.pci-0000_00_1f.3";
             })];
-            actions.update-props."device.profile" = "output:analog-stereo+output:hdmi-stereo+input:analog-stereo";
-            # actions.update-props."device.profile" = "output:hdmi-stereo+input:analog-stereo";
-            # actions.update-props."api.alsa.soft-mixer" = true;
+            # Valitaan yhdistelmäprofiili vain FW13 Pron ALSA-kortille, muuten
+            # WirePlumber ottaa käyttöön oletuksena vain yhden ulostulon.
+            # WirePlumberin profiilinvalinta (find-best-profile.lua) lukee
+            # device.profile -propertyä.
+            actions.update-props."device.profile" =
+              "output:analog-stereo+output:hdmi-stereo+input:analog-stereo";
           })
           ({
             matches = [({
@@ -186,29 +90,17 @@
             })];
             actions.update-props."node.description" = "Näyttö - Kaiuttimet (HDMI/DP)";
           })
-          # ({
-          #   matches = [({
-          #     "node.name" = "alsa_output.pci-0000_00_1f.3.analog-stereo";
-          #   })];
-          #   actions.update-props."node.description" = "Läppäri - Kaiuttimet";
-          # })
-          # ({
-          #   matches = [({
-          #     "node.name" = "alsa_input.pci-0000_00_1f.3.analog-stereo";
-          #   })];
-          #   actions.update-props."node.description" = "Läppäri - Mikki";
-          # })
           ({
             matches = [({
-              "node.name" = "alsa_output.usb-CalDigit__Inc._CalDigit_Thunderbolt_3_Audio-00.analog-stereo";
+              "node.name" = "alsa_output.pci-0000_00_1f.3.analog-stereo";
             })];
-            actions.update-props."node.description" = "Telakka - Kaiuttimet";
+            actions.update-props."node.description" = "Läppäri - Kaiuttimet";
           })
           ({
             matches = [({
-                "node.name" = "alsa_input.usb-CalDigit__Inc._CalDigit_Thunderbolt_3_Audio-00.analog-stereo";
+              "node.name" = "alsa_input.pci-0000_00_1f.3.analog-stereo";
             })];
-            actions.update-props."node.description" = "Telakka - Mikki";
+            actions.update-props."node.description" = "Läppäri - Mikki";
           })
           ({
             matches = [({
