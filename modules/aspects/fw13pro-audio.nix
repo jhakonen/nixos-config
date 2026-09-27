@@ -143,10 +143,8 @@
         # };
       };
 
-      environment.etc."alsa-card-profile/mixer/profile-sets/default.conf".source = "${pkgs.pipewire}/share/alsa-card-profile/mixer/profile-sets/default.conf";
-
-      systemd.user.services.wireplumber.environment.ACP_PATHS_DIR = "/etc/alsa-card-profile/mixer/paths";
-      systemd.user.services.wireplumber.environment.ACP_PROFILES_DIR = "/etc/alsa-card-profile/mixer/profile-sets";
+      environment.etc."alsa-card-profile/mixer/profile-sets/default.conf".source =
+        "${pkgs.pipewire}/share/alsa-card-profile/mixer/profile-sets/default.conf";
 
       environment.etc."alsa-card-profile/mixer/profile-sets/9999-custom.conf".text = ''
         [Profile output:analog-stereo+output:hdmi-stereo+input:analog-stereo]
@@ -165,7 +163,6 @@
         pkgs.runCommand "analog-output.conf.common-no-iec958" {} ''
           sed \
             -e '/\[Element IEC958\]/,/^$/ s/switch = off/switch = ignore/' \
-            -e '/\[Element IEC958 Optical Raw\]/,/^$/ s/switch = off/switch = ignore/' \
             ${pkgs.pipewire}/share/alsa-card-profile/mixer/paths/analog-output.conf.common \
             > $out
         '';
