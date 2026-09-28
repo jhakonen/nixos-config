@@ -238,7 +238,6 @@
         cachix
         devenv
         discord
-        easyeffects
         exfatprogs  # kdePackages.partitionmanager tarvitsee exfat tukea varten
         git-crypt
         immich-cli
@@ -290,8 +289,6 @@
       # Ota SSH-agentti käyttöön, tarvitaan jotta KeepassXC pystyy lisäämään SSH
       # avaimet agenttiin
       programs.ssh.startAgent = true;
-
-      programs.dconf.enable = true;  # Easyeffects tarvitsee tämän
 
       programs.direnv = {
         enable = true;
@@ -369,10 +366,6 @@
           };
         };
       };
-
-      # services.easyeffects = {
-      #   enable = true;
-      # };
 
       # Nicely reload system units when changing configs
       systemd.user.startServices = "sd-switch";

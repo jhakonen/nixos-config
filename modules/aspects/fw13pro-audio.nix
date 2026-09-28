@@ -13,6 +13,8 @@
         # wireplumber.extraConfig."log-level"."context.properties"."log.level" = "I";
       };
 
+      programs.dconf.enable = true;  # Easyeffects tarvitsee tämän
+
       # FW13 Pron analoginen ääni ja näytön HDMI/DP-ääni kuuluvat samaan ALSA-
       # korttiin. Kortin vakioprofiilit sallivat vain toisen ulostulon
       # kerrallaan. WirePlumber valitsi automaattisesti
@@ -131,6 +133,12 @@
             actions.update-props."node.description" = "Telakka - Mikki";
           })
         ];
+      };
+    };
+
+    provides.jhakonen.homeManager = {
+      services.easyeffects = {
+        enable = true;
       };
     };
   };
