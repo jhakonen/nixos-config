@@ -72,6 +72,10 @@
         '';
 
       services.pipewire.wireplumber.extraConfig.main = {
+        # Äänilaitteet ja niiden selitteet:
+        #   pw-dump | jq -r '.[] | . | select(.type == "PipeWire:Interface:Device") | { name: .info.props."device.name", description: .info.props."device.description" }'
+        # Äänilähteet ja niiden selitteet:
+        #   pw-dump | jq -r '.[] | . | select(.type == "PipeWire:Interface:Node") | { name: .info.props."node.name", description: .info.props."node.description" }'
         "monitor.alsa.rules" = [
           ({
             matches = [({
@@ -83,6 +87,12 @@
             # device.profile -propertyä.
             actions.update-props."device.profile" =
               "output:analog-stereo+output:hdmi-stereo+input:analog-stereo";
+          })
+          ({
+            matches = [({
+              "device.name" = "alsa_card.usb-Generic_LGE_37G800A-00";
+            })];
+            actions.update-props."device.disabled" = true;
           })
           ({
             matches = [({
@@ -107,6 +117,18 @@
               "node.name" = "alsa_input.usb-046d_HD_Pro_Webcam_C920_AF6A0BDF-02.analog-stereo";
             })];
             actions.update-props."node.description" = "Webbikamera - Mikki";
+          })
+          ({
+            matches = [({
+              "node.name" = "alsa_output.usb-Lenovo_ThinkPad_Thunderbolt_4_Dock_USB_Audio_000000000000-00.analog-stereo";
+            })];
+            actions.update-props."node.description" = "Telakka - Kuulokkeet";
+          })
+          ({
+            matches = [({
+              "node.name" = "alsa_input.usb-Lenovo_ThinkPad_Thunderbolt_4_Dock_USB_Audio_000000000000-00.mono-fallback";
+            })];
+            actions.update-props."node.description" = "Telakka - Mikki";
           })
         ];
       };
