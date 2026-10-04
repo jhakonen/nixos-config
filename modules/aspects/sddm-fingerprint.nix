@@ -19,13 +19,6 @@
       }
     );
 
-    # Määritä minä käyttäjänä kirjaudutaan sisään kun käytetään
-    # sormenjäljenlukijaa, osa pätsin vaatimaa muutosta
-    environment.etc."sddm.conf.d/fingerprint.conf".text = ''
-      [Fingerprintlogin]
-      User=jhakonen
-    '';
-
     # Määritä PAM konfiguraatio sormenjäljenlukijalle, osa pätsin vaatimaa
     # muutosta
     security.pam.services.sddm-fingerprint.text = ''
