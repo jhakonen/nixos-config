@@ -258,7 +258,6 @@
         obsidian
         renameutils  # qmv
         sublime4-dev # sublime4 -paketissa plugin host 3.8 kaatuu 20.9.2026
-        syncthingtray-minimal
         trayscale
 
         unstable.calibre
@@ -366,6 +365,8 @@
           };
         };
       };
+
+      services.syncthing.tray.enable = true;
 
       # Nicely reload system units when changing configs
       systemd.user.startServices = "sd-switch";
