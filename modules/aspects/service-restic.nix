@@ -22,17 +22,29 @@
       ];
 
       # Aseta oletusasetukset kullekin varmuuskopiotehtävälle
-      services.restic.backups = builtins.mapAttrs (_name: options:
+      services.restic.backups = builtins.mapAttrs (name: options:
         {
           initialize = true;
           passwordFile = config.age.secrets.restic-password.path;
-          checkOpts = [ "--read-data" ];
-          pruneOpts = [
-            "--keep-daily 7"
-            "--keep-weekly 4"
-            "--keep-monthly 12"
-            "--keep-yearly 3"
-          ];
+          checkOpts = if lib.hasSuffix "-veli" name then [
+              # Rajaa tarkistetun datan määrää koska backupissa menee 3+ tuntia
+              # täydellä tarkistuksella, ja aiheuttaa yhteyden katkeamisen
+              "--read-data-subset" "10%"
+            ] else [
+              "--read-data"
+            ];
+          pruneOpts =
+            if lib.hasSuffix "-veli" name then [
+              "--keep-daily 1"
+              "--keep-weekly 2"
+              "--keep-monthly 6"
+              "--keep-yearly 3"
+            ] else [
+              "--keep-daily 7"
+              "--keep-weekly 4"
+              "--keep-monthly 12"
+              "--keep-yearly 3"
+            ];
           rcloneConfigFile = config.age.secrets.restic-nas-smb-config.path;
         } // options
       ) config.my.services.restic.backups;
