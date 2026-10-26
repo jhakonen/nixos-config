@@ -1,3 +1,8 @@
+# Uuden koneen lisääminen:
+#  - Tee palomuuriin reikä portille `agent-port` monitoroitavalle koneelle
+#  - Avaa https://beszel.nassuvm.lan.jhakonen.com/ ja klikkaa "Add system".
+#    Anna koneelle nimi ja host/ip -osoite. Muista käyttää koneen palomuurin
+#    rajapinnan osoitetta.
 { den, ... }: let
   agent-port = 45876;
 in {
@@ -11,25 +16,9 @@ in {
         KEY = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIASoKzcQ8/e5ggX73nlVsQvVykW87oWHmQznDfTBv65+";
       };
     };
-
-    ################################################
-    # Korjaa Systemd palvelujen monitorointi
-    # https://github.com/NixOS/nixpkgs/pull/461327
-    # HUOMAA: PR on mergetty, tämän voi poistaa NixOS 26.05:ssä.
-    users.users.beszel-agent = {
-      isSystemUser = true;
-      group = "beszel-agent";
-    };
-    users.groups.beszel-agent = {};
-    systemd.services.beszel-agent.serviceConfig = {
-      DynamicUser = lib.mkForce false;
-      Group = "beszel-agent";
-      SupplementaryGroups = [ "messagebus" ];
-    };
-    ################################################
   };
 
-  den.aspects.nassuvm.nixos = { config, pkgs, ... }: {
+  den.aspects.nassuvm.nixos = { config, lib, pkgs, ... }: {
     services.beszel.hub = {
       enable = true;
       package = pkgs.unstable.beszel;
@@ -39,6 +28,13 @@ in {
         APP_URL = "https://${config.catalog.services.beszel.public.domain}";
       };
     };
+
+    # Korjaa ongelman https://github.com/NixOS/nixpkgs/pull/539583
+    # Tämän voinee poistaa NixOS 26.11 versiossa.
+    systemd.services.beszel-hub.serviceConfig.ExecStartPre = lib.mkForce [
+      "${config.services.beszel.hub.package}/bin/beszel-hub migrate up"
+      "${config.services.beszel.hub.package}/bin/beszel-hub migrate history-sync"
+    ];
 
     services.nginx.virtualHosts.${config.catalog.services.beszel.public.domain} = {
       locations."/" = {
