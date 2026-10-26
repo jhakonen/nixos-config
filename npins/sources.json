@@ -9,9 +9,9 @@
       },
       "branch": "main",
       "submodules": false,
-      "revision": "b027ee29d959fda4b60b57566d64c98a202e0feb",
-      "url": "https://github.com/ryantm/agenix/archive/b027ee29d959fda4b60b57566d64c98a202e0feb.tar.gz",
-      "hash": "sha256-9VnK6Oqai65puVJ4WYtCTvlJeXxMzAp/69HhQuTdl/I="
+      "revision": "3daa710894355fa2fad8243380af373a2b4046ef",
+      "url": "https://github.com/ryantm/agenix/archive/3daa710894355fa2fad8243380af373a2b4046ef.tar.gz",
+      "hash": "sha256-n7wew722m1OTBT9DOIMxNX/NF4zfsSUABAO5eW3wikE="
     },
     "den": {
       "type": "GitRelease",
@@ -24,10 +24,10 @@
       "version_upper_bound": null,
       "release_prefix": null,
       "submodules": false,
-      "version": "v0.18.0",
-      "revision": "5df0987658d6e44268abba953406480e9f066928",
-      "url": "https://api.github.com/repos/vic/den/tarball/refs/tags/v0.18.0",
-      "hash": "sha256-8Mntz200pNVIF2l8twpdc4wvEFqzrlkICz2tvkfwz0s="
+      "version": "v0.19.0",
+      "revision": "37eb88ce28a9e42d5b367b967a9097030ff4f665",
+      "url": "https://api.github.com/repos/vic/den/tarball/refs/tags/v0.19.0",
+      "hash": "sha256-QTPzBJpxfetqU3u29+tQev8SlAC6EaRvHks0+FHAclY="
     },
     "flake-aspects": {
       "type": "GitRelease",
@@ -54,9 +54,9 @@
       },
       "branch": "release-26.05",
       "submodules": false,
-      "revision": "ec172013fa62135f58fb58dd17ae9651e8f39727",
-      "url": "https://github.com/nix-community/home-manager/archive/ec172013fa62135f58fb58dd17ae9651e8f39727.tar.gz",
-      "hash": "sha256-LWiBv9yAYFi2LPbUhDGHPGKYskJQjj2fw12OlyO1uQo="
+      "revision": "db7d5e2332710f5abb088f6b5de927d7f9511b35",
+      "url": "https://github.com/nix-community/home-manager/archive/db7d5e2332710f5abb088f6b5de927d7f9511b35.tar.gz",
+      "hash": "sha256-f+kOxEmOUnQazVAmGg0i8hzwgd1kX/geY+k/Dpheye8="
     },
     "home-manager-unstable": {
       "type": "Git",
@@ -67,9 +67,9 @@
       },
       "branch": "master",
       "submodules": false,
-      "revision": "d2a22a3659a6ae99847ea9176114f6957b8ac62e",
-      "url": "https://github.com/nix-community/home-manager/archive/d2a22a3659a6ae99847ea9176114f6957b8ac62e.tar.gz",
-      "hash": "sha256-sOag/7DTqw4tXLI7UxjrZxPGV+dlTe6zFtJn0VSkgFM="
+      "revision": "c58f54c733a7894d84fa2fdff26cc12088c4b78c",
+      "url": "https://github.com/nix-community/home-manager/archive/c58f54c733a7894d84fa2fdff26cc12088c4b78c.tar.gz",
+      "hash": "sha256-0bK0A59rVUn1SRZzo4cNi4VSqAe7vR1gL2/MZl53Frw="
     },
     "import-tree": {
       "type": "Git",
@@ -95,10 +95,10 @@
       "version_upper_bound": null,
       "release_prefix": null,
       "submodules": false,
-      "version": "v0.7.0",
-      "revision": "440818969ac2cbd77bfe025e884d0aa528991374",
-      "url": "https://api.github.com/repos/gmodena/nix-flatpak/tarball/refs/tags/v0.7.0",
-      "hash": "sha256-7ZCulYUD9RmJIDULTRkGLSW1faMpDlPKcbWJLYHoXcs="
+      "version": "v0.8.0",
+      "revision": "f1f045fc8b35ff59f88982c1752d3f3a42ca6a61",
+      "url": "https://api.github.com/repos/gmodena/nix-flatpak/tarball/refs/tags/v0.8.0",
+      "hash": "sha256-OsZ/I7v3ArCrk0XOUvkiU1dFtGtE1qZTHRGjvBXIKUU="
     },
     "nixos-hardware": {
       "type": "Git",
@@ -109,9 +109,9 @@
       },
       "branch": "master",
       "submodules": false,
-      "revision": "b2d7d02644f0002535a3bb51a73780945cdc7ba4",
-      "url": "https://github.com/NixOS/nixos-hardware/archive/b2d7d02644f0002535a3bb51a73780945cdc7ba4.tar.gz",
-      "hash": "sha256-q0J27mJDfd4BM9a7KcMVbcRmqyU+goQwudbMIu66qsg="
+      "revision": "60a624466c08787ee8303393b7d4752d1826f14f",
+      "url": "https://github.com/NixOS/nixos-hardware/archive/60a624466c08787ee8303393b7d4752d1826f14f.tar.gz",
+      "hash": "sha256-BYhx89XJltnRyQeuDKHVL5eSqbbfAcOKuDts7QRsrxQ="
     },
     "nixpkgs": {
       "type": "Git",
@@ -122,9 +122,9 @@
       },
       "branch": "nixos-26.05",
       "submodules": false,
-      "revision": "cf9d2fb3e50fa1cd5114c47505ea9177f7ff5f49",
-      "url": "https://github.com/nixos/nixpkgs/archive/cf9d2fb3e50fa1cd5114c47505ea9177f7ff5f49.tar.gz",
-      "hash": "sha256-cFTsMQz8Hzn8MT49oaeLSHg62tE86NykugCWkeM2ypk="
+      "revision": "6fcc160353f63555b560f25588925133c8f61f2a",
+      "url": "https://github.com/nixos/nixpkgs/archive/6fcc160353f63555b560f25588925133c8f61f2a.tar.gz",
+      "hash": "sha256-xI8L+UwJLIg75yVJwLPsY+AUEP1teCT3FyuvodyJu2Y="
     },
     "nixpkgs-unstable": {
       "type": "Git",
@@ -135,16 +135,16 @@
       },
       "branch": "nixos-unstable",
       "submodules": false,
-      "revision": "20b1ddd1aa5ace70c9468305030aa4f9ef79671b",
-      "url": "https://github.com/nixos/nixpkgs/archive/20b1ddd1aa5ace70c9468305030aa4f9ef79671b.tar.gz",
-      "hash": "sha256-B44WL6h0XoLjJ41bUPJk0X5SDinLCII//6EcBLXKiJ0="
+      "revision": "6510408d147d8c5e6d76043e899e9251756f6a75",
+      "url": "https://github.com/nixos/nixpkgs/archive/6510408d147d8c5e6d76043e899e9251756f6a75.tar.gz",
+      "hash": "sha256-XK4KceonkwD8LuMAt/vNrz982mXJM5jeHAxMwsUXXAQ="
     },
     "tvheadend-image": {
       "type": "Container",
       "image_name": "lscr.io/linuxserver/tvheadend",
       "image_tag": "latest",
-      "image_digest": "sha256:04caf2d70776233154fff1a184647c72068b3aa1593f3576c1c9ea3a755ae18c",
-      "hash": "sha256-4vlH6o/uZ5RwuYfM4ildPkVmCOjpswES9rsaU/P2TN0="
+      "image_digest": "sha256:fcc4b2091c573bd0b5ec04cf09db9acf0907e23d3bca9b53b0a0111bc8ae1fc3",
+      "hash": "sha256-ZAvW5/RtL9KQsuqQ/zg06bd1mbC0iAq9nkFFhFI+Tb4="
     }
   },
   "version": 8

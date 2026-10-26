@@ -10,13 +10,6 @@
 
     services.karakeep = {
       enable = true;
-
-      # Tämän voi poistaa kun korjaus NixOS 26.05 versioon on mergetty:
-      #   https://github.com/NixOS/nixpkgs/pull/555128
-      package = pkgs.callPackage "${inputs.nixpkgs}/pkgs/by-name/ka/karakeep/package.nix" {
-        nodejs = pkgs.nodejs_22;
-      };
-
       extraEnvironment = {
         DISABLE_SIGNUPS = "true";
         OCR_LANGS = "fin,eng";
