@@ -72,8 +72,6 @@
       nettools = lib.hiPrio pkgs.nettools;
     };
 
-    programs.nix-index.enable = true;
-
     # Listaa kaikki asennetut paketit polussa /etc/current-system-packages
     # Lähde: https://www.reddit.com/r/NixOS/comments/fsummx/comment/fm45htj/
     environment.etc."current-system-packages".text = lib.pipe config.environment.systemPackages [

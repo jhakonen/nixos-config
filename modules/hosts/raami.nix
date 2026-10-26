@@ -253,7 +253,6 @@
         meld
         moonlight-qt
         mqttx
-        nix-index  # Nixpkgs pakettien sisällön etsiminen
         nixos-rebuild-ng
         obsidian
         renameutils  # qmv
