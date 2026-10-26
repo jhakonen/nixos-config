@@ -20,6 +20,7 @@
   in {
     environment.systemPackages = [
       new-pi
+      pkgs.wl-clipboard  # pi:n riippuvuus
       # pkgs.mistral-vibe  -- 20.9.2026 kääntäminen epäonnistuu unstablessa
       pkgs.unstable.opencode
       pkgs.unstable.opencode-desktop
