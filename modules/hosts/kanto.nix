@@ -56,6 +56,7 @@
       security.acme.certs."jhakonen.com".extraDomainNames = [
         "*.jhakonen.com"
         "*.kanto.lan.jhakonen.com"
+        "*.kanto.tailscale.jhakonen.com"
       ];
 
       # Näyttää salasana-kehotteen kun ohjelma tarvitsee root-oikeudet

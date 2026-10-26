@@ -182,6 +182,7 @@
         domain = "immich.kanto.lan.jhakonen.com";
         port = 443;
       };
+      tailscale.domain = "immich.kanto.tailscale.jhakonen.com";
     };
     influx-db = {
       host = nodes.kanto;

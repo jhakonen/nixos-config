@@ -17,9 +17,8 @@
     users.users.immich.extraGroups = [ "video" "render" ];
 
     # Paljasta Immich jhakonen.com domainissa
-    services.nginx = {
-      enable = true;
-      virtualHosts.${config.catalog.services.immich.public.domain} = {
+    services.nginx = let
+      vhost = {
         locations."/" = {
           proxyPass = "http://[::1]:${toString config.catalog.services.immich.port}";
           proxyWebsockets = true;
@@ -35,6 +34,10 @@
         addSSL = true;
         useACMEHost = "jhakonen.com";
       };
+    in {
+      enable = true;
+      virtualHosts.${config.catalog.services.immich.public.domain} = vhost;
+      virtualHosts.${config.catalog.services.immich.tailscale.domain} = vhost;
     };
 
     # Varmuuskopiointi
