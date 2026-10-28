@@ -1,31 +1,34 @@
 # Dokumentaatio: obsidian://open?vault=Muistiinpanot&file=Yksityinen%2F0.%20Inbox%2FLocal%20AI
 { inputs, ... }:
 {
-  den.aspects.ai-tools.nixos = { lib, pkgs, ... }: let
-    # Kopioitu tiedostosta:
-    #   https://github.com/nix-community/home-manager/blob/master/modules/programs/pi-coding-agent.nix
-    # Tämän voi korvata NixOS 26.11:ssä home-managerin pi-conding-agent moduulilla
-    original-pi = pkgs.unstable.pi-coding-agent;
-    new-pi = pkgs.symlinkJoin {
-      meta = original-pi.meta;
-      name = "${lib.getName original-pi}-wrapped-${lib.getVersion original-pi}";
-      paths = [ original-pi ];
-      preferLocalBuild = true;
-      nativeBuildInputs = [ pkgs.makeWrapper ];
-      postBuild = ''
-        wrapProgram $out/bin/pi \
-          --suffix PATH : ${lib.makeBinPath [ pkgs.unstable.nodejs ]}
-      '';
+  den.aspects.ai-tools = {
+    nixos = { lib, pkgs, ... }: {
+      environment.systemPackages = [
+        pkgs.wl-clipboard  # pi:n riippuvuus
+        # pkgs.mistral-vibe  -- 20.9.2026 kääntäminen epäonnistuu unstablessa
+        pkgs.unstable.opencode
+        pkgs.unstable.opencode-desktop
+        pkgs.unstable.whichllm
+      ];
     };
-  in {
-    environment.systemPackages = [
-      new-pi
-      pkgs.wl-clipboard  # pi:n riippuvuus
-      # pkgs.mistral-vibe  -- 20.9.2026 kääntäminen epäonnistuu unstablessa
-      pkgs.unstable.opencode
-      pkgs.unstable.opencode-desktop
-      pkgs.unstable.whichllm
-    ];
+
+    provides.jhakonen.homeManager = {
+      programs.pi-coding-agent = {
+        enable = true;
+        context = ''
+          - When unsure what to do ask user first for their decision.
+        '';
+        settings = {
+          defaultProvider = "openrouter";
+          defaultModel = "openrouter/auto";
+          defaultThinkingLevel = "medium";
+          packages = [
+            "npm:@gotgenes/pi-permission-system"
+          ];
+        };
+        mutableSettings = true;
+      };
+    };
   };
 
   den.aspects.mervi.nixos = { config, lib, pkgs, ... }: let
