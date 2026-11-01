@@ -59,6 +59,7 @@
       immich-veli = bConfig // {
         repository = "rclone:nas-veli:/home/restic/immich";
         timerConfig.OnCalendar = "Sat 02:00";
+        checkOpts = [ "--read-data-subset" "5%" ];
       };
     };
 

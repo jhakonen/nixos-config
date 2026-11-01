@@ -48,6 +48,7 @@
       kavita-veli = bConfig // {
         repository = "rclone:nas-veli:/home/restic/kavita";
         timerConfig.OnCalendar = "Sat 02:00";
+        checkOpts = [];
       };
     };
 
