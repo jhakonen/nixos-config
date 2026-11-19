@@ -98,6 +98,8 @@
         echo "---"
       fi
     '';
+
+    services.nginx.package = (import inputs.nixpkgs-small {}).nginxMainline;
   };
 
   den.default.homeManager = {

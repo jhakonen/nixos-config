@@ -120,6 +120,13 @@
       "url": "https://releases.nixos.org/nixos/26.05/nixos-26.05.12658.1f607aa79b63/nixexprs.tar.zst",
       "hash": "sha256-v+CWvNPgAsxoqWDWmkjhh3qwZiE/oGkhXT+QH79yg2o="
     },
+    "nixpkgs-small": {
+      "type": "Channel",
+      "name": "nixos-26.05-small",
+      "artifact": "nixexprs.tar.zst",
+      "url": "https://releases.nixos.org/nixos/26.05-small/nixos-26.05.14840.69467f449339/nixexprs.tar.zst",
+      "hash": "sha256-WwtfcTiuxYr9VTKf0gUfql5ii+mohsYt95InlBPrBLQ="
+    },
     "nixpkgs-unstable": {
       "type": "Channel",
       "name": "nixos-unstable",
